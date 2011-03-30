@@ -9,6 +9,11 @@ create_ln_if_not_yet_created(){
 }
 
 pwd=$PWD
+
+pushd vim/.vim/bundle
+make
+popd
+
 pushd $HOME
 create_ln_if_not_yet_created ".vim" "$pwd/vim/.vim"
 create_ln_if_not_yet_created ".vimrc" "$pwd/vim/.vimrc"
