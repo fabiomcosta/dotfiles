@@ -1,17 +1,19 @@
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export EDITOR="mvim"
-export PATH=/Users/fabio/bin:$PATH
+export EDITOR="mvim -f"
+export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/Cellar/node/0.4.3/bin:$PATH
-export GLB_PROJECTS_ROOT_PATH="/Users/fabio/Sites/glb"
+export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
 export PYTHONPATH=/usr/local/lib/python2.6/site-packages:$PYTHONPATH
 
+alias grep='grep --color'
+alias egrep='egrep --color'
 alias la='ls -a'
 alias ll='ls -l'
-alias yui='java -jar ${HOME}/bin/yui.jar --charset=utf8'
-alias closurec='java -jar ${HOME}/bin/compiler.jar'
+alias yui='java -jar $HOME/bin/yui.jar --charset=utf8'
+alias closurec='java -jar $HOME/bin/compiler.jar'
 alias uuid='python -c "import sys;import uuid;sys.stdout.write(str(uuid.uuid4()))" | pbcopy'
 
 # remove .svn folders
@@ -19,9 +21,6 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 # remove *.pyc files
 alias pycrm='find . -name "*.pyc" -delete'
 
-#export PATH=/usr/local/Cellar/python/2.7/bin:$PATH
-#export PATH=/usr/local/bin:/usr/local/sbin:$PATH
-#export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
 export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 
