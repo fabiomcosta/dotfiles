@@ -51,23 +51,6 @@ stop_slow() {
     sudo ipfw delete 1
 }
 
-
-# Git support functions for Evil Tomato
-# Mohit Cheppudira <mohit@muthanna.com>
-
-# Returns "*" if the current git branch is dirty.
-function evil_git_dirty {
-    [[ $(git diff --shortstat 2>/dev/null | tail -n1) != "" ]] && echo "*"
-}
-
-# Get the current git branch name (if available)
-evil_git_prompt() {
-    local ref=$(git branch 2>/dev/null | grep '^\*' | cut -b 3- | sed 's/[\(\)]//g')
-    if [ "$ref" != "" ]; then
-        echo " ($ref$(evil_git_dirty))"
-    fi
-}
-
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
@@ -79,5 +62,5 @@ LIGHTBLUE="\[\033[1;34m\]"
 LIGHTYELLOW="\[\033[1;33m\]"
 LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
-export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(evil_git_prompt)$NOCOLOR \$ "
+export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR \$ "
 export PS2="> "

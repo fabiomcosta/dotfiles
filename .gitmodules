@@ -16,3 +16,6 @@
 [submodule "vim/.vim/bundle/puppet-vim"]
 	path = vim/.vim/bundle/puppet-vim
 	url = git://github.com/ajf/puppet-vim.git
+[submodule "vim/pyflakes-vim"]
+	path = vim/pyflakes-vim
+	url = https://github.com/kevinw/pyflakes-vim.git

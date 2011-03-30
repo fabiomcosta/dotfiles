@@ -8,8 +8,6 @@ filetype off
 call pathogen#runtime_append_all_bundles()
 filetype plugin indent on
 
-autocmd FileType python compiler pylint
-
 set nocompatible
 
 set modelines=0
@@ -79,9 +77,14 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
+nnoremap <C-j> :m+<CR>==
+nnoremap <C-k> :m-2<CR>==
+inoremap <C-j> <Esc>:m+<CR>==gi
+inoremap <C-k> <Esc>:m-2<CR>==gi
+vnoremap <C-j> :m'>+<CR>gv=gv
+vnoremap <C-k> :m-2<CR>gv=gv
 
-nmap <silent> <c-n> :NERDTreeToggle<CR>
+set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 
 au BufNewFile,BufRead *.less set filetype=less
 
@@ -98,11 +101,14 @@ augroup END
 nmap <silent> <Leader>y :CommandTFlush<CR>
 nmap <silent> <Leader>t :CommandT<CR>
 
-" Removes trailing spaces
-function TrimWhiteSpace()
-  %s/\s*$//
-  ''
-:endfunction
+if !exists("*TrimWhiteSpace")
+    " Removes trailing spaces
+    function TrimWhiteSpace()
+      %s/\s*$//
+      ''
+    :endfunction
+endif
 
 map <F2> :call TrimWhiteSpace()<CR>
-map <F1> :tabnew<CR> 
+map <F1> :tabnew<CR>
+
