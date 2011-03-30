@@ -1,3 +1,38 @@
+export_to_path_if_exists(){
+    if [ -e "$1" ]; then
+        export PATH="$1:$PATH"
+    fi
+}
+
+execute_to_path_if_exists(){
+    if [ -e "$2" ]; then
+        $1 "$2"
+    fi
+}
+
+start_slow() {
+    sudo ipfw pipe 1 config bw 100KByte/s
+    sudo ipfw add 1 pipe 1 src-port $1
+}
+
+stop_slow() {
+    sudo ipfw delete 1
+}
+
+# adicionando include e lib path do macports para gcc/g++
+export C_INCLUDE_PATH=/opt/local/include
+export CPLUS_INCLUDE_PATH=/opt/local/include
+export LIBRARY_PATH=/opt/local/lib
+export LD_LIBRARY_PATH=/opt/local/lib
+export MANPATH=/opt/local/share/man:$MANPATH
+
+export_to_path_if_exists /opt/local/bin
+export_to_path_if_exists /opt/local/sbin
+export_to_path_if_exists /opt/local/lib/postgresql83/bin
+export_to_path_if_exists /opt/local/mysql5/bin
+export_to_path_if_exists /opt/local/Library/Frameworks/Python.frameworks/Versions/2.5/bin
+export_to_path_if_exists /opt/local/Library/Frameworks/Python.frameworks/Versions/2.6/bin
+
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
@@ -22,10 +57,9 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
-source /usr/local/bin/virtualenvwrapper.sh
-
-source ~/.git-completion.bash
-source ~/.django_bash_completion
+execute_to_path_if_exists source /usr/local/bin/virtualenvwrapper.sh
+execute_to_path_if_exists source /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin/virtualenvwrapper.sh
+source $HOME/.git-completion.bash
 
 alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
 alias solr_stop='make stop -C ~/Sites/glb/busca-nova-plataforma'
@@ -40,16 +74,6 @@ alias mysql_stop='killall mysqld'
 
 alias stop_all='solr_stop; activemq_stop; selenium stop; mysql_stop'
 alias start_all='stop_all; solr_start; activemq_start; selenium start; mysql_start'
-
-start_slow() {
-    sudo ipfw pipe 1 config bw 100KByte/s
-    sudo ipfw add 1 pipe 1 src-port $1
-}
-
-stop_slow() {
-    sudo ipfw delete 1
-}
-
 
 # Git support functions for Evil Tomato
 # Mohit Cheppudira <mohit@muthanna.com>

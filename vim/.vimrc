@@ -98,11 +98,13 @@ augroup END
 nmap <silent> <Leader>y :CommandTFlush<CR>
 nmap <silent> <Leader>t :CommandT<CR>
 
-" Removes trailing spaces
-function TrimWhiteSpace()
-  %s/\s*$//
-  ''
-:endfunction
+if !exists("*TrimWhiteSpace")
+    " Removes trailing spaces
+    function TrimWhiteSpace()
+      %s/\s*$//
+      ''
+    :endfunction
+endif
 
 map <F2> :call TrimWhiteSpace()<CR>
 map <F1> :tabnew<CR> 
