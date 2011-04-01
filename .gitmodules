@@ -16,3 +16,6 @@
 [submodule "vim/.vim/bundle/puppet-vim"]
 	path = vim/.vim/bundle/puppet-vim
 	url = git://github.com/ajf/puppet-vim.git
+[submodule "vim/.vim/bundle/xmledit"]
+	path = vim/.vim/bundle/xmledit
+	url = https://github.com/sukima/xmledit.git
