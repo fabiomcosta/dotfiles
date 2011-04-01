@@ -36,7 +36,6 @@ export_to_path_if_exists /opt/local/Library/Frameworks/Python.frameworks/Version
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export EDITOR="mvim -f"
 export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/Cellar/node/0.4.3/bin:$PATH
