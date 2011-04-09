@@ -4,7 +4,7 @@ export_to_path_if_exists(){
     fi
 }
 
-execute_to_path_if_exists(){
+execute_if_exists(){
     if [ -e "$2" ]; then
         $1 "$2"
     fi
@@ -30,8 +30,8 @@ export_to_path_if_exists /opt/local/bin
 export_to_path_if_exists /opt/local/sbin
 export_to_path_if_exists /opt/local/lib/postgresql83/bin
 export_to_path_if_exists /opt/local/mysql5/bin
-export_to_path_if_exists /opt/local/Library/Frameworks/Python.frameworks/Versions/2.5/bin
-export_to_path_if_exists /opt/local/Library/Frameworks/Python.frameworks/Versions/2.6/bin
+export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.5/bin
+export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin
 
 export TERM="xterm-color"
 export CLICOLOR=1
@@ -40,7 +40,8 @@ export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
 export PATH=/usr/local/Cellar/node/0.4.3/bin:$PATH
 export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
-export PYTHONPATH=/usr/local/lib/python2.6/site-packages:$PYTHONPATH
+export PYTHONPATH=/opt/local/lib/python2.6/site-packages:$PYTHONPATH
+export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/Current/lib/python2.6/site-packages:$PYTHONPATH
 
 alias grep='grep --color'
 alias egrep='egrep --color'
@@ -56,8 +57,8 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
-execute_to_path_if_exists source /usr/local/bin/virtualenvwrapper.sh
-execute_to_path_if_exists source /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin/virtualenvwrapper.sh
+execute_if_exists source /usr/local/bin/virtualenvwrapper.sh
+execute_if_exists source /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin/virtualenvwrapper.sh
 source $HOME/.git-completion.bash
 
 alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
