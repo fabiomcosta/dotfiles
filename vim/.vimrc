@@ -84,6 +84,8 @@ inoremap <C-k> <Esc>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
+map <F3> :NERDTreeToggle<CR>
+
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 
 au BufNewFile,BufRead *.less set filetype=less

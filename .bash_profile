@@ -39,7 +39,7 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 export EDITOR="mvim -f"
 export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
-export PATH=/usr/local/Cellar/node/0.4.3/bin:$PATH
+export NODE_PATH=/usr/local/lib/node:$NODE_PATH
 export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
 export PYTHONPATH=/usr/local/lib/python2.6/site-packages:$PYTHONPATH
 
