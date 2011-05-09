@@ -48,7 +48,6 @@ vnoremap <tab> %
 
 set wrap
 set textwidth=360
-set fuopt=maxvert,maxhorz
 set formatoptions=qrn1
 
 nmap <leader>l :set list!<CR>
@@ -90,7 +89,6 @@ set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 
 au BufNewFile,BufRead *.less set filetype=less
 
-"set guioptions-=m  "remove menu bar
 set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
 
@@ -106,6 +104,7 @@ nmap <silent> <Leader>t :CommandT<CR>
 if !exists("*TrimWhiteSpace")
     " Removes trailing spaces
     function TrimWhiteSpace()
+      :retab
       %s/\s*$//
       ''
     :endfunction
