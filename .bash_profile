@@ -33,6 +33,10 @@ export_to_path_if_exists /opt/local/mysql5/bin
 export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.5/bin
 export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin
 
+#adds android-sdk to our path
+export_to_path_if_exists $HOME/Sites/android-sdk/tools
+export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
+
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
