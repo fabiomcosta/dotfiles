@@ -79,15 +79,6 @@ alias mysql_stop='killall mysqld'
 alias stop_all='solr_stop; activemq_stop; selenium stop; mysql_stop'
 alias start_all='stop_all; solr_start; activemq_start; selenium start; mysql_start'
 
-start_slow() {
-    sudo ipfw pipe 1 config bw 100KByte/s
-    sudo ipfw add 1 pipe 1 src-port $1
-}
-
-stop_slow() {
-    sudo ipfw delete 1
-}
-
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
