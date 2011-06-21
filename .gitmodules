@@ -25,3 +25,6 @@
 [submodule "vim/.vim/bundle/vim-javascript"]
 	path = vim/.vim/bundle/vim-javascript
 	url = https://github.com/pangloss/vim-javascript
+[submodule "vim/snipmate_for_django"]
+	path = vim/snipmate_for_django
+	url = https://github.com/robhudson/snipmate_for_django.git
