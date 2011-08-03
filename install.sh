@@ -1,4 +1,4 @@
-#/usr/bin/env sh
+#/usr/bin/env bash
 
 create_ln_if_not_yet_created(){
 	if [ ! -e "$1" ]; then
