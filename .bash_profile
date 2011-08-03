@@ -19,20 +19,6 @@ stop_slow() {
     sudo ipfw delete 1
 }
 
-# adicionando include e lib path do macports para gcc/g++
-export C_INCLUDE_PATH=/opt/local/include
-export CPLUS_INCLUDE_PATH=/opt/local/include
-export LIBRARY_PATH=/opt/local/lib
-export LD_LIBRARY_PATH=/opt/local/lib
-export MANPATH=/opt/local/share/man:$MANPATH
-
-export_to_path_if_exists /opt/local/bin
-export_to_path_if_exists /opt/local/sbin
-export_to_path_if_exists /opt/local/lib/postgresql83/bin
-export_to_path_if_exists /opt/local/mysql5/bin
-export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.5/bin
-export_to_path_if_exists /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin
-
 #adds android-sdk to our path
 export_to_path_if_exists $HOME/Sites/android-sdk/tools
 export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
@@ -44,8 +30,6 @@ export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
 export NODE_PATH=/usr/local/lib/node:$NODE_PATH
 export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
-export PYTHONPATH=/opt/local/lib/python2.6/site-packages:$PYTHONPATH
-export PYTHONPATH=/opt/local/Library/Frameworks/Python.framework/Versions/Current/lib/python2.6/site-packages:$PYTHONPATH
 
 alias grep='grep --color'
 alias egrep='egrep --color'
@@ -62,7 +46,6 @@ alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
 execute_if_exists source /usr/local/bin/virtualenvwrapper.sh
-execute_if_exists source /opt/local/Library/Frameworks/Python.framework/Versions/2.6/bin/virtualenvwrapper.sh
 source $HOME/.git-completion.bash
 
 alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
