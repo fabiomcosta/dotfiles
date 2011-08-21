@@ -51,8 +51,6 @@ source $HOME/.git-completion.bash
 alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
 alias solr_stop='make stop -C ~/Sites/glb/busca-nova-plataforma'
 
-alias ion_start='cd ~/Sites/glb/dynamo-core; ion run'
-
 alias activemq_start='make start -C ~/Sites/glb/barramento'
 alias activemq_stop='make stop -C ~/Sites/glb/barramento'
 
@@ -64,6 +62,8 @@ alias start_all='stop_all; solr_start; activemq_start; selenium start; mysql_sta
 
 alias staging_activate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh ativar'
 alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh desativar'
+
+export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
