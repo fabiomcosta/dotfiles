@@ -28,3 +28,12 @@
 [submodule "vim/snipmate_for_django"]
 	path = vim/snipmate_for_django
 	url = https://github.com/robhudson/snipmate_for_django.git
+[submodule "vim/.vim/bundle/syntastic"]
+	path = vim/.vim/bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
+[submodule "vim/.vim/bundle/supertab"]
+	path = vim/.vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "vim/.vim/bundle/vim-jasmine"]
+	path = vim/.vim/bundle/vim-jasmine
+	url = https://github.com/thomd/vim-jasmine.git

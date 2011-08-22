@@ -86,6 +86,9 @@ vnoremap <C-k> :m-2<CR>gv=gv
 map <F3> :NERDTreeToggle<CR>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 au BufNewFile,BufRead *.less set filetype=less
 
@@ -112,4 +115,7 @@ endif
 
 map <F2> :call TrimWhiteSpace()<CR>
 map <F1> :tabnew<CR>
+
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
 
