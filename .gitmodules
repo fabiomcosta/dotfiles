@@ -37,3 +37,6 @@
 [submodule "vim/.vim/bundle/vim-jasmine"]
 	path = vim/.vim/bundle/vim-jasmine
 	url = https://github.com/thomd/vim-jasmine.git
+[submodule "vim/.vim/bundle/vim-less"]
+	path = vim/.vim/bundle/vim-less
+	url = https://github.com/groenewege/vim-less.git
