@@ -43,3 +43,6 @@
 [submodule "vim/.vim/bundle/vim-jade"]
 	path = vim/.vim/bundle/vim-jade
 	url = https://github.com/digitaltoad/vim-jade.git
+[submodule "vim/.vim/bundle/eregex"]
+	path = vim/.vim/bundle/eregex
+	url = https://github.com/othree/eregex.vim.git
