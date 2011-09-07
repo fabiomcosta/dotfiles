@@ -1,7 +1,7 @@
 colorscheme molokai
 
 if has("gui_running")
-  set guifont=Inconsolata:h18
+  set guifont=Inconsolata:h14
 endif
 
 call pathogen#infect()
