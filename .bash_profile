@@ -65,6 +65,8 @@ alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.
 
 export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
 
+. $HOME/bin/z/z.sh
+
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
@@ -78,3 +80,13 @@ LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
 export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 export PS2="> "
+
+# pip bash completion start
+_pip_completion()
+{
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                   COMP_CWORD=$COMP_CWORD \
+                   PIP_AUTO_COMPLETE=1 $1 ) )
+}
+complete -o default -F _pip_completion pip
+# pip bash completion end
