@@ -28,7 +28,7 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export PATH=$HOME/bin:$PATH
 export PATH=/usr/local/share/npm/bin:$PATH
-export NODE_PATH=/usr/local/lib/node:$NODE_PATH
+export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
 export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
 
 alias grep='grep --color'
