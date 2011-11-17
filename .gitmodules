@@ -46,3 +46,6 @@
 [submodule "vim/.vim/bundle/eregex"]
 	path = vim/.vim/bundle/eregex
 	url = https://github.com/othree/eregex.vim.git
+[submodule "vim/.vim/bundle/scss-syntax"]
+	path = vim/.vim/bundle/scss-syntax
+	url = https://github.com/cakebaker/scss-syntax.vim.git
