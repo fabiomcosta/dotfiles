@@ -49,3 +49,6 @@
 [submodule "vim/.vim/bundle/scss-syntax"]
 	path = vim/.vim/bundle/scss-syntax
 	url = https://github.com/cakebaker/scss-syntax.vim.git
+[submodule "vim/.vim/bundle/detectindent"]
+	path = vim/.vim/bundle/detectindent
+	url = https://github.com/ciaranm/detectindent.git
