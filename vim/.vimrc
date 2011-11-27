@@ -89,8 +89,6 @@ inoremap <C-k> <Esc>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
-map <F3> :NERDTreeToggle<CR>
-
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -120,6 +118,7 @@ if !exists("*TrimWhiteSpace")
 endif
 
 map <F2> :call TrimWhiteSpace()<CR>
+map <F3> :NERDTreeToggle<CR>
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
