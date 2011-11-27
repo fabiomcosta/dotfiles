@@ -5,6 +5,12 @@ if has("gui_running")
 endif
 
 call pathogen#infect()
+
+" autodetects if the file uses spaces or tabs to define preferences
+:autocmd BufReadPost * :DetectIndent
+:let g:detectindent_preferred_indent = 4
+:let g:detectindent_preferred_expandtab = 1
+
 syntax on
 filetype plugin indent on
 
@@ -124,8 +130,4 @@ nnoremap ? :M?
 nnoremap ,/ /
 nnoremap ,? ?
 
-" autodetects if the file uses spaces or tabs to define preferences
-:autocmd BufReadPost * :DetectIndent
-:let g:detectindent_preferred_indent = 4
-:let g:detectindent_preferred_expandtab = 1
 
