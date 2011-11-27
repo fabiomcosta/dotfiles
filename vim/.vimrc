@@ -120,7 +120,6 @@ if !exists("*TrimWhiteSpace")
 endif
 
 map <F2> :call TrimWhiteSpace()<CR>
-map <F1> :tabnew<CR>
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
