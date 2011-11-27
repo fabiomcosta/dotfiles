@@ -127,4 +127,5 @@ nnoremap ,? ?
 " autodetects if the file uses spaces or tabs to define preferences
 :autocmd BufReadPost * :DetectIndent
 :let g:detectindent_preferred_indent = 4
+:let g:detectindent_preferred_expandtab = 1
 
