@@ -29,7 +29,6 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 export PATH=$HOME/bin:$PATH
 export PATH=`brew --prefix`/share/npm/bin:$PATH
 export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
-export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
 
 alias grep='grep --color'
 alias egrep='egrep --color'
