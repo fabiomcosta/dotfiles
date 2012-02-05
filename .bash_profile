@@ -47,18 +47,6 @@ alias pycrm='find . -name "*.pyc" -delete'
 export WORKON_HOME=$HOME/.virtualenvs
 execute_if_exists source `brew --prefix`/bin/virtualenvwrapper.sh
 
-alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
-alias solr_stop='make stop -C ~/Sites/glb/busca-nova-plataforma'
-
-alias activemq_start='make start -C ~/Sites/glb/barramento'
-alias activemq_stop='make stop -C ~/Sites/glb/barramento'
-
-alias mysql_start='mysqld &'
-alias mysql_stop='killall mysqld'
-
-alias stop_all='solr_stop; activemq_stop; selenium stop; mysql_stop'
-alias start_all='stop_all; solr_start; activemq_start; selenium start; mysql_start'
-
 alias staging_activate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh ativar'
 alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh desativar'
 
