@@ -27,8 +27,8 @@ export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export PATH=$HOME/bin:$PATH
-export PATH=/usr/local/share/npm/bin:$PATH
-export NODE_PATH=/usr/local/lib/node_modules:$NODE_PATH
+export PATH=`brew --prefix`/share/npm/bin:$PATH
+export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
 export GLB_PROJECTS_ROOT_PATH="/$HOME/Sites/glb"
 
 alias grep='grep --color'
@@ -45,8 +45,7 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
-execute_if_exists source /usr/local/bin/virtualenvwrapper.sh
-source $HOME/.git-completion.bash
+execute_if_exists source `brew --prefix`/bin/virtualenvwrapper.sh
 
 alias solr_start='make start -C ~/Sites/glb/busca-nova-plataforma'
 alias solr_stop='make stop -C ~/Sites/glb/busca-nova-plataforma'
@@ -63,9 +62,8 @@ alias start_all='stop_all; solr_start; activemq_start; selenium start; mysql_sta
 alias staging_activate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh ativar'
 alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh desativar'
 
-export PYTHONPATH=/usr/local/lib/python:$PYTHONPATH
-
-. $HOME/bin/z/z.sh
+export PYTHONPATH=`brew --prefix`/lib/python:$PYTHONPATH
+. `brew --prefix`/etc/profile.d/z.sh
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'

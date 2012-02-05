@@ -23,6 +23,5 @@ pushd $HOME
 create_ln_if_not_yet_created ".vim" "$pwd/vim/.vim"
 create_ln_if_not_yet_created ".vimrc" "$pwd/vim/.vimrc"
 create_ln_if_not_yet_created ".bash_profile" "$pwd/.bash_profile"
-create_ln_if_not_yet_created ".git-completion.bash" "$pwd/.git-completion.bash"
 
 source ".bash_profile"
