@@ -26,9 +26,10 @@ export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export PATH=$HOME/bin:$PATH
-export PATH=`brew --prefix`/share/npm/bin:$PATH
+export_to_path_if_exists $HOME/bin
+
 export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
+export_to_path_if_exists `brew --prefix`/share/npm/bin
 
 alias grep='grep --color'
 alias egrep='egrep --color'
@@ -47,10 +48,9 @@ export WORKON_HOME=$HOME/.virtualenvs
 execute_if_exists source `brew --prefix`/bin/virtualenvwrapper.sh
 execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
 
-alias staging_activate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh ativar'
-alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh desativar'
-
 export PYTHONPATH=`brew --prefix`/lib/python:$PYTHONPATH
+export_to_path_if_exists `brew --prefix`/share/python
+
 . `brew --prefix`/etc/profile.d/z.sh
 
 function PWD {
