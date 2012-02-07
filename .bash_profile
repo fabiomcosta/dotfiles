@@ -45,6 +45,7 @@ alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
 execute_if_exists source `brew --prefix`/bin/virtualenvwrapper.sh
+execute_if_exists source `brew --prefix`/etc/bash_completion.d
 
 alias staging_activate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh ativar'
 alias staging_deactivate='sudo ${HOME}/Sites/glb/staging-deploy/scripts/staging.sh desativar'
