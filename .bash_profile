@@ -19,20 +19,8 @@ stop_slow() {
     sudo ipfw delete 1
 }
 
-#adds android-sdk to our path
-#export_if_exists PATH $HOME/Sites/android-sdk/tools
-#export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
 
-export TERM="xterm-color"
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad
-export_if_exists PATH `brew --prefix`/bin
-export_if_exists PATH $HOME/bin
-
-export_if_exists NODE_PATH `brew --prefix`/lib/node_modules
-export_if_exists PATH      `brew --prefix`/share/npm/bin
-execute_if_exists source $HOME/.nvm/nvm.sh
-
+# aliases
 alias grep='grep --color'
 alias egrep='egrep --color'
 alias la='ls -a'
@@ -40,21 +28,46 @@ alias ll='ls -l'
 alias yui='java -jar $HOME/bin/yui.jar --charset=utf8'
 alias closurec='java -jar $HOME/bin/compiler.jar'
 alias uuid='python -c "import sys;import uuid;sys.stdout.write(str(uuid.uuid4()))" | pbcopy'
-
 # remove .svn folders
 alias svnrm='find . -type d -name .svn | xargs rm -rf'
 # remove *.pyc files
 alias pycrm='find . -name "*.pyc" -delete'
+# endaliases
 
-export WORKON_HOME=$HOME/.virtualenvs
+
+export TERM="xterm-color"
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad
+
+# android-sdk
+#export_if_exists PATH $HOME/Sites/android-sdk/tools
+#export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
+
+export_if_exists PATH `brew --prefix`/bin
+export_if_exists PATH $HOME/bin
+
+# node
+export_if_exists NODE_PATH `brew --prefix`/lib/node_modules
+export_if_exists PATH      `brew --prefix`/share/npm/bin
+execute_if_exists source $HOME/.nvm/nvm.sh
+
+# python
 export_if_exists PYTHONPATH `brew --prefix`/lib/python2.7/site-packages
 export_if_exists PATH       `brew --prefix`/share/python
+    # virtualenv
+    export WORKON_HOME=$HOME/.virtualenvs
+    execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
 
+# ruby
+export_if_exists PATH       `brew --prefix`/Cellar/ruby/1.9.3-p0/bin
+
+# git
 execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
-execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
-execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
 
-# Add common Yipit functions and settings
+# z
+execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
+
+# yipit
 export YIPIT_PATH=$HOME/Sites/yipit/yipit
 execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
 
