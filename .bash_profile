@@ -54,6 +54,10 @@ execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.ba
 execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
 execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
 
+# Add common Yipit functions and settings
+export YIPIT_PATH=$HOME/Sites/yipit/yipit
+execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
