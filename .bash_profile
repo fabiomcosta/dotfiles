@@ -1,6 +1,6 @@
-export_to_path_if_exists(){
-    if [ -e "$1" ]; then
-        export PATH="$1:$PATH"
+export_if_exists(){
+    if [ -e "$2" ]; then
+        export $1="$2:$(eval echo $`echo $1`)"
     fi
 }
 
@@ -20,17 +20,17 @@ stop_slow() {
 }
 
 #adds android-sdk to our path
-#export_to_path_if_exists $HOME/Sites/android-sdk/tools
-#export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
+#export_if_exists PATH $HOME/Sites/android-sdk/tools
+#export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
 
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export_to_path_if_exists `brew --prefix`/bin
-export_to_path_if_exists $HOME/bin
+export_if_exists PATH `brew --prefix`/bin
+export_if_exists PATH $HOME/bin
 
-export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
-export_to_path_if_exists `brew --prefix`/share/npm/bin
+export_if_exists NODE_PATH `brew --prefix`/lib/node_modules
+export_if_exists PATH      `brew --prefix`/share/npm/bin
 execute_if_exists source $HOME/.nvm/nvm.sh
 
 alias grep='grep --color'
@@ -47,8 +47,8 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
-export PYTHONPATH=`brew --prefix`/lib/python:$PYTHONPATH
-export_to_path_if_exists `brew --prefix`/share/python
+export_if_exists PYTHONPATH `brew --prefix`/lib/python2.7/site-packages
+export_if_exists PATH       `brew --prefix`/share/python
 
 execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
 execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
