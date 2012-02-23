@@ -20,12 +20,13 @@ stop_slow() {
 }
 
 #adds android-sdk to our path
-export_to_path_if_exists $HOME/Sites/android-sdk/tools
-export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
+#export_to_path_if_exists $HOME/Sites/android-sdk/tools
+#export_to_path_if_exists $HOME/Sites/android-sdk/platform-tools
 
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+export_to_path_if_exists `brew --prefix`/bin
 export_to_path_if_exists $HOME/bin
 
 export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
@@ -45,13 +46,12 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 
 export WORKON_HOME=$HOME/.virtualenvs
-execute_if_exists source `brew --prefix`/bin/virtualenvwrapper.sh
-execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
-
 export PYTHONPATH=`brew --prefix`/lib/python:$PYTHONPATH
 export_to_path_if_exists `brew --prefix`/share/python
 
-. `brew --prefix`/etc/profile.d/z.sh
+execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
+execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
+execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
