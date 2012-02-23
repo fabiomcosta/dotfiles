@@ -31,6 +31,7 @@ export_to_path_if_exists $HOME/bin
 
 export NODE_PATH=`brew --prefix`/lib/node_modules:$NODE_PATH
 export_to_path_if_exists `brew --prefix`/share/npm/bin
+execute_if_exists source $HOME/.nvm/nvm.sh
 
 alias grep='grep --color'
 alias egrep='egrep --color'
