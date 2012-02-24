@@ -59,7 +59,7 @@ export_if_exists PATH       `brew --prefix`/share/python
     execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
 
 # ruby
-export_if_exists PATH       `brew --prefix`/Cellar/ruby/1.9.3-p0/bin
+export_if_exists PATH    `brew --prefix ruby`/bin
 
 # git
 execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
