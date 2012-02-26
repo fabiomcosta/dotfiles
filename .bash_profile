@@ -68,7 +68,7 @@ execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.ba
 execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
 
 # yipit
-export YIPIT_PATH=$HOME/Sites/yipit/yipit
+export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
 execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
 
 function PWD {
