@@ -15,16 +15,12 @@ syntax on
 filetype plugin indent on
 
 set nocompatible
-
 set modelines=0
 
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
-set number
 set expandtab
-
-let mapleader = ","
 
 set encoding=utf-8
 set scrolloff=3
@@ -39,6 +35,10 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
+set undofile
+set number
+
+let mapleader = ","
 
 nnoremap / /\v
 vnoremap / /\v
@@ -60,22 +60,24 @@ nmap <leader>l :set list!<CR>
 set list
 set listchars=tab:▸\ ,eol:¬
 
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-nnoremap <left> <nop>
-nnoremap <right> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
+au FocusLost * :wa
+
 nnoremap j gj
 nnoremap k gk
 
+inoremap <F1> <ESC>
+nnoremap <F1> <ESC>
+vnoremap <F1> <ESC>
+inoremap jj <ESC>
 nnoremap ; :
-au FocusLost * :wa
 
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
 nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <leader>a :Ack
+"html fold tag
+nnoremap <leader>ft Vatzf
+"sorts properties inside {} mostly for css
+nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -88,6 +90,9 @@ inoremap <C-j> <Esc>:m+<CR>==gi
 inoremap <C-k> <Esc>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
+
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+map <F3> :NERDTreeToggle<CR>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
@@ -108,18 +113,6 @@ augroup END
 nmap <silent> <Leader>y :CommandTFlush<CR>
 nmap <silent> <Leader>t :CommandT<CR>
 
-if !exists("*TrimWhiteSpace")
-    " Removes trailing spaces
-    function TrimWhiteSpace()
-      :retab
-      %s/\s*$//
-      ''
-    :endfunction
-endif
-
-map <F2> :call TrimWhiteSpace()<CR>
-map <F3> :NERDTreeToggle<CR>
-
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
@@ -127,5 +120,4 @@ nnoremap / :M/
 nnoremap ? :M?
 nnoremap ,/ /
 nnoremap ,? ?
-
 
