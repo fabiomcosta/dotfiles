@@ -11,7 +11,7 @@ set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
 " let Vundle manage Vundle
-" required! 
+" required!
 Bundle 'gmarik/vundle'
 
 Bundle 'snipMate'
@@ -70,8 +70,10 @@ set number
 
 let mapleader = ","
 
-nnoremap / /\v
-vnoremap / /\v
+nnoremap / :M/
+vnoremap / :M/
+nnoremap ? :M?
+vnoremap ? :M?
 set ignorecase
 set smartcase
 set gdefault
@@ -99,7 +101,9 @@ inoremap jj <ESC>
 nnoremap ; :
 
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
-nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <leader>es :source $MYVIMRC<cr>
+nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader>W <C-w>v<C-w>l
 nnoremap <leader>a :Ack
 "html fold tag
 nnoremap <leader>ft Vatzf
@@ -107,8 +111,6 @@ nnoremap <leader>ft Vatzf
 nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
 nnoremap <C-j> :m+<CR>==
@@ -118,8 +120,9 @@ inoremap <C-k> <Esc>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
-nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-map <F3> :NERDTreeToggle<CR>
+noremap <leader>z :NERDTreeToggle<CR>
+
+nmap <leader>t <C-p>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
@@ -137,14 +140,6 @@ augroup mkd
     autocmd BufRead,BufEnter *.markdown set ai formatoptions=tcroqn2 comments=n:&gt;
 augroup END
 
-nmap <silent> <Leader>y :CommandTFlush<CR>
-nmap <silent> <Leader>t :CommandT<CR>
-
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
-
-nnoremap / :M/
-nnoremap ? :M?
-nnoremap ,/ /
-nnoremap ,? ?
 
