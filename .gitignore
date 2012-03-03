@@ -1,5 +1,7 @@
 .DS_Store
 *~
 *.swp
-.netrwhist
+*.swo
 *.pyc
+.netrwhist
+vim/.vim/bundle/
