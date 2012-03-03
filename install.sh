@@ -10,8 +10,6 @@ create_ln_if_not_yet_created(){
 
 pwd=$PWD
 
-git submodule update --init --recursive
-
 pushd $HOME
 	create_ln_if_not_yet_created ".vim" "$pwd/vim/.vim"
 	create_ln_if_not_yet_created ".vimrc" "$pwd/vim/.vimrc"
