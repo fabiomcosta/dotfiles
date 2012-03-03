@@ -15,7 +15,7 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'snipMate'
-Bundle 'wincent/Command-T'
+Bundle 'kien/ctrlp.vim'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
