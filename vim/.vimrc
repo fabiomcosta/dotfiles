@@ -4,7 +4,40 @@ if has("gui_running")
   set guifont=Inconsolata:h14
 endif
 
-call pathogen#infect()
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required! 
+Bundle 'gmarik/vundle'
+
+Bundle 'snipMate'
+Bundle 'wincent/Command-T'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'scrooloose/syntastic'
+Bundle 'csexton/snipmate.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'ajf/puppet-vim'
+Bundle 'sukima/xmledit'
+Bundle 'scrooloose/nerdtree'
+Bundle 'pangloss/vim-javascript'
+Bundle 'ervandew/supertab'
+Bundle 'thomd/vim-jasmine'
+Bundle 'groenewege/vim-less'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'othree/eregex.vim'
+Bundle 'cakebaker/scss-syntax.vim'
+Bundle 'ciaranm/detectindent'
+Bundle 'robhudson/snipmate_for_django'
+Bundle 'mileszs/ack.vim'
+
+"call pathogen#infect()
 
 " autodetects if the file uses spaces or tabs to define preferences
 :autocmd BufReadPost * :DetectIndent
@@ -14,7 +47,6 @@ call pathogen#infect()
 syntax on
 filetype plugin indent on
 
-set nocompatible
 set modelines=0
 
 set tabstop=4
