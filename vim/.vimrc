@@ -37,15 +37,13 @@ Bundle 'ciaranm/detectindent'
 Bundle 'robhudson/snipmate_for_django'
 Bundle 'mileszs/ack.vim'
 
-"call pathogen#infect()
+syntax on
+filetype plugin indent on
 
 " autodetects if the file uses spaces or tabs to define preferences
 :autocmd BufReadPost * :DetectIndent
 :let g:detectindent_preferred_indent = 4
 :let g:detectindent_preferred_expandtab = 1
-
-syntax on
-filetype plugin indent on
 
 set modelines=0
 
@@ -97,9 +95,6 @@ au FocusLost * :wa
 nnoremap j gj
 nnoremap k gk
 
-inoremap <F1> <ESC>
-nnoremap <F1> <ESC>
-vnoremap <F1> <ESC>
 inoremap jj <ESC>
 nnoremap ; :
 
