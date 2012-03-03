@@ -61,6 +61,3 @@
 [submodule "vim/.vim/bundle/vim-ack"]
 	path = vim/.vim/bundle/vim-ack
 	url = https://github.com/mileszs/ack.vim.git
-[submodule "vim/sparkup"]
-	path = vim/sparkup
-	url = https://github.com/rstacruz/sparkup.git
