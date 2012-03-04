@@ -104,7 +104,7 @@ nnoremap ; :
 
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
 nnoremap <leader>es :source $MYVIMRC<cr>
-nnoremap <leader>w :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader>w :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>``
 nnoremap <leader>W <C-w>v<C-w>l
 nnoremap <leader>a :Ack
 "html fold tag
