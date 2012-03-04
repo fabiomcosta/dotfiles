@@ -126,7 +126,7 @@ vnoremap <C-k> :m-2<CR>gv=gv
 
 noremap <leader>z :NERDTreeToggle<CR>
 
-nmap <leader>t <C-p>
+nmap <leader>t :CtrlP<CR>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
