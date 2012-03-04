@@ -106,7 +106,7 @@ nnoremap ; :
 
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
 nnoremap <leader>es :source $MYVIMRC<cr>
-nnoremap <leader>w :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>``
+nnoremap <leader>w :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>''
 nnoremap <leader>W <C-w>v<C-w>l
 nnoremap <leader>a :Ack
 "html fold tag
@@ -126,7 +126,8 @@ vnoremap <C-k> :m-2<CR>gv=gv
 
 noremap <leader>z :NERDTreeToggle<CR>
 
-nmap <leader>t :CtrlP<CR>
+let g:ctrlp_map = '<leader>t'
+nmap <silent> <leader>y <leader>t<F5><CR>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
