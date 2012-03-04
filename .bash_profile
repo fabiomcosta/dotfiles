@@ -44,6 +44,7 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 #export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
 
 export_if_exists PATH `brew --prefix`/bin
+export_if_exists PATH `brew --prefix`/sbin
 export_if_exists PATH $HOME/bin
 
 # node
