@@ -15,35 +15,37 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'snipMate'
+Bundle 'scrooloose/syntastic'
 Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'sukima/xmledit'
+Bundle 'scrooloose/nerdtree'
+Bundle 'Shougo/neocomplcache'
+Bundle 'othree/eregex.vim'
+Bundle 'ciaranm/detectindent'
+Bundle 'mileszs/ack.vim'
+Bundle 'pangloss/vim-javascript'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'kchmck/vim-coffee-script'
-Bundle 'scrooloose/syntastic'
-Bundle 'csexton/snipmate.vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'ajf/puppet-vim'
-Bundle 'sukima/xmledit'
-Bundle 'scrooloose/nerdtree'
-Bundle 'pangloss/vim-javascript'
-Bundle 'ervandew/supertab'
 Bundle 'thomd/vim-jasmine'
 Bundle 'groenewege/vim-less'
 Bundle 'digitaltoad/vim-jade'
-Bundle 'othree/eregex.vim'
+Bundle 'ajf/puppet-vim'
 Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'ciaranm/detectindent'
 Bundle 'robhudson/snipmate_for_django'
-Bundle 'mileszs/ack.vim'
+
 
 syntax on
 filetype plugin indent on
 
 " autodetects if the file uses spaces or tabs to define preferences
-:autocmd BufReadPost * :DetectIndent
-:let g:detectindent_preferred_indent = 4
-:let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent = 4
+let g:detectindent_preferred_expandtab = 1
+autocmd BufReadPost * :DetectIndent
+
+let g:neocomplcache_enable_at_startup = 1
 
 set modelines=0
 
