@@ -69,8 +69,11 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
-set undofile
 set number
+
+if exists("&undofile")
+  set undofile
+endif
 
 let mapleader = ","
 
