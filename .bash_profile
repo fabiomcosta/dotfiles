@@ -34,10 +34,10 @@ alias svnrm='find . -type d -name .svn | xargs rm -rf'
 alias pycrm='find . -name "*.pyc" -delete'
 # endaliases
 
-
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+export EDITOR=vim
 
 # android-sdk
 #export_if_exists PATH $HOME/Sites/android-sdk/tools
