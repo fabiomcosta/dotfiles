@@ -15,6 +15,9 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 Bundle 'snipMate'
+Bundle 'Gundo'
+Bundle 'YankRing.vim'
+
 Bundle 'scrooloose/syntastic'
 Bundle 'kien/ctrlp.vim'
 Bundle 'scrooloose/nerdcommenter'
@@ -24,8 +27,9 @@ Bundle 'Shougo/neocomplcache'
 Bundle 'othree/eregex.vim'
 Bundle 'ciaranm/detectindent'
 Bundle 'mileszs/ack.vim'
-Bundle 'YankRing.vim'
 Bundle 'mattn/zencoding-vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'robhudson/snipmate_for_django'
 Bundle 'pangloss/vim-javascript'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-surround'
@@ -36,7 +40,7 @@ Bundle 'groenewege/vim-less'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'ajf/puppet-vim'
 Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'robhudson/snipmate_for_django'
+Bundle 'plasticboy/vim-markdown'
 
 
 syntax on
@@ -109,7 +113,7 @@ nnoremap ; :
 
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
 nnoremap <leader>es :source $MYVIMRC<cr>
-nnoremap <leader>w :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>''
+nnoremap <leader>w :let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<Bar>:nohl<CR>''
 nnoremap <leader>W <C-w>v<C-w>l
 nnoremap <leader>a :Ack
 "html fold tag
