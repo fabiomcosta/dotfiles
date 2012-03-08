@@ -37,7 +37,7 @@ alias pycrm='find . -name "*.pyc" -delete'
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export EDITOR=vim
+export EDITOR=`which vim`
 
 # android-sdk
 #export_if_exists PATH $HOME/Sites/android-sdk/tools
