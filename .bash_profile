@@ -52,6 +52,9 @@ export_if_exists NODE_PATH `brew --prefix`/lib/node_modules
 export_if_exists PATH      `brew --prefix`/share/npm/bin
 execute_if_exists source $HOME/.nvm/nvm.sh
 
+# python3 with less priority than python2
+export_if_exists PATH       `brew --prefix`/share/python3
+
 # python
 export_if_exists PYTHONPATH `brew --prefix`/lib/python2.7/site-packages
 export_if_exists PATH       `brew --prefix`/share/python
