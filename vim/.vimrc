@@ -134,7 +134,7 @@ vnoremap <C-k> :m-2<CR>gv=gv
 noremap <leader>z :NERDTreeToggle<CR>
 
 let g:ctrlp_map = '<leader>t'
-nmap <silent> <leader>y <leader>t<F5><CR>
+nmap <leader>y :CtrlPClearCache<CR>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
