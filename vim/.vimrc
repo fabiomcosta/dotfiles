@@ -131,10 +131,12 @@ inoremap <C-k> <Esc>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
-noremap <leader>z :NERDTreeToggle<CR>
+noremap <leader>z :NERDTreeToggle<cr>
+
+inoremap <c-z> <esc>:call zencoding#expandAbbr(1)<cr>a
 
 let g:ctrlp_map = '<leader>t'
-nmap <leader>y :CtrlPClearCache<CR>
+nmap <leader>y :CtrlPClearCache<cr>
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
@@ -155,6 +157,7 @@ augroup END
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
+let g:yankring_history_file = '.yankring_history'
 
 " Show trailing whitespace:
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
