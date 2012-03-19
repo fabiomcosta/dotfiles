@@ -135,8 +135,15 @@ noremap <leader>z :NERDTreeToggle<cr>
 
 inoremap <c-z> <esc>:call zencoding#expandAbbr(1)<cr>a
 
+"ctrlp configuration
 let g:ctrlp_map = '<leader>t'
 nmap <leader>y :CtrlPClearCache<cr>
+let g:ctrlp_working_path_mode = 1
+let g:ctrlp_max_height = 20
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.un~,*.dll,*.exe
+set wildignore+=*/.git/*,*/.hq/*,*/.svn/*
+set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
+
 
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
