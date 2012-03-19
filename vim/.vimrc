@@ -133,7 +133,7 @@ vnoremap <C-k> :m-2<CR>gv=gv
 
 noremap <leader>z :NERDTreeToggle<cr>
 
-inoremap <c-z> <esc>:call zencoding#expandAbbr(1)<cr>a
+inoremap <c-z> <esc>:call zencoding#expandAbbr(0)<cr>a
 
 "ctrlp configuration
 let g:ctrlp_map = '<leader>t'
