@@ -19,6 +19,9 @@ stop_slow() {
     sudo ipfw delete 1
 }
 
+findd() {
+    find . -name "*$1*"
+}
 
 # aliases
 alias grep='grep --color'
