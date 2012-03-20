@@ -41,38 +41,39 @@ export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 export EDITOR=`which vim`
+BREW_PREFIX=`brew --prefix`
 
 # android-sdk
 #export_if_exists PATH $HOME/Sites/android-sdk/tools
 #export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
 
-export_if_exists PATH `brew --prefix`/bin
-export_if_exists PATH `brew --prefix`/sbin
+export_if_exists PATH $BREW_PREFIX/bin
+export_if_exists PATH $BREW_PREFIX/sbin
 export_if_exists PATH $HOME/bin
 
 # node
-export_if_exists NODE_PATH `brew --prefix`/lib/node_modules
-export_if_exists PATH      `brew --prefix`/share/npm/bin
+export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
+export_if_exists PATH      $BREW_PREFIX/share/npm/bin
 execute_if_exists source $HOME/.nvm/nvm.sh
 
 # python3 with less priority than python2
-export_if_exists PATH       `brew --prefix`/share/python3
+export_if_exists PATH       $BREW_PREFIX/share/python3
 
 # python
-export_if_exists PYTHONPATH `brew --prefix`/lib/python2.7/site-packages
-export_if_exists PATH       `brew --prefix`/share/python
+export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+export_if_exists PATH       $BREW_PREFIX/share/python
     # virtualenv
     export WORKON_HOME=$HOME/.virtualenvs
-    execute_if_exists source `brew --prefix`/share/python/virtualenvwrapper.sh
+    execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
 
 # ruby
 export_if_exists PATH    `brew --prefix ruby`/bin
 
 # git
-execute_if_exists source `brew --prefix`/etc/bash_completion.d/git-completion.bash
+execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
 
 # z
-execute_if_exists source `brew --prefix`/etc/profile.d/z.sh
+execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 
 # yipit
 export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
@@ -95,7 +96,6 @@ LIGHTYELLOW="\[\033[1;33m\]"
 LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
 export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
-export PS2="> "
 
 # pip bash completion start
 _pip_completion()
