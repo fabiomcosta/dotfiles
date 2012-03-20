@@ -5,52 +5,6 @@ if has("gui_running")
 endif
 
 set nocompatible
-filetype off
-
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-" required!
-Bundle 'gmarik/vundle'
-
-Bundle 'snipMate'
-Bundle 'Gundo'
-Bundle 'YankRing.vim'
-
-Bundle 'scrooloose/syntastic'
-Bundle 'kien/ctrlp.vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'sukima/xmledit'
-Bundle 'scrooloose/nerdtree'
-Bundle 'Shougo/neocomplcache'
-Bundle 'othree/eregex.vim'
-Bundle 'ciaranm/detectindent'
-Bundle 'mileszs/ack.vim'
-Bundle 'mattn/zencoding-vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'robhudson/snipmate_for_django'
-Bundle 'pangloss/vim-javascript'
-Bundle 'tpope/vim-haml'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'thomd/vim-jasmine'
-Bundle 'groenewege/vim-less'
-Bundle 'digitaltoad/vim-jade'
-Bundle 'ajf/puppet-vim'
-Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'plasticboy/vim-markdown'
-
-filetype plugin indent on
-
-" autodetects if the file uses spaces or tabs to define preferences
-let g:detectindent_preferred_indent=4
-let g:detectindent_preferred_expandtab=1
-autocmd BufReadPost * :DetectIndent
-
-let g:neocomplcache_enable_at_startup=1
-
 set modelines=0
 
 set tabstop=4
@@ -129,6 +83,59 @@ inoremap <C-k> <ESC>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
+
+"show trailing whitespace
+highlight ExtraWhitespace ctermbg=darkred guibg=darkred
+match ExtraWhitespace /\s\+$/
+
+
+filetype off
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
+
+Bundle 'snipMate'
+Bundle 'Gundo'
+Bundle 'YankRing.vim'
+
+Bundle 'scrooloose/syntastic'
+Bundle 'kien/ctrlp.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'sukima/xmledit'
+Bundle 'scrooloose/nerdtree'
+Bundle 'Shougo/neocomplcache'
+Bundle 'othree/eregex.vim'
+Bundle 'ciaranm/detectindent'
+Bundle 'mileszs/ack.vim'
+Bundle 'mattn/zencoding-vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'robhudson/snipmate_for_django'
+Bundle 'pangloss/vim-javascript'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'thomd/vim-jasmine'
+Bundle 'groenewege/vim-less'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'ajf/puppet-vim'
+Bundle 'cakebaker/scss-syntax.vim'
+Bundle 'plasticboy/vim-markdown'
+
+
+" autodetects if the file uses spaces or tabs to define preferences
+let g:detectindent_preferred_indent=4
+let g:detectindent_preferred_expandtab=1
+autocmd BufReadPost * :DetectIndent
+
+let g:neocomplcache_enable_at_startup=1
+
 noremap <LEADER>z :NERDTreeToggle<CR>
 
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0)<CR>a
@@ -148,15 +155,13 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-set guioptions-=T  "remove toolbar
-set guioptions-=r  "remove right-hand scroll bar
-
+let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
 let g:yankring_history_file='.yankring_history'
 
-"show trailing whitespace
-highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-match ExtraWhitespace /\s\+$/
+
+syntax on
+filetype plugin indent on
 
