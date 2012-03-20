@@ -42,16 +42,14 @@ Bundle 'ajf/puppet-vim'
 Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'plasticboy/vim-markdown'
 
-
-syntax on
 filetype plugin indent on
 
 " autodetects if the file uses spaces or tabs to define preferences
-let g:detectindent_preferred_indent = 4
-let g:detectindent_preferred_expandtab = 1
+let g:detectindent_preferred_indent=4
+let g:detectindent_preferred_expandtab=1
 autocmd BufReadPost * :DetectIndent
 
-let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_at_startup=1
 
 set modelines=0
 
@@ -91,15 +89,15 @@ set gdefault
 set incsearch
 set showmatch
 set hlsearch
-nnoremap <leader><space> :noh<cr>
-nnoremap <tab> %
-vnoremap <tab> %
+nnoremap <LEADER><SPACE> :noh<CR>
+nnoremap <TAB> %
+vnoremap <TAB> %
 
 set wrap
 set textwidth=360
 set formatoptions=qrn1
 
-nmap <leader>l :set list!<CR>
+nmap <LEADER>l :set list!<CR>
 set list
 set listchars=tab:▸\ ,eol:¬
 
@@ -111,62 +109,54 @@ nnoremap k gk
 inoremap jj <ESC>
 nnoremap ; :
 
-nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
-nnoremap <leader>es :source $MYVIMRC<cr>
-nnoremap <leader>w a<esc>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<Bar>:nohl<CR>``
-nnoremap <leader>W <C-w>v<C-w>l
-nnoremap <leader>a :Ack
+nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
+nnoremap <LEADER>es :source $MYVIMRC<CR>
+nnoremap <LEADER>w a<ESC>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<Bar>:nohl<CR>``
+nnoremap <LEADER>W <C-w>v<C-w>l
+nnoremap <LEADER>a :Ack
 "html fold tag
-nnoremap <leader>ft Vatzf
+nnoremap <LEADER>ft Vatzf
 "sorts properties inside {} mostly for css
-nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+nnoremap <LEADER>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 nnoremap <C-j> :m+<CR>==
 nnoremap <C-k> :m-2<CR>==
-inoremap <C-j> <Esc>:m+<CR>==gi
-inoremap <C-k> <Esc>:m-2<CR>==gi
+inoremap <C-j> <ESC>:m+<CR>==gi
+inoremap <C-k> <ESC>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
 
-noremap <leader>z :NERDTreeToggle<cr>
+noremap <LEADER>z :NERDTreeToggle<CR>
 
-inoremap <c-z> <esc>:call zencoding#expandAbbr(0)<cr>a
+inoremap <C-z> <ESC>:call zencoding#expandAbbr(0)<CR>a
 
-"ctrlp configuration
-let g:ctrlp_map = '<leader>t'
-nmap <leader>y :CtrlPClearCache<cr>
+"ctrlp
+let g:ctrlp_map = '<LEADER>t'
+nmap <LEADER>y :CtrlPClearCache<cr>
 let g:ctrlp_working_path_mode = 1
 let g:ctrlp_max_height = 20
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.un~,*.dll,*.exe
-set wildignore+=*/.git/*,*/.hq/*,*/.svn/*
+set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/.sass-cache/*
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 
-
+"statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-au BufNewFile,BufRead *.less set filetype=less
-
 set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
-
-augroup mkd
-    autocmd BufRead,BufEnter *.mkd set ai formatoptions=tcroqn2 comments=n:&gt;
-    autocmd BufRead,BufEnter *.md set ai formatoptions=tcroqn2 comments=n:&gt;
-    autocmd BufRead,BufEnter *.markdown set ai formatoptions=tcroqn2 comments=n:&gt;
-augroup END
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
-let g:yankring_history_file = '.yankring_history'
+let g:yankring_history_file='.yankring_history'
 
-" Show trailing whitespace:
+"show trailing whitespace
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 match ExtraWhitespace /\s\+$/
 
