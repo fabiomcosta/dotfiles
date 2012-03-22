@@ -103,6 +103,7 @@ Bundle 'gmarik/vundle'
 Bundle 'snipMate'
 Bundle 'Gundo'
 Bundle 'YankRing.vim'
+Bundle 'yaifa.vim'
 
 Bundle 'scrooloose/syntastic'
 Bundle 'kien/ctrlp.vim'
@@ -111,7 +112,6 @@ Bundle 'sukima/xmledit'
 Bundle 'scrooloose/nerdtree'
 Bundle 'Shougo/neocomplcache'
 Bundle 'othree/eregex.vim'
-Bundle 'ciaranm/detectindent'
 Bundle 'mileszs/ack.vim'
 Bundle 'mattn/zencoding-vim'
 Bundle 'tpope/vim-fugitive'
@@ -130,8 +130,6 @@ Bundle 'plasticboy/vim-markdown'
 
 
 " autodetects if the file uses spaces or tabs to define preferences
-let g:detectindent_preferred_indent=4
-let g:detectindent_preferred_expandtab=1
 autocmd BufReadPost * :DetectIndent
 
 let g:neocomplcache_enable_at_startup=1
@@ -139,6 +137,10 @@ let g:neocomplcache_enable_at_startup=1
 noremap <LEADER>z :NERDTreeToggle<CR>
 
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0)<CR>a
+
+"removes autodetection of indentation on TAB
+au! YAIFA
+map <LEADER>ii :YAIFAMagic<CR>
 
 "ctrlp
 let g:ctrlp_map = '<LEADER>t'
