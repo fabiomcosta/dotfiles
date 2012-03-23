@@ -1,4 +1,7 @@
 colorscheme molokai
+syntax on
+
+let mapleader = ","
 
 if has("gui_running")
   set guifont=Inconsolata:h14
@@ -7,14 +10,21 @@ endif
 set nocompatible
 set modelines=0
 
-set tabstop=4
-set shiftwidth=4
-set softtabstop=4
 set expandtab
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set shiftround
 
+set nobackup
+set noswapfile
+set visualbell
+set noerrorbells
 set encoding=utf-8
 set scrolloff=3
 set autoindent
+set copyindent
+set title
 set showmode
 set showcmd
 set hidden
@@ -26,13 +36,11 @@ set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set number
-
 if exists("&undofile")
-  set undofile
+    set undofile
 endif
 
-let mapleader = ","
-
+"search related {{{
 nnoremap / :M/
 vnoremap / :M/
 nnoremap ? :M?
@@ -40,12 +48,14 @@ vnoremap ? :M?
 set ignorecase
 set smartcase
 set gdefault
-set incsearch
 set showmatch
 set hlsearch
+set incsearch
+"clears search
 nnoremap <LEADER><SPACE> :noh<CR>
 nnoremap <TAB> %
 vnoremap <TAB> %
+" }}}
 
 set wrap
 set textwidth=360
@@ -64,14 +74,12 @@ inoremap jj <ESC>
 nnoremap ; :
 
 nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
-nnoremap <LEADER>es :source $MYVIMRC<CR>
-nnoremap <LEADER>w a<ESC>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<Bar>:nohl<CR>``
+nnoremap <LEADER>sv :so $MYVIMRC<CR>
+nnoremap <LEADER>w a<ESC>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<CR>``
 nnoremap <LEADER>W <C-w>v<C-w>l
 nnoremap <LEADER>a :Ack
 "html fold tag
 nnoremap <LEADER>ft Vatzf
-"sorts properties inside {} mostly for css
-nnoremap <LEADER>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
@@ -89,6 +97,8 @@ set guioptions-=r  "remove right-hand scroll bar
 "show trailing whitespace
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 match ExtraWhitespace /\s\+$/
+
+cmap w!! w !sudo tee % >/dev/null
 
 
 filetype off
@@ -127,10 +137,10 @@ Bundle 'digitaltoad/vim-jade'
 Bundle 'ajf/puppet-vim'
 Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'plasticboy/vim-markdown'
+Bundle 'hostsamurai/CSSMinister.vim'
+Bundle 'sjbach/lusty'
 
-
-" autodetects if the file uses spaces or tabs to define preferences
-autocmd BufReadPost * :DetectIndent
+filetype plugin indent on
 
 let g:neocomplcache_enable_at_startup=1
 
@@ -139,15 +149,14 @@ noremap <LEADER>z :NERDTreeToggle<CR>
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0)<CR>a
 
 "removes autodetection of indentation on TAB
-au! YAIFA
-map <LEADER>ii :YAIFAMagic<CR>
+"au! YAIFA
+map <LEADER>di :YAIFAMagic<CR>
 
 "ctrlp
-let g:ctrlp_map = '<LEADER>t'
-nmap <LEADER>y :CtrlPClearCache<cr>
-let g:ctrlp_working_path_mode = 1
-let g:ctrlp_max_height = 20
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.un~,*.dll,*.exe
+let g:ctrlp_map='<LEADER>t'
+nmap <LEADER>y :CtrlPClearCache<CR>
+let g:ctrlp_max_height=20
+set wildignore=*/tmp/*,*.so,*.swp,*.zip,*.un~,*.dll,*.exe,*.pyc
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/.sass-cache/*
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 
@@ -162,8 +171,4 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 
 let g:yankring_history_file='.yankring_history'
-
-
-syntax on
-filetype plugin indent on
 
