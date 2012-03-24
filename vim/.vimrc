@@ -6,6 +6,8 @@ let mapleader = ","
 if has("gui_running")
   set guifont=Inconsolata:h14
 endif
+set guioptions-=T  "remove toolbar
+set guioptions-=r  "remove right-hand scroll bar
 
 set nocompatible
 set modelines=0
@@ -41,10 +43,8 @@ if exists("&undofile")
 endif
 
 "search related {{{
-nnoremap / :M/
-vnoremap / :M/
-nnoremap ? :M?
-vnoremap ? :M?
+nnoremap / /\v
+vnoremap / /\v
 set ignorecase
 set smartcase
 set gdefault
@@ -90,9 +90,6 @@ inoremap <C-j> <ESC>:m+<CR>==gi
 inoremap <C-k> <ESC>:m-2<CR>==gi
 vnoremap <C-j> :m'>+<CR>gv=gv
 vnoremap <C-k> :m-2<CR>gv=gv
-
-set guioptions-=T  "remove toolbar
-set guioptions-=r  "remove right-hand scroll bar
 
 "show trailing whitespace
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
@@ -154,11 +151,13 @@ map <LEADER>di :YAIFAMagic<CR>
 
 "ctrlp
 let g:ctrlp_map='<LEADER>t'
-nmap <LEADER>y :CtrlPClearCache<CR>
 let g:ctrlp_max_height=20
-set wildignore=*/tmp/*,*.so,*.swp,*.zip,*.un~,*.dll,*.exe,*.pyc
-set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/.sass-cache/*
+nmap <LEADER>y :CtrlPClearCache<CR>
+
+set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
+set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
+set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*,*/.sass-cache/*
 
 "statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
