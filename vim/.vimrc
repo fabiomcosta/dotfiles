@@ -136,6 +136,7 @@ Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'hostsamurai/CSSMinister.vim'
 Bundle 'sjbach/lusty'
+Bundle 'pavel-v-chernykh/vim-vagrant.git'
 
 filetype plugin indent on
 
