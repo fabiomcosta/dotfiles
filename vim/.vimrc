@@ -159,6 +159,7 @@ set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
 set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*,*/.sass-cache/*
+set wildignore+=*/node_modules/*
 
 "statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
