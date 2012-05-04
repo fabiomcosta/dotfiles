@@ -18,6 +18,7 @@ set softtabstop=4
 set shiftwidth=4
 set shiftround
 
+set autoread
 set nobackup
 set noswapfile
 set visualbell
