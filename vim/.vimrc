@@ -76,9 +76,9 @@ nnoremap ; :
 
 nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
-nnoremap <LEADER>w a<ESC>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<CR>``
-nnoremap <LEADER>W <C-w>v<C-w>l
-nnoremap <LEADER>a :Ack
+nnoremap <LEADER>W a<ESC>:let _s=@/<Bar>:%s/\s\+$//<Bar>:let @/=_s<CR>``
+nnoremap <LEADER>w <C-w>v<C-w>l
+nnoremap <LEADER>a :Ack<Space>
 "html fold tag
 nnoremap <LEADER>ft Vatzf
 
