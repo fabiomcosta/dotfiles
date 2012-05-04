@@ -79,9 +79,13 @@ export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
 execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
 
 #buster
-BUSTER_PATH=$HOME/Sites/other/buster
-export_if_exists NODE_PATH   $BUSTER_PATH
-export_if_exists PATH        $BUSTER_PATH/buster/bin
+#BUSTER_PATH=$HOME/Sites/other/buster
+#export_if_exists NODE_PATH   $BUSTER_PATH
+#export_if_exists PATH        $BUSTER_PATH/buster/bin
+
+#bash completion
+execute_if_exists . `brew --prefix`/etc/bash_completion
+
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
