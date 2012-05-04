@@ -4,7 +4,7 @@ syntax on
 let mapleader = ","
 
 if has("gui_running")
-  set guifont=Inconsolata:h14
+  set guifont=Inconsolata:h16
 endif
 set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
