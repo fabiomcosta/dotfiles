@@ -98,6 +98,7 @@ match ExtraWhitespace /\s\+$/
 
 cmap w!! w !sudo tee % >/dev/null
 
+vnoremap <Leader>j :!python -m json.tool<CR>
 
 filetype off
 
