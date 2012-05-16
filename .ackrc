@@ -1,0 +1,4 @@
+--no-sql
+--ignore-dir=migrations
+# Search Sass Files
+--type-set=sass=.scss
