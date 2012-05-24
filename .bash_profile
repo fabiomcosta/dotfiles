@@ -28,13 +28,12 @@ alias grep='grep --color'
 alias egrep='egrep --color'
 alias la='ls -a'
 alias ll='ls -l'
-alias yui='java -jar $HOME/bin/yui.jar --charset=utf8'
-alias closurec='java -jar $HOME/bin/compiler.jar'
 alias uuid='python -c "import sys;import uuid;sys.stdout.write(str(uuid.uuid4()))" | pbcopy'
 # remove .svn folders
 alias svnrm='find . -type d -name .svn | xargs rm -rf'
 # remove *.pyc files
 alias pycrm='find . -name "*.pyc" -delete'
+alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
 # endaliases
 
 export TERM="xterm-color"
@@ -80,9 +79,13 @@ export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
 execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
 
 #buster
-BUSTER_PATH=$HOME/Sites/other/buster
-export_if_exists NODE_PATH   $BUSTER_PATH
-export_if_exists PATH        $BUSTER_PATH/buster/bin
+#BUSTER_PATH=$HOME/Sites/other/buster
+#export_if_exists NODE_PATH   $BUSTER_PATH
+#export_if_exists PATH        $BUSTER_PATH/buster/bin
+
+#bash completion
+execute_if_exists . `brew --prefix`/etc/bash_completion
+
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
