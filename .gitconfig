@@ -1,0 +1,19 @@
+[user]
+	email = fabiomcosta@gmail.com
+	name = Fabio M. Costa
+[color]
+	ui = always
+	status = auto
+	branch = auto
+	interactive = auto
+	diff = auto
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	last = log -1 HEAD
+[branch]
+	autosetuprebase = always
+[credential]
+	helper = osxkeychain

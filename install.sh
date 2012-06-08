@@ -14,6 +14,7 @@ pushd $HOME
 	create_ln_if_not_created ".vim" "$pwd/vim/.vim"
 	create_ln_if_not_created ".vimrc" "$pwd/vim/.vimrc"
 	create_ln_if_not_created ".bash_profile" "$pwd/.bash_profile"
+	create_ln_if_not_created ".gitconfig" "$pwd/.gitconfig"
 	create_ln_if_not_created ".ackrc" "$pwd/.ackrc"
 	source ".bash_profile"
 popd
