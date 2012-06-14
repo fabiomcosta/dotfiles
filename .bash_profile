@@ -30,6 +30,7 @@ alias la='ls -a'
 alias ll='ls -l'
 alias gs='git status'
 alias gd='git diff'
+alias gc='git commit'
 alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
 # endaliases
 
