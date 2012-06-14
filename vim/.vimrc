@@ -157,15 +157,17 @@ set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*,*/.sass-cache/*
 set wildignore+=*/node_modules/*
 
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+" yipits ignored checks
+let g:syntastic_python_checker_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
+
 "statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=2
 
 let g:yankring_history_file='.yankring_history'
 
