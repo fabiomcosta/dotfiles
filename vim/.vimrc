@@ -39,9 +39,6 @@ set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set number
-if exists("&undofile")
-    set undofile
-endif
 
 "search related {{{
 nnoremap / /\v
