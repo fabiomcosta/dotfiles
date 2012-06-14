@@ -45,10 +45,6 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 export EDITOR=`which vim`
 BREW_PREFIX=`brew --prefix`
 
-# android-sdk
-#export_if_exists PATH $HOME/Sites/android-sdk/tools
-#export_if_exists PATH $HOME/Sites/android-sdk/platform-tools
-
 export_if_exists PATH $BREW_PREFIX/bin
 export_if_exists PATH $BREW_PREFIX/sbin
 export_if_exists PATH $HOME/bin
