@@ -28,14 +28,8 @@ alias grep='grep --color'
 alias egrep='egrep --color'
 alias la='ls -a'
 alias ll='ls -l'
-alias uuid='python -c "import sys;import uuid;sys.stdout.write(str(uuid.uuid4()))" | pbcopy'
-# git
 alias gs='git status'
 alias gd='git diff'
-# remove .svn folders
-alias svnrm='find . -type d -name .svn | xargs rm -rf'
-# remove *.pyc files
-alias pycrm='find . -name "*.pyc" -delete'
 alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
 # endaliases
 
