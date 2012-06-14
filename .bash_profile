@@ -31,13 +31,13 @@ alias ll='ls -l'
 alias gs='git status'
 alias gd='git diff'
 alias gc='git commit'
+alias gr='git rebase'
 alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
 # endaliases
 
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
-export EDITOR=`which vim`
 BREW_PREFIX=`brew --prefix`
 
 export_if_exists PATH $BREW_PREFIX/bin
@@ -80,6 +80,11 @@ execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
 #bash completion
 execute_if_exists . `brew --prefix`/etc/bash_completion
 
+if [ `which mvim` ]; then
+    export EDITOR=`which mvim`
+else
+    export EDITOR=`which vim`
+fi
 
 function PWD {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
