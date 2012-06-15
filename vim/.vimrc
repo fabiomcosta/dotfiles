@@ -140,7 +140,8 @@ let g:neocomplcache_enable_at_startup=1
 
 noremap <LEADER>z :NERDTreeToggle<CR>
 
-inoremap <C-z> <ESC>:call zencoding#expandAbbr(0)<CR>a
+nnoremap <C-z> :call zencoding#expandAbbr(0,"")<CR>a
+inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
 
 "removes autodetection of indentation on TAB
 "au! YAIFA
