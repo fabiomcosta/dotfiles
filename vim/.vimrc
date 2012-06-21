@@ -185,7 +185,10 @@ augroup filetypedetect
         setf htmldjango
         return
       endif
+      let n = n + 1
     endwhile
+
+    let n = 1
     while n < 10 && n < line("$")
       if getline(n) =~ '\<DTD\s\+XHTML\s'
         setf xhtml
