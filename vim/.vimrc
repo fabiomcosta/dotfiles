@@ -181,12 +181,14 @@ augroup filetypedetect
   func! FThtml()
     let n = 1
     while n < 10 && n < line("$")
-      if getline(n) =~ '\<DTD\s\+XHTML\s'
-        setf xhtml
-        return
-      endif
       if getline(n) =~ '{%\|{{\|{#'
         setf htmldjango
+        return
+      endif
+    endwhile
+    while n < 10 && n < line("$")
+      if getline(n) =~ '\<DTD\s\+XHTML\s'
+        setf xhtml
         return
       endif
       let n = n + 1
@@ -194,3 +196,33 @@ augroup filetypedetect
     setf html
   endfunc
 augroup END
+
+
+" correctly indents the current file depending on the user options
+nnoremap <LEADER>fi :let _s=@/<BAR>:call MyReplaceIndentation()<BAR>:let @/=_s<CR>
+
+function! MyReplaceIndentation()
+  let spaces = ''
+  let tab = '\t'
+  for i in range(&shiftwidth)
+    let spaces .= ' '
+  endfor
+
+  if exists('&expandtab')
+    let incorrectIndentation = tab
+    let correctIndentation = spaces
+  else
+    let incorrectIndentation = spaces
+    let correctIndentation = tab
+  endif
+
+  try
+    execute "% s/" . incorrectIndentation . "/" . correctIndentation . "/"
+  catch
+    echo "Indentation is fine already."
+  endtry
+
+endfunction
+
+noh
+
