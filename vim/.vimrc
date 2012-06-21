@@ -202,7 +202,7 @@ augroup END
 
 
 " correctly indents the current file depending on the user options
-nnoremap <LEADER>fi :let _s=@/<BAR>:call MyFixIndentation()<BAR>:let @/=_s<CR>
+nnoremap <LEADER>fi a<ESC>:let _s=@/<BAR>:call MyFixIndentation()<BAR>:let @/=_s<CR>``
 
 function! MyFixIndentation()
   let spaces = ''
