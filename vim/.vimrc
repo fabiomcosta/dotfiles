@@ -199,9 +199,9 @@ augroup END
 
 
 " correctly indents the current file depending on the user options
-nnoremap <LEADER>fi :let _s=@/<BAR>:call MyReplaceIndentation()<BAR>:let @/=_s<CR>
+nnoremap <LEADER>fi :let _s=@/<BAR>:call MyFixIndentation()<BAR>:let @/=_s<CR>
 
-function! MyReplaceIndentation()
+function! MyFixIndentation()
   let spaces = ''
   let tab = '\t'
   for i in range(&shiftwidth)
@@ -221,8 +221,6 @@ function! MyReplaceIndentation()
   catch
     echo "Indentation is fine already."
   endtry
-
 endfunction
 
 noh
-
