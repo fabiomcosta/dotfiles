@@ -104,10 +104,16 @@ call vundle#rc()
 " required!
 Bundle 'gmarik/vundle'
 
-Bundle 'snipMate'
 Bundle 'Gundo'
 Bundle 'YankRing.vim'
 Bundle 'yaifa.vim'
+
+" vim-snipmate
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'tomtom/tlib_vim'
+Bundle 'garbas/vim-snipmate'
+Bundle 'honza/snipmate-snippets'
+"/vim-snipmate
 
 Bundle 'scrooloose/syntastic'
 Bundle 'kien/ctrlp.vim'
