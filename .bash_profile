@@ -70,7 +70,9 @@ execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 
 # yipit
 export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
-execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
+test "$AT_YIPIT" && execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+
 
 #buster
 #BUSTER_PATH=$HOME/Sites/other/buster
