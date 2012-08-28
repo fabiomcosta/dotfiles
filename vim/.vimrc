@@ -171,6 +171,7 @@ let g:syntastic_python_checker_args="--ignore=E501,E502,W293,E121,E123,E124,E125
 "statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
+set statusline+=%{fugitive#statusline()}
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
