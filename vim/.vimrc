@@ -176,6 +176,11 @@ set statusline+=%*
 
 let g:yankring_history_file='.yankring_history'
 
+set foldmethod=manual
+set foldnestmax=2
+nnoremap <space> za
+vnoremap <space> zf
+
 " a better htmldjango detection
 augroup filetypedetect
   " removes current htmldjango detection located at $VIMRUNTIME/filetype.vim
