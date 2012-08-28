@@ -68,10 +68,13 @@ execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
 # z
 execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 
-# yipit
+# executes when Im at yipits wifi
 export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
 AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
-test "$AT_YIPIT" && execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+if [ "$AT_YIPIT" ]; then
+    execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+    yipit
+fi
 
 
 #buster
