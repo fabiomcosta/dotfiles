@@ -23,6 +23,19 @@ findd() {
     find . -name "*$1*"
 }
 
+function PWD {
+    pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+}
+
+RED="\[\033[0;31m\]"
+YELLOW="\[\033[0;33m\]"
+GREEN="\[\033[0;32m\]"
+LIGHTBLUE="\[\033[1;34m\]"
+LIGHTYELLOW="\[\033[1;33m\]"
+LIGHTCYAN="\[\033[1;36m\]"
+NOCOLOR="\[\e[0m\]"
+export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+
 # aliases
 alias grep='grep --color'
 alias egrep='egrep --color'
@@ -68,15 +81,6 @@ execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
 # z
 execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 
-# executes when Im at yipits wifi
-export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
-AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
-if [ "$AT_YIPIT" ]; then
-    execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
-    yipit
-fi
-
-
 #buster
 #BUSTER_PATH=$HOME/Sites/other/buster
 #export_if_exists NODE_PATH   $BUSTER_PATH
@@ -91,18 +95,13 @@ else
     export EDITOR=`which vim`
 fi
 
-function PWD {
-    pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
-}
-
-RED="\[\033[0;31m\]"
-YELLOW="\[\033[0;33m\]"
-GREEN="\[\033[0;32m\]"
-LIGHTBLUE="\[\033[1;34m\]"
-LIGHTYELLOW="\[\033[1;33m\]"
-LIGHTCYAN="\[\033[1;36m\]"
-NOCOLOR="\[\e[0m\]"
-export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+# executes when Im at yipits wifi
+export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
+AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
+if [ "$AT_YIPIT" ]; then
+    execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
+    yipit
+fi
 
 # pip bash completion start
 _pip_completion()

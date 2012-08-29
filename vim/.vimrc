@@ -177,8 +177,8 @@ set statusline+=%*
 
 let g:yankring_history_file='.yankring_history'
 
-set foldmethod=manual
-set foldnestmax=2
+set foldmethod=indent
+set nofoldenable
 nnoremap <space> za
 vnoremap <space> zf
 
