@@ -136,6 +136,7 @@ Bundle 'ajf/puppet-vim'
 Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'hostsamurai/CSSMinister.vim'
+Bundle 'Lokaltog/vim-powerline'
 "Bundle 'sjbach/lusty'
 
 filetype plugin indent on
@@ -167,6 +168,8 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 " yipits ignored checks
 let g:syntastic_python_checker_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
+
+let g:Powerline_symbols = 'fancy'
 
 "statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
