@@ -166,6 +166,8 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 " yipits ignored checks
 let g:syntastic_python_checker_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
 
 let g:Powerline_symbols = 'fancy'
 
