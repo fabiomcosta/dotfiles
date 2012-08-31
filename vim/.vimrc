@@ -79,6 +79,9 @@ nnoremap <LEADER>a :Ack<Space>
 
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
+nnoremap = <C-w>=
+nnoremap + :vertical resize +5<CR>
+nnoremap - :vertical resize -5<CR>
 
 nnoremap <C-j> :m+<CR>==
 nnoremap <C-k> :m-2<CR>==
@@ -106,7 +109,6 @@ Bundle 'gmarik/vundle'
 
 Bundle 'Gundo'
 Bundle 'YankRing.vim'
-Bundle 'yaifa.vim'
 
 " vim-snipmate
 Bundle 'MarcWeber/vim-addon-mw-utils'
@@ -147,10 +149,6 @@ noremap <LEADER>z :NERDTreeToggle<CR>
 
 nnoremap <C-z> :call zencoding#expandAbbr(0,"")<CR>a
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
-
-"removes autodetection of indentation on TAB
-"au! YAIFA
-map <LEADER>di :YAIFAMagic<CR>
 
 "ctrlp
 let g:ctrlp_map='<LEADER>t'
