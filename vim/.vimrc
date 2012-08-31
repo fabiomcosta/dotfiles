@@ -151,7 +151,7 @@ nnoremap <C-z> :call zencoding#expandAbbr(0,"")<CR>a
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
 
 "ctrlp
-let g:ctrlp_map='<LEADER>t'
+let g:ctrlp_map='<LEADER><LEADER>'
 let g:ctrlp_max_height=20
 nmap <LEADER>y :CtrlPClearCache<CR>
 
