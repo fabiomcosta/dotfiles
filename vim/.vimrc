@@ -191,7 +191,7 @@ augroup filetypedetect
   au! BufNewFile,BufRead *.html
   au  BufNewFile,BufRead *.html   call FThtml()
 
-  func! FThtml()
+  fun! FThtml()
     let n = 1
     while n < 10 && n < line("$")
       if getline(n) =~ '{%\|{{\|{#'
@@ -210,33 +210,44 @@ augroup filetypedetect
       let n = n + 1
     endwhile
     setf html
-  endfunc
+  endfun
 augroup END
 
-
 " correctly indents the current file depending on the user options
-nnoremap <LEADER>fi a<ESC>:let _s=@/<BAR>:call MyFixIndentation()<BAR>:let @/=_s<CR>``
+nnoremap <LEADER>fi :retab<CR>
+nnoremap <LEADER>ti :call ToggleIndentation()<CR>
+nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
-function! MyFixIndentation()
-  let spaces = ''
-  let tab = '\t'
-  for i in range(&shiftwidth)
-    let spaces .= ' '
-  endfor
+fun! ToggleIndentation()
+    if &expandtab
+        set noexpandtab
+        echo "using tabs to indent"
+    else
+        set expandtab
+        echo "using spaces to indent"
+    endif
+endfun
 
-  if exists('&expandtab')
-    let incorrectIndentation = tab
-    let correctIndentation = spaces
-  else
-    let incorrectIndentation = spaces
-    let correctIndentation = tab
-  endif
-
-  try
-    execute "% s/" . incorrectIndentation . "/" . correctIndentation . "/"
-  catch
-    echo "Indentation is fine already."
-  endtry
-endfunction
+" sets expandtab based on the first
+" indented lines of a file
+fun! NaiveIndentationDetector()
+    let n = 1
+    let max_line_number = 10
+    while n < max_line_number && n < line("$")
+        let current_line = getline(n)
+        if current_line =~ '^\t'
+            set noexpandtab
+            echo "using tabs to indent"
+            return
+        endif
+        if current_line =~ '^ '
+            set expandtab
+            echo "using spaces to indent"
+            return
+        endif
+        let n = n + 1
+    endwhile
+    echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
+endfun
 
 noh
