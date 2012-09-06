@@ -184,8 +184,13 @@ let g:yankring_history_file='.yankring_history'
 
 set foldmethod=indent
 set nofoldenable
-nnoremap <space> za
-vnoremap <space> zf
+nnoremap <SPACE> za
+vnoremap <SPACE> zf
+
+" underline to camelcase
+vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>
+" camelcase to underline
+vnoremap <LEADER>tul :s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>
 
 " a better htmldjango detection
 augroup filetypedetect
@@ -252,4 +257,3 @@ fun! NaiveIndentationDetector()
     echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
 
-noh
