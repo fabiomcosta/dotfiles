@@ -67,6 +67,8 @@ au FocusLost * :wa
 
 nnoremap j gj
 nnoremap k gk
+nnoremap <D-j> 10j
+nnoremap <D-k> 10k
 
 inoremap jj <ESC>
 nnoremap ; :
