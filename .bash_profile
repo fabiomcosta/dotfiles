@@ -23,8 +23,13 @@ findd() {
     find . -name "*$1*"
 }
 
-function PWD {
+PWD() {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+}
+
+gitsync() {
+    git pull
+    git push origin $1
 }
 
 RED="\[\033[0;31m\]"
@@ -36,16 +41,23 @@ LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
 export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 
+if [ `which mvim` ]; then
+    export EDITOR=`which mvim`
+else
+    export EDITOR=`which vim`
+fi
+
 # aliases
 alias grep='grep --color'
 alias egrep='egrep --color'
 alias la='ls -a'
 alias ll='ls -l'
+alias g='git'
 alias gs='git status'
 alias gd='git diff'
-alias gc='git commit'
-alias gr='git rebase'
 alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
+alias editprofile="$EDITOR ~/.bash_profile"
+alias sourceprofile="source ~/.bash_profile"
 # endaliases
 
 export TERM="xterm-color"
@@ -89,11 +101,6 @@ execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 #bash completion
 execute_if_exists . `brew --prefix`/etc/bash_completion
 
-if [ `which mvim` ]; then
-    export EDITOR=`which mvim`
-else
-    export EDITOR=`which vim`
-fi
 
 # executes when Im at yipits wifi
 export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
