@@ -48,8 +48,6 @@ else
 fi
 
 # aliases
-alias grep='grep --color'
-alias egrep='egrep --color'
 alias la='ls -a'
 alias ll='ls -l'
 alias g='git'
