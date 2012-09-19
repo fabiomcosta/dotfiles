@@ -1,4 +1,4 @@
-djs.loadJquery(function($) {
+djs.loadjQuery(function($) {
 
     $('#SubLanguageID').val('eng');
     $('#search_text').focus();
