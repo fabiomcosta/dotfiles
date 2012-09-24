@@ -18,5 +18,9 @@ djs = {
         } else {
             calljQuery();
         }
+    },
+
+    toArray: function(collection) {
+        return Array.prototype.slice.call(collection);
     }
 };
