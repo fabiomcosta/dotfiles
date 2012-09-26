@@ -1,10 +1,11 @@
-export_if_exists(){
-    if [ -e "$2" ]; then
-        export $1="$2:$(eval echo $`echo $1`)"
+export_if_exists() {
+    var_value=$(eval echo $`echo $1`)
+    if [[ -e "$2" && ! "$var_value" =~ .*(^|:)$2(:|$).* ]]; then
+        export $1="$2:$var_value"
     fi
 }
 
-execute_if_exists(){
+execute_if_exists() {
     if [ -e "$2" ]; then
         $1 "$2"
     fi
@@ -97,8 +98,7 @@ execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 #export_if_exists PATH        $BUSTER_PATH/buster/bin
 
 #bash completion
-execute_if_exists . `brew --prefix`/etc/bash_completion
-
+execute_if_exists source $BREW_PREFIX/etc/bash_completion
 
 # executes when Im at yipits wifi
 export YIPIT_PATH=$HOME/Sites/yipit/yipit-env/yipit
@@ -107,6 +107,8 @@ if [ "$AT_YIPIT" ]; then
     execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
     yipit
 fi
+
+
 
 # pip bash completion start
 _pip_completion()
