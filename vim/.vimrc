@@ -6,10 +6,10 @@ let mapleader = ","
 " try setting a better font
 if has("gui_running")
   try
-    set guifont=Monaco:h16
+    set guifont=Monaco:h14
   catch
     try
-      set guifont=SourceCodePro-Regular:h16
+      set guifont=SourceCodePro-Regular:h14
     catch
       set guifont=Inconsolata:h16
     endtry
@@ -47,6 +47,7 @@ set ttyfast
 set ruler
 set backspace=indent,eol,start
 set laststatus=2
+set linespace=0
 set number
 
 "search related {{{
