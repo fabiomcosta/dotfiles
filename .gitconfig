@@ -17,3 +17,5 @@
 	autosetuprebase = always
 [credential]
 	helper = osxkeychain
+[core]
+    editor = vim
