@@ -1,3 +1,5 @@
+#!/bin/bash
+
 export_if_exists() {
     var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" && ! "$var_value" =~ .*(^|:)$2(:|$).* ]]; then
