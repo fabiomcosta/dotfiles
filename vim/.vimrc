@@ -79,6 +79,8 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <D-j> 12j
 nnoremap <D-k> 12k
+vnoremap <D-j> 12j
+vnoremap <D-k> 12k
 
 inoremap jj <ESC>
 nnoremap ; :
