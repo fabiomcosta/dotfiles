@@ -23,11 +23,9 @@ stop_slow() {
 }
 
 findd() {
-    find . -name "*$1*"
-}
-
-PWD() {
-    pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+    # find files containing all the passed arg
+    # example: findd landing html -> landing.html some_landing_some.html
+    find . $(echo `( for arg in $@; do echo "-name *$arg*"; done )`)
 }
 
 gitsync() {
@@ -35,14 +33,26 @@ gitsync() {
     git push origin $1
 }
 
-RED="\[\033[0;31m\]"
-YELLOW="\[\033[0;33m\]"
-GREEN="\[\033[0;32m\]"
-LIGHTBLUE="\[\033[1;34m\]"
-LIGHTYELLOW="\[\033[1;33m\]"
-LIGHTCYAN="\[\033[1;36m\]"
-NOCOLOR="\[\e[0m\]"
-export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+myip() {
+    ip="`ifconfig | grep 192 | awk '{print \$2}'`"
+    print "Your ip is: $ip"
+    echo "$ip" | pbcopy
+}
+
+# since im using zsh with ohmyzsh, this is not needed
+
+#PWD() {
+    #pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+#}
+#RED="\[\033[0;31m\]"
+#YELLOW="\[\033[0;33m\]"
+#GREEN="\[\033[0;32m\]"
+#LIGHTBLUE="\[\033[1;34m\]"
+#LIGHTYELLOW="\[\033[1;33m\]"
+#LIGHTCYAN="\[\033[1;36m\]"
+#NOCOLOR="\[\e[0m\]"
+#export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+
 
 if [ `which mvim` ]; then
     export EDITOR=`which mvim`
@@ -56,7 +66,6 @@ alias ll='ls -l'
 alias g='git'
 alias gs='git status'
 alias gd='git diff'
-alias myip="ifconfig | grep 192 | awk '{print \$2}' | pbcopy"
 alias editprofile="$EDITOR ~/.bash_profile"
 alias sourceprofile="source ~/.bash_profile"
 # endaliases
