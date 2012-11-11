@@ -100,9 +100,6 @@ export_if_exists PATH       $BREW_PREFIX/share/python
 # ruby
 export_if_exists PATH    `brew --prefix ruby`/bin
 
-# z
-execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
-
 #buster
 #BUSTER_PATH=$HOME/Sites/other/buster
 #export_if_exists NODE_PATH   $BUSTER_PATH
