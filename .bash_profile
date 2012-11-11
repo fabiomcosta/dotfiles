@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 export_if_exists() {
     path_var_value=$(eval echo $`echo $1`)
@@ -100,9 +100,6 @@ export_if_exists PATH       $BREW_PREFIX/share/python
 # ruby
 export_if_exists PATH    `brew --prefix ruby`/bin
 
-# git
-execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
-
 # z
 execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 
@@ -110,10 +107,6 @@ execute_if_exists source $BREW_PREFIX/etc/profile.d/z.sh
 #BUSTER_PATH=$HOME/Sites/other/buster
 #export_if_exists NODE_PATH   $BUSTER_PATH
 #export_if_exists PATH        $BUSTER_PATH/buster/bin
-
-#bash completion
-# not needed since im using zsh
-#execute_if_exists source $BREW_PREFIX/etc/bash_completion
 
 # executes when Im at yipits wifi
 export YIPIT_PATH=$HOME/Sites/yipit/yipit
@@ -123,12 +116,21 @@ if [ "$AT_YIPIT" ]; then
     yipit
 fi
 
-# pip bash completion start
-_pip_completion()
-{
-    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
-                   COMP_CWORD=$COMP_CWORD \
-                   PIP_AUTO_COMPLETE=1 $1 ) )
-}
-complete -o default -F _pip_completion pip
-# pip bash completion end
+# bash completion scripts
+if [ ! "`which complete`" ]; then
+    # bash completion
+    execute_if_exists source $BREW_PREFIX/etc/bash_completion
+
+    # git
+    execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
+
+    # pip bash completion start
+    _pip_completion()
+    {
+        COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                    COMP_CWORD=$COMP_CWORD \
+                    PIP_AUTO_COMPLETE=1 $1 ) )
+    }
+    complete -o default -F _pip_completion pip
+    # pip bash completion end
+fi
