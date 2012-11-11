@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 OK=`printf "\033[1;32m✓\033[0m"`
 WARNING=`printf "\033[1;33m⚠\033[0m"`
