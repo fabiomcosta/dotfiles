@@ -32,11 +32,11 @@ install() {
     if [ ! `which $command` ]; then
         echo "Installing `hl $command`..."
         $@
-        if [[ "$?" ]]; then
+        if [ $? -eq 0 ]; then
+            echo "${OK} `hl $command` successfully installed."
+        else
             echo "${ERROR} a problem happened while installing `hl $command`."
             exit 1
-        else
-            echo "${OK} `hl $command` successfully installed."
         fi
     else
         echo "${OK} `hl $command` is already installed."
@@ -58,23 +58,23 @@ install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 install mvim brew install macvim --with-lua --override-system-vim
 install git brew install git
 
-
 # clone the vundle plugin, to manage vim plugins
-if [ ! -e $HOME/.vim/bundle/vundle ]; then
+if [ ! -d "$HOME/.vim/bundle/vundle/.git" ]; then
     echo "Installing `hl 'vundle'`..."
     git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
 else
     echo "${OK} `hl 'vundle'` is already installed."
 fi
 
-if [ ! `which mvim` ]; then
+# updating vim's plugins
+if [ `which mvim` ]; then
     echo "Installing/Updating `hl "macvim's plugins"`..."
-    mvim +BundleInstall! +qall
-    if [[ "$?" ]]; then
+    mvim -f +BundleInstall! +qall
+    if [ $? -eq 0 ]; then
+        echo "${OK} `hl "macvim's plugins"` updated successfuly.";
+    else
         echo "${ERROR} We had a problem while updating `hl "macvim's plugins"`.";
         exit 1
-    else
-        echo "${OK} `hl "macvim's plugins"` updated successfuly.";
     fi
 fi
 
