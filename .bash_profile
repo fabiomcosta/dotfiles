@@ -4,8 +4,8 @@ export_if_exists() {
     path_var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" ]]; then
         # remove the path from $path_var_value
-        # also cleans duplicated and leading ":" chars
-        path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's/:{2,}/:/g' | perl -ple 's,^:|:$,,g'`
+        # also cleans leading ":" chars
+        path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
         export $1="$2:$path_var_value"
     fi
 }
