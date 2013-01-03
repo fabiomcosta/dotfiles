@@ -238,20 +238,34 @@ augroup filetypedetect
     endwhile
     setf html
   endfun
+
 augroup END
 
 " correctly indents the current file depending on the user options
 nnoremap <LEADER>fi :retab<CR>
-nnoremap <LEADER>ti :call ToggleIndentation()<CR>
+nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
+nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
-fun! ToggleIndentation()
+fun! ToggleIndentationSize()
+    let n = 4
+    if &shiftwidth == 4
+        let n = 2
+    endif
+
+    let &tabstop=n
+    let &softtabstop=n
+    let &shiftwidth=n
+    echo "indentation width is now ".n."."
+endfun
+
+fun! ToggleIndentationType()
     if &expandtab
         set noexpandtab
-        echo "using tabs to indent"
+        echo "using tabs to indent."
     else
         set expandtab
-        echo "using spaces to indent"
+        echo "using spaces to indent."
     endif
 endfun
 
@@ -264,12 +278,12 @@ fun! NaiveIndentationDetector()
         let current_line = getline(n)
         if current_line =~ '^\t'
             set noexpandtab
-            echo "using tabs to indent"
+            echo "using tabs to indent."
             return
         endif
         if current_line =~ '^ '
             set expandtab
-            echo "using spaces to indent"
+            echo "using spaces to indent."
             return
         endif
         let n = n + 1
