@@ -38,12 +38,12 @@ gitsync() {
 
 myip() {
     ip="`ifconfig | grep 192 | awk '{print \$2}'`"
-    print "Your ip is: $ip"
+    print "$ip"
     echo "$ip" | pbcopy
 }
 
+# PS1 structure
 # since im using zsh with ohmyzsh, this is not needed
-
 #PWD() {
     #pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 #}
