@@ -3,3 +3,5 @@
 # Search Sass Files
 --type-set=sass=.scss,.sass
 --type-set=scss=.scss,.sass
+--type-set=coffee=.coffee
+--type-set=ejs=.ejs
