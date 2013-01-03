@@ -207,12 +207,13 @@ nnoremap <SPACE> za
 vnoremap <SPACE> zf
 
 " underline to camelcase
-vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>
+vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>:noh<CR>
 " camelcase to underline
-vnoremap <LEADER>tul :s#\C\(\<\u[a-z0-9]\+\|[a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>
+vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
 
 " a better htmldjango detection
 augroup filetypedetect
+
   " removes current htmldjango detection located at $VIMRUNTIME/filetype.vim
   au! BufNewFile,BufRead *.html
   au  BufNewFile,BufRead *.html   call FThtml()
