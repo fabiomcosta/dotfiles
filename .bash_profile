@@ -57,13 +57,13 @@ myip() {
 #export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 
 
-if [ `which mvim` ]; then
+if [ "`which mvim`" ]; then
     export EDITOR=`which mvim`
 else
     export EDITOR=`which vim`
 fi
 
-# aliases
+## aliases
 alias la='ls -a'
 alias ll='ls -l'
 alias g='git'
@@ -71,49 +71,59 @@ alias gs='git status'
 alias gd='git diff'
 alias editprofile="$EDITOR ~/.bash_profile"
 alias sourceprofile="source ~/.bash_profile"
-# endaliases
 
+## colors
 export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
+
+## brew
 BREW_PREFIX=`brew --prefix`
 
 export_if_exists PATH $BREW_PREFIX/bin
 export_if_exists PATH $BREW_PREFIX/sbin
 export_if_exists PATH $HOME/bin
 
-# node
+## node
 export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
 export_if_exists PATH      $BREW_PREFIX/share/npm/bin
 execute_if_exists source $HOME/.nvm/nvm.sh
 
-# python3 with less priority than python2
-export_if_exists PATH       $BREW_PREFIX/share/python3
-
-# python
-export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+## python
 export_if_exists PATH       $BREW_PREFIX/share/python
-    # virtualenv
+    ## virtualenv
     export WORKON_HOME=$HOME/.virtualenvs
     execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
 
-# ruby
-export_if_exists PATH    `brew --prefix ruby`/bin
+## python3 with more priority than python2
+export_if_exists PATH       $BREW_PREFIX/share/python3
 
-#buster
+## ruby
+export_if_exists PATH    `brew --prefix ruby`/bin
+    ## RVM
+    execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
+
+## buster
 #BUSTER_PATH=$HOME/Sites/other/buster
 #export_if_exists NODE_PATH   $BUSTER_PATH
 #export_if_exists PATH        $BUSTER_PATH/buster/bin
 
-# executes when Im at yipits wifi
+## yipit
 export YIPIT_PATH=$HOME/Sites/yipit/yipit
-AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
-if [ "$AT_YIPIT" ]; then
+
+# there is a command called `at` so gotta do it this way
+at_yipit() {
     execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
     yipit
+}
+
+# executes when im at yipits wifi
+AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
+if [ "$AT_YIPIT" ]; then
+    at_yipit
 fi
 
-# bash completion scripts
+## bash completion scripts
 if [ ! "`which complete`" ]; then
     # bash completion
     execute_if_exists source $BREW_PREFIX/etc/bash_completion
