@@ -6,8 +6,8 @@ djs.loadjQuery(function($) {
     // remove propaganda
     $('#holder').remove();
 
-    // remove popus, ao clicar baixa a legenda direto
-    $('.buscaNDestaque, .buscaDestaque').each(function(i, el) {
+    // remove popups, ao clicar baixa a legenda direto
+    $('[onclick^="javascript:abredown"]').each(function(i, el) {
         el = $(el);
         var onclickAttr = el.attr('onclick'),
             id = onclickAttr.match(/'(\w+)'/)[1];
