@@ -160,6 +160,11 @@ Bundle 'Lokaltog/vim-powerline'
 filetype plugin indent on
 
 let g:neocomplcache_enable_at_startup=1
+if !exists('g:neocomplcache_omni_functions')
+    let g:neocomplcache_omni_functions = {}
+endif
+let g:neocomplcache_omni_functions['python'] = 'jedi#complete'
+let g:jedi#popup_on_dot = 0
 
 noremap <LEADER>z :NERDTreeToggle<CR>
 
