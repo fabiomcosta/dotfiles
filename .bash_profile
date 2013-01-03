@@ -11,7 +11,7 @@ export_if_exists() {
 }
 
 execute_if_exists() {
-    if [[ -e "$2" ]]; then
+    if [[ -s "$2" ]]; then
         $1 "$2"
     fi
 }
