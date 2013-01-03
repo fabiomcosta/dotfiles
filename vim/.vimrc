@@ -179,8 +179,8 @@ nmap <LEADER>y :CtrlPClearCache<CR>
 set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
 set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
-set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*,*/.sass-cache/*
-set wildignore+=*/node_modules/*
+set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
+set wildignore+=*/.sass-cache/*,*/node_modules/*
 
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
