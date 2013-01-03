@@ -12,6 +12,7 @@ hl() {
 create_ln_for() {
     if [ ! -e "$1" ]; then
         ln -s "$2" "$1"
+        echo "${OK} Symlink for `hl $1` created."
     elif [ -L "$1" ]; then
         echo "${OK} Symlink for `hl $1` was already created."
     else
