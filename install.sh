@@ -54,6 +54,7 @@ pushd $HOME &> /dev/null
     create_ln_for ".ackrc" "$pwd/.ackrc"
     create_ln_for ".js" "$pwd/.js"
     create_ln_for ".irbrc" "$pwd/.irbrc"
+    create_ln_for ".zshrc" "$pwd/.zshrc"
 popd &> /dev/null
 
 install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
