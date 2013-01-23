@@ -89,21 +89,22 @@ nnoremap ; :
 nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
-nnoremap <LEADER>w <C-w>v<C-w>l
+nnoremap <LEADER>w :vsplit<CR><C-w>l
+nnoremap <LEADER>v :split<CR><C-w>j
 nnoremap <LEADER>a :Ack<Space>
 
+
+
+" moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+" changes the size of the buffer windows
 nnoremap = <C-w>=
 nnoremap + :vertical resize +5<CR>
 nnoremap - :vertical resize -5<CR>
-
-nnoremap <C-j> :m+<CR>==
-nnoremap <C-k> :m-2<CR>==
-inoremap <C-j> <ESC>:m+<CR>==gi
-inoremap <C-k> <ESC>:m-2<CR>==gi
-vnoremap <C-j> :m'>+<CR>gv=gv
-vnoremap <C-k> :m-2<CR>gv=gv
 
 "show trailing whitespace
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
