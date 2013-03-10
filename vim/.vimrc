@@ -93,8 +93,6 @@ nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
 nnoremap <LEADER>a :Ack<Space>
 
-
-
 " moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
@@ -156,6 +154,7 @@ Bundle 'cakebaker/scss-syntax.vim'
 Bundle 'plasticboy/vim-markdown'
 Bundle 'hostsamurai/CSSMinister.vim'
 Bundle 'Lokaltog/vim-powerline'
+Bundle 'airblade/vim-gitgutter'
 "Bundle 'sjbach/lusty'
 
 filetype plugin indent on
