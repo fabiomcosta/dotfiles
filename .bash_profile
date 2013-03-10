@@ -118,6 +118,8 @@ export_if_exists PATH    `brew --prefix ruby`/bin
 
 ## yipit
 export YIPIT_PATH=$HOME/Sites/yipit/yipit
+export CHEF_PATH=$HOME/Sites/yipit/yipit-chef
+execute_if_exists source $CHEF_PATH/settings/yipit_chef_functions
 
 # there is a command called `at` so gotta do it this way
 at_yipit() {
