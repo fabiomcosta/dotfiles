@@ -95,6 +95,10 @@ execute_if_exists source $HOME/.nvm/nvm.sh
 
 ## python
 export_if_exists PATH       $BREW_PREFIX/share/python
+    ## do not create .pyc files
+    export PYTHONDONTWRITEBYTECODE=x
+    ## python opencv module
+    export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
     ## virtualenv
     export WORKON_HOME=$HOME/.virtualenvs
     execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
