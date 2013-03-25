@@ -31,11 +31,6 @@ findd() {
     find . $(echo `( for arg in $@; do echo "-name *$arg*"; done )`)
 }
 
-gitsync() {
-    git pull
-    git push origin $1
-}
-
 myip() {
     ip="`ifconfig | grep 192 | awk '{print \$2}'`"
     print "$ip"
