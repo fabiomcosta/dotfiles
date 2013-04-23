@@ -59,7 +59,7 @@ popd &> /dev/null
 
 install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
 install mvim brew install macvim --with-lua --override-system-vim
-install git brew install git
+brew install git bash-completion ack
 
 # clone the vundle plugin, to manage vim plugins
 if [ ! -d "$HOME/.vim/bundle/vundle/.git" ]; then
