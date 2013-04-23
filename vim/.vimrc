@@ -128,7 +128,7 @@ Bundle 'YankRing.vim'
 Bundle 'MarcWeber/vim-addon-mw-utils'
 Bundle 'tomtom/tlib_vim'
 Bundle 'garbas/vim-snipmate'
-Bundle 'honza/snipmate-snippets'
+Bundle 'honza/vim-snippets'
 "/vim-snipmate
 
 Bundle 'scrooloose/syntastic'
