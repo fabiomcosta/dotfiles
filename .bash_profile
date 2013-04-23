@@ -39,17 +39,17 @@ myip() {
 
 # PS1 structure
 # since im using zsh with ohmyzsh, this is not needed
-#PWD() {
-    #pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
-#}
-#RED="\[\033[0;31m\]"
-#YELLOW="\[\033[0;33m\]"
-#GREEN="\[\033[0;32m\]"
-#LIGHTBLUE="\[\033[1;34m\]"
-#LIGHTYELLOW="\[\033[1;33m\]"
-#LIGHTCYAN="\[\033[1;36m\]"
-#NOCOLOR="\[\e[0m\]"
-#export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+PWD() {
+    pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+}
+RED="\[\033[0;31m\]"
+YELLOW="\[\033[0;33m\]"
+GREEN="\[\033[0;32m\]"
+LIGHTBLUE="\[\033[1;34m\]"
+LIGHTYELLOW="\[\033[1;33m\]"
+LIGHTCYAN="\[\033[1;36m\]"
+NOCOLOR="\[\e[0m\]"
+export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 
 # increases number of open files per process
 # needed to make thumbor tests work.
