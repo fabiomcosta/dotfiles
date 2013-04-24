@@ -16,6 +16,10 @@ execute_if_exists() {
     fi
 }
 
+exists() {
+    hash $1 2> /dev/null
+}
+
 start_slow() {
     sudo ipfw pipe 1 config bw 100KByte/s
     sudo ipfw add 1 pipe 1 src-port $1
@@ -56,7 +60,7 @@ export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $N
 # http://superuser.com/questions/433746/is-there-a-fix-for-the-too-many-open-files-in-system-error-on-os-x-10-7-1
 ulimit -S -n 2048
 
-if [ "`which mvim`" ]; then
+if [ `exists mvim` ]; then
     export EDITOR=`which mvim`
 else
     export EDITOR=`which vim`
@@ -108,7 +112,7 @@ export_if_exists PATH    `brew --prefix ruby`/bin
     execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
 
 ## bash completion scripts
-if [ ! "`which complete`" ]; then
+if [ ! `exists complete` ]; then
     # bash completion
     execute_if_exists source $BREW_PREFIX/etc/bash_completion
 
