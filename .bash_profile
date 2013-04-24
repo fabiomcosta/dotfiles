@@ -107,11 +107,6 @@ export_if_exists PATH    `brew --prefix ruby`/bin
     ## RVM
     execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
 
-## buster
-#BUSTER_PATH=$HOME/Sites/other/buster
-#export_if_exists NODE_PATH   $BUSTER_PATH
-#export_if_exists PATH        $BUSTER_PATH/buster/bin
-
 ## bash completion scripts
 if [ ! "`which complete`" ]; then
     # bash completion
