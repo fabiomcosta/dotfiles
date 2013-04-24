@@ -1,4 +1,8 @@
-colorscheme molokai
+try
+  colorscheme molokai
+catch
+endtry
+
 syntax on
 
 let mapleader = ","
