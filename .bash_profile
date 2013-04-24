@@ -72,9 +72,9 @@ alias ll='ls -l'
 alias g='git'
 alias gs='git status'
 alias gd='git diff'
-alias editprofile="$EDITOR ~/.bash_profile"
-alias sourceprofile="source ~/.bash_profile"
+alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
 alias dev="ssh devrs144.prn1.facebook.com"
+
 
 ## colors
 export TERM="xterm-color"
