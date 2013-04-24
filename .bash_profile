@@ -112,23 +112,6 @@ export_if_exists PATH    `brew --prefix ruby`/bin
 #export_if_exists NODE_PATH   $BUSTER_PATH
 #export_if_exists PATH        $BUSTER_PATH/buster/bin
 
-## yipit
-export YIPIT_PATH=$HOME/Sites/yipit/yipit
-export CHEF_PATH=$HOME/Sites/yipit/yipit-chef
-execute_if_exists source $CHEF_PATH/settings/yipit_chef_functions
-
-# there is a command called `at` so gotta do it this way
-at_yipit() {
-    execute_if_exists source $YIPIT_PATH/conf/yipit_bash_profile
-    yipit
-}
-
-# executes when im at yipits wifi
-AT_YIPIT=`networksetup -getairportnetwork en1 | grep Deal`
-if [ "$AT_YIPIT" ]; then
-    at_yipit
-fi
-
 ## bash completion scripts
 if [ ! "`which complete`" ]; then
     # bash completion
