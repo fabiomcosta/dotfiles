@@ -31,7 +31,7 @@ create_ln_for() {
 install() {
     command=$1
     shift
-    if [ ! `which $command` ]; then
+    if [ ! `which $command 2> /dev/null` ]; then
         echo "Installing `hl $command`..."
         $@
         if [ $? -eq 0 ]; then
@@ -76,7 +76,7 @@ else
 fi
 
 # updating vim's plugins
-if [[ $OSX && `which mvim` ]]; then
+if [[ $OSX && `which mvim 2> /dev/null` ]]; then
     echo "Installing/Updating `hl "macvim's plugins"`..."
     mvim -f +BundleInstall +qall
     if [ $? -eq 0 ]; then
