@@ -3,7 +3,7 @@
 OK=`printf "\033[1;32m✓\033[0m"`
 WARNING=`printf "\033[1;33m⚠\033[0m"`
 ERROR=`printf "\033[1;31m✖\033[0m"`
-OSX=$(test "`uname`" != "Darwin"; echo $?)
+OSX=$(test "`uname`" == "Darwin" && echo "x")
 
 # highlights values
 hl() {
@@ -78,7 +78,7 @@ fi
 # updating vim's plugins
 if [[ $OSX && `which mvim` ]]; then
     echo "Installing/Updating `hl "macvim's plugins"`..."
-    mvim -f +BundleInstall! +qall
+    mvim -f +BundleInstall +qall
     if [ $? -eq 0 ]; then
         echo "${OK} `hl "macvim's plugins"` updated successfuly.";
     else
