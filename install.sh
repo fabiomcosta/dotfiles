@@ -3,6 +3,7 @@
 OK=`printf "\033[1;32m✓\033[0m"`
 WARNING=`printf "\033[1;33m⚠\033[0m"`
 ERROR=`printf "\033[1;31m✖\033[0m"`
+OSX=$(test "`uname`" != "Darwin"; echo $?)
 
 # highlights values
 hl() {
@@ -57,9 +58,14 @@ pushd $HOME &> /dev/null
     create_ln_for ".zshrc" "$pwd/.zshrc"
 popd &> /dev/null
 
-install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-install mvim brew install macvim --with-lua --override-system-vim
-brew install git bash-completion ack
+if [ $OSX ]; then
+    echo "Executing some OSX specific changes..."
+    install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+    install mvim brew install macvim --with-lua --override-system-vim
+    brew install git bash-completion ack python ruby node
+    # decreases the delay repetition on keyboard
+    defaults write NSGlobalDomain KeyRepeat -int 0
+fi
 
 # clone the vundle plugin, to manage vim plugins
 if [ ! -d "$HOME/.vim/bundle/vundle/.git" ]; then
@@ -70,7 +76,7 @@ else
 fi
 
 # updating vim's plugins
-if [ `which mvim` ]; then
+if [[ $OSX && `which mvim` ]]; then
     echo "Installing/Updating `hl "macvim's plugins"`..."
     mvim -f +BundleInstall! +qall
     if [ $? -eq 0 ]; then
