@@ -17,7 +17,7 @@ execute_if_exists() {
 }
 
 exists() {
-    hash $1 2> /dev/null
+    hash $1 2> /dev/null && echo "x"
 }
 
 start_slow() {
@@ -81,38 +81,41 @@ export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-## brew
-BREW_PREFIX=`brew --prefix`
+## adding brew paths to PATH and other brew specific stuff
+if [ `exists brew` ]; then
+    ## brew
+    BREW_PREFIX=`brew --prefix`
 
-export_if_exists PATH $BREW_PREFIX/bin
-export_if_exists PATH $BREW_PREFIX/sbin
-export_if_exists PATH $HOME/bin
+    export_if_exists PATH $BREW_PREFIX/bin
+    export_if_exists PATH $BREW_PREFIX/sbin
+    export_if_exists PATH $HOME/bin
 
-## node
-export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
-export_if_exists PATH      $BREW_PREFIX/share/npm/bin
-execute_if_exists source $HOME/.nvm/nvm.sh
+    ## node
+    export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
+    export_if_exists PATH      $BREW_PREFIX/share/npm/bin
+    execute_if_exists source $HOME/.nvm/nvm.sh
 
-## python
-export_if_exists PATH       $BREW_PREFIX/share/python
-    ## do not create .pyc files
-    export PYTHONDONTWRITEBYTECODE=x
-    ## python opencv module
-    export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
-    ## virtualenv
-    export WORKON_HOME=$HOME/.virtualenvs
-    execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
+    ## python
+    export_if_exists PATH $BREW_PREFIX/share/python
+        ## do not create .pyc files
+        export PYTHONDONTWRITEBYTECODE=x
+        ## python opencv module
+        export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+        ## virtualenv
+        export WORKON_HOME=$HOME/.virtualenvs
+        execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
 
-## python3 with more priority than python2
-export_if_exists PATH       $BREW_PREFIX/share/python3
+    ## python3 with more priority than python2
+    export_if_exists PATH $BREW_PREFIX/share/python3
 
-## ruby
-export_if_exists PATH    `brew --prefix ruby`/bin
-    ## RVM
-    execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
+    ## ruby
+    export_if_exists PATH `brew --prefix ruby`/bin
+        ## RVM
+        execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
+fi
 
 ## bash completion scripts
-if [ ! `exists complete` ]; then
+if [ `exists complete` ]; then
     # bash completion
     execute_if_exists source $BREW_PREFIX/etc/bash_completion
 
