@@ -16,8 +16,8 @@ execute_if_exists() {
     fi
 }
 
-exists() {
-    hash $1 2> /dev/null && echo "x"
+command_exists() {
+    hash $1 2> /dev/null
 }
 
 start_slow() {
@@ -60,7 +60,7 @@ export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $N
 # http://superuser.com/questions/433746/is-there-a-fix-for-the-too-many-open-files-in-system-error-on-os-x-10-7-1
 ulimit -S -n 2048
 
-if [ `exists mvim` ]; then
+if command_exists mvim; then
     export EDITOR=`which mvim`
 else
     export EDITOR=`which vim`
@@ -82,7 +82,7 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 ## adding brew paths to PATH and other brew specific stuff
-if [ `exists brew` ]; then
+if command_exists brew; then
     ## brew
     BREW_PREFIX=`brew --prefix`
 
@@ -115,7 +115,7 @@ if [ `exists brew` ]; then
 fi
 
 ## bash completion scripts
-if [ `exists complete` ]; then
+if command_exists complete; then
     # bash completion
     execute_if_exists source $BREW_PREFIX/etc/bash_completion
 
