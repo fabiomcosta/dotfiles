@@ -86,6 +86,11 @@ nnoremap <D-j> 12j
 nnoremap <D-k> 12k
 vnoremap <D-j> 12j
 vnoremap <D-k> 12k
+" Meta for Linux
+nnoremap <C-j> 12j
+nnoremap <C-k> 12k
+vnoremap <C-j> 12j
+vnoremap <C-k> 12k
 
 inoremap jj <ESC>
 nnoremap ; :
@@ -100,8 +105,8 @@ nnoremap <LEADER>a :Ack<Space>
 " moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
+"nnoremap <C-j> <C-w>j
+"nnoremap <C-k> <C-w>k
 
 " changes the size of the buffer windows
 nnoremap = <C-w>=
