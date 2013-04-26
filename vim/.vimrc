@@ -1,11 +1,11 @@
-colorscheme molokai
-
 syntax on
 
 let mapleader = ","
 
 " try setting a better font
 if has("gui_running")
+  " molokai is better only on mvim
+  colorscheme molokai
   try
     set guifont=Monaco:h14
   catch
@@ -15,6 +15,8 @@ if has("gui_running")
       set guifont=Inconsolata:h16
     endtry
   endtry
+else
+  colorscheme slate
 endif
 set guioptions-=T  "remove toolbar
 set guioptions-=r  "remove right-hand scroll bar
