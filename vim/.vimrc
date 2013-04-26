@@ -1,7 +1,4 @@
-try
-  colorscheme molokai
-catch
-endtry
+colorscheme molokai
 
 syntax on
 
