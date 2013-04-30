@@ -4,8 +4,10 @@ let mapleader = ","
 
 " try setting a better font
 if has("gui_running")
-  " molokai is better only on mvim
-  colorscheme molokai
+  colorscheme molokai "molokai is better only on mvim
+  set guioptions-=T   "remove toolbar
+  set guioptions-=r   "remove right-hand scroll bar
+  set guioptions-=L   "remove left-hand scroll bar
   try
     set guifont=Monaco:h14
   catch
@@ -18,9 +20,6 @@ if has("gui_running")
 else
   colorscheme slate
 endif
-set guioptions-=T  "remove toolbar
-set guioptions-=r  "remove right-hand scroll bar
-set guioptions-=L  "remove left-hand scroll bar
 
 set nocompatible
 set modelines=0
@@ -85,7 +84,7 @@ nnoremap <D-j> 12j
 nnoremap <D-k> 12k
 vnoremap <D-j> 12j
 vnoremap <D-k> 12k
-" Meta for Linux
+" Use control+up/down to move fast
 nnoremap <C-j> 12j
 nnoremap <C-k> 12k
 vnoremap <C-j> 12j
@@ -122,50 +121,53 @@ vnoremap <LEADER>j :!python -m json.tool<CR>
 
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
 
-" let Vundle manage Vundle
-" required!
-Bundle 'gmarik/vundle'
+call neobundle#rc(expand('~/.vim/bundle/'))
 
-Bundle 'Gundo'
-Bundle 'YankRing.vim'
+" Let NeoBundle manage NeoBundle
+NeoBundleFetch 'Shougo/neobundle.vim'
+
+NeoBundle 'Gundo'
+NeoBundle 'YankRing.vim'
 
 " vim-snipmate
-Bundle 'MarcWeber/vim-addon-mw-utils'
-Bundle 'tomtom/tlib_vim'
-Bundle 'garbas/vim-snipmate'
-Bundle 'honza/vim-snippets'
+NeoBundle 'MarcWeber/vim-addon-mw-utils'
+NeoBundle 'tomtom/tlib_vim'
+NeoBundle 'garbas/vim-snipmate'
+NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
-Bundle 'scrooloose/syntastic'
-Bundle 'kien/ctrlp.vim'
-"Bundle 'davidhalter/jedi-vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'Shougo/neocomplcache'
-Bundle 'othree/eregex.vim'
-Bundle 'mileszs/ack.vim'
-Bundle 'mattn/zencoding-vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'pangloss/vim-javascript'
-Bundle 'tpope/vim-haml'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-repeat'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'thomd/vim-jasmine'
-Bundle 'groenewege/vim-less'
-Bundle 'digitaltoad/vim-jade'
-Bundle 'briancollins/vim-jst'
-Bundle 'cakebaker/scss-syntax.vim'
-Bundle 'plasticboy/vim-markdown'
-Bundle 'hostsamurai/CSSMinister.vim'
-Bundle 'Lokaltog/vim-powerline'
-Bundle 'airblade/vim-gitgutter'
-"Bundle 'sjbach/lusty'
+NeoBundle 'scrooloose/syntastic'
+NeoBundle 'kien/ctrlp.vim'
+"NeoBundle 'davidhalter/jedi-vim'
+NeoBundle 'scrooloose/nerdcommenter'
+NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'othree/eregex.vim'
+NeoBundle 'mileszs/ack.vim'
+NeoBundle 'mattn/zencoding-vim'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'tpope/vim-haml'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'kchmck/vim-coffee-script'
+NeoBundle 'thomd/vim-jasmine'
+NeoBundle 'groenewege/vim-less'
+NeoBundle 'digitaltoad/vim-jade'
+NeoBundle 'briancollins/vim-jst'
+NeoBundle 'cakebaker/scss-syntax.vim'
+NeoBundle 'plasticboy/vim-markdown'
+NeoBundle 'hostsamurai/CSSMinister.vim'
+NeoBundle 'Lokaltog/vim-powerline'
+NeoBundle 'airblade/vim-gitgutter'
+"NeoBundle 'sjbach/lusty'
 
 filetype plugin indent on
+
 
 let g:neocomplcache_enable_at_startup=1
 if !exists('g:neocomplcache_omni_functions')
@@ -200,7 +202,7 @@ let g:syntastic_warning_symbol='⚠'
 
 let g:Powerline_symbols = 'fancy'
 
-"statusline
+" statusline
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
 set statusline+=%{fugitive#statusline()}
@@ -299,3 +301,5 @@ fun! NaiveIndentationDetector()
     echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
 
+" Installation check.
+NeoBundleCheck

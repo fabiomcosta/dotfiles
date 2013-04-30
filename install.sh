@@ -67,18 +67,18 @@ if [ $OSX ]; then
     defaults write NSGlobalDomain KeyRepeat -int 0
 fi
 
-# clone the vundle plugin, to manage vim plugins
-if [ ! -d "$HOME/.vim/bundle/vundle/.git" ]; then
-    echo "Installing `hl 'vundle'`..."
-    git clone https://github.com/gmarik/vundle.git $HOME/.vim/bundle/vundle
+# clone the neobundle plugin, to manage vim plugins
+if [ ! -d "$HOME/.vim/bundle/neobundle.vim/.git" ]; then
+    echo "Installing `hl 'neobundle'`..."
+    git clone https://github.com/Shougo/neobundle.vim.git $HOME/.vim/bundle/neobundle.vim
 else
-    echo "${OK} `hl 'vundle'` is already installed."
+    echo "${OK} `hl 'neobundle'` is already installed."
 fi
 
 # updating vim's plugins
 if [[ $OSX && `which mvim 2> /dev/null` ]]; then
     echo "Installing/Updating `hl "macvim's plugins"`..."
-    mvim -f +BundleInstall +qall
+    mvim -f +NeoBundleInstall +qall
     if [ $? -eq 0 ]; then
         echo "${OK} `hl "macvim's plugins"` updated successfuly.";
     else
