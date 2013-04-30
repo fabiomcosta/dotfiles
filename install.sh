@@ -75,14 +75,6 @@ else
     echo "${OK} `hl 'neobundle'` is already installed."
 fi
 
-# creating folder so you can install plugins not from the web
-if [ ! -d "$HOME/.vim/bundle-local" ]; then
-    echo "Creating bundle-local folder for your local vim plugins..."
-    mkdir "$HOME/.vim/bundle-local"
-else
-    echo "${OK} bundle-local folder already created."
-fi
-
 # updating vim's plugins
 if [[ $OSX && `which vim 2> /dev/null` ]]; then
     echo "Installing/Updating `hl "vim's plugins"`..."

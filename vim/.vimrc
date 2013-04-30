@@ -130,10 +130,6 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-" Adds folder for plugins installed localy,
-" without git or hg or not from the web
-NeoBundleLocal '~/.vim/bundle-local'
-
 NeoBundle 'Gundo'
 NeoBundle 'YankRing.vim'
 
@@ -169,6 +165,7 @@ NeoBundle 'hostsamurai/CSSMinister.vim'
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'airblade/vim-gitgutter'
 "NeoBundle 'sjbach/lusty'
+NeoBundle 'hack-stable', {'type': 'nosync'}
 
 filetype plugin indent on
 
