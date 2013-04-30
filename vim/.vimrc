@@ -130,6 +130,10 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 " Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
+" Adds folder for plugins installed localy,
+" without git or hg or not from the web
+NeoBundleLocal '~/.vim/bundle-local'
+
 NeoBundle 'Gundo'
 NeoBundle 'YankRing.vim'
 
@@ -144,12 +148,12 @@ NeoBundle 'scrooloose/syntastic'
 NeoBundle 'kien/ctrlp.vim'
 "NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'scrooloose/nerdtree'
+NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'mattn/zencoding-vim'
-NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
@@ -167,7 +171,6 @@ NeoBundle 'airblade/vim-gitgutter'
 "NeoBundle 'sjbach/lusty'
 
 filetype plugin indent on
-
 
 let g:neocomplcache_enable_at_startup=1
 if !exists('g:neocomplcache_omni_functions')

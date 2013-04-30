@@ -75,14 +75,22 @@ else
     echo "${OK} `hl 'neobundle'` is already installed."
 fi
 
+# creating folder so you can install plugins not from the web
+if [ ! -d "$HOME/.vim/bundle-local" ]; then
+    echo "Creating bundle-local folder for your local vim plugins..."
+    mkdir "$HOME/.vim/bundle-local"
+else
+    echo "${OK} bundle-local folder already created."
+fi
+
 # updating vim's plugins
-if [[ $OSX && `which mvim 2> /dev/null` ]]; then
-    echo "Installing/Updating `hl "macvim's plugins"`..."
-    mvim -f +NeoBundleInstall +qall
+if [[ $OSX && `which vim 2> /dev/null` ]]; then
+    echo "Installing/Updating `hl "vim's plugins"`..."
+    vim -f +NeoBundleInstall +qall
     if [ $? -eq 0 ]; then
-        echo "${OK} `hl "macvim's plugins"` updated successfuly.";
+        echo "${OK} `hl "vim's plugins"` updated successfuly.";
     else
-        echo "${ERROR} We had a problem while updating `hl "macvim's plugins"`.";
+        echo "${ERROR} We had a problem while updating `hl "vim's plugins"`.";
         exit 1
     fi
 fi
