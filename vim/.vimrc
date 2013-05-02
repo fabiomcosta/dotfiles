@@ -316,7 +316,7 @@ endif
 
 "colorscheme
 NeoBundle 'tomasr/molokai'
-colorscheme molokai "molokai is better only on mvim
+colorscheme molokai
 
 
 filetype plugin indent on
