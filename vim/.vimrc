@@ -316,13 +316,7 @@ endif
 
 "colorscheme
 NeoBundle 'tomasr/molokai'
-NeoBundle 'jonathanfilip/vim-lucius'
-if &t_Co > 255
-  colorscheme molokai "molokai is better only on mvim
-else
-  colorscheme lucius
-  LuciusBlack
-endif
+colorscheme molokai "molokai is better only on mvim
 
 
 filetype plugin indent on
