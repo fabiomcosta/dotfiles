@@ -80,10 +80,6 @@ au FocusLost * :wa
 
 nnoremap j gj
 nnoremap k gk
-nnoremap <D-j> 12j
-nnoremap <D-k> 12k
-vnoremap <D-j> 12j
-vnoremap <D-k> 12k
 " Use control+up/down to move fast
 nnoremap <C-j> 12j
 nnoremap <C-k> 12k
