@@ -95,7 +95,6 @@ nnoremap ; :
 
 nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
-nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
 nnoremap <LEADER>a :Ack<Space>
@@ -110,10 +109,6 @@ nnoremap <C-l> <C-w>l
 nnoremap = <C-w>=
 nnoremap + :vertical resize +5<CR>
 nnoremap - :vertical resize -5<CR>
-
-"show trailing whitespace
-highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-match ExtraWhitespace /\s\+$/
 
 cmap w!! w !sudo tee % >/dev/null
 
@@ -131,7 +126,6 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'Gundo'
-NeoBundle 'YankRing.vim'
 
 " vim-snipmate
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
@@ -140,15 +134,9 @@ NeoBundle 'garbas/vim-snipmate'
 NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'kien/ctrlp.vim'
-"NeoBundle 'davidhalter/jedi-vim'
 NeoBundle 'scrooloose/nerdcommenter'
-NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
-NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
-NeoBundle 'mattn/zencoding-vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'tpope/vim-haml'
@@ -162,73 +150,92 @@ NeoBundle 'briancollins/vim-jst'
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'hostsamurai/CSSMinister.vim'
-NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 "NeoBundle 'sjbach/lusty'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
-filetype plugin indent on
 
+NeoBundle 'Shougo/neocomplcache'
 let g:neocomplcache_enable_at_startup=1
 if !exists('g:neocomplcache_omni_functions')
     let g:neocomplcache_omni_functions = {}
 endif
 let g:neocomplcache_omni_functions['python'] = 'jedi#complete'
+
+
+"NeoBundle 'davidhalter/jedi-vim'
 let g:jedi#popup_on_dot = 0
 
+
+NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
 noremap <LEADER>z :NERDTreeToggle<CR>
 
+
+NeoBundle 'mattn/zencoding-vim'
 nnoremap <C-z> :call zencoding#expandAbbr(0,"")<CR>a
 inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
 
-"ctrlp
+
+NeoBundle 'kien/ctrlp.vim'
 let g:ctrlp_map='<LEADER><LEADER>'
 let g:ctrlp_max_height=20
 nmap <LEADER>y :CtrlPClearCache<CR>
 
+
+NeoBundle 'scrooloose/syntastic'
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=2
+let g:syntastic_python_flake8_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+
+
+NeoBundle 'Lokaltog/vim-powerline'
+let g:Powerline_symbols = 'fancy'
+
+
+NeoBundle 'YankRing.vim'
+let g:yankring_history_file='.yankring_history'
+
+
+"ignored files while search files and stuff
 set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
 set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*,*/node_modules/*
 
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=2
-" yipits ignored checks
-let g:syntastic_python_flake8_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
 
-let g:Powerline_symbols = 'fancy'
-
-" statusline
+"statusline stuff
 set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
 set statusline+=%#warningmsg#
 set statusline+=%{fugitive#statusline()}
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:yankring_history_file='.yankring_history'
 
+"folding stuff
 set foldmethod=indent
 set nofoldenable
 nnoremap <SPACE> za
 vnoremap <SPACE> zf
 
-" underline to camelcase
+
+"underline to camelcase
 vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>:noh<CR>
-" camelcase to underline
+"camelcase to underline
 vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
 
-" a better htmldjango detection
+
+"a better htmldjango detection
 augroup filetypedetect
 
   " removes current htmldjango detection located at $VIMRUNTIME/filetype.vim
   au! BufNewFile,BufRead *.html
-  au  BufNewFile,BufRead *.html   call FThtml()
+  au  BufNewFile,BufRead *.html call FThtml()
 
   fun! FThtml()
     let n = 1
@@ -253,12 +260,8 @@ augroup filetypedetect
 
 augroup END
 
-" correctly indents the current file depending on the user options
-nnoremap <LEADER>fi :retab<CR>
-nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
-nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
-nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
+"indentation stuff
 fun! ToggleIndentationSize()
     let n = 4
     if &shiftwidth == 4
@@ -302,6 +305,20 @@ fun! NaiveIndentationDetector()
     endwhile
     echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
+
+nnoremap <LEADER>fi :retab<CR>
+nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
+nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
+nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
+
+
+"whitespace in the end of the lines stuff
+nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
+highlight ExtraWhitespace ctermbg=darkred guibg=darkred
+match ExtraWhitespace /\s\+$/
+
+
+filetype plugin indent on
 
 " Installation check.
 NeoBundleCheck
