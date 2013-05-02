@@ -1,25 +1,7 @@
 syntax on
+filetype off
 
 let mapleader = ","
-
-" try setting a better font
-if has("gui_running")
-  colorscheme molokai "molokai is better only on mvim
-  set guioptions-=T   "remove toolbar
-  set guioptions-=r   "remove right-hand scroll bar
-  set guioptions-=L   "remove left-hand scroll bar
-  try
-    set guifont=Monaco:h14
-  catch
-    try
-      set guifont=SourceCodePro-Regular:h14
-    catch
-      set guifont=Inconsolata:h16
-    endtry
-  endtry
-else
-  colorscheme slate
-endif
 
 set nocompatible
 set modelines=0
@@ -92,13 +74,13 @@ nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
 nnoremap <LEADER>a :Ack<Space>
 
-" moves the cursor around the buffer windows
+"moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 "nnoremap <C-j> <C-w>j
 "nnoremap <C-k> <C-w>k
 
-" changes the size of the buffer windows
+"changes the size of the buffer windows
 nnoremap = <C-w>=
 nnoremap + :vertical resize +5<CR>
 nnoremap - :vertical resize -5<CR>
@@ -107,7 +89,6 @@ cmap w!! w !sudo tee % >/dev/null
 
 vnoremap <LEADER>j :!python -m json.tool<CR>
 
-filetype off
 
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -115,10 +96,10 @@ endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-" let NeoBundle manage NeoBundle
+"let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-" vim-snipmate
+"vim-snipmate
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
 NeoBundle 'tomtom/tlib_vim'
 NeoBundle 'garbas/vim-snipmate'
@@ -250,47 +231,47 @@ augroup END
 
 "indentation stuff
 fun! ToggleIndentationSize()
-    let n = 4
-    if &shiftwidth == 4
-        let n = 2
-    endif
+  let n = 4
+  if &shiftwidth == 4
+    let n = 2
+  endif
 
-    let &tabstop=n
-    let &softtabstop=n
-    let &shiftwidth=n
-    echo "indentation width is now ".n."."
+  let &tabstop=n
+  let &softtabstop=n
+  let &shiftwidth=n
+  echo "indentation width is now ".n."."
 endfun
 
 fun! ToggleIndentationType()
-    if &expandtab
-        set noexpandtab
-        echo "using tabs to indent."
-    else
-        set expandtab
-        echo "using spaces to indent."
-    endif
+  if &expandtab
+    set noexpandtab
+    echo "using tabs to indent."
+  else
+    set expandtab
+    echo "using spaces to indent."
+  endif
 endfun
 
 " sets expandtab based on the first
 " indented lines of a file
 fun! NaiveIndentationDetector()
-    let n = 1
-    let max_line_number = 10
-    while n < max_line_number && n < line("$")
-        let current_line = getline(n)
-        if current_line =~ '^\t'
-            set noexpandtab
-            echo "using tabs to indent."
-            return
-        endif
-        if current_line =~ '^ '
-            set expandtab
-            echo "using spaces to indent."
-            return
-        endif
-        let n = n + 1
-    endwhile
-    echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
+  let n = 1
+  let max_line_number = 10
+  while n < max_line_number && n < line("$")
+    let current_line = getline(n)
+    if current_line =~ '^\t'
+      set noexpandtab
+      echo "using tabs to indent."
+      return
+    endif
+    if current_line =~ '^ '
+      set expandtab
+      echo "using spaces to indent."
+      return
+    endif
+    let n = n + 1
+  endwhile
+  echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
 
 nnoremap <LEADER>fi :retab<CR>
@@ -300,9 +281,35 @@ nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
 
 "whitespace in the end of the lines stuff
+"http://vim.wikia.com/wiki/Highlight_unwanted_spaces
+""still buggy!!! grr!
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+autocmd BufWinLeave * call clearmatches()
+"NOTE: this has to execute before setting any colorscheme
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
+
+
+"font and colorscheme
+if has("gui_running")
+  colorscheme molokai "molokai is better only on mvim
+  set guioptions-=T   "remove toolbar
+  set guioptions-=r   "remove right-hand scroll bar
+  set guioptions-=L   "remove left-hand scroll bar
+  try
+    set guifont=Monaco:h14
+  catch
+    try
+      set guifont=SourceCodePro-Regular:h14
+    catch
+      set guifont=Inconsolata:h16
+    endtry
+  endtry
+else
+  colorscheme slate
+endif
 
 
 filetype plugin indent on
