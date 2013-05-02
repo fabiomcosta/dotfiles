@@ -76,8 +76,6 @@ nmap <LEADER>l :set list!<CR>
 set list
 set listchars=tab:▸\ ,eol:¬
 
-au FocusLost * :wa
-
 nnoremap j gj
 nnoremap k gk
 " Use control+up/down to move fast
