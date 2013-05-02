@@ -122,10 +122,8 @@ endif
 
 call neobundle#rc(expand('~/.vim/bundle/'))
 
-" Let NeoBundle manage NeoBundle
+" let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
-
-NeoBundle 'Gundo'
 
 " vim-snipmate
 NeoBundle 'MarcWeber/vim-addon-mw-utils'
@@ -139,14 +137,10 @@ NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'tpope/vim-haml'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'thomd/vim-jasmine'
-NeoBundle 'groenewege/vim-less'
-NeoBundle 'digitaltoad/vim-jade'
-NeoBundle 'briancollins/vim-jst'
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'hostsamurai/CSSMinister.vim'
