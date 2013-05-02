@@ -72,7 +72,6 @@ set wrap
 set textwidth=360
 set formatoptions=qrn1
 
-nmap <LEADER>l :set list!<CR>
 set list
 set listchars=tab:▸\ ,eol:¬
 
