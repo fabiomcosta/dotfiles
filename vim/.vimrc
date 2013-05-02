@@ -111,8 +111,6 @@ NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'thomd/vim-jasmine'
 NeoBundle 'cakebaker/scss-syntax.vim'
@@ -167,6 +165,12 @@ let g:Powerline_symbols = 'fancy'
 
 NeoBundle 'YankRing.vim'
 let g:yankring_history_file='.yankring_history'
+
+
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
+map <leader>' cs"'<CR>
+map <leader>" cs'"<CR>
 
 
 "ignored files while search files and stuff
