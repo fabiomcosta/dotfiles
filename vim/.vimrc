@@ -298,17 +298,24 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
 
 "fonts and other gui stuff
+"make sure to install the powerline patched font
+"version of the font you like
+"https://github.com/Lokaltog/powerline-fonts
 if has("gui_running")
   set guioptions-=T   "remove toolbar
   set guioptions-=r   "remove right-hand scroll bar
   set guioptions-=L   "remove left-hand scroll bar
   try
-    set guifont=Monaco:h14
+    set guifont=Monaco \for \Powerline:h14
   catch
     try
-      set guifont=SourceCodePro-Regular:h14
+      set guifont=Monaco:h14
     catch
-      set guifont=Inconsolata:h16
+      try
+        set guifont=SourceCodePro-Regular:h14
+      catch
+        set guifont=Inconsolata:h16
+      endtry
     endtry
   endtry
 endif
