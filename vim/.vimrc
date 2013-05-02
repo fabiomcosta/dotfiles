@@ -165,6 +165,7 @@ NeoBundle 'hostsamurai/CSSMinister.vim'
 NeoBundle 'Lokaltog/vim-powerline'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'godlygeek/tabular'
 "NeoBundle 'sjbach/lusty'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
