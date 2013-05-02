@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+DEV="$HOME/Dev"
+
 export_if_exists() {
     path_var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" ]]; then
@@ -81,6 +83,20 @@ export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
+# adds my bin folder to the path
+export_if_exists PATH $HOME/bin
+# nvm
+execute_if_exists source $HOME/.nvm/nvm.sh
+# do not create .pyc files
+export PYTHONDONTWRITEBYTECODE=x
+# virtualenv
+export WORKON_HOME=$HOME/.virtualenvs
+# RVM
+execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
+# adds arc path to the current path
+export_if_exists PATH $DEV/fb/devtools/arcanist/bin
+
+
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
     ## brew
@@ -88,21 +104,16 @@ if command_exists brew; then
 
     export_if_exists PATH $BREW_PREFIX/bin
     export_if_exists PATH $BREW_PREFIX/sbin
-    export_if_exists PATH $HOME/bin
 
     ## node
     export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
     export_if_exists PATH      $BREW_PREFIX/share/npm/bin
-    execute_if_exists source $HOME/.nvm/nvm.sh
 
     ## python
     export_if_exists PATH $BREW_PREFIX/share/python
-        ## do not create .pyc files
-        export PYTHONDONTWRITEBYTECODE=x
         ## python opencv module
         export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
         ## virtualenv
-        export WORKON_HOME=$HOME/.virtualenvs
         execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
 
     ## python3 with more priority than python2
@@ -110,18 +121,17 @@ if command_exists brew; then
 
     ## ruby
     export_if_exists PATH `brew --prefix ruby`/bin
-        ## RVM
-        execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
+
+    if command_exists complete; then
+        # bash completion
+        execute_if_exists source $BREW_PREFIX/etc/bash_completion
+
+        # git
+        execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
+    fi
 fi
 
-## bash completion scripts
 if command_exists complete; then
-    # bash completion
-    execute_if_exists source $BREW_PREFIX/etc/bash_completion
-
-    # git
-    execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
-
     # pip bash completion start
     _pip_completion()
     {
@@ -132,3 +142,5 @@ if command_exists complete; then
     complete -o default -F _pip_completion pip
     # pip bash completion end
 fi
+
+
