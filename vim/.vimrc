@@ -3,6 +3,7 @@ filetype off
 
 let mapleader = ","
 
+set t_Co=256 "adds possibility of using 256
 set nocompatible
 set modelines=0
 
@@ -296,9 +297,8 @@ autocmd BufWinLeave * call clearmatches()
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
 
-"font and colorscheme
+"fonts and other gui stuff
 if has("gui_running")
-  colorscheme molokai "molokai is better only on mvim
   set guioptions-=T   "remove toolbar
   set guioptions-=r   "remove right-hand scroll bar
   set guioptions-=L   "remove left-hand scroll bar
@@ -311,8 +311,17 @@ if has("gui_running")
       set guifont=Inconsolata:h16
     endtry
   endtry
+endif
+
+
+"colorscheme
+NeoBundle 'tomasr/molokai'
+NeoBundle 'jonathanfilip/vim-lucius'
+if &t_Co > 255
+  colorscheme molokai "molokai is better only on mvim
 else
-  colorscheme slate
+  colorscheme lucius
+  LuciusBlack
 endif
 
 
