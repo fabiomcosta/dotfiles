@@ -56,7 +56,6 @@ pushd $HOME &> /dev/null
     create_ln_for ".js" "$pwd/.js"
     create_ln_for ".irbrc" "$pwd/.irbrc"
     create_ln_for ".zshrc" "$pwd/.zshrc"
-    create_ln_for ".screenrc" "$pwd/.screenrc"
 popd &> /dev/null
 
 if [ $OSX ]; then
