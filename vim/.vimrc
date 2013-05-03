@@ -162,6 +162,14 @@ let g:syntastic_warning_symbol='⚠'
 
 NeoBundle 'Lokaltog/vim-powerline'
 let g:Powerline_symbols = 'fancy'
+"statusline stuff if powerline is not loaded
+if !g:Powerline_loaded
+  set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
+  set statusline+=%#warningmsg#
+  set statusline+=%{fugitive#statusline()}
+  set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%*
+endif
 
 
 NeoBundle 'YankRing.vim'
@@ -180,14 +188,6 @@ set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*,*/node_modules/*
-
-
-"statusline stuff
-set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
-set statusline+=%#warningmsg#
-set statusline+=%{fugitive#statusline()}
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
 
 
 "folding stuff
