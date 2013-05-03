@@ -62,7 +62,7 @@ if [ $OSX ]; then
     echo "Executing some OSX specific changes..."
     install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
     install mvim brew install macvim --with-lua --override-system-vim
-    brew install git bash-completion ack python ruby node
+    brew install git bash-completion ack python ruby node tmux
     # decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
 fi
