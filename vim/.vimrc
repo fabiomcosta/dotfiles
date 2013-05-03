@@ -163,7 +163,7 @@ let g:syntastic_warning_symbol='⚠'
 NeoBundle 'Lokaltog/vim-powerline'
 let g:Powerline_symbols = 'fancy'
 "statusline stuff if powerline is not loaded
-if !g:Powerline_loaded
+if !exists("g:Powerline_loaded")
   set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
   set statusline+=%#warningmsg#
   set statusline+=%{fugitive#statusline()}
