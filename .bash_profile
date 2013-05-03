@@ -43,8 +43,8 @@ myip() {
     echo "$ip" | pbcopy
 }
 
+
 # PS1 structure
-# since im using zsh with ohmyzsh, this is not needed
 PWD() {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
@@ -139,5 +139,3 @@ if command_exists complete; then
     complete -o default -F _pip_completion pip
     # pip bash completion end
 fi
-
-

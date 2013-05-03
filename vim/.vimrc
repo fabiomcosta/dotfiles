@@ -3,7 +3,7 @@ filetype off
 
 let mapleader = ","
 
-set t_Co=256 "adds possibility of using 256
+set t_Co=256 "adds possibility of using 256 colors
 set nocompatible
 set modelines=0
 
@@ -121,7 +121,6 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
-"NeoBundle 'sjbach/lusty'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
 
