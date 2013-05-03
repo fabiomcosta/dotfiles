@@ -35,6 +35,7 @@ set backspace=indent,eol,start
 set laststatus=2
 set linespace=0
 set number
+set timeoutlen=1000 ttimeoutlen=0 "prevents delay while pressing esc on insert mode
 
 "search related {{{
 nnoremap / /\v
