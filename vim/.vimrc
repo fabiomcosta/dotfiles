@@ -179,8 +179,8 @@ let g:yankring_history_file='.yankring_history'
 
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
-map <leader>' cs"'<CR>
-map <leader>" cs'"<CR>
+map <LEADER>' cs"'<CR>
+map <LEADER>" cs'"<CR>
 
 
 "ignored files while search files and stuff
