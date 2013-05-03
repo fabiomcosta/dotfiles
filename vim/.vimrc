@@ -120,6 +120,7 @@ NeoBundle 'hostsamurai/CSSMinister.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
+NeoBundle 'jszakmeister/vim-togglecursor'
 "NeoBundle 'sjbach/lusty'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
