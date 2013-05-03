@@ -125,9 +125,6 @@ if command_exists brew; then
     if command_exists complete; then
         # bash completion
         execute_if_exists source $BREW_PREFIX/etc/bash_completion
-
-        # git
-        execute_if_exists source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
     fi
 fi
 
