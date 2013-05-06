@@ -292,7 +292,8 @@ nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 match ExtraWhitespace /\s\+$/
-autocmd WinEnter * match ExtraWhitespace /\s\+$/
+autocmd WinEnter,InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 "NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
