@@ -149,7 +149,8 @@ inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
 NeoBundle 'kien/ctrlp.vim'
 let g:ctrlp_map='<LEADER>p'
 let g:ctrlp_max_height=20
-let g:ctrlp_max_files = 2000000
+let g:ctrlp_max_files=2000000
+let g:ctrlp_clear_cache_on_exit=0
 nmap <LEADER>y :CtrlPClearCache<CR>
 
 
