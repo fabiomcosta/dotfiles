@@ -338,6 +338,20 @@ nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
 
+"uses xclip to copy things to the clipboard
+"even while using vim with ssh.
+"NOTES:
+" * make sure you start the ssh session with X (ssh -X server).
+" * make sure the server has xclip installed.
+" * make sure your remote vim is compiled with +clipboard.
+" * if you are in OSX, make sure XQuartz is installed
+"   (http://xquartz.macosforge.org/landing/).
+" * On xQuartz, open a new sheel window (ctrl-n) and hide it
+"   or it won't work.
+"TODO: make this work on normal mode.
+vmap y y:call system("if hash xclip 2> /dev/null; then xclip -i -selection c; fi", getreg("\""))<CR>
+
+
 "whitespace in the end of the lines stuff
 "http://vim.wikia.com/wiki/Highlight_unwanted_spaces
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
