@@ -87,6 +87,9 @@ if [[ $OSX && `which vim 2> /dev/null` ]]; then
     fi
 fi
 
+echo "Setting rebase to be the default for the master branch on this repo..."
+git config branch.master.rebase true
+
 pushd $HOME &> /dev/null
     echo "Sourcing `hl ".bash_profile"`...";
     source ".bash_profile"
