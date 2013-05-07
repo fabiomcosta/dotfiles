@@ -67,7 +67,9 @@ set clipboard=unnamed
 "store lots of :cmdline history
 set history=1000
 "mark the ideal max text width
-set colorcolumn=81
+if v:version > 702
+  set colorcolumn=81
+endif
 
 "some stuff to get the mouse going in term
 set mouse=a
@@ -87,11 +89,15 @@ set wildignore+=*/.sass-cache/*,*/node_modules/*
 "search options
 nnoremap / /\v
 vnoremap / /\v
+"ignores case
 set ignorecase
+"do not ignore case if explicitly defined on the search
+"by search for an uppercased pattern
 set smartcase
+"defaults to search for every match of the pattern
 set gdefault
 set showmatch
-"hilight searches by default
+"highlight searches by default
 set hlsearch
 "find the next match as we type the search
 set incsearch
