@@ -189,7 +189,6 @@ NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
 NeoBundle 'hack-stable', {'type': 'nosync'}
-NeoBundle 'justone/remotecopy', {'rtp': 'vim'}
 
 
 NeoBundle 'Shougo/neocomplcache'
