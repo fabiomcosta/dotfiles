@@ -74,6 +74,7 @@ ulimit -S -n 2048
 
 if command_exists mvim; then
     export EDITOR=`which mvim`
+    alias vim='mvim -v'
 else
     export EDITOR=`which vim`
 fi
@@ -85,7 +86,7 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
-alias dev="ssh -X devrs144.prn1.facebook.com"
+alias dev='ssh -X devrs144.prn1.facebook.com'
 
 ## colors
 export TERM="xterm-color"
