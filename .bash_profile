@@ -85,8 +85,7 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
-alias dev="ssh devrs144.prn1.facebook.com"
-
+alias dev="ssh -X devrs144.prn1.facebook.com"
 
 ## colors
 export TERM="xterm-color"
