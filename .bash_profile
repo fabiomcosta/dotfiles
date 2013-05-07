@@ -2,7 +2,17 @@
 
 DEV="$HOME/Dev"
 
-export_if_exists() {
+append_if_exists() {
+    path_var_value=$(eval echo $`echo $1`)
+    if [[ -e "$2" ]]; then
+        # remove the path from $path_var_value
+        # also cleans leading ":" chars
+        path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+        export $1="$path_var_value:$2"
+    fi
+}
+
+prepend_if_exists() {
     path_var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" ]]; then
         # remove the path from $path_var_value
@@ -83,8 +93,8 @@ export TERM="xterm-color"
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# adds my bin folder to the path
-export_if_exists PATH $HOME/bin
+# prepends my bin folder to the path
+prepend_if_exists PATH $HOME/bin
 # nvm
 execute_if_exists source $HOME/.nvm/nvm.sh
 # do not create .pyc files
@@ -94,7 +104,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 # RVM
 execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
 # adds arc path to the current path
-export_if_exists PATH $DEV/fb/devtools/arcanist/bin
+append_if_exists PATH $DEV/fb/devtools/arcanist/bin
 
 
 ## adding brew paths to PATH and other brew specific stuff
@@ -102,25 +112,25 @@ if command_exists brew; then
     ## brew
     BREW_PREFIX=`brew --prefix`
 
-    export_if_exists PATH $BREW_PREFIX/bin
-    export_if_exists PATH $BREW_PREFIX/sbin
+    append_if_exists PATH $BREW_PREFIX/bin
+    append_if_exists PATH $BREW_PREFIX/sbin
 
     ## node
-    export_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
-    export_if_exists PATH      $BREW_PREFIX/share/npm/bin
+    append_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
+    append_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
     ## python
-    export_if_exists PATH $BREW_PREFIX/share/python
+    append_if_exists PATH $BREW_PREFIX/share/python
         ## python opencv module
-        export_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+        append_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
         ## virtualenv
         execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
 
     ## python3 with more priority than python2
-    export_if_exists PATH $BREW_PREFIX/share/python3
+    append_if_exists PATH $BREW_PREFIX/share/python3
 
     ## ruby
-    export_if_exists PATH `brew --prefix ruby`/bin
+    append_if_exists PATH `brew --prefix ruby`/bin
 
     if command_exists complete; then
         # bash completion
