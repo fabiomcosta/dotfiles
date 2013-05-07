@@ -1,12 +1,36 @@
-syntax on
-filetype off
-
-let mapleader = ","
-
-set t_Co=256 "adds possibility of using 256 colors
+"Use Vim settings, rather then Vi settings (much better!).
+"This must be first, because it changes other options as a side effect.
 set nocompatible
-set modelines=0
 
+let mapleader=","
+
+"fonts and other gui stuff
+"make sure to install the powerline patched font
+"version of the font you like
+"https://github.com/Lokaltog/powerline-fonts
+if has("gui_running")
+  set guioptions-=T   "remove toolbar
+  set guioptions-=r   "remove right-hand scroll bar
+  set guioptions-=L   "remove left-hand scroll bar
+  try
+    set guifont=Monaco \for \Powerline:h14
+  catch
+    try
+      set guifont=Monaco:h14
+    catch
+      try
+        set guifont=SourceCodePro-Regular:h14
+      catch
+        set guifont=Inconsolata:h16
+      endtry
+    endtry
+  endtry
+endif
+
+"adds possibility of using 256 colors
+set t_Co=256
+
+"default indent settings
 set expandtab
 set tabstop=2
 set softtabstop=2
@@ -26,39 +50,75 @@ set title
 set showmode
 set showcmd
 set hidden
-set wildmenu
-set wildmode=list:longest
 set cursorline
 set ttyfast
 set ruler
+"allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 set laststatus=2
+"font line-height
 set linespace=0
+"adds line numbers to the left
 set number
-set timeoutlen=1000 ttimeoutlen=0 "prevents delay while pressing esc on insert mode
+"prevents delay while pressing esc on insert mode
+set timeoutlen=1000 ttimeoutlen=0
+"uses OS clipboard if possible (check +clipboard)
 set clipboard=unnamed
+"store lots of :cmdline history
+set history=1000
+"mark the ideal max text width
+set colorcolumn=81
 
-"search related {{{
+"some stuff to get the mouse going in term
+set mouse=a
+set ttymouse=xterm2
+
+"enable ctrl-n and ctrl-p to scroll thru matches
+set wildmenu
+"make cmdline tab completion similar to bash
+set wildmode=list:longest
+"ignored files while search files and stuff
+set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
+set wildignore+=*.swp,*.swo,*~,*.pyc
+set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
+set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
+set wildignore+=*/.sass-cache/*,*/node_modules/*
+
+"search options
 nnoremap / /\v
 vnoremap / /\v
 set ignorecase
 set smartcase
 set gdefault
 set showmatch
+"hilight searches by default
 set hlsearch
+"find the next match as we type the search
 set incsearch
 "clears search
 nnoremap <LEADER><SPACE> :noh<CR>
 nnoremap <TAB> %
 vnoremap <TAB> %
-" }}}
 
+"dont wrap lines
 set wrap
+"wrap lines at convenient points
+set linebreak
 set textwidth=360
 set formatoptions=qrn1
 
+"display tabs and trailing spaces
 set list
 set listchars=tab:▸\ ,eol:¬
+
+"folding options
+set foldmethod=indent
+set nofoldenable
+nnoremap <SPACE> za
+vnoremap <SPACE> zf
+
+"turn on syntax highlighting
+syntax on
 
 nnoremap j gj
 nnoremap k gk
@@ -91,6 +151,11 @@ nnoremap - :vertical resize -5<CR>
 cmap w!! w !sudo tee % >/dev/null
 
 vnoremap <LEADER>j :!python -m json.tool<CR>
+
+"underline to camelcase
+vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>:noh<CR>
+"camelcase to underline
+vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
 
 
 if has('vim_starting')
@@ -187,25 +252,9 @@ map <LEADER>' cs"'<CR>
 map <LEADER>" cs'"<CR>
 
 
-"ignored files while search files and stuff
-set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
-set wildignore+=*.swp,*.swo,*~,*.pyc
-set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
-set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
-set wildignore+=*/.sass-cache/*,*/node_modules/*
-
-
-"folding stuff
-set foldmethod=indent
-set nofoldenable
-nnoremap <SPACE> za
-vnoremap <SPACE> zf
-
-
-"underline to camelcase
-vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>:noh<CR>
-"camelcase to underline
-vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
+"colorscheme
+NeoBundle 'tomasr/molokai'
+colorscheme molokai
 
 
 "a better htmldjango detection
@@ -300,35 +349,6 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 "NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-
-
-"fonts and other gui stuff
-"make sure to install the powerline patched font
-"version of the font you like
-"https://github.com/Lokaltog/powerline-fonts
-if has("gui_running")
-  set guioptions-=T   "remove toolbar
-  set guioptions-=r   "remove right-hand scroll bar
-  set guioptions-=L   "remove left-hand scroll bar
-  try
-    set guifont=Monaco \for \Powerline:h14
-  catch
-    try
-      set guifont=Monaco:h14
-    catch
-      try
-        set guifont=SourceCodePro-Regular:h14
-      catch
-        set guifont=Inconsolata:h16
-      endtry
-    endtry
-  endtry
-endif
-
-
-"colorscheme
-NeoBundle 'tomasr/molokai'
-colorscheme molokai
 
 
 filetype plugin indent on
