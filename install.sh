@@ -28,21 +28,8 @@ create_ln_for() {
     fi
 }
 
-install() {
-    command=$1
-    shift
-    if [ ! `which $command 2> /dev/null` ]; then
-        echo "Installing `hl $command`..."
-        $@
-        if [ $? -eq 0 ]; then
-            echo "${OK} `hl $command` successfully installed."
-        else
-            echo "${ERROR} a problem happened while installing `hl $command`."
-            exit 1
-        fi
-    else
-        echo "${OK} `hl $command` is already installed."
-    fi
+command_exists() {
+  hash $1 2> /dev/null
 }
 
 pwd=$PWD
@@ -60,8 +47,11 @@ popd &> /dev/null
 
 if [ $OSX ]; then
     echo "Executing some OSX specific changes..."
-    install brew ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
-    install mvim brew install macvim --with-lua --override-system-vim
+    if ! command_exists brew; then
+      echo "Installing brew..."
+      ruby -e "`curl -fsSkL raw.github.com/mxcl/homebrew/go`"
+    fi
+    brew install macvim --with-lua --override-system-vim
     brew install git bash-completion ack python ruby node tmux
     # decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
