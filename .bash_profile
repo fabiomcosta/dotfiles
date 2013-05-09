@@ -44,7 +44,7 @@ stop_slow() {
 findd() {
     # find files containing all the passed arg
     # example: findd landing html -> landing.html some_landing_some.html
-    find . $(echo `( for arg in $@; do echo "-name *$arg*"; done )`)
+    find . $(echo `( for arg in $@; do echo "-iname *$arg*"; done )`)
 }
 
 myip() {
