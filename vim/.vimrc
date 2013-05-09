@@ -199,6 +199,7 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
+NeoBundle 'git://repo.or.cz/vcscommand.git'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
 
