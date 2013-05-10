@@ -75,6 +75,9 @@ endif
 set mouse=a
 set ttymouse=xterm2
 
+"keep going up dirs until a tags file is found
+set tags=tags;/
+
 "enable ctrl-n and ctrl-p to scroll thru matches
 set wildmenu
 "make cmdline tab completion similar to bash
