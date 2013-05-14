@@ -188,7 +188,6 @@ NeoBundle 'garbas/vim-snipmate'
 NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
-NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
@@ -202,6 +201,7 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
+NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'git://repo.or.cz/vcscommand.git'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
