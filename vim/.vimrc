@@ -263,8 +263,12 @@ let g:yankring_history_file='.yankring_history'
 
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
-map <LEADER>' cs"'<CR>
-map <LEADER>" cs'"<CR>
+nnoremap <LEADER>' cs"'<CR>
+nnoremap <LEADER>" cs'"<CR>
+
+
+NeoBundle 'majutsushi/tagbar'
+nnoremap <LEADER>0 :TagbarToggle<CR>
 
 
 "colorscheme
