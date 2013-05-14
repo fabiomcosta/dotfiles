@@ -83,11 +83,12 @@ set wildmenu
 "make cmdline tab completion similar to bash
 set wildmode=list:longest
 "ignored files while search files and stuff
-set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz
-set wildignore+=*.swp,*.swo,*~,*.pyc
-set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg
+set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz,*.swf
+set wildignore+=*.swp,*.swo,*~,*.pyc,*.json
+set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*,*/node_modules/*
+set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
 "search options
 nnoremap / /\v
