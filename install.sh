@@ -52,7 +52,8 @@ if [ $OSX ]; then
       ruby -e "`curl -fsSkL raw.github.com/mxcl/homebrew/go`"
     fi
     brew install macvim --with-lua --override-system-vim
-    brew install git bash-completion ack python ruby node tmux
+    brew install git bash-completion ack python ruby node \
+      tmux reattach-to-user-namespace
     # decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
 fi
