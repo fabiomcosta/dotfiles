@@ -172,8 +172,8 @@ vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
 
 "tab related mappings
 nnoremap <LEADER>nt :tabnew<CR>
-nnoremap <C-p> :tabprevious<CR>
-nnoremap <C-n> :tabnext<CR>
+nnoremap <LEADER>[ :tabprevious<CR>
+nnoremap <LEADER>] :tabnext<CR>
 
 
 if has('vim_starting')
