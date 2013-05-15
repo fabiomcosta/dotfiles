@@ -373,7 +373,7 @@ nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 " * On xQuartz, open a new sheel window (ctrl-n) and hide it
 "   or it won't work.
 "TODO: make this work on normal mode.
-vmap y y:call system("if hash xclip 2> /dev/null; then xclip -i -selection c; fi", getreg("\""))<CR>
+" vmap y y:call system("if hash xclip 2> /dev/null; then xclip -i -selection c; fi", getreg("\""))<CR>
 
 
 "whitespace in the end of the lines stuff
