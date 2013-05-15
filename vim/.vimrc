@@ -206,6 +206,7 @@ NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
 NeoBundle 'tomtom/tcomment_vim'
+NeoBundle 'benmills/vimux'
 NeoBundle 'git://repo.or.cz/vcscommand.git'
 NeoBundle 'hack-stable', {'type': 'nosync'}
 
