@@ -89,7 +89,7 @@ alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
 alias dev='ssh dev -t "if which tmux 2>&1 >/dev/null; then test -z "$TMUX" && (tmux attach || tmux new-session) fi"'
 
 ## colors
-[ -n "$TMUX" ] && export TERM=screen-256color
+export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
