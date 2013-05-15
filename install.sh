@@ -43,6 +43,7 @@ pushd $HOME &> /dev/null
     create_ln_for ".js" "$pwd/.js"
     create_ln_for ".irbrc" "$pwd/.irbrc"
     create_ln_for ".zshrc" "$pwd/.zshrc"
+    create_ln_for ".tmux.conf" "$pwd/.tmux.conf"
 popd &> /dev/null
 
 if [ $OSX ]; then
