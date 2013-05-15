@@ -141,6 +141,9 @@ vnoremap <C-k> 12k
 inoremap jj <ESC>
 nnoremap ; :
 
+"makes paste work on command-line mode
+cnoremap <C-v> <C-r>"
+
 nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
