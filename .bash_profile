@@ -86,7 +86,7 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
-alias dev='ssh dev -t tmux fb'
+alias dev='ssh dev -t tmux attach-session'
 
 ## colors
 export TERM="xterm-color"
