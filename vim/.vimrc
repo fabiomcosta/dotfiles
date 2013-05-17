@@ -213,6 +213,7 @@ NeoBundle 'hack-stable', {'type': 'nosync'}
 
 NeoBundle 'Shougo/neocomplcache'
 let g:neocomplcache_enable_at_startup=1
+let g:neocomplcache_enable_auto_select=1
 if !exists('g:neocomplcache_omni_functions')
     let g:neocomplcache_omni_functions = {}
 endif

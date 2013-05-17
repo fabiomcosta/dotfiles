@@ -73,10 +73,9 @@ export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $N
 ulimit -S -n 2048
 
 if command_exists mvim; then
-    export EDITOR=`which mvim`
-    alias vim='mvim -v'
-else
     export EDITOR=`which vim`
+    alias vim='mvim -v'
+    alias mvim='echo "use vim, get used to it."'
 fi
 
 ## aliases
