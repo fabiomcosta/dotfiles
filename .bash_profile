@@ -74,8 +74,9 @@ ulimit -S -n 2048
 
 if command_exists mvim; then
     export EDITOR=`which vim`
+    alias mvim='mvim -v'
     alias vim='mvim -v'
-    alias mvim='echo "use vim, get used to it."'
+    alias vi='mvim -v'
 fi
 
 ## aliases
