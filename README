@@ -2,3 +2,4 @@ TODO
 
 * Modularize
 * source specific files based on computer features, for example if machine has a command or its name is "X"
+* add osx default settings (https://github.com/mathiasbynens/dotfiles/blob/master/.osx)
