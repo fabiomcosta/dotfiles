@@ -67,8 +67,11 @@ set clipboard=unnamed
 "store lots of :cmdline history
 set history=1000
 "mark the ideal max text width
-if v:version > 702
-  set colorcolumn=81
+if exists('+colorcolumn')
+  set colorcolumn=80
+else
+  " remove this in the future where youll always be using vim >= 7.3
+  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
 
 "some stuff to get the mouse going in term
