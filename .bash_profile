@@ -93,8 +93,6 @@ export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-# prepends my bin folder to the path
-prepend_if_exists PATH $HOME/bin
 # nvm
 execute_if_exists source $HOME/.nvm/nvm.sh
 # do not create .pyc files
@@ -106,37 +104,41 @@ execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session 
 # adds arc path to the current path
 append_if_exists PATH $DEV/fb/devtools/arcanist/bin
 
-
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
     ## brew
     BREW_PREFIX=`brew --prefix`
 
-    append_if_exists PATH $BREW_PREFIX/bin
-    append_if_exists PATH $BREW_PREFIX/sbin
+    ## ruby
+    prepend_if_exists PATH `brew --prefix ruby`/bin
 
     ## node
-    append_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
-    append_if_exists PATH      $BREW_PREFIX/share/npm/bin
+    prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
+    prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
     ## python
-    append_if_exists PATH $BREW_PREFIX/share/python
+    prepend_if_exists PATH $BREW_PREFIX/share/python
         ## python opencv module
-        append_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+        prepend_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
         ## virtualenv
-        execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
+        execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
+        # execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
+        export VIRTUALENV_DISTRIBUTE="x" # makes --distribute the default
 
     ## python3 with more priority than python2
-    append_if_exists PATH $BREW_PREFIX/share/python3
-
-    ## ruby
-    append_if_exists PATH `brew --prefix ruby`/bin
+    prepend_if_exists PATH $BREW_PREFIX/share/python3
 
     if command_exists complete; then
         # bash completion
         execute_if_exists source $BREW_PREFIX/etc/bash_completion
     fi
+
+    prepend_if_exists PATH $BREW_PREFIX/bin
+    prepend_if_exists PATH $BREW_PREFIX/sbin
 fi
+
+# prepends my bin folder to the path
+prepend_if_exists PATH $HOME/bin
 
 if command_exists complete; then
     # pip bash completion start
