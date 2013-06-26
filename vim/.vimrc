@@ -76,7 +76,7 @@ endif
 
 "some stuff to get the mouse going in term
 set mouse=a
-set ttymouse=xterm2
+set ttymouse=xterm
 
 "keep going up dirs until a tags file is found
 set tags=tags;/
