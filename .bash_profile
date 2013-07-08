@@ -116,14 +116,12 @@ if command_exists brew; then
     prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
     prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
-    ## python
-    prepend_if_exists PATH $BREW_PREFIX/share/python
-        ## python opencv module
-        prepend_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
-        ## virtualenv
-        execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
-        # execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
-        export VIRTUALENV_DISTRIBUTE="x" # makes --distribute the default
+    ## python opencv module
+    prepend_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
+    ## virtualenv
+    execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
+    # execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
+    export VIRTUALENV_DISTRIBUTE="x" # makes --distribute the default
 
     ## python3 with more priority than python2
     prepend_if_exists PATH $BREW_PREFIX/share/python3
