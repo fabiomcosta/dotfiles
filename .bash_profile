@@ -71,11 +71,6 @@ LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
 export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 
-# increases number of open files per process
-# needed to make thumbor tests work.
-# http://superuser.com/questions/433746/is-there-a-fix-for-the-too-many-open-files-in-system-error-on-os-x-10-7-1
-ulimit -S -n 2048
-
 export EDITOR=`which vim`
 if command_exists mvim; then
     alias mvim='mvim -v'
