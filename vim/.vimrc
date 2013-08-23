@@ -224,7 +224,7 @@ let g:neocomplcache_omni_functions['python'] = 'jedi#complete'
 
 
 "NeoBundle 'davidhalter/jedi-vim'
-let g:jedi#popup_on_dot = 0
+"let g:jedi#popup_on_dot = 0
 
 
 NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
