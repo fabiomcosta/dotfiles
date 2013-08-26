@@ -115,8 +115,7 @@ if command_exists brew; then
     prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
     ## virtualenv
-    execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
-    # execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
+    execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
     export VIRTUALENV_DISTRIBUTE="x" # makes --distribute the default
 
     ## python3 with more priority than python2
