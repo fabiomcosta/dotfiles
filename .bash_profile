@@ -114,8 +114,6 @@ if command_exists brew; then
     prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
     prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
-    ## python opencv module
-    prepend_if_exists PYTHONPATH $BREW_PREFIX/lib/python2.7/site-packages
     ## virtualenv
     execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
     # execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
