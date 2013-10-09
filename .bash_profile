@@ -85,6 +85,7 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
+alias simpleserver="python -m SimpleHTTPServer"
 
 ## colors
 export TERM=xterm-256color
