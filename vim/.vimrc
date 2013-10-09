@@ -53,6 +53,7 @@ set hidden
 set cursorline
 set ttyfast
 set ruler
+set pastetoggle=<F2>
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 set laststatus=2
