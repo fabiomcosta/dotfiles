@@ -286,6 +286,9 @@ NeoBundle 'tomasr/molokai'
 colorscheme molokai
 
 
+NeoBundle 'mattboehm/vim-accordion'
+
+
 "a better htmldjango detection
 augroup filetypedetect
 
