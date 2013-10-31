@@ -84,6 +84,34 @@ if [ $OSX ]; then
 
     # decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
+
+    # Disable the sound effects on boot
+    sudo nvram SystemAudioVolume=" "
+
+    # Menu bar: show remaining battery time (on pre-10.8); hide percentage
+    defaults write com.apple.menuextra.battery ShowPercent -string "NO"
+    defaults write com.apple.menuextra.battery ShowTime -string "YES"
+
+    # Finder: show all filename extensions
+    defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+    # Finder: allow text selection in Quick Look
+    defaults write com.apple.finder QLEnableTextSelection -bool true
+
+    # Disable the warning when changing a file extension
+    defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+
+    # Disable shadow in screenshots
+    defaults write com.apple.screencapture disable-shadow -bool true
+
+    # Use plain text mode for new TextEdit documents
+    defaults write com.apple.TextEdit RichText -int 0
+    # Open and save files as UTF-8 in TextEdit
+    defaults write com.apple.TextEdit PlainTextEncoding -int 4
+    defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+    # Prevent Time Machine from prompting to use new hard drives as backup volume
+    defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 fi
 
 # clone the neobundle plugin, to manage vim plugins
