@@ -100,8 +100,6 @@ export PYTHONDONTWRITEBYTECODE=x
 export WORKON_HOME=$HOME/.virtualenvs
 # RVM
 execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
-# adds arc path to the current path
-append_if_exists PATH $DEV/fb/devtools/arcanist/bin
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
