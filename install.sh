@@ -52,6 +52,8 @@ if [ $OSX ]; then
       echo "Installing brew..."
       ruby -e "`curl -fsSkL raw.github.com/mxcl/homebrew/go`"
     fi
+
+    brew update
     brew install macvim --with-lua --override-system-vim
     brew install git bash-completion ack python ruby node \
       tmux reattach-to-user-namespace
