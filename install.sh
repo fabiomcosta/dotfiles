@@ -69,16 +69,13 @@ if [ $OSX ]; then
       dropbox \
       spectacle \
       the-unarchiver \
-    # dev
       imagealpha \
       imageoptim \
       iterm2 \
-    # browsers
       firefox \
       firefox-aurora \
       google-chrome \
       google-chrome-canary \
-    # others
       lime-chat \
       skype \
       u-torrent \
