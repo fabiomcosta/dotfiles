@@ -55,6 +55,33 @@ if [ $OSX ]; then
     brew install macvim --with-lua --override-system-vim
     brew install git bash-completion ack python ruby node \
       tmux reattach-to-user-namespace
+
+    # install homebrew-cask
+    brew tap phinze/homebrew-cask
+    brew install brew-cask
+
+    # essential
+    brew cask install \
+      adium \
+      caffeine \
+      dropbox \
+      spectacle \
+      the-unarchiver \
+    # dev
+      imagealpha \
+      imageoptim \
+      iterm2 \
+    # browsers
+      firefox \
+      firefox-aurora \
+      google-chrome \
+      google-chrome-canary \
+    # others
+      lime-chat \
+      skype \
+      u-torrent \
+      adobe-air
+
     # decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
 fi
