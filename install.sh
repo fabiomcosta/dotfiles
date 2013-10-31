@@ -82,7 +82,8 @@ if [ $OSX ]; then
       u-torrent \
       adobe-air
 
-    # decreases the delay repetition on keyboard
+    # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+    # Decreases the delay repetition on keyboard
     defaults write NSGlobalDomain KeyRepeat -int 0
 
     # Disable the sound effects on boot
