@@ -133,6 +133,9 @@ fi
 prepend_if_exists PATH $HOME/bin
 
 if command_exists complete; then
+    # run `complete -p` to see already available autocomplete functions
+    complete -F _ssh tssh
+
     # pip bash completion start
     _pip_completion()
     {
