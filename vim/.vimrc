@@ -205,7 +205,8 @@ NeoBundle 'thomd/vim-jasmine'
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'hostsamurai/CSSMinister.vim'
-NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'mattboehm/vim-accordion'
+NeoBundle 'mhinz/vim-signify'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
@@ -286,7 +287,6 @@ NeoBundle 'tomasr/molokai'
 colorscheme molokai
 
 
-NeoBundle 'mattboehm/vim-accordion'
 
 
 "a better htmldjango detection
