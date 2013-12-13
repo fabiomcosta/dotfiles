@@ -94,10 +94,14 @@ export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # nvm
 execute_if_exists source $HOME/.nvm/nvm.sh
+
 # do not create .pyc files
 export PYTHONDONTWRITEBYTECODE=x
 # virtualenv
 export WORKON_HOME=$HOME/.virtualenvs
+export PIP_VIRTUALENV_BASE=$WORKON_HOME
+export PIP_RESPECT_VIRTUALENV=true
+
 # RVM
 execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
 
@@ -113,20 +117,19 @@ if command_exists brew; then
     prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
     prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
-    ## virtualenv
-    execute_if_exists source $BREW_PREFIX/share/python/virtualenvwrapper.sh
-    export VIRTUALENV_DISTRIBUTE="x" # makes --distribute the default
-
     ## python3 with more priority than python2
     prepend_if_exists PATH $BREW_PREFIX/share/python3
+
+    prepend_if_exists PATH $BREW_PREFIX/bin
+    prepend_if_exists PATH $BREW_PREFIX/sbin
 
     if command_exists complete; then
         # bash completion
         execute_if_exists source $BREW_PREFIX/etc/bash_completion
     fi
 
-    prepend_if_exists PATH $BREW_PREFIX/bin
-    prepend_if_exists PATH $BREW_PREFIX/sbin
+    ## virtualenv
+    execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
 fi
 
 # prepends my bin folder to the path
