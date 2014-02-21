@@ -206,7 +206,7 @@ NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'hostsamurai/CSSMinister.vim'
 NeoBundle 'mattboehm/vim-accordion'
-NeoBundle 'mhinz/vim-signify'
+" NeoBundle 'mhinz/vim-signify'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
@@ -395,6 +395,9 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 "NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
+
+
+" autocmd BufEnter * silent! lcd %:p:h
 
 
 filetype plugin indent on
