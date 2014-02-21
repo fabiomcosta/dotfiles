@@ -396,9 +396,9 @@ autocmd BufWinLeave * call clearmatches()
 "NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
-
+" http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file
+" Changes the window-local current directory to be the same as the directory of the current file
 " autocmd BufEnter * silent! lcd %:p:h
-
 
 filetype plugin indent on
 
