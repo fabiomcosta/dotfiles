@@ -85,7 +85,10 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
-alias simpleserver="python -m SimpleHTTPServer"
+alias simpleserver='python -m SimpleHTTPServer'
+if [[ -e "$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit" ]]; then
+  alias nw="$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit"
+fi
 
 ## colors
 export TERM=xterm-256color
@@ -131,6 +134,9 @@ if command_exists brew; then
     ## virtualenv
     execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
 fi
+
+# prepends depot_tools from the chromium project
+prepend_if_exists PATH $DEV/other/depot_tools
 
 # prepends my bin folder to the path
 prepend_if_exists PATH $HOME/bin
