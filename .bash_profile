@@ -59,7 +59,7 @@ tssh() {
 }
 
 # PS1 structure
-PWD() {
+_PWD() {
     pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
 RED="\[\033[0;31m\]"
@@ -69,7 +69,7 @@ LIGHTBLUE="\[\033[1;34m\]"
 LIGHTYELLOW="\[\033[1;33m\]"
 LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
-export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(_PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
 
 export EDITOR=`which vim`
 if command_exists mvim; then
