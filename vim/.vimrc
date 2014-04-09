@@ -214,7 +214,6 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
 NeoBundle 'git://repo.or.cz/vcscommand.git'
-NeoBundle 'hack-stable', {'type': 'nosync'}
 
 
 NeoBundle 'Shougo/neocomplcache'
