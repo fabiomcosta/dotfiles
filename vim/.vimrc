@@ -54,6 +54,8 @@ set cursorline
 set ttyfast
 set ruler
 set pastetoggle=<F2>
+"allows colors on long lines
+set synmaxcol=5000
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 set laststatus=2
