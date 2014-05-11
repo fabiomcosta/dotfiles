@@ -90,7 +90,7 @@ set wildmenu
 set wildmode=list:longest
 "ignored files while search files and stuff
 set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz,*.swf
-set wildignore+=*.swp,*.swo,*~,*.pyc,*.json
+set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*,*/node_modules/*
