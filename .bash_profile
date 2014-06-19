@@ -3,21 +3,21 @@
 DEV="$HOME/Dev"
 
 append_if_exists() {
-    path_var_value=$(eval echo $`echo $1`)
+    local path_var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" ]]; then
         # remove the path from $path_var_value
         # also cleans leading ":" chars
-        path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+        local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
         export $1="$path_var_value:$2"
     fi
 }
 
 prepend_if_exists() {
-    path_var_value=$(eval echo $`echo $1`)
+    local path_var_value=$(eval echo $`echo $1`)
     if [[ -e "$2" ]]; then
         # remove the path from $path_var_value
         # also cleans leading ":" chars
-        path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+        local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
         export $1="$2:$path_var_value"
     fi
 }
@@ -48,7 +48,7 @@ findd() {
 }
 
 myip() {
-    ip="`ifconfig | grep 192 | awk '{print \$2}'`"
+    local ip="`ifconfig | grep 192 | awk '{print \$2}'`"
     print "$ip"
     echo "$ip" | pbcopy
 }
