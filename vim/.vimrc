@@ -235,9 +235,9 @@ NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
 noremap <LEADER>z :NERDTreeToggle<CR>
 
 
-NeoBundle 'mattn/zencoding-vim'
-nnoremap <C-z> :call zencoding#expandAbbr(0,"")<CR>a
-inoremap <C-z> <ESC>:call zencoding#expandAbbr(0,"")<CR>a
+NeoBundle 'mattn/emmet-vim'
+nnoremap <C-z> :call emmet#expandAbbr(0,"")<CR>a
+inoremap <C-z> <ESC>:call emmet#expandAbbr(0,"")<CR>a
 
 
 NeoBundle 'kien/ctrlp.vim'
