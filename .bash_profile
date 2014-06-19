@@ -55,7 +55,7 @@ myip() {
 
 tssh() {
   # connects to the server and attaches to the running tmux session
-  ssh $1 -t "export PATH=\"\$HOME/bin:\$PATH\"; if which tmux 2>&1 >/dev/null; then test -z \"\$TMUX\" && (tmux attach || tmux new-session) fi"
+  ssh $1 -t "source ~/.bash_profile; if which tmux 2>&1 >/dev/null; then test -z \"\$TMUX\" && (tmux attach || tmux new-session) fi"
 }
 
 # PS1 structure
