@@ -3,38 +3,46 @@
 DEV="$HOME/Dev"
 
 append_if_exists() {
-  local path_var_value=$(eval echo $`echo $1`)
-  if [[ -e "$2" ]]; then
+  local var_name=$1
+  local path_var_value="$(eval echo $`echo $var_name`)"
+  local path="$2"
+  if [[ -e "$path" ]]; then
     # remove the path from $path_var_value
     # also cleans leading ":" chars
-    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
-    export $1="$path_var_value:$2"
+    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$path(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+    export $var_name="$path_var_value:$path"
   fi
 }
 
 prepend_if_exists() {
-  local path_var_value=$(eval echo $`echo $1`)
-  if [[ -e "$2" ]]; then
+  local var_name=$1
+  local path_var_value="$(eval echo $`echo $var_name`)"
+  local path="$2"
+  if [[ -e "$path" ]]; then
     # remove the path from $path_var_value
     # also cleans leading ":" chars
-    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
-    export $1="$2:$path_var_value"
+    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$path(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+    export $var_name="$path:$path_var_value"
   fi
 }
 
 execute_if_exists() {
-  if [[ -s "$2" ]]; then
-    $1 "$2"
+  local cmd=$1
+  local path="$2"
+  if [[ -s "$path" ]]; then
+    $cmd "$path"
   fi
 }
 
 command_exists() {
-  hash $1 2> /dev/null
+  local cmd=$1
+  hash $cmd 2> /dev/null
 }
 
 start_slow() {
+  local port=$1
   sudo ipfw pipe 1 config bw 100KByte/s
-  sudo ipfw add 1 pipe 1 src-port $1
+  sudo ipfw add 1 pipe 1 src-port $port
 }
 
 stop_slow() {
