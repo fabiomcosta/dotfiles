@@ -55,8 +55,7 @@ if [ $OSX ]; then
 
   brew update
   brew install macvim --with-lua --override-system-vim
-  brew install git bash-completion ack python ruby node \
-    tmux reattach-to-user-namespace
+  brew install git bash-completion ack python ruby node tmux
 
   # install homebrew-cask
   brew tap phinze/homebrew-cask
