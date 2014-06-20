@@ -203,10 +203,8 @@ NeoBundle 'mileszs/ack.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'thomd/vim-jasmine'
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
-NeoBundle 'hostsamurai/CSSMinister.vim'
 NeoBundle 'mattboehm/vim-accordion'
 " NeoBundle 'mhinz/vim-signify'
 NeoBundle 'Lokaltog/vim-easymotion'
@@ -215,20 +213,11 @@ NeoBundle 'jszakmeister/vim-togglecursor'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
-NeoBundle 'git://repo.or.cz/vcscommand.git'
 
 
 NeoBundle 'Shougo/neocomplcache'
 let g:neocomplcache_enable_at_startup=1
 let g:neocomplcache_enable_auto_select=1
-" if !exists('g:neocomplcache_omni_functions')
-"     let g:neocomplcache_omni_functions = {}
-" endif
-" let g:neocomplcache_omni_functions['python'] = 'jedi#complete'
-
-
-" NeoBundle 'davidhalter/jedi-vim'
-" let g:jedi#popup_on_dot = 0
 
 
 NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
@@ -270,10 +259,6 @@ if !exists("g:Powerline_loaded")
 endif
 
 
-NeoBundle 'YankRing.vim'
-let g:yankring_history_file='.yankring_history'
-
-
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'tpope/vim-repeat'
 nnoremap <LEADER>' cs"'<CR>
@@ -287,8 +272,6 @@ nnoremap <LEADER>0 :TagbarToggle<CR>
 "colorscheme
 NeoBundle 'tomasr/molokai'
 colorscheme molokai
-
-
 
 
 "a better htmldjango detection
@@ -372,21 +355,6 @@ nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
 nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
-
-"uses xclip to copy things to the clipboard
-"even while using vim with ssh.
-"NOTES:
-" * make sure you start the ssh session with X (ssh -X server).
-" * make sure the server has xclip installed.
-" * make sure your remote vim is compiled with +clipboard.
-" * if you are in OSX, make sure XQuartz is installed
-"   (http://xquartz.macosforge.org/landing/).
-" * On xQuartz, open a new sheel window (ctrl-n) and hide it
-"   or it won't work.
-"TODO: make this work on normal mode.
-" vmap y y:call system("if hash xclip 2> /dev/null; then xclip -i -selection c; fi", getreg("\""))<CR>
-
-
 "whitespace in the end of the lines stuff
 "http://vim.wikia.com/wiki/Highlight_unwanted_spaces
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
@@ -397,10 +365,6 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 "NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-
-" http://vim.wikia.com/wiki/Set_working_directory_to_the_current_file
-" Changes the window-local current directory to be the same as the directory of the current file
-" autocmd BufEnter * silent! lcd %:p:h
 
 filetype plugin indent on
 
