@@ -3,54 +3,54 @@
 DEV="$HOME/Dev"
 
 append_if_exists() {
-    local path_var_value=$(eval echo $`echo $1`)
-    if [[ -e "$2" ]]; then
-        # remove the path from $path_var_value
-        # also cleans leading ":" chars
-        local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
-        export $1="$path_var_value:$2"
-    fi
+  local path_var_value=$(eval echo $`echo $1`)
+  if [[ -e "$2" ]]; then
+    # remove the path from $path_var_value
+    # also cleans leading ":" chars
+    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+    export $1="$path_var_value:$2"
+  fi
 }
 
 prepend_if_exists() {
-    local path_var_value=$(eval echo $`echo $1`)
-    if [[ -e "$2" ]]; then
-        # remove the path from $path_var_value
-        # also cleans leading ":" chars
-        local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
-        export $1="$2:$path_var_value"
-    fi
+  local path_var_value=$(eval echo $`echo $1`)
+  if [[ -e "$2" ]]; then
+    # remove the path from $path_var_value
+    # also cleans leading ":" chars
+    local path_var_value=`echo "$path_var_value" | perl -ple "s,(^|:)$2(:|$),:,g" | perl -ple 's,^:|:$,,g'`
+    export $1="$2:$path_var_value"
+  fi
 }
 
 execute_if_exists() {
-    if [[ -s "$2" ]]; then
-        $1 "$2"
-    fi
+  if [[ -s "$2" ]]; then
+    $1 "$2"
+  fi
 }
 
 command_exists() {
-    hash $1 2> /dev/null
+  hash $1 2> /dev/null
 }
 
 start_slow() {
-    sudo ipfw pipe 1 config bw 100KByte/s
-    sudo ipfw add 1 pipe 1 src-port $1
+  sudo ipfw pipe 1 config bw 100KByte/s
+  sudo ipfw add 1 pipe 1 src-port $1
 }
 
 stop_slow() {
-    sudo ipfw delete 1
+  sudo ipfw delete 1
 }
 
 findd() {
-    # find files containing all the passed arg
-    # example: findd landing html -> landing.html some_landing_some.html
-    find . $(echo `( for arg in $@; do echo "-iname *$arg*"; done )`)
+  # find files containing all the passed arg
+  # example: findd landing html -> landing.html some_landing_some.html
+  find . $(echo `( for arg in $@; do echo "-iname *$arg*"; done )`)
 }
 
 myip() {
-    local ip="`ifconfig | grep 192 | awk '{print \$2}'`"
-    print "$ip"
-    echo "$ip" | pbcopy
+  local ip="`ifconfig | grep 192 | awk '{print \$2}'`"
+  print "$ip"
+  echo "$ip" | pbcopy
 }
 
 tssh() {
@@ -60,7 +60,7 @@ tssh() {
 
 # PS1 structure
 _PWD() {
-    pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+  pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
@@ -73,9 +73,9 @@ export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $N
 
 export EDITOR=`which vim`
 if command_exists mvim; then
-    alias mvim='mvim -v'
-    alias vim='mvim -v'
-    alias vi='mvim -v'
+  alias mvim='mvim -v'
+  alias vim='mvim -v'
+  alias vi='mvim -v'
 fi
 
 ## aliases
@@ -110,29 +110,29 @@ execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session 
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
-    ## brew
-    BREW_PREFIX=`brew --prefix`
+  ## brew
+  BREW_PREFIX=`brew --prefix`
 
-    ## ruby
-    prepend_if_exists PATH `brew --prefix ruby`/bin
+  ## ruby
+  prepend_if_exists PATH `brew --prefix ruby`/bin
 
-    ## node
-    prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
-    prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
+  ## node
+  prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
+  prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
 
-    ## python3 with more priority than python2
-    prepend_if_exists PATH $BREW_PREFIX/share/python3
+  ## python3 with more priority than python2
+  prepend_if_exists PATH $BREW_PREFIX/share/python3
 
-    prepend_if_exists PATH $BREW_PREFIX/bin
-    prepend_if_exists PATH $BREW_PREFIX/sbin
+  prepend_if_exists PATH $BREW_PREFIX/bin
+  prepend_if_exists PATH $BREW_PREFIX/sbin
 
-    if command_exists complete; then
-        # bash completion
-        execute_if_exists source $BREW_PREFIX/etc/bash_completion
-    fi
+  if command_exists complete; then
+    # bash completion
+    execute_if_exists source $BREW_PREFIX/etc/bash_completion
+  fi
 
-    ## virtualenv
-    execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
+  ## virtualenv
+  execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
 fi
 
 # prepends depot_tools from the chromium project
@@ -142,16 +142,15 @@ prepend_if_exists PATH $DEV/other/depot_tools
 prepend_if_exists PATH $HOME/bin
 
 if command_exists complete; then
-    # run `complete -p` to see already available autocomplete functions
-    complete -F _ssh tssh
+  # run `complete -p` to see already available autocomplete functions
+  complete -F _ssh tssh
 
-    # pip bash completion start
-    _pip_completion()
-    {
-        COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
-                    COMP_CWORD=$COMP_CWORD \
-                    PIP_AUTO_COMPLETE=1 $1 ) )
-    }
-    complete -o default -F _pip_completion pip
-    # pip bash completion end
+  # pip bash completion start
+  _pip_completion() {
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                COMP_CWORD=$COMP_CWORD \
+                PIP_AUTO_COMPLETE=1 $1 ) )
+  }
+  complete -o default -F _pip_completion pip
+  # pip bash completion end
 fi
