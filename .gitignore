@@ -5,3 +5,4 @@
 *.pyc
 .netrwhist
 vim/.vim/bundle/
+node_modules/
