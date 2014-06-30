@@ -15,9 +15,11 @@
 	last = log -1 HEAD
 [branch]
 	autosetuprebase = always
-[credential]
-	helper = osxkeychain
 [core]
 	editor = vim
 [push]
 	default = simple
+<% if (isOSX) { %>
+[credential]
+	helper = osxkeychain
+<% } %>

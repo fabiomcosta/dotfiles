@@ -1,0 +1,15 @@
+{
+  "name": "dotfile",
+  "repository": "https://github.com/fabiomcosta/dotfiles.git",
+  "version": "0.0.1",
+  "description": "My dotfiles",
+  "dependencies": {
+    "lodash": "~2.4.0",
+    "platform": "~1.2.0"
+  },
+  "keywords": [
+    "dotfiles"
+  ],
+  "author": "Fabio M. Costa",
+  "license": "MIT"
+}

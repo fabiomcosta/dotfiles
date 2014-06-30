@@ -34,11 +34,24 @@ command_exists() {
   hash $1 2> /dev/null
 }
 
+if [ $OSX ]; then
+  source $DIR/osx
+fi
+
+if ! command_exists node; then
+  echo "${ERROR} You need to install the nodejs project to run this script."
+  exit 1
+fi
+
+npm install .
+
+./bin/apply_template.js "$HOME/.gitconfig" "$DIR/.gitconfig"
+
+# TODO do this using nodejs and a template engine
 pushd $HOME &> /dev/null
   create_ln_for ".vim" "$DIR/vim/.vim"
   create_ln_for ".vimrc" "$DIR/vim/.vimrc"
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
-  create_ln_for ".gitconfig" "$DIR/.gitconfig"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".js" "$DIR/.js"
   create_ln_for ".irbrc" "$DIR/.irbrc"
@@ -46,9 +59,6 @@ pushd $HOME &> /dev/null
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
-if [ $OSX ]; then
-  source $DIR/osx
-fi
 
 # clone the neobundle plugin, to manage vim plugins
 if [ ! -d "$HOME/.vim/bundle/neobundle.vim/.git" ]; then
