@@ -44,74 +44,10 @@ pushd $HOME &> /dev/null
   create_ln_for ".irbrc" "$pwd/.irbrc"
   create_ln_for ".zshrc" "$pwd/.zshrc"
   create_ln_for ".tmux.conf" "$pwd/.tmux.conf"
-popd &> /dev/null
-
-if [ $OSX ]; then
-  echo "Executing some OSX specific changes..."
-  if ! command_exists brew; then
-    echo "Installing brew..."
-    ruby -e "`curl -fsSkL raw.github.com/mxcl/homebrew/go`"
+  if [ $OSX ]; then
+    source "$pwd/osx"
   fi
-
-  brew update
-  brew install macvim --with-lua --override-system-vim
-  brew install git bash-completion ack python ruby node tmux
-
-  # install homebrew-cask
-  brew tap phinze/homebrew-cask
-  brew install brew-cask
-
-  # essential
-  brew cask install \
-    adium \
-    caffeine \
-    dropbox \
-    spectacle \
-    the-unarchiver \
-    imagealpha \
-    imageoptim \
-    iterm2 \
-    firefox \
-    firefox-aurora \
-    google-chrome \
-    google-chrome-canary \
-    lime-chat \
-    skype \
-    u-torrent \
-    adobe-air
-
-  # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
-  # Decreases the delay repetition on keyboard
-  defaults write NSGlobalDomain KeyRepeat -int 0
-
-  # Disable the sound effects on boot
-  sudo nvram SystemAudioVolume=" "
-
-  # Menu bar: show remaining battery time (on pre-10.8); hide percentage
-  defaults write com.apple.menuextra.battery ShowPercent -string "NO"
-  defaults write com.apple.menuextra.battery ShowTime -string "YES"
-
-  # Finder: show all filename extensions
-  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-  # Finder: allow text selection in Quick Look
-  defaults write com.apple.finder QLEnableTextSelection -bool true
-
-  # Disable the warning when changing a file extension
-  defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-
-  # Disable shadow in screenshots
-  defaults write com.apple.screencapture disable-shadow -bool true
-
-  # Use plain text mode for new TextEdit documents
-  defaults write com.apple.TextEdit RichText -int 0
-  # Open and save files as UTF-8 in TextEdit
-  defaults write com.apple.TextEdit PlainTextEncoding -int 4
-  defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
-
-  # Prevent Time Machine from prompting to use new hard drives as backup volume
-  defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
-fi
+popd &> /dev/null
 
 # clone the neobundle plugin, to manage vim plugins
 if [ ! -d "$HOME/.vim/bundle/neobundle.vim/.git" ]; then
@@ -122,7 +58,7 @@ else
 fi
 
 # updating vim's plugins
-if [[ $OSX && `which vim 2> /dev/null` ]]; then
+if command_exists vim; then
   echo "Installing/Updating `hl "vim's plugins"`..."
   vim -f +NeoBundleInstall +qall
   if [ $? -eq 0 ]; then
