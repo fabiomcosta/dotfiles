@@ -4,6 +4,8 @@ OK=`printf "\033[1;32m✓\033[0m"`
 WARNING=`printf "\033[1;33m⚠\033[0m"`
 ERROR=`printf "\033[1;31m✖\033[0m"`
 OSX=$(test "`uname`" == "Darwin" && echo "x")
+# http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # highlights values
 hl() {
@@ -32,22 +34,21 @@ command_exists() {
   hash $1 2> /dev/null
 }
 
-pwd=$PWD
-
 pushd $HOME &> /dev/null
-  create_ln_for ".vim" "$pwd/vim/.vim"
-  create_ln_for ".vimrc" "$pwd/vim/.vimrc"
-  create_ln_for ".bash_profile" "$pwd/.bash_profile"
-  create_ln_for ".gitconfig" "$pwd/.gitconfig"
-  create_ln_for ".ackrc" "$pwd/.ackrc"
-  create_ln_for ".js" "$pwd/.js"
-  create_ln_for ".irbrc" "$pwd/.irbrc"
-  create_ln_for ".zshrc" "$pwd/.zshrc"
-  create_ln_for ".tmux.conf" "$pwd/.tmux.conf"
-  if [ $OSX ]; then
-    source "$pwd/osx"
-  fi
+  create_ln_for ".vim" "$DIR/vim/.vim"
+  create_ln_for ".vimrc" "$DIR/vim/.vimrc"
+  create_ln_for ".bash_profile" "$DIR/.bash_profile"
+  create_ln_for ".gitconfig" "$DIR/.gitconfig"
+  create_ln_for ".ackrc" "$DIR/.ackrc"
+  create_ln_for ".js" "$DIR/.js"
+  create_ln_for ".irbrc" "$DIR/.irbrc"
+  create_ln_for ".zshrc" "$DIR/.zshrc"
+  create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
+
+if [ $OSX ]; then
+  source $DIR/osx
+fi
 
 # clone the neobundle plugin, to manage vim plugins
 if [ ! -d "$HOME/.vim/bundle/neobundle.vim/.git" ]; then
