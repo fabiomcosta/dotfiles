@@ -53,7 +53,6 @@ set hidden
 set cursorline
 set ttyfast
 set ruler
-set pastetoggle=<F2>
 "allows colors on long lines
 set synmaxcol=5000
 "allow backspacing over everything in insert mode
@@ -272,6 +271,40 @@ nnoremap <LEADER>0 :TagbarToggle<CR>
 "colorscheme
 NeoBundle 'tomasr/molokai'
 colorscheme molokai
+
+
+" from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
+" automagicaly enables paste mode when pasting content from iterm
+let s:screen  = &term =~ 'screen'
+let s:xterm   = &term =~ 'xterm'
+
+" enable focus reporting on entering Vim
+let &t_ti .= "\e[?1004h"
+" disable focus reporting on leaving Vim
+let &t_te = "\e[?1004l" . &t_te
+
+" make use of Xterm "bracketed paste mode"
+" http://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
+" http://stackoverflow.com/questions/5585129
+if s:screen || s:xterm
+  function! s:BeginXTermPaste(ret)
+    set paste
+    return a:ret
+  endfunction
+
+  " enable bracketed paste mode on entering Vim
+  let &t_ti .= "\e[?2004h"
+
+  " disable bracketed paste mode on leaving Vim
+  let &t_te = "\e[?2004l" . &t_te
+
+  set pastetoggle=<Esc>[201~
+  inoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("")
+  nnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("i")
+  vnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("c")
+  cnoremap <Esc>[200~ <nop>
+  cnoremap <Esc>[201~ <nop>
+endif
 
 
 "a better htmldjango detection
