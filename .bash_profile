@@ -86,6 +86,9 @@ if command_exists mvim; then
   alias vi='mvim -v'
 fi
 
+# sets bash vi mode
+set -o vi
+
 ## aliases
 alias la='ls -a'
 alias ll='ls -l'
