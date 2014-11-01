@@ -307,37 +307,6 @@ if s:screen || s:xterm
 endif
 
 
-"a better htmldjango detection
-augroup filetypedetect
-
-  " removes current htmldjango detection located at $VIMRUNTIME/filetype.vim
-  au! BufNewFile,BufRead *.html
-  au  BufNewFile,BufRead *.html call FThtml()
-
-  fun! FThtml()
-    let n = 1
-    while n < 10 && n < line("$")
-      if getline(n) =~ '{%\|{{\|{#'
-        setf htmldjango
-        return
-      endif
-      let n = n + 1
-    endwhile
-
-    let n = 1
-    while n < 10 && n < line("$")
-      if getline(n) =~ '\<DTD\s\+XHTML\s'
-        setf xhtml
-        return
-      endif
-      let n = n + 1
-    endwhile
-    setf html
-  endfun
-
-augroup END
-
-
 "indentation stuff
 fun! ToggleIndentationSize()
   let n = 4
