@@ -276,21 +276,13 @@ call neobundle#end()
 
 
 colorscheme molokai
-
+"
 " from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
 " automagicaly enables paste mode when pasting content from iterm
-let s:screen  = &term =~ 'screen'
-let s:xterm   = &term =~ 'xterm'
-
-" enable focus reporting on entering Vim
-let &t_ti .= "\e[?1004h"
-" disable focus reporting on leaving Vim
-let &t_te = "\e[?1004l" . &t_te
-
 " make use of Xterm "bracketed paste mode"
 " http://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
 " http://stackoverflow.com/questions/5585129
-if s:screen || s:xterm
+if &term =~ 'screen' || &term =~ 'xterm'
   function! s:BeginXTermPaste(ret)
     set paste
     return a:ret
