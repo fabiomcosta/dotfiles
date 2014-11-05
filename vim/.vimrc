@@ -280,7 +280,7 @@ NeoBundle 'tomasr/molokai'
 
 
 if isdirectory(expand('~/.vim/bundle/fb-admin'))
-  NeoBundleLocal expand('~/.vim/bundle/fb-admin')
+  NeoBundle 'fb-admin', {'type': 'nosync'}
 endif
 
 
