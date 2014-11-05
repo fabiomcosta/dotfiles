@@ -279,6 +279,11 @@ nnoremap <LEADER>0 :TagbarToggle<CR>
 NeoBundle 'tomasr/molokai'
 
 
+if isdirectory(expand('~/.vim/bundle/fb-admin'))
+  NeoBundleLocal expand('~/.vim/bundle/fb-admin')
+endif
+
+
 call neobundle#end()
 
 
