@@ -247,7 +247,7 @@ let g:ctrlp_clear_cache_on_exit=0
 let g:ctrlp_working_path_mode = 'a'
 let g:ctrlp_user_command = {
   \ 'types': {
-    \ 1: ['.git', 'cd %s && git ls-files'],
+    \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
     \ 2: ['.hg', 'hg --cwd %s locate -I .'],
   \ },
   \ 'fallback': 'find %s -type f'
