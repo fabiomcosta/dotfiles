@@ -111,7 +111,6 @@ set hlsearch
 "find the next match as we type the search
 set incsearch
 "clears search
-nnoremap <LEADER><SPACE> :noh<CR>
 nnoremap <TAB> %
 vnoremap <TAB> %
 
