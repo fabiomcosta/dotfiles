@@ -284,6 +284,13 @@ nnoremap <LEADER>0 :TagbarToggle<CR>
 NeoBundle 'tomasr/molokai'
 
 
+NeoBundle 'mattboehm/vim-accordion'
+nnoremap <LEADER>a2 :Accordion 2<CR>
+nnoremap <LEADER>a3 :Accordion 3<CR>
+nnoremap <LEADER>a4 :Accordion 4<CR>
+autocmd VimEnter * AccordionAll 2
+
+
 if isdirectory(expand('~/.vim/bundle/fb-admin'))
   NeoBundle 'fb-admin', {'type': 'nosync'}
 endif
