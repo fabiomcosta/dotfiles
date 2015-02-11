@@ -92,7 +92,7 @@ set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz,*.swf
 set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
-set wildignore+=*/.sass-cache/*,*/node_modules/*
+set wildignore+=*/.sass-cache/*
 set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
 "ignores case
