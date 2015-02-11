@@ -286,9 +286,12 @@ NeoBundle 'tomasr/molokai'
 
 NeoBundle 'mattboehm/vim-accordion'
 nnoremap <LEADER>a2 :Accordion 2<CR>
-nnoremap <LEADER>a3 :Accordion 3<CR>
 nnoremap <LEADER>a4 :Accordion 4<CR>
-autocmd VimEnter * AccordionAll 2
+autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
+
+fun! s:AutoSetAccordionValue()
+  exe ":AccordionAll " . string(floor(&columns/80))
+endfun
 
 
 if isdirectory(expand('~/.vim/bundle/fb-admin'))
@@ -308,10 +311,10 @@ colorscheme molokai
 " http://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
 " http://stackoverflow.com/questions/5585129
 if &term =~ 'screen' || &term =~ 'xterm'
-  function! s:BeginXTermPaste(ret)
+  fun! s:BeginXTermPaste(ret)
     set paste
     return a:ret
-  endfunction
+  endfun
 
   " enable bracketed paste mode on entering Vim
   let &t_ti .= "\e[?2004h"
