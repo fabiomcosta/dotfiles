@@ -300,7 +300,8 @@ call neobundle#end()
 
 
 colorscheme molokai
-"
+
+
 " from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
 " automagicaly enables paste mode when pasting content from iterm
 " make use of Xterm "bracketed paste mode"
@@ -385,7 +386,6 @@ match ExtraWhitespace /\s\+$/
 autocmd WinEnter,InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
-"NOTE: this has to execute before setting any colorscheme
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
 filetype plugin indent on
