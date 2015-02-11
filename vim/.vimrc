@@ -95,9 +95,6 @@ set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*,*/node_modules/*
 set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
-"search options
-nnoremap / /\v
-vnoremap / /\v
 "ignores case
 set ignorecase
 "do not ignore case if explicitly defined on the search
@@ -106,10 +103,6 @@ set smartcase
 "defaults to search for every match of the pattern
 set gdefault
 set showmatch
-"highlight searches by default
-set hlsearch
-"find the next match as we type the search
-set incsearch
 "clears search
 nnoremap <TAB> %
 vnoremap <TAB> %
@@ -196,15 +189,12 @@ NeoBundle 'garbas/vim-snipmate'
 NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
-NeoBundle 'othree/eregex.vim'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
 NeoBundle 'cakebaker/scss-syntax.vim'
 NeoBundle 'plasticboy/vim-markdown'
-NeoBundle 'mattboehm/vim-accordion'
-" NeoBundle 'mhinz/vim-signify'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
@@ -213,10 +203,14 @@ NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
 
 
+NeoBundle 'othree/eregex.vim'
+let g:eregex_default_enable=0
+
+
 NeoBundle 'haya14busa/incsearch.vim'
-map /  <Plug>(incsearch-forward)
 set hlsearch
-let g:incsearch#auto_nohlsearch = 1
+let g:incsearch#auto_nohlsearch=1
+map /  <Plug>(incsearch-forward)
 map n  <Plug>(incsearch-nohl-n)
 map N  <Plug>(incsearch-nohl-N)
 map *  <Plug>(incsearch-nohl-*)
