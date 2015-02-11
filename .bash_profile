@@ -57,7 +57,7 @@ findd() {
 
 myip() {
   local ip="`ifconfig | grep 192 | awk '{print \$2}'`"
-  print "$ip"
+  echo "$ip"
   echo "$ip" | pbcopy
 }
 
