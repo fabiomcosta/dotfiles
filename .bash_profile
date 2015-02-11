@@ -106,6 +106,10 @@ export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
+# android
+export ANDROID_HOME=$HOME/Dev/android/sdk
+prepend_if_exists PATH $ANDROID_HOME/tools
+
 # nvm
 execute_if_exists source $HOME/.nvm/nvm.sh
 
