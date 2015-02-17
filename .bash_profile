@@ -66,7 +66,7 @@ tssh() {
 }
 
 tmosh() {
-  mosh $1 -- tmux attach
+  mosh $1 -- bash -c "source ~/.bash_profile && tmux attach"
 }
 
 # PS1 structure
