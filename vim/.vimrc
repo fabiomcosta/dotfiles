@@ -202,6 +202,7 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
 NeoBundle 'facebook/vim-flow'
+NeoBundle 'bling/vim-airline'
 
 
 NeoBundle 'othree/eregex.vim'
@@ -257,18 +258,6 @@ let g:syntastic_auto_loc_list=2
 let g:syntastic_python_flake8_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
-
-
-NeoBundle 'Lokaltog/vim-powerline'
-let g:Powerline_symbols = 'fancy'
-"statusline stuff if powerline is not loaded
-if !exists("g:Powerline_loaded")
-  set statusline=%F%m%r%h%w%=(%{&ff}/%Y)\ (line\ %l\/%L,\ col\ %c)
-  set statusline+=%#warningmsg#
-  set statusline+=%{fugitive#statusline()}
-  set statusline+=%{SyntasticStatuslineFlag()}
-  set statusline+=%*
-endif
 
 
 NeoBundle 'tpope/vim-surround'
