@@ -201,6 +201,7 @@ NeoBundle 'jszakmeister/vim-togglecursor'
 NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
+NeoBundle 'facebook/vim-flow'
 
 
 NeoBundle 'othree/eregex.vim'
