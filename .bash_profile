@@ -62,11 +62,11 @@ myip() {
 }
 
 tssh() {
-  ssh $1 -t "source ~/.bash_profile && tmux attach"
+  ssh $1 -t "source ~/.bash_profile && tmux attach -d"
 }
 
 tmosh() {
-  mosh $1 -- bash -c "source ~/.bash_profile && tmux attach"
+  mosh $1 -- bash -c "source ~/.bash_profile && tmux attach -d"
 }
 
 # PS1 structure
