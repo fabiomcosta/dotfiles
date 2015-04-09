@@ -73,6 +73,14 @@ tmosh() {
 _PWD() {
   pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
 }
+__vcs_ps1() {
+  if [ -d .hg ]; then
+    hg prompt ' {bookmark}{status}' 2> /dev/null
+  else
+    __git_ps1
+  fi
+}
+
 RED="\[\033[0;31m\]"
 YELLOW="\[\033[0;33m\]"
 GREEN="\[\033[0;32m\]"
@@ -80,7 +88,7 @@ LIGHTBLUE="\[\033[1;34m\]"
 LIGHTYELLOW="\[\033[1;33m\]"
 LIGHTCYAN="\[\033[1;36m\]"
 NOCOLOR="\[\e[0m\]"
-export PS1="$RED[\$(date +%H:%M)]$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR[/\$(_PWD)]$LIGHTCYAN\$(__git_ps1)$NOCOLOR\n\$ "
+export PS1="$RED\$(date +%H:%M)$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR/\$(_PWD)$LIGHTCYAN\$(__vcs_ps1)$NOCOLOR\n\$ "
 
 export EDITOR=`which vim`
 if command_exists mvim; then
