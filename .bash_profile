@@ -66,29 +66,19 @@ tssh() {
 }
 
 tmosh() {
-  mosh $1 -- bash -c "source ~/.bash_profile && tmux attach -d"
+  mosh -6 $1 -- bash -c "source ~/.bash_profile && tmux attach -d"
 }
 
-# PS1 structure
-_PWD() {
-  pwd | awk -F\/ '{if (NF>4) print "...", $(NF-2), $(NF-1), $(NF); else if (NF>3) print $(NF-2),$(NF-1),$(NF); else if (NF>2) print $(NF-1),$(NF); else if (NF>1) print $(NF);}' | sed -e 's# #\/#g'
+# d8
+d8_update() {
+  pushd $DEV/fb/v8/
+    git checkout master
+    git pull
+    gclient sync
+    GYP_GENERATORS=ninja build/gyp_v8
+    ninja -C out/Debug d8
+  popd
 }
-__vcs_ps1() {
-  if [ -d .hg ]; then
-    hg prompt ' {bookmark}{status}' 2> /dev/null
-  else
-    __git_ps1
-  fi
-}
-
-RED="\[\033[0;31m\]"
-YELLOW="\[\033[0;33m\]"
-GREEN="\[\033[0;32m\]"
-LIGHTBLUE="\[\033[1;34m\]"
-LIGHTYELLOW="\[\033[1;33m\]"
-LIGHTCYAN="\[\033[1;36m\]"
-NOCOLOR="\[\e[0m\]"
-export PS1="$RED\$(date +%H:%M)$NOCOLOR $LIGHTBLUE\u$NOCOLOR@$LIGHTYELLOW\h $NOCOLOR/\$(_PWD)$LIGHTCYAN\$(__vcs_ps1)$NOCOLOR\n\$ "
 
 export EDITOR=`which vim`
 if command_exists mvim; then
@@ -106,11 +96,9 @@ alias ll='ls -l'
 alias g='git'
 alias gs='git status'
 alias gd='git diff'
-alias eb="$EDITOR ~/.bash_profile; source ~/.bash_profile"
 alias simpleserver='python -m SimpleHTTPServer'
-if [[ -e "$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit" ]]; then
-  alias nw="$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit"
-fi
+alias nw="$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit"
+alias d8="$DEV/fb/v8/out/Debug/d8"
 
 ## colors
 export TERM=xterm-256color
@@ -118,11 +106,11 @@ export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
 # android
-export ANDROID_HOME=$HOME/Dev/android/sdk
-prepend_if_exists PATH $ANDROID_HOME/tools
-
-# nvm
-execute_if_exists source $HOME/.nvm/nvm.sh
+export ANDROID_ROOT=$HOME/Dev/android
+export ANDROID_HOME=$ANDROID_ROOT/sdk
+append_if_exists PATH $ANDROID_HOME/tools
+append_if_exists PATH $ANDROID_HOME/platform-tools
+export ANDROID_NDK_ROOT=$ANDROID_ROOT/ndk
 
 # do not create .pyc files
 export PYTHONDONTWRITEBYTECODE=x
@@ -130,9 +118,6 @@ export PYTHONDONTWRITEBYTECODE=x
 export WORKON_HOME=$HOME/.virtualenvs
 export PIP_VIRTUALENV_BASE=$WORKON_HOME
 export PIP_RESPECT_VIRTUALENV=true
-
-# RVM
-execute_if_exists source $HOME/.rvm/scripts/rvm # Load RVM into a shell session *as a function*
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
@@ -157,8 +142,10 @@ if command_exists brew; then
     execute_if_exists source $BREW_PREFIX/etc/bash_completion
   fi
 
-  ## virtualenv
-  execute_if_exists source $BREW_PREFIX/bin/virtualenvwrapper.sh
+  if [ -f "$(brew --prefix bash-git-prompt)/share/gitprompt.sh" ]; then
+    GIT_PROMPT_THEME=Default
+    source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
+  fi
 fi
 
 # prepends depot_tools from the chromium project

@@ -145,7 +145,7 @@ nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
-nnoremap <LEADER>a :Ack<Space>
+nnoremap <LEADER>a :Ag<Space>
 
 "moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
@@ -190,6 +190,7 @@ NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
 NeoBundle 'mileszs/ack.vim'
+NeoBundle 'rking/ag.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'kchmck/vim-coffee-script'
@@ -255,9 +256,9 @@ NeoBundle 'scrooloose/syntastic'
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
-let g:syntastic_python_flake8_args="--ignore=E501,E502,W293,E121,E123,E124,E125,E126,E127,E128"
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
+let g:syntastic_javascript_checkers = []
 
 
 NeoBundle 'tpope/vim-surround'
@@ -282,6 +283,9 @@ autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 fun! s:AutoSetAccordionValue()
   exe ":AccordionAll " . string(floor(&columns/80))
 endfun
+
+
+NeoBundle 'moll/vim-node'
 
 
 if isdirectory(expand('~/.vim/bundle/fb-admin'))
