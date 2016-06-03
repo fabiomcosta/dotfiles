@@ -114,10 +114,13 @@ export ANDROID_NDK_ROOT=$ANDROID_ROOT/ndk
 
 # do not create .pyc files
 export PYTHONDONTWRITEBYTECODE=x
-# virtualenv
-export WORKON_HOME=$HOME/.virtualenvs
-export PIP_VIRTUALENV_BASE=$WORKON_HOME
-export PIP_RESPECT_VIRTUALENV=true
+
+if which pyenv > /dev/null; then
+  eval "$(pyenv init -)"
+fi
+if which pyenv-virtualenv-init > /dev/null; then
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
@@ -130,9 +133,6 @@ if command_exists brew; then
   ## node
   prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
   prepend_if_exists PATH      $BREW_PREFIX/share/npm/bin
-
-  ## python3 with more priority than python2
-  prepend_if_exists PATH $BREW_PREFIX/share/python3
 
   prepend_if_exists PATH $BREW_PREFIX/bin
   prepend_if_exists PATH $BREW_PREFIX/sbin
@@ -153,17 +153,3 @@ prepend_if_exists PATH $DEV/other/depot_tools
 
 # prepends my bin folder to the path
 prepend_if_exists PATH $HOME/bin
-
-if command_exists complete; then
-  # run `complete -p` to see already available autocomplete functions
-  complete -F _ssh tssh
-
-  # pip bash completion start
-  _pip_completion() {
-    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
-                COMP_CWORD=$COMP_CWORD \
-                PIP_AUTO_COMPLETE=1 $1 ) )
-  }
-  complete -o default -F _pip_completion pip
-  # pip bash completion end
-fi
