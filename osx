@@ -9,7 +9,7 @@ fi
 
 brew update
 brew install macvim --with-lua --override-system-vim
-brew install git bash-completion ack python ruby node tmux
+brew install git bash-completion ack python ruby node tmux mosh bash-git-prompt
 
 # install homebrew-cask
 brew tap caskroom/cask
