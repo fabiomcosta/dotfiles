@@ -17,22 +17,17 @@ brew install brew-cask
 
 # essential
 brew cask install \
-  adium \
   caffeine \
   dropbox \
-  spectacle \
-  the-unarchiver \
+  firefox \
+  hermes \
+  google-chrome \
   imagealpha \
   imageoptim \
   iterm2 \
-  firefox \
-  firefox-aurora \
-  google-chrome \
-  google-chrome-canary \
-  lime-chat \
+  limechat \
   skype \
-  u-torrent \
-  adobe-air
+  spectacle
 
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # Decreases the delay repetition on keyboard

@@ -54,8 +54,6 @@ pushd $HOME &> /dev/null
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".js" "$DIR/.js"
-  create_ln_for ".irbrc" "$DIR/.irbrc"
-  create_ln_for ".zshrc" "$DIR/.zshrc"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
