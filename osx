@@ -4,19 +4,19 @@ echo "Executing the OSX specific setup..."
 
 if ! command_exists brew; then
   echo "Installing brew..."
-  ruby -e "`curl -fsSkL raw.github.com/mxcl/homebrew/go`"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 brew update
 brew install macvim --with-lua --override-system-vim
-brew install git bash-completion ack python ruby node tmux mosh bash-git-prompt
+brew install git bash-completion node tmux mosh bash-git-prompt
 
 # install homebrew-cask
 brew tap caskroom/cask
-brew install brew-cask
 
 # essential
 brew cask install \
+  atom \
   caffeine \
   dropbox \
   firefox \
