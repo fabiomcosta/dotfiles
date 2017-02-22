@@ -18,15 +18,9 @@ brew tap caskroom/cask
 brew cask install \
   atom \
   caffeine \
-  dropbox \
-  firefox \
-  hermes \
-  google-chrome \
   imagealpha \
   imageoptim \
   iterm2 \
-  limechat \
-  skype \
   spectacle
 
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
