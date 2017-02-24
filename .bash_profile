@@ -71,7 +71,7 @@ tmosh() {
 
 # d8
 d8_update() {
-  pushd $DEV/fb/v8/
+  pushd $DEV/tp/v8/
     git checkout master
     git pull
     gclient sync
@@ -98,7 +98,7 @@ alias gs='git status'
 alias gd='git diff'
 alias simpleserver='python -m SimpleHTTPServer'
 alias nw="$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit"
-alias d8="$DEV/fb/v8/out/Debug/d8"
+alias d8="$DEV/tp/v8/out/Debug/d8"
 
 ## colors
 export TERM=xterm-256color
