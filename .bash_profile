@@ -82,7 +82,6 @@ d8_update() {
 
 export EDITOR=`which vim`
 if command_exists mvim; then
-  alias mvim='mvim -v'
   alias vim='mvim -v'
   alias vi='mvim -v'
 fi
