@@ -13,7 +13,7 @@ if has("gui_running")
   set guioptions-=r   "remove right-hand scroll bar
   set guioptions-=L   "remove left-hand scroll bar
   try
-    set guifont=Monaco \for \Powerline:h14
+    set guifont=Monaco\ for\ Powerline:h14
   catch
     try
       set guifont=Monaco:h14
@@ -203,7 +203,10 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
 NeoBundle 'facebook/vim-flow'
+
+
 NeoBundle 'bling/vim-airline'
+let g:airline_powerline_fonts=1
 
 
 NeoBundle 'othree/eregex.vim'
