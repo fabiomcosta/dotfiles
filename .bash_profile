@@ -152,3 +152,6 @@ prepend_if_exists PATH $DEV/other/depot_tools
 
 # prepends my bin folder to the path
 prepend_if_exists PATH $HOME/bin
+
+# node n
+export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
