@@ -3,7 +3,7 @@
 OK=`printf "\033[1;32m✓\033[0m"`
 WARNING=`printf "\033[1;33m⚠\033[0m"`
 ERROR=`printf "\033[1;31m✖\033[0m"`
-OSX=$(test "`uname`" == "Darwin" && echo "x")
+MACOS=$(test "`uname`" == "Darwin" && echo "x")
 # http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -34,8 +34,8 @@ command_exists() {
   hash $1 2> /dev/null
 }
 
-if [ $OSX ]; then
-  source $DIR/osx
+if [ $MACOS ]; then
+  source $DIR/macos
 fi
 
 if ! command_exists node; then
