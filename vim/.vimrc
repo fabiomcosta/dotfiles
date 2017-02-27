@@ -140,7 +140,7 @@ nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
-nnoremap <LEADER>a :Ag<Space>
+nnoremap <LEADER>a :Ack!<Space>
 
 "moves the cursor around the buffer windows
 nnoremap <C-h> <C-w>h
@@ -184,13 +184,7 @@ NeoBundle 'garbas/vim-snipmate'
 NeoBundle 'honza/vim-snippets'
 "/vim-snipmate
 
-NeoBundle 'mileszs/ack.vim'
-NeoBundle 'rking/ag.vim'
 NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
-NeoBundle 'pangloss/vim-javascript'
-NeoBundle 'kchmck/vim-coffee-script'
-NeoBundle 'cakebaker/scss-syntax.vim'
-NeoBundle 'plasticboy/vim-markdown'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'godlygeek/tabular'
 NeoBundle 'jszakmeister/vim-togglecursor'
@@ -198,6 +192,16 @@ NeoBundle 'tomtom/tcomment_vim'
 NeoBundle 'benmills/vimux'
 NeoBundle 'jordwalke/VimAutoMakeDirectory'
 NeoBundle 'facebook/vim-flow'
+
+
+NeoBundle 'mileszs/ack.vim'
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
+
+NeoBundle 'sheerun/vim-polyglot'
+let g:javascript_plugin_flow=1
 
 
 NeoBundle 'bling/vim-airline'
