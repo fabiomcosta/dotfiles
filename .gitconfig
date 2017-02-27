@@ -19,7 +19,7 @@
 	editor = vim
 [push]
 	default = simple
-<% if (isOSX) { %>
+<% if (isMacos) { %>
 [credential]
 	helper = osxkeychain
 <% } %>

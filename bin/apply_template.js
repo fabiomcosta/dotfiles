@@ -13,6 +13,6 @@ var origPath = path.normalize(process.argv[3]);
 
 var template = fs.readFileSync(origPath);
 var renderedTemplate = _.template(template, {
-  isOSX: platform.os.family === 'Darwin'
+  isMacos: platform.os.family === 'Darwin'
 });
 fs.writeFileSync(destPath, renderedTemplate);
