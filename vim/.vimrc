@@ -9,23 +9,18 @@ let mapleader=","
 "version of the font you like
 "https://github.com/Lokaltog/powerline-fonts
 if has("gui_running")
-  set guioptions-=T   "remove toolbar
-  set guioptions-=r   "remove right-hand scroll bar
-  set guioptions-=L   "remove left-hand scroll bar
-  try
-    set guifont=Monaco\ for\ Powerline:h14
-  catch
-    try
-      set guifont=Monaco:h14
-    catch
-      try
-        set guifont=SourceCodePro-Regular:h14
-      catch
-        set guifont=Inconsolata:h16
-      endtry
-    endtry
-  endtry
+  set guioptions-=T "remove toolbar
+  set guioptions-=r "remove right-hand scroll bar
+  set guioptions-=L "remove left-hand scroll bar
 endif
+
+"activates ligatures when supported
+set macligatures
+
+try
+  set guifont=Fira\ Code:h12
+catch
+endtry
 
 "adds possibility of using 256 colors
 set t_Co=256

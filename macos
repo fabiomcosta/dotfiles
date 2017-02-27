@@ -13,6 +13,8 @@ brew install git bash-completion node tmux mosh bash-git-prompt
 
 # install homebrew-cask
 brew tap caskroom/cask
+# so we can install the fira-code code
+brew tap caskroom/fonts
 
 # essential
 brew cask install \
@@ -21,7 +23,8 @@ brew cask install \
   imagealpha \
   imageoptim \
   iterm2 \
-  spectacle
+  spectacle \
+  font-fira-code
 
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # Decreases the delay repetition on keyboard
