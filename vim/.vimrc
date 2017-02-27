@@ -288,11 +288,12 @@ endfun
 
 
 NeoBundle 'moll/vim-node'
-
-
-if isdirectory(expand('~/.vim/bundle/fb-admin'))
-  NeoBundle 'fb-admin', {'type': 'nosync'}
-endif
+"gf will open horizontal split instead of vertical
+autocmd User Node
+  \ if &filetype == "javascript" |
+  \   nmap <buffer> <C-w>f <Plug>NodeVSplitGotoFile |
+  \   nmap <buffer> <C-w><C-f> <Plug>NodeVSplitGotoFile |
+  \ endif
 
 
 call neobundle#end()
