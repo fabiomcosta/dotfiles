@@ -238,13 +238,13 @@ nnoremap <C-z> :call emmet#expandAbbr(0,"")<CR>a
 inoremap <C-z> <ESC>:call emmet#expandAbbr(0,"")<CR>a
 
 
-NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map='<LEADER>p'
 let g:ctrlp_max_height=20
 let g:ctrlp_max_files=2000000
 let g:ctrlp_clear_cache_on_exit=0
-let g:ctrlp_working_path_mode = 'a'
-let g:ctrlp_user_command = {
+let g:ctrlp_working_path_mode='a'
+let g:ctrlp_user_command={
   \ 'types': {
     \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
     \ 2: ['.hg', 'hg --cwd %s locate -I .'],
@@ -260,7 +260,7 @@ let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
-let g:syntastic_javascript_checkers = []
+let g:syntastic_javascript_checkers=[]
 
 
 NeoBundle 'tpope/vim-surround'
