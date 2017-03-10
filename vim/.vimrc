@@ -167,6 +167,9 @@ nnoremap <LEADER>nt :tabnew<CR>
 nnoremap <LEADER>[ :tabprevious<CR>
 nnoremap <LEADER>] :tabnext<CR>
 
+"copies current buffer file path to register
+nnoremap cp :let @+=expand("%")<CR>
+
 
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
