@@ -171,33 +171,26 @@ nnoremap <LEADER>] :tabnext<CR>
 nnoremap cp :let @+=expand("%")<CR>
 
 
-if has('vim_starting')
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
-endif
-
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-"let NeoBundle manage NeoBundle
-NeoBundleFetch 'Shougo/neobundle.vim'
+call plug#begin(expand('~/.vim/plugged'))
 
 "vim-snipmate
-NeoBundle 'MarcWeber/vim-addon-mw-utils'
-NeoBundle 'tomtom/tlib_vim'
-NeoBundle 'garbas/vim-snipmate'
-NeoBundle 'honza/vim-snippets'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
 "/vim-snipmate
 
-NeoBundle 'tpope/vim-fugitive', {'augroup': 'fugitive'}
-NeoBundle 'Lokaltog/vim-easymotion'
-NeoBundle 'godlygeek/tabular'
-NeoBundle 'jszakmeister/vim-togglecursor'
-NeoBundle 'tomtom/tcomment_vim'
-NeoBundle 'benmills/vimux'
-NeoBundle 'jordwalke/VimAutoMakeDirectory'
-NeoBundle 'facebook/vim-flow'
+Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
+Plug 'Lokaltog/vim-easymotion'
+Plug 'godlygeek/tabular'
+Plug 'jszakmeister/vim-togglecursor'
+Plug 'tomtom/tcomment_vim'
+Plug 'benmills/vimux'
+Plug 'jordwalke/VimAutoMakeDirectory'
+Plug 'facebook/vim-flow'
 
 
-NeoBundle 'mhinz/vim-grepper'
+Plug 'mhinz/vim-grepper'
 let g:grepper={}
 let g:grepper.dir='repo,cwd,file'
 let g:grepper.tools=['git', 'ag', 'ack', 'grep']
@@ -206,19 +199,19 @@ let g:grepper.git.grepprg='git grep -nI --no-color'
 nnoremap <LEADER>a :Grepper -query<SPACE>
 
 
-NeoBundle 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 let g:javascript_plugin_flow=1
 
 
-NeoBundle 'bling/vim-airline'
+Plug 'bling/vim-airline'
 let g:airline_powerline_fonts=1
 
 
-NeoBundle 'othree/eregex.vim'
+Plug 'othree/eregex.vim'
 let g:eregex_default_enable=0
 
 
-NeoBundle 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch.vim'
 set hlsearch
 let g:incsearch#auto_nohlsearch=1
 map /  <Plug>(incsearch-forward)
@@ -230,21 +223,21 @@ map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
 
-NeoBundle 'Shougo/neocomplcache'
+Plug 'Shougo/neocomplcache'
 let g:neocomplcache_enable_at_startup=1
 let g:neocomplcache_enable_auto_select=1
 
 
-NeoBundle 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
+Plug 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
 noremap <LEADER>z :NERDTreeToggle<CR>
 
 
-NeoBundle 'mattn/emmet-vim'
+Plug 'mattn/emmet-vim'
 nnoremap <C-z> :call emmet#expandAbbr(0,"")<CR>a
 inoremap <C-z> <ESC>:call emmet#expandAbbr(0,"")<CR>a
 
 
-NeoBundle 'ctrlpvim/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map='<LEADER>p'
 let g:ctrlp_max_height=20
 let g:ctrlp_max_files=2000000
@@ -260,7 +253,7 @@ let g:ctrlp_user_command={
 nmap <LEADER>y :CtrlPClearCache<CR>
 
 
-NeoBundle 'scrooloose/syntastic'
+Plug 'scrooloose/syntastic'
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=2
@@ -269,21 +262,21 @@ let g:syntastic_warning_symbol='⚠'
 let g:syntastic_javascript_checkers=[]
 
 
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 nnoremap <LEADER>' cs"'<CR>
 nnoremap <LEADER>" cs'"<CR>
 
 
-NeoBundle 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar'
 nnoremap <LEADER>0 :TagbarToggle<CR>
 
 
 "colorscheme
-NeoBundle 'tomasr/molokai'
+Plug 'tomasr/molokai'
 
 
-NeoBundle 'mattboehm/vim-accordion'
+Plug 'mattboehm/vim-accordion'
 nnoremap <LEADER>a2 :Accordion 2<CR>
 nnoremap <LEADER>a4 :Accordion 4<CR>
 autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
@@ -293,7 +286,7 @@ fun! s:AutoSetAccordionValue()
 endfun
 
 
-NeoBundle 'moll/vim-node'
+Plug 'moll/vim-node'
 "gf will open horizontal split instead of vertical
 autocmd User Node
   \ if &filetype == "javascript" |
@@ -302,7 +295,7 @@ autocmd User Node
   \ endif
 
 
-call neobundle#end()
+call plug#end()
 
 
 colorscheme molokai
@@ -395,6 +388,3 @@ autocmd BufWinLeave * call clearmatches()
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
 filetype plugin indent on
-
-" Installation check.
-NeoBundleCheck

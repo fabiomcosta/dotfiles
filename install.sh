@@ -58,18 +58,20 @@ pushd $HOME &> /dev/null
 popd &> /dev/null
 
 
-# clone the neobundle plugin, to manage vim plugins
-if [ ! -d "$HOME/.vim/bundle/neobundle.vim/.git" ]; then
-  echo "Installing `hl 'neobundle'`..."
-  git clone https://github.com/Shougo/neobundle.vim.git $HOME/.vim/bundle/neobundle.vim
-else
-  echo "${OK} `hl 'neobundle'` is already installed."
-fi
-
 # updating vim's plugins
 if command_exists vim; then
+
+  # install vim-plug
+  if [ ! -d "$HOME/.vim/autoload/plug.vim" ]; then
+    echo "Installing `hl 'vim-plug'`..."
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  else
+    echo "${OK} `hl 'vim-plug'` is already installed."
+  fi
+
   echo "Installing/Updating `hl "vim's plugins"`..."
-  vim -f +NeoBundleInstall +qall
+  vim -f +PlugInstall +qall
   if [ $? -eq 0 ]; then
     echo "${OK} `hl "vim's plugins"` updated successfuly.";
   else
