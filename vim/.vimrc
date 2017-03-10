@@ -223,11 +223,6 @@ map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
 
 
-Plug 'Shougo/neocomplcache'
-let g:neocomplcache_enable_at_startup=1
-let g:neocomplcache_enable_auto_select=1
-
-
 Plug 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
 noremap <LEADER>z :NERDTreeToggle<CR>
 
@@ -293,6 +288,18 @@ autocmd User Node
   \   nmap <buffer> <C-w>f <Plug>NodeVSplitGotoFile |
   \   nmap <buffer> <C-w><C-f> <Plug>NodeVSplitGotoFile |
   \ endif
+
+
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --tern-completer
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
 
 call plug#end()
