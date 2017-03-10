@@ -80,16 +80,21 @@ d8_update() {
   popd
 }
 
+# sets bash vi mode
+set -o vi
+
+## aliases
 export EDITOR=`which vim`
 if command_exists mvim; then
   alias vim='mvim -v'
   alias vi='mvim -v'
 fi
 
-# sets bash vi mode
-set -o vi
+# because sometimes I type 'ack' accidentaly (muscle memory)
+if command_exists ag && ! command_exists ack; then
+  alias ack='ag'
+fi
 
-## aliases
 alias la='ls -a'
 alias ll='ls -l'
 alias g='git'
