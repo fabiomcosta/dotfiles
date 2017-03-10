@@ -1,6 +1,13 @@
-"Use Vim settings, rather then Vi settings (much better!).
-"This must be first, because it changes other options as a side effect.
-set nocompatible
+
+"options not supported by neovim
+if !has("nvim")
+  "Use Vim settings, rather then Vi settings (much better!).
+  "This must be first, because it changes other options as a side effect.
+  set nocompatible
+
+  set ttymouse=xterm
+  set ttyfast
+endif
 
 let mapleader=","
 
@@ -12,18 +19,16 @@ if has("gui_running")
   set guioptions-=T "remove toolbar
   set guioptions-=r "remove right-hand scroll bar
   set guioptions-=L "remove left-hand scroll bar
+
+  "activates ligatures when supported
+  set macligatures
+
+  try
+    set guifont=Fira\ Code:h12
+  catch
+  endtry
 endif
 
-"activates ligatures when supported
-set macligatures
-
-try
-  set guifont=Fira\ Code:h12
-catch
-endtry
-
-"adds possibility of using 256 colors
-set t_Co=256
 
 "default indent settings
 set expandtab
@@ -46,7 +51,6 @@ set showmode
 set showcmd
 set hidden
 set cursorline
-set ttyfast
 set ruler
 "allows colors on long lines
 set synmaxcol=5000
@@ -64,16 +68,13 @@ set clipboard=unnamed
 "store lots of :cmdline history
 set history=1000
 "mark the ideal max text width
-if exists('+colorcolumn')
-  set colorcolumn=80
-else
-  " remove this in the future where youll always be using vim >= 7.3
-  au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
-endif
+set colorcolumn=80
+set termguicolors
+"adds possibility of using 256 colors
+set t_Co=256
 
 "some stuff to get the mouse going in term
 set mouse=a
-set ttymouse=xterm
 
 "keep going up dirs until a tags file is found
 set tags=tags;/
