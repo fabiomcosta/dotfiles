@@ -13,12 +13,12 @@
 	ci = commit
 	st = status
 	last = log -1 HEAD
-[branch]
-	autosetuprebase = always
 [core]
 	editor = vim
 [push]
 	default = simple
+[pull]
+	rebase = true
 <% if (isMacos) { %>
 [credential]
 	helper = osxkeychain
