@@ -101,7 +101,6 @@ alias g='git'
 alias gs='git status'
 alias gd='git diff'
 alias simpleserver='python -m SimpleHTTPServer'
-alias nw="$HOME/Applications/node-webkit.app/Contents/MacOS/node-webkit"
 alias d8="$DEV/tp/v8/out/Debug/d8"
 
 ## colors
@@ -115,16 +114,6 @@ export ANDROID_HOME=$ANDROID_ROOT/sdk
 append_if_exists PATH $ANDROID_HOME/tools
 append_if_exists PATH $ANDROID_HOME/platform-tools
 export ANDROID_NDK_ROOT=$ANDROID_ROOT/ndk
-
-# do not create .pyc files
-export PYTHONDONTWRITEBYTECODE=x
-
-if which pyenv > /dev/null; then
-  eval "$(pyenv init -)"
-fi
-if which pyenv-virtualenv-init > /dev/null; then
-  eval "$(pyenv virtualenv-init -)"
-fi
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
@@ -150,6 +139,16 @@ if command_exists brew; then
     GIT_PROMPT_THEME=Default
     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
   fi
+fi
+
+# do not create .pyc files
+export PYTHONDONTWRITEBYTECODE=x
+
+if which pyenv > /dev/null; then
+  eval "$(pyenv init -)"
+fi
+if which pyenv-virtualenv-init > /dev/null; then
+  eval "$(pyenv virtualenv-init -)"
 fi
 
 # prepends depot_tools from the chromium project

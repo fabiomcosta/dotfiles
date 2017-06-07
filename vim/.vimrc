@@ -69,7 +69,7 @@ set clipboard=unnamed
 set history=1000
 "mark the ideal max text width
 set colorcolumn=80
-set termguicolors
+" set termguicolors
 "adds possibility of using 256 colors
 set t_Co=256
 
@@ -168,7 +168,7 @@ nnoremap <LEADER>[ :tabprevious<CR>
 nnoremap <LEADER>] :tabnext<CR>
 
 "copies current buffer file path to register
-nnoremap cp :let @+=expand("%")<CR>
+nnoremap cp :let @+=resolve(expand("%"))<CR>
 
 
 call plug#begin(expand('~/.vim/plugged'))
@@ -185,7 +185,6 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
-Plug 'benmills/vimux'
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'facebook/vim-flow'
 
@@ -197,6 +196,7 @@ let g:grepper.tools=['git', 'ag', 'ack', 'grep']
 let g:grepper.git={}
 let g:grepper.git.grepprg='git grep -nI --no-color'
 nnoremap <LEADER>a :Grepper -query<SPACE>
+nnoremap <LEADER>* :Grepper -cword -noprompt<CR>
 
 
 Plug 'sheerun/vim-polyglot'
@@ -221,6 +221,7 @@ map *  <Plug>(incsearch-nohl-*)
 map #  <Plug>(incsearch-nohl-#)
 map g* <Plug>(incsearch-nohl-g*)
 map g# <Plug>(incsearch-nohl-g#)
+map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
 
 
 Plug 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
@@ -235,7 +236,7 @@ inoremap <C-z> <ESC>:call emmet#expandAbbr(0,"")<CR>a
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map='<LEADER>p'
 let g:ctrlp_max_height=20
-let g:ctrlp_max_files=2000000
+let g:ctrlp_max_files=100000
 let g:ctrlp_clear_cache_on_exit=0
 let g:ctrlp_working_path_mode='a'
 let g:ctrlp_user_command={
@@ -248,23 +249,21 @@ let g:ctrlp_user_command={
 nmap <LEADER>y :CtrlPClearCache<CR>
 
 
-Plug 'scrooloose/syntastic'
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=2
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_javascript_checkers=[]
+" Plug 'scrooloose/syntastic'
+" let g:syntastic_check_on_open=1
+" let g:syntastic_check_on_wq=0
+" let g:syntastic_auto_loc_list=0
+" let g:syntastic_enable_signs=1
+" let g:syntastic_error_symbol='✗'
+" let g:syntastic_warning_symbol='⚠'
+" let g:syntastic_javascript_checkers=['eslint']
+" let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
 
 
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 nnoremap <LEADER>' cs"'<CR>
 nnoremap <LEADER>" cs'"<CR>
-
-
-Plug 'majutsushi/tagbar'
-nnoremap <LEADER>0 :TagbarToggle<CR>
 
 
 "colorscheme
@@ -282,12 +281,6 @@ endfun
 
 
 Plug 'moll/vim-node'
-"gf will open horizontal split instead of vertical
-autocmd User Node
-  \ if &filetype == "javascript" |
-  \   nmap <buffer> <C-w>f <Plug>NodeVSplitGotoFile |
-  \   nmap <buffer> <C-w><C-f> <Plug>NodeVSplitGotoFile |
-  \ endif
 
 
 function! BuildYCM(info)
@@ -300,6 +293,7 @@ function! BuildYCM(info)
   endif
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+nnoremap <LEADER>c :YcmCompleter GoToDefinition<CR>
 
 
 call plug#end()
