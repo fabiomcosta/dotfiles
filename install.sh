@@ -35,7 +35,7 @@ command_exists() {
 }
 
 if [ $MACOS ]; then
-  source $DIR/macos
+  bash -c "$DIR/macos"
 fi
 
 if ! command_exists node; then
@@ -43,11 +43,12 @@ if ! command_exists node; then
   exit 1
 fi
 
-npm install .
-
-./bin/apply_template.js "$HOME/.gitconfig" "$DIR/.gitconfig"
+pushd $DIR &> /dev/null
+  npm install .
+popd &> /dev/null
 
 pushd $HOME &> /dev/null
+  $DIR/bin/apply_template.js ".gitconfig" "$DIR/.gitconfig"
   create_ln_for ".vim" "$DIR/vim/.vim"
   create_ln_for ".vimrc" "$DIR/vim/.vimrc"
   create_ln_for ".bash_profile" "$DIR/.bash_profile"

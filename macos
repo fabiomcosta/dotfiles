@@ -2,6 +2,10 @@
 
 echo "Executing the OSX specific setup..."
 
+command_exists() {
+  hash $1 2> /dev/null
+}
+
 if ! command_exists brew; then
   echo "Installing brew..."
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -9,7 +13,7 @@ fi
 
 brew update
 brew install macvim --with-lua --override-system-vim
-brew install git bash-completion node tmux mosh bash-git-prompt
+brew install git bash-completion tmux mosh bash-git-prompt
 
 # install homebrew-cask
 brew tap caskroom/cask
