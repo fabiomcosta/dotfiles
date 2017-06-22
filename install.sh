@@ -47,13 +47,11 @@ npm install .
 
 ./bin/apply_template.js "$HOME/.gitconfig" "$DIR/.gitconfig"
 
-# TODO do this using nodejs and a template engine
 pushd $HOME &> /dev/null
   create_ln_for ".vim" "$DIR/vim/.vim"
   create_ln_for ".vimrc" "$DIR/vim/.vimrc"
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
   create_ln_for ".ackrc" "$DIR/.ackrc"
-  create_ln_for ".js" "$DIR/.js"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
