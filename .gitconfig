@@ -17,8 +17,6 @@
 	editor = vim
 [push]
 	default = simple
-[pull]
-	rebase = true
 <% if (isMacos) { %>
 [credential]
 	helper = osxkeychain
