@@ -2,6 +2,19 @@
 
 echo "Executing the OSX specific setup..."
 
+ask_password_for() {
+  local message=$1
+  local pass_key=$2
+  if [[ "$(security find-generic-password -a $USER -s $pass_key -w 2> /dev/null)" ]]; then
+    echo "Password for '$message' and key '$pass_key' already defined."
+    return
+  fi
+  echo -n "$message: "
+  read -s password
+  echo
+  security add-generic-password -a $USER -s $pass_key -w $password
+}
+
 command_exists() {
   hash $1 2> /dev/null
 }
@@ -11,6 +24,7 @@ if ! command_exists brew; then
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
+echo "brew update... (can take a while)"
 brew update
 brew install macvim --with-lua --override-system-vim
 brew install git bash-completion tmux mosh bash-git-prompt
@@ -62,3 +76,9 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
 # Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
+
+# setup passwords
+ask_password_for 'Personal email' personal_email
+ask_password_for 'SparkPost email API key' sparkpost_email_api_key
+ask_password_for "Router's MAC address 2.4ghz" mac_address_24ghz
+ask_password_for "Router's MAC address 5.0ghz" mac_address_50ghz

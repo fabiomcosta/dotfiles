@@ -1,0 +1,180 @@
+#!/usr/bin/env bash
+
+find_pass() {
+  local pass_key=$1
+  security find-generic-password -a $USER -s $pass_key -w
+}
+
+BOT_NAME='mortadela'
+BOT_EMAIL="$BOT_NAME@concretizeconstrucoes.com.br"
+
+REMOTE_USER='admin'
+REMOTE_VOLUME_NAME='volume1'
+# our TP-link archer c7 mac address
+REMOTE_BSSID_24GHZ="$(find_pass mac_address_24ghz)"
+REMOTE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
+# getting IP from the MAC address
+REMOTE_IP="`arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F'[()]' '{print $2}'`"
+
+SMB_SERVER_URI="//$REMOTE_USER@$REMOTE_IP/$REMOTE_VOLUME_NAME"
+
+ADMIN_EMAIL="$(find_pass personal_email)"
+EMAIL_API_KEY="$(find_pass sparkpost_email_api_key)"
+EMAIL_API_SEND_URI='https://api.sparkpost.com/api/v1/transmissions'
+
+LOCAL_BACKUP_FOLDER="$1"
+REMOTE_BACKUP_FOLDER="auto_backup/`hostname`/$USER"
+
+PLOCK="/tmp/${BOT_NAME}_${USER}.lock"
+LOG_FILE="`mktemp /tmp/${BOT_NAME}_XXXXXX`"
+
+is_terminal() {
+  test -t 1
+}
+
+p() {
+  if is_terminal; then
+    echo $@
+  else
+    echo $@ >> $LOG_FILE
+  fi
+}
+
+notify() {
+  local message=$@
+  local title="$BOT_NAME"
+  p "[notify]" "$title" "$message"
+  if command_exists osascript; then
+    osascript -e "display notification \"$message\" with title \"$title\""
+  fi
+}
+
+command_exists() {
+  local cmd="$1"
+  hash $cmd 2> /dev/null
+}
+
+json_escape() {
+  echo -n "$1" | \
+    python -c 'import json,sys; print json.dumps(sys.stdin.read())'
+}
+
+send_admin_email() {
+  local subject="$1"
+  local message="$2"
+  local json_encoded_message="$(json_escape "$message")"
+  read -r -d '' data <<EOM
+{
+  "recipients": [
+    {"address": {"email": "$ADMIN_EMAIL"}}
+  ],
+  "content": {
+    "from": {"name": "$BOT_NAME", "email": "$BOT_EMAIL"},
+    "subject": "$subject",
+    "text": $json_encoded_message
+  }
+}
+EOM
+curl \
+  --silent \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: $EMAIL_API_KEY" \
+  -d "$data" $EMAIL_API_SEND_URI > /dev/null
+}
+
+bail() {
+  local message="$1"
+  send_admin_email "[Error] $BOT_NAME" "$message"
+  exit 1
+}
+
+is_rsync_instance_running() {
+  test "$(ps aux | grep rsync | grep "$LOCAL_BACKUP_FOLDER" | grep -v 'grep rsync')"
+}
+
+backup_with_rsync() {
+  # checks if the storage is already mounted and returns the folder
+  mount_path="`mount | grep -e "$REMOTE_USER@tplinklogin.net/$REMOTE_VOLUME_NAME" -e "$SMB_SERVER_URI" | cut -d ' ' -f3`"
+  if [[ -z "$mount_path" ]]; then
+    mount_path="`mktemp -d /tmp/${BOT_NAME}_XXXXXX`"
+    mount -t smbfs "$SMB_SERVER_URI" "$mount_path"
+    echo "$SMB_SERVER_URI" "$mount_path"
+    trap "umount $mount_path" EXIT
+    # This thing creates a folder localy, kind of unmounting the volume.
+    # I don't understand #wtf is happening but maybe my future self will.
+    # mkdir -p "$mount_path/$REMOTE_BACKUP_FOLDER"
+  fi
+
+  # Why --modify-window? http://ubuntuforums.org/showthread.php?t=1859694&page=2&p=11345356#post11345356
+  if is_terminal; then
+    rsync -azvh --modify-window=3601 -P "$LOCAL_BACKUP_FOLDER" "$mount_path/$REMOTE_BACKUP_FOLDER"
+  else
+    rsync -azvh --modify-window=3601 -P "$LOCAL_BACKUP_FOLDER" "$mount_path/$REMOTE_BACKUP_FOLDER" >> $LOG_FILE
+  fi
+}
+
+get_current_bssid() {
+  # http://stackoverflow.com/questions/4481005/get-wireless-ssid-through-shell-script-on-mac-os-x
+  # I know right?
+  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ BSSID: /{print $2}'
+}
+
+is_my_router() {
+  current_bssid="`get_current_bssid`"
+  test "$current_bssid" == "$REMOTE_BSSID_24GHZ" -o "$current_bssid" == "$REMOTE_BSSID_50GHZ"
+}
+
+run_sanity_checks() {
+  if [ -z "$LOCAL_BACKUP_FOLDER" ]; then
+    notify "Exiting because no argument was supplied."
+    exit 0
+  fi
+
+  lockfile -r 0 -l 86400 "$PLOCK" || (
+    notify "I'm already running! Wait untill I stop or remove"\
+      "'$PLOCK' if you're sure I can run again." \
+    && exit 0
+  )
+
+  if is_rsync_instance_running; then
+    notify "There is already an 'rsync' instance running, I'll bail for safety."
+    exit 0
+  fi
+
+  if ! is_my_router; then
+    notify "You're not connected to your home router."
+    exit 0
+  fi
+
+  if [[ ! $REMOTE_IP ]]; then
+    notify "Couldn't get your router's IP. You could be connected to a VPN."
+    exit 0
+  fi
+}
+
+main() {
+  notify "Started backup from $LOCAL_BACKUP_FOLDER"
+  backup_with_rsync
+  notify "Finished backup from $LOCAL_BACKUP_FOLDER"
+}
+
+record() {
+  cmd=$1
+  run_sanity_checks
+  set -e
+  set -x
+  if is_terminal; then
+    $cmd
+  else
+    recorded_run="`$cmd 2>&1`"
+    backup_info="`cat "$LOG_FILE" | tail -40`"
+    send_admin_email "[bkp][success] $LOCAL_BACKUP_FOLDER is safe!" "$recorded_run\n\n\n$backup_info"
+  fi
+  set +x
+  set +e
+}
+
+trap "rm -f $PLOCK" EXIT
+
+record main || bail "There was an error on $BOT_NAME: $?"

@@ -56,6 +56,16 @@ pushd $HOME &> /dev/null
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
+# setup backup job
+pushd $HOME &> /dev/null
+  mkdir -p bin
+  create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
+  $DIR/bin/apply_template.js \
+    "Library/LaunchAgents/com.fabs.mortadela.plist" \
+    "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
+  sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
+popd &> /dev/null
+
 
 # updating vim's plugins
 if command_exists vim; then
