@@ -276,11 +276,18 @@ nnoremap <LEADER>a4 :Accordion 4<CR>
 autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 
 fun! s:AutoSetAccordionValue()
-  exe ":AccordionAll " . string(floor(&columns/80))
+  exe ":AccordionAll " . string(floor(&columns/81))
 endfun
 
 
 Plug 'moll/vim-node'
+Plug 'sbdchd/neoformat'
+let g:neoformat_javascript_prettier={
+  \ 'exe': 'prettier',
+  \ 'args': ['--single-quote']
+\ }
+let g:neoformat_enabled_python=['prettier']
+nnoremap <LEADER>fc :Neoformat<CR>
 
 
 function! BuildYCM(info)
