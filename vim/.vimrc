@@ -303,6 +303,7 @@ function! BuildYCM(info)
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 nnoremap <LEADER>c :YcmCompleter GoToDefinition<CR>
+let g:ycm_python_binary_path = 'python'
 
 
 call plug#end()
