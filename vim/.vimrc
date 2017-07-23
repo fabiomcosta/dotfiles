@@ -170,6 +170,9 @@ nnoremap <LEADER>] :tabnext<CR>
 "copies current buffer file path to register
 nnoremap cp :let @+=resolve(expand("%"))<CR>
 
+"so vim won't force pep8 on all python files
+let g:python_recommended_style=0
+
 
 call plug#begin(expand('~/.vim/plugged'))
 
