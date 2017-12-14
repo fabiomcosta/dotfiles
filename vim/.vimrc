@@ -56,7 +56,6 @@ set ruler
 set synmaxcol=5000
 "allow backspacing over everything in insert mode
 set backspace=indent,eol,start
-set laststatus=2
 "font line-height
 set linespace=0
 "adds line numbers to the left
@@ -176,38 +175,35 @@ let g:python_recommended_style=0
 
 call plug#begin(expand('~/.vim/plugged'))
 
-"vim-snipmate
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'garbas/vim-snipmate'
+Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-"/vim-snipmate
-
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
+Plug 'christoomey/vim-conflicted'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
-Plug 'facebook/vim-flow'
+Plug 'Galooshi/vim-import-js'
 
 
-Plug 'mhinz/vim-grepper'
-let g:grepper={}
-let g:grepper.dir='repo,cwd,file'
-let g:grepper.tools=['git', 'ag', 'ack', 'grep']
-let g:grepper.git={}
-let g:grepper.git.grepprg='git grep -nI --no-color'
-nnoremap <LEADER>a :Grepper -query<SPACE>
-nnoremap <LEADER>* :Grepper -cword -noprompt<CR>
+" Plug 'mhinz/vim-grepper'
+" let g:grepper={}
+" let g:grepper.dir='repo,cwd,file'
+" let g:grepper.tools=['git', 'ag', 'ack', 'grep']
+" let g:grepper.git={}
+" let g:grepper.git.grepprg='git grep -nI --no-color'
+" nnoremap <LEADER>a :Grepper -query<SPACE>
+" nnoremap <LEADER>* :Grepper -cword -noprompt<CR>
+
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
 
 
 Plug 'sheerun/vim-polyglot'
 let g:javascript_plugin_flow=1
-
-
-Plug 'bling/vim-airline'
-let g:airline_powerline_fonts=1
 
 
 Plug 'othree/eregex.vim'
@@ -232,35 +228,52 @@ noremap <LEADER>z :NERDTreeToggle<CR>
 
 
 Plug 'mattn/emmet-vim'
-nnoremap <C-z> :call emmet#expandAbbr(0,"")<CR>a
-inoremap <C-z> <ESC>:call emmet#expandAbbr(0,"")<CR>a
+" You need to enter <C-Z>,
+let g:user_emmet_leader_key='<C-Z>'
+let g:user_emmet_settings = {
+ \ 'javascript.jsx' : {
+    \ 'extends' : 'jsx',
+    \ },
+ \ }
 
 
 Plug 'ctrlpvim/ctrlp.vim'
 let g:ctrlp_map='<LEADER>p'
 let g:ctrlp_max_height=20
 let g:ctrlp_max_files=100000
-let g:ctrlp_clear_cache_on_exit=0
 let g:ctrlp_working_path_mode='a'
-let g:ctrlp_user_command={
-  \ 'types': {
-    \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
-    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-  \ },
-  \ 'fallback': 'find %s -type f'
-\ }
-nmap <LEADER>y :CtrlPClearCache<CR>
+let g:ctrlp_clear_cache_on_exit=0
+if executable('rg')
+  set grepprg=rg\ --color=never
+  let g:ctrlp_user_command='rg %s --files --color=never --glob ""'
+  let g:ctrlp_use_caching=0
+elseif executable('ag')
+  set grepprg=ag\ --nogroup\ --nocolor
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  let g:ctrlp_use_caching=0
+else
+  let g:ctrlp_user_command={
+    \ 'types': {
+      \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
+    \ },
+    \ 'fallback': 'find %s -type f'
+  \ }
+  nmap <LEADER>y :CtrlPClearCache<CR>
+endif
 
 
-" Plug 'scrooloose/syntastic'
-" let g:syntastic_check_on_open=1
-" let g:syntastic_check_on_wq=0
-" let g:syntastic_auto_loc_list=0
-" let g:syntastic_enable_signs=1
-" let g:syntastic_error_symbol='✗'
-" let g:syntastic_warning_symbol='⚠'
-" let g:syntastic_javascript_checkers=['eslint']
-" let g:syntastic_javascript_eslint_exe='$(npm bin)/eslint'
+Plug 'w0rp/ale'
+let g:ale_sign_error='✗'
+let g:ale_sign_warning='>'
+let g:ale_lint_on_text_changed='never'
+let g:ale_lint_on_enter=0
+let g:ale_linters = {
+\ 'javascript': ['eslint', 'flow'],
+\}
+let g:ale_fixers = {
+\ 'javascript': ['eslint'],
+\}
 
 
 Plug 'tpope/vim-surround'
@@ -289,10 +302,11 @@ let g:neoformat_javascript_prettier={
   \ 'exe': 'prettier',
   \ 'args': ['--single-quote']
 \ }
+let g:neoformat_enabled_javascript = ['prettier']
 nnoremap <LEADER>fc :Neoformat<CR>
 
 
-function! BuildYCM(info)
+fun! BuildYCM(info)
   " info is a dictionary with 3 fields
   " - name:   name of the plugin
   " - status: 'installed', 'updated', or 'unchanged'
@@ -300,7 +314,7 @@ function! BuildYCM(info)
   if a:info.status == 'installed' || a:info.force
     !./install.py --tern-completer
   endif
-endfunction
+endfun
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 nnoremap <LEADER>c :YcmCompleter GoToDefinition<CR>
 let g:ycm_python_binary_path = 'python'
@@ -310,6 +324,20 @@ call plug#end()
 
 
 colorscheme molokai
+
+
+" statusline
+set laststatus=2
+set statusline=%#statusline#%{ChangeStatuslineColor()}%f%=%m%r%y
+fun! ChangeStatuslineColor()
+  if getbufvar(bufnr('%'),'&mod')
+    hi! statusline guifg=#F92672 guibg=#232526 ctermfg=199 ctermbg=16
+  else
+    hi! statusline guifg=#455354 guibg=fg      ctermfg=238 ctermbg=253
+  endif
+  return ''
+endfun
+
 
 
 " from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
@@ -361,6 +389,7 @@ fun! ToggleIndentationType()
   endif
 endfun
 
+
 " sets expandtab based on the first
 " indented lines of a file
 fun! NaiveIndentationDetector()
@@ -383,10 +412,12 @@ fun! NaiveIndentationDetector()
   echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
 
+
 nnoremap <LEADER>fi :retab<CR>
 nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
 nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
+
 
 "whitespace in the end of the lines stuff
 "http://vim.wikia.com/wiki/Highlight_unwanted_spaces
@@ -397,5 +428,6 @@ autocmd WinEnter,InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
+
 
 filetype plugin indent on

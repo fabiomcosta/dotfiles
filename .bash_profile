@@ -91,8 +91,8 @@ if command_exists mvim; then
 fi
 
 # because sometimes I type 'ack' accidentaly (muscle memory)
-if command_exists ag && ! command_exists ack; then
-  alias ack='ag'
+if command_exists rg && ! command_exists ack; then
+  alias ack='rg'
 fi
 
 alias la='ls -a'
