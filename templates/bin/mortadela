@@ -128,6 +128,12 @@ is_my_router() {
   test "$current_bssid" == "$REMOTE_BSSID_24GHZ" -o "$current_bssid" == "$REMOTE_BSSID_50GHZ"
 }
 
+can_ping_storage_server() {
+  # -o exits with success on a successsful ping
+  # -t2 2 seconds timeout
+  ping -t2 -o "$REMOTE_IP" > /dev/null
+}
+
 lockfile_check() {
   if [ ! -f "$PLOCK" ]; then
     touch "$PLOCK"
@@ -166,7 +172,12 @@ run_sanity_checks() {
   fi
 
   if [[ ! $REMOTE_IP ]]; then
-    notify "Couldn't get your router's IP. You could be connected to a VPN."
+    notify "Couldn't get your router's IP. Maybe you're on VPN?"
+    exit 0
+  fi
+
+  if ! can_ping_storage_server; then
+    notify "Couldn't ping storage server. Maybe you're on VPN?"
     exit 0
   fi
 }
