@@ -184,22 +184,27 @@ Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
+
+
 Plug 'Galooshi/vim-import-js'
+nnoremap <LEADER>iw :ImportJSWord<CR>
+nnoremap <LEADER>ig :ImportJSGoto<CR>
+nnoremap <LEADER>if :ImportJSFix<CR>
 
 
-" Plug 'mhinz/vim-grepper'
-" let g:grepper={}
-" let g:grepper.dir='repo,cwd,file'
-" let g:grepper.tools=['git', 'ag', 'ack', 'grep']
-" let g:grepper.git={}
-" let g:grepper.git.grepprg='git grep -nI --no-color'
-" nnoremap <LEADER>a :Grepper -query<SPACE>
-" nnoremap <LEADER>* :Grepper -cword -noprompt<CR>
+Plug 'mhinz/vim-grepper'
+let g:grepper={}
+let g:grepper.dir='repo,cwd,file'
+let g:grepper.tools=['rg', 'ag', 'git', 'ack', 'grep']
+nnoremap <LEADER>g :Grepper -query<SPACE>
+nnoremap K :Grepper -query "\b<C-R><C-W>\b"<CR>:cw<CR>
 
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --no-ignore --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>), 1, <bang>0)
+Plug 'yssl/QFEnter'
+let g:qfenter_keymap={}
+let g:qfenter_keymap.vopen=['<C-v>']
+let g:qfenter_keymap.hopen=['<C-CR>', '<C-s>', '<C-x>']
+let g:qfenter_keymap.topen=['<C-t>']
 
 
 Plug 'sheerun/vim-polyglot'
