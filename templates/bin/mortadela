@@ -10,7 +10,7 @@ BOT_EMAIL="$BOT_NAME@concretizeconstrucoes.com.br"
 
 REMOTE_USER='admin'
 REMOTE_VOLUME_NAME='volume1'
-# our TP-link archer c7 mac address
+# router mac address
 REMOTE_BSSID_24GHZ="$(find_pass mac_address_24ghz)"
 REMOTE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
 # getting IP from the MAC address
@@ -95,7 +95,7 @@ is_rsync_instance_running() {
 
 backup_with_rsync() {
   # checks if the storage is already mounted and returns the folder
-  mount_path="`mount | grep -e "$REMOTE_USER@tplinklogin.net/$REMOTE_VOLUME_NAME" -e "$SMB_SERVER_URI" | cut -d ' ' -f3`"
+  mount_path="$(mount | grep "$SMB_SERVER_URI" | cut -d ' ' -f3)"
   if [[ -z "$mount_path" ]]; then
     mount_path="`mktemp -d /tmp/${BOT_NAME}_XXXXXX`"
     mount -t smbfs "$SMB_SERVER_URI" "$mount_path"
@@ -103,7 +103,7 @@ backup_with_rsync() {
     trap "umount $mount_path" EXIT
   fi
 
-  # We need to go inside the mounter folder, else mkdir will destroy the
+  # We need to go inside the mounted folder, else mkdir will destroy the
   # mounted point
   pushd "$mount_path" > /dev/null
     mkdir -p "$REMOTE_BACKUP_FOLDER"
