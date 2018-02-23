@@ -184,6 +184,8 @@ Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
+Plug 'junegunn/vim-emoji'
+Plug 'w0rp/ale'
 
 
 Plug 'Galooshi/vim-import-js'
@@ -268,17 +270,6 @@ else
 endif
 
 
-Plug 'w0rp/ale'
-let g:ale_sign_error='✗'
-let g:ale_sign_warning='>'
-let g:ale_lint_on_text_changed='never'
-let g:ale_lint_on_enter=0
-let g:ale_linters = {
-\ 'javascript': ['eslint', 'flow'],
-\}
-let g:ale_fixers = {
-\ 'javascript': ['eslint'],
-\}
 
 
 Plug 'tpope/vim-surround'
@@ -328,6 +319,18 @@ let g:ycm_python_binary_path = 'python'
 call plug#end()
 
 
+let g:ale_sign_error=emoji#for('poop')
+let g:ale_sign_warning=emoji#for('small_orange_diamond')
+let g:ale_lint_on_text_changed='never'
+let g:ale_lint_on_enter=0
+let g:ale_linters = {
+\ 'javascript': ['eslint', 'flow'],
+\}
+let g:ale_fixers = {
+\ 'javascript': ['eslint'],
+\}
+
+
 colorscheme molokai
 
 
@@ -342,7 +345,6 @@ fun! ChangeStatuslineColor()
   endif
   return ''
 endfun
-
 
 
 " from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
