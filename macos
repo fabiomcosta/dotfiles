@@ -50,7 +50,7 @@ defaults write NSGlobalDomain KeyRepeat -int 1
 defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # Disable the sound effects on boot
-sudo nvram SystemAudioVolume=" "
+sudo nvram SystemAudioVolume=' '
 
 # Menu bar: show remaining battery time (on pre-10.8); hide percentage
 defaults write com.apple.menuextra.battery ShowPercent -string "NO"
@@ -78,7 +78,9 @@ defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # setup passwords
-ask_password_for 'Personal email' personal_email
-ask_password_for 'SparkPost email API key' sparkpost_email_api_key
+ask_password_for "Personal email" personal_email
+ask_password_for "SparkPost email API key" sparkpost_email_api_key
 ask_password_for "Router's MAC address 2.4ghz" mac_address_24ghz
 ask_password_for "Router's MAC address 5.0ghz" mac_address_50ghz
+
+# setup timemachine backup
