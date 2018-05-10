@@ -7,11 +7,11 @@
     <key>ProgramArguments</key>
     <array>
       <string>/Users/<%= user %>/bin/mortadela</string>
-      <string>/Users/<%= user %>/Google Drive</string>
+      <string>/Users/<%= user %>/gdrive</string>
     </array>
     <key>WatchPaths</key>
     <array>
-      <string>/Users/<%= user %>/Google Drive</string>
+      <string>/Users/<%= user %>/gdrive</string>
     </array>
     <key>RunAtLoad</key>
     <true/>
