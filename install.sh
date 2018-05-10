@@ -38,6 +38,8 @@ if [ $MACOS ]; then
   bash -c "$DIR/macos"
 fi
 
+curl -L https://git.io/n-install | bash -s -- -y lts
+
 if ! command_exists node; then
   echo "${ERROR} You need to install the nodejs project to run this script."
   exit 1

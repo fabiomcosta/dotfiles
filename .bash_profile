@@ -161,6 +161,6 @@ prepend_if_exists PATH $DEV/other/depot_tools
 prepend_if_exists PATH $HOME/bin
 
 # node n
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+export N_PREFIX="$HOME/.node_n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 
 execute_if_exists source "$HOME/.$(hostname)"
