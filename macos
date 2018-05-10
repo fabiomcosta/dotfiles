@@ -47,7 +47,7 @@ brew cask install \
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # Decreases the delay repetition on keyboard
 defaults write NSGlobalDomain KeyRepeat -int 1
-defaults write NSGlobalDomain InitialKeyRepeat -int 5
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
