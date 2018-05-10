@@ -148,6 +148,7 @@ fi
 export PYTHONDONTWRITEBYTECODE=x
 
 if which pyenv > /dev/null; then
+  export PYTHON_CONFIGURE_OPTS="--enable-framework"
   eval "$(pyenv init -)"
 fi
 if which pyenv-virtualenv-init > /dev/null; then
