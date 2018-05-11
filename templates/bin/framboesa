@@ -1,0 +1,181 @@
+#!/usr/bin/env bash
+
+find_pass() {
+  local pass_key=$1
+  security find-generic-password -a $USER -s $pass_key -w
+}
+
+BOT_NAME='framboesa'
+BOT_EMAIL="$BOT_NAME@concretizeconstrucoes.com.br"
+
+STORAGE_USER='admin'
+STORAGE_VOLUME_NAME='volume1'
+# router mac address
+STORAGE_BSSID_24GHZ="$(find_pass mac_address_24ghz)"
+STORAGE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
+# getting IP from the MAC address
+STORAGE_IP="`arp -a | grep -E "$STORAGE_BSSID_24GHZ|$STORAGE_BSSID_50GHZ" | head -1 | awk -F'[()]' '{print $2}'`"
+
+STORAGE_URI="//$STORAGE_USER@$STORAGE_IP/$STORAGE_VOLUME_NAME"
+# ideally, this id should be the same for all other user and scripts on this
+# physical machine.
+STORAGE_ID="router_storage"
+STORAGE_DEFAULT_LOCAL_MOUNT_PATH="/tmp/$STORAGE_ID"
+
+# Instructions to create sparse bundle at
+# https://www.makeuseof.com/tag/turn-nas-windows-share-time-machine-backup/
+SPARSE_BUNDLE_NAME="$(hostname)_$USER"
+SPARSE_BUNDLE_REMOTE_PATH="timemachine_backup/$SPARSE_BUNDLE_NAME.sparsebundle"
+SPARSE_BUNDLE_LOCAL_MOUNT_PATH="/tmp/$SPARSE_BUNDLE_NAME"
+
+ADMIN_EMAIL="$(find_pass personal_email)"
+EMAIL_API_KEY="$(find_pass sparkpost_email_api_key)"
+EMAIL_API_SEND_URI='https://api.sparkpost.com/api/v1/transmissions'
+
+PLOCK="/tmp/${BOT_NAME}_${USER}.lock"
+LOG_FILE="$(mktemp /tmp/${BOT_NAME}_XXXXXX)"
+
+is_console() {
+  test -t 1
+}
+
+p() {
+  if is_console; then
+    echo $@
+  else
+    echo $@ >> $LOG_FILE
+  fi
+}
+
+notify() {
+  local message=$@
+  local title="$BOT_NAME"
+  p "notify" "$title" "$message"
+  if command_exists osascript; then
+    osascript -e "display notification \"$message\" with title \"$title\""
+  fi
+}
+
+command_exists() {
+  local cmd="$1"
+  hash $cmd 2> /dev/null
+}
+
+json_escape() {
+  echo -n "$1" | \
+    python -c 'import json,sys; print json.dumps(sys.stdin.read())'
+}
+
+send_admin_email() {
+  local subject="$1"
+  local message="$2"
+  local json_encoded_message="$(json_escape "$message")"
+  read -r -d '' data <<EOM
+{
+  "recipients": [
+    {"address": {"email": "$ADMIN_EMAIL"}}
+  ],
+  "content": {
+    "from": {"name": "$BOT_NAME", "email": "$BOT_EMAIL"},
+    "subject": "$subject",
+    "text": $json_encoded_message
+  }
+}
+EOM
+curl \
+  --silent \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: $EMAIL_API_KEY" \
+  -d "$data" $EMAIL_API_SEND_URI > /dev/null
+}
+
+bail() {
+  local message="$1"
+  send_admin_email "[Error] $BOT_NAME" "$message"
+  exit 1
+}
+
+enable_backup_with_timemachine() {
+  # checks if the storage is already mounted and returns the folder
+  mount_path="$(mount | grep "$STORAGE_URI" | cut -d ' ' -f3)"
+  if [[ -z "$mount_path" ]]; then
+    mount_path="$STORAGE_DEFAULT_LOCAL_MOUNT_PATH"
+    mkdir -p "$mount_path"
+    mount -t smbfs "$STORAGE_URI" "$mount_path"
+    echo "$STORAGE_URI" "$mount_path"
+  fi
+
+  # TODO: we could check for the presence of the sparse bundle and ask if
+  # the user wants to create one in case there is none.
+  # hdiutil create -size 600g -type SPARSEBUNDLE -fs "HFS+J" -volname $SPARSE_BUNDLE_NAME $SPARSE_BUNDLE_NAME.sparsebundle
+  hdiutil attach -mountpoint "$SPARSE_BUNDLE_LOCAL_MOUNT_PATH" "$mount_path/$SPARSE_BUNDLE_REMOTE_PATH" > /dev/null
+  # needs sudo :/
+  sudo tmutil setdestination "$SPARSE_BUNDLE_LOCAL_MOUNT_PATH"
+  sudo tmutil enable
+  tmutil startbackup
+}
+
+can_ping_storage_server() {
+  # -o exits with success on a successsful ping
+  # -t2 2 seconds timeout
+  ping -t2 -o "$STORAGE_IP" > /dev/null
+}
+
+lockfile_check() {
+  if [ ! -f "$PLOCK" ]; then
+    touch "$PLOCK"
+    return 0
+  else
+    return 1
+  fi
+}
+
+lockfile_rm() {
+  rm -f "$PLOCK"
+}
+
+trap lockfile_rm EXIT
+
+run_sanity_checks() {
+  if ! lockfile_check; then
+    notify "I'm already running! Wait untill I stop or remove"\
+      "'$PLOCK' if you're sure I can run again."
+    exit 0
+  fi
+
+  if [[ ! $STORAGE_IP ]]; then
+    notify "Couldn't get your router's IP. Maybe you're on VPN?"
+    exit 0
+  fi
+
+  if ! can_ping_storage_server; then
+    notify "Couldn't ping storage server. Maybe you're on VPN?"
+    exit 0
+  fi
+}
+
+main() {
+  notify "Enabling timemachine backup..."
+  enable_backup_with_timemachine
+  notify "Finished enabling timemachine backup"
+}
+
+record() {
+  cmd=$1
+  run_sanity_checks
+  set -e
+  set -x
+  if is_console; then
+    $cmd
+  else
+    recorded_run="`$cmd 2>&1`"
+    backup_info="`cat "$LOG_FILE" | tail -40`"
+    send_admin_email "[bkp][success] $LOCAL_BACKUP_FOLDER is safe!" "$recorded_run\n\n\n$backup_info"
+  fi
+  set +x
+  set +e
+}
+
+
+record main || bail "There was an error on $BOT_NAME: $?"

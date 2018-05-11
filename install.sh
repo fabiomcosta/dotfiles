@@ -24,7 +24,7 @@ create_ln_for() {
     elif [ -d "$1" ]; then
       echo "${WARNING} There is already a `hl $1` folder inside your home folder."
     else
-      echo "${ERROR} `hl $1` isn't a symlink nor a folder nor a file. Do something!"
+      echo "${ERROR} `hl $1` isn't a symlink, folder or file. Do something!"
       exit 1
     fi
   fi
@@ -41,7 +41,7 @@ fi
 curl -L https://git.io/n-install | bash -s -- -y lts
 
 if ! command_exists node; then
-  echo "${ERROR} You need to install the nodejs project to run this script."
+  echo "${ERROR} You need to install nodejs before running this script."
   exit 1
 fi
 
@@ -58,16 +58,24 @@ pushd $HOME &> /dev/null
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
+# WE ARE EXPERIMENTING WITH TIME MACHINE BACKUP
+# LOOK AT `macos` FILE
 # setup backup job
+# pushd $HOME &> /dev/null
+#   mkdir -p bin
+#   create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
+#   $DIR/bin/apply_template.js \
+#     "Library/LaunchAgents/com.fabs.mortadela.plist" \
+#     "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
+#   sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
+# popd &> /dev/null
+
+LOOK AT `macos` FILE
+setup backup job
 pushd $HOME &> /dev/null
   mkdir -p bin
-  create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
-  $DIR/bin/apply_template.js \
-    "Library/LaunchAgents/com.fabs.mortadela.plist" \
-    "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
-  sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
+  create_ln_for "bin/framboesa" "$DIR/templates/bin/framboesa"
 popd &> /dev/null
-
 
 # updating vim's plugins
 if command_exists vim; then
