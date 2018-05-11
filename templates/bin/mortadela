@@ -109,11 +109,19 @@ backup_with_rsync() {
     mkdir -p "$REMOTE_BACKUP_FOLDER"
   popd > /dev/null
 
+  # date works very differently between gnu (linux) and freebsd (macos), let's
+  # use python to get a date string representation.
+  date_now="$(python -c 'import datetime as d,sys; sys.stdout.write(d.datetime.now().strftime("%Y%m%d_%H%M%S"))')"
+  remote_folder="$mount_path/$REMOTE_BACKUP_FOLDER"
+  remote_backup_folder="${remote_folder}_backup_${date_now}"
   # Why --modify-window? http://ubuntuforums.org/showthread.php?t=1859694&page=2&p=11345356#post11345356
+  # --delete removes files on the destination folder
+  # --backup and --backup-dir makes sure that the deleted files are moved to that dir.
+  # -P shows progress
   if is_console; then
-    rsync -azvh --modify-window=3601 -P "$LOCAL_BACKUP_FOLDER" "$mount_path/$REMOTE_BACKUP_FOLDER"
+    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$LOCAL_BACKUP_FOLDER" "$remote_folder"
   else
-    rsync -azvh --modify-window=3601 -P "$LOCAL_BACKUP_FOLDER" "$mount_path/$REMOTE_BACKUP_FOLDER" >> $LOG_FILE
+    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$LOCAL_BACKUP_FOLDER" "$remote_folder" >> $LOG_FILE
   fi
 }
 
@@ -124,7 +132,7 @@ get_current_bssid() {
 }
 
 is_my_router() {
-  current_bssid="`get_current_bssid`"
+  current_bssid="$(get_current_bssid)"
   test "$current_bssid" == "$REMOTE_BSSID_24GHZ" -o "$current_bssid" == "$REMOTE_BSSID_50GHZ"
 }
 
@@ -196,13 +204,12 @@ record() {
   if is_console; then
     $cmd
   else
-    recorded_run="`$cmd 2>&1`"
-    backup_info="`cat "$LOG_FILE" | tail -40`"
+    recorded_run="$($cmd 2>&1)"
+    backup_info="$(cat "$LOG_FILE" | tail -40)"
     send_admin_email "[bkp][success] $LOCAL_BACKUP_FOLDER is safe!" "$recorded_run\n\n\n$backup_info"
   fi
   set +x
   set +e
 }
-
 
 record main || bail "There was an error on $BOT_NAME: $?"
