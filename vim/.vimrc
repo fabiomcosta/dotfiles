@@ -157,9 +157,10 @@ cmap w!! w !sudo tee % >/dev/null
 vnoremap <LEADER>j :!python -m json.tool<CR>
 
 "underline to camelcase
-vnoremap <LEADER>tcc :s#_\(\l\)#\u\1#<CR>:noh<CR>
+vnoremap <LEADER>ltc :s#\%V_\(\l\)#\u\1#<CR>:noh<CR>
+vnoremap <LEADER>utc :s#\%V_*\(\u\)\(\u*\)#\1\L\2#<CR>:noh<CR>
 "camelcase to underline
-vnoremap <LEADER>tus :s#\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
+vnoremap <LEADER>tus :s#\%V\([a-z0-9]\+\)\(\u\)#\l\1_\l\2#g<CR>:noh<CR>
 
 "tab related mappings
 nnoremap <LEADER>nt :tabnew<CR>
