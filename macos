@@ -27,7 +27,7 @@ fi
 echo "brew update... (can take a while)"
 brew update
 brew install macvim --with-lua --with-override-system-vim
-brew install git bash-completion tmux mosh bash-git-prompt
+brew install git bash-completion tmux mosh bash-git-prompt rsync
 
 # install homebrew-cask
 brew tap caskroom/cask
