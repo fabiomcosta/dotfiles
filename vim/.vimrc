@@ -201,6 +201,7 @@ let g:grepper.dir='repo,cwd,file'
 let g:grepper.tools=['rg', 'ag', 'git', 'ack', 'grep']
 nnoremap <LEADER>g :Grepper -query<SPACE>
 nnoremap K :Grepper -query "\b<C-R><C-W>\b"<CR>:cw<CR>
+vnoremap K y:Grepper -query "\b<C-R>"\b"<CR>
 
 
 Plug 'yssl/QFEnter'

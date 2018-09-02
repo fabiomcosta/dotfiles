@@ -2,6 +2,14 @@
 
 DEV="$HOME/Dev"
 
+export_if_exists() {
+  local var_name=$1
+  local path="$2"
+  if [[ -e "$path" ]]; then
+    export $var_name="$path"
+  fi
+}
+
 append_if_exists() {
   local var_name=$1
   local path_var_value="$(eval echo $`echo $var_name`)"
@@ -99,24 +107,17 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.g
 
 alias la='ls -a'
 alias ll='ls -l'
-alias g='git'
-alias gs='git status'
-alias gd='git diff'
 alias simpleserver='python -m SimpleHTTPServer'
 alias d8="$DEV/tp/v8/out/Debug/d8"
+alias cat='bat'
+alias ping='prettyping --nolegend'
+alias help='tldr'
 
 ## colors
 export TERM=xterm-256color
 export CLICOLOR=1
 export LSCOLORS=ExFxCxDxBxegedabagacad
 
-
-## android
-export ANDROID_ROOT=$HOME/Dev/android
-export ANDROID_HOME=$ANDROID_ROOT/sdk
-append_if_exists PATH $ANDROID_HOME/tools
-append_if_exists PATH $ANDROID_HOME/platform-tools
-export ANDROID_NDK_ROOT=$ANDROID_ROOT/ndk
 
 ## adding brew paths to PATH and other brew specific stuff
 if command_exists brew; then
@@ -161,7 +162,39 @@ prepend_if_exists PATH $DEV/other/depot_tools
 # prepends my bin folder to the path
 prepend_if_exists PATH $HOME/bin
 
+# prepends my gdrive/code/gd/bin folder to the path
+prepend_if_exists PATH $HOME/gdrive/code/gd/bin
+
 # node n
 export N_PREFIX="$HOME/.node_n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 
 execute_if_exists source "$HOME/.$(hostname)"
+###-begin-gd-completions-###
+#
+# yargs command completion script
+#
+# Installation: gd completion >> ~/.bashrc
+#    or gd completion >> ~/.bash_profile on OSX.
+#
+_yargs_completions()
+{
+    local cur_word args type_list
+
+    cur_word="${COMP_WORDS[COMP_CWORD]}"
+    args=("${COMP_WORDS[@]}")
+
+    # ask yargs to generate completions.
+    type_list=$(gd --get-yargs-completions "${args[@]}")
+
+    COMPREPLY=( $(compgen -W "${type_list}" -- ${cur_word}) )
+
+    # if no match was found, fall back to filename completion
+    if [ ${#COMPREPLY[@]} -eq 0 ]; then
+      COMPREPLY=( $(compgen -f -- "${cur_word}" ) )
+    fi
+
+    return 0
+}
+complete -F _yargs_completions gd
+###-end-gd-completions-###
+
