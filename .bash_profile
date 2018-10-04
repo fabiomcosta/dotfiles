@@ -145,15 +145,23 @@ if command_exists brew; then
   fi
 fi
 
+
+# autocomplete for ctrl-r
+if command_exists fzf; then
+  source "$HOME/.fzf.bash"
+fi
+
+
 # do not create .pyc files
 export PYTHONDONTWRITEBYTECODE=x
 
-if which pyenv > /dev/null; then
+if command_exists pyenv; then
   export PYTHON_CONFIGURE_OPTS="--enable-framework"
   eval "$(pyenv init -)"
-fi
-if which pyenv-virtualenv-init > /dev/null; then
-  eval "$(pyenv virtualenv-init -)"
+
+  if command_exists pyenv-virtualenv-init; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
 
 # prepends depot_tools from the chromium project
