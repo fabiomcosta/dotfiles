@@ -19,6 +19,7 @@ if has("gui_running")
   set guioptions-=T "remove toolbar
   set guioptions-=r "remove right-hand scroll bar
   set guioptions-=L "remove left-hand scroll bar
+  set cursorline "cursorline is quite expensive when not on a gui
 
   "activates ligatures when supported
   set macligatures
@@ -27,6 +28,8 @@ if has("gui_running")
     set guifont=Fira\ Code:h12
   catch
   endtry
+else
+  set lazyredraw
 endif
 
 
@@ -50,7 +53,6 @@ set title
 set showmode
 set showcmd
 set hidden
-set cursorline
 set ruler
 "allows colors on long lines
 set synmaxcol=5000
