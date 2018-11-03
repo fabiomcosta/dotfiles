@@ -36,7 +36,6 @@ brew tap caskroom/fonts
 
 # essential
 brew cask install \
-  atom \
   caffeine \
   imagealpha \
   imageoptim \
@@ -82,5 +81,6 @@ ask_password_for "Personal email" personal_email
 ask_password_for "SparkPost email API key" sparkpost_email_api_key
 ask_password_for "Router's MAC address 2.4ghz" mac_address_24ghz
 ask_password_for "Router's MAC address 5.0ghz" mac_address_50ghz
+ask_password_for "Router's admin password" router_admin_password
 
 # setup timemachine backup

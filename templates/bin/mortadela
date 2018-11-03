@@ -9,14 +9,15 @@ BOT_NAME='mortadela'
 BOT_EMAIL="$BOT_NAME@concretizeconstrucoes.com.br"
 
 REMOTE_USER='admin'
+REMOTE_PASSWORD="$(find_pass router_admin_password)"
 REMOTE_VOLUME_NAME='volume1'
 # router mac address
 REMOTE_BSSID_24GHZ="$(find_pass mac_address_24ghz)"
 REMOTE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
 # getting IP from the MAC address
-REMOTE_IP="`arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F'[()]' '{print $2}'`"
+REMOTE_IP="$(arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F'[()]' '{print $2}')"
 
-SMB_SERVER_URI="//$REMOTE_USER@$REMOTE_IP/$REMOTE_VOLUME_NAME"
+SMB_SERVER_URI="//$REMOTE_USER:$REMOTE_PASSWORD@$REMOTE_IP/$REMOTE_VOLUME_NAME"
 
 ADMIN_EMAIL="$(find_pass personal_email)"
 EMAIL_API_KEY="$(find_pass sparkpost_email_api_key)"
