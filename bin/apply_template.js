@@ -12,7 +12,7 @@ var origPath = path.normalize(process.argv[3]);
 // `path` first.
 
 var template = fs.readFileSync(origPath);
-var renderedTemplate = _.template(template, {
+var renderedTemplate = _.template(template)({
   isMacos: platform.os.family === 'Darwin',
   user: process.env.USER,
 });
