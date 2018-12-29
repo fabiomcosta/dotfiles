@@ -15,7 +15,7 @@ REMOTE_VOLUME_NAME='volume1'
 REMOTE_BSSID_24GHZ="$(find_pass mac_address_24ghz)"
 REMOTE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
 # getting IP from the MAC address
-REMOTE_IP="$(arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F'[()]' '{print $2}')"
+REMOTE_IP="$(arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F '[()]' '{print $2}')"
 
 SMB_SERVER_URI="//$REMOTE_USER:$REMOTE_PASSWORD@$REMOTE_IP/$REMOTE_VOLUME_NAME"
 
@@ -126,19 +126,8 @@ backup_with_rsync() {
   fi
 }
 
-get_current_bssid() {
-  # http://stackoverflow.com/questions/4481005/get-wireless-ssid-through-shell-script-on-mac-os-x
-  # I know right?
-  /System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport -I | awk '/ BSSID: /{print $2}'
-}
-
-is_my_router() {
-  current_bssid="$(get_current_bssid)"
-  test "$current_bssid" == "$REMOTE_BSSID_24GHZ" -o "$current_bssid" == "$REMOTE_BSSID_50GHZ"
-}
-
 can_ping_storage_server() {
-  # -o exits with success on a successsful ping
+  # -o exits with success on a successful ping
   # -t2 2 seconds timeout
   ping -t2 -o "$REMOTE_IP" > /dev/null
 }
@@ -172,11 +161,6 @@ run_sanity_checks() {
 
   if is_rsync_instance_running; then
     notify "There is already an 'rsync' instance running, I'll bail for safety."
-    exit 0
-  fi
-
-  if ! is_my_router; then
-    notify "You're not connected to your home router."
     exit 0
   fi
 
