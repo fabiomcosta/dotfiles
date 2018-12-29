@@ -58,24 +58,22 @@ pushd $HOME &> /dev/null
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
 
-# WE ARE EXPERIMENTING WITH TIME MACHINE BACKUP
-# LOOK AT `macos` FILE
 # setup backup job
-# pushd $HOME &> /dev/null
-#   mkdir -p bin
-#   create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
-#   $DIR/bin/apply_template.js \
-#     "Library/LaunchAgents/com.fabs.mortadela.plist" \
-#     "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
-#   sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
-# popd &> /dev/null
-
-LOOK AT `macos` FILE
-setup backup job
 pushd $HOME &> /dev/null
   mkdir -p bin
-  create_ln_for "bin/framboesa" "$DIR/templates/bin/framboesa"
+  create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
+  $DIR/bin/apply_template.js \
+    "Library/LaunchAgents/com.fabs.mortadela.plist" \
+    "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
+  sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
 popd &> /dev/null
+
+# WE ARE EXPERIMENTING WITH TIME MACHINE BACKUP
+# LOOK AT `macos` FILE
+# pushd $HOME &> /dev/null
+#   mkdir -p bin
+#   create_ln_for "bin/framboesa" "$DIR/templates/bin/framboesa"
+# popd &> /dev/null
 
 # updating vim's plugins
 if command_exists vim; then
