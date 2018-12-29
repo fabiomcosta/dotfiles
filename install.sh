@@ -65,6 +65,7 @@ pushd $HOME &> /dev/null
   $DIR/bin/apply_template.js \
     "Library/LaunchAgents/com.fabs.mortadela.plist" \
     "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
+  sudo chown root:wheel "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
   sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
 popd &> /dev/null
 
