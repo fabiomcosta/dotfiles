@@ -8,10 +8,15 @@
     <array>
       <string>/Users/<%= user %>/bin/mortadela</string>
       <string>/Users/<%= user %>/gdrive</string>
+      <string>/Users/<%= user %>/Google Drive</string>
+      <string>/Users/<%= user %>/Documents</string>
+      <string>/Users/<%= user %>/Downloads</string>
+      <string>/Users/<%= user %>/Desktop</string>
     </array>
     <key>WatchPaths</key>
     <array>
       <string>/Users/<%= user %>/gdrive</string>
+      <string>/Users/<%= user %>/Google Drive</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

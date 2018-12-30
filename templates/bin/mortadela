@@ -120,9 +120,9 @@ backup_with_rsync() {
   # --backup and --backup-dir makes sure that the deleted files are moved to that dir.
   # -P shows progress
   if is_console; then
-    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$LOCAL_BACKUP_FOLDER" "$remote_folder"
+    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$@" "$remote_folder"
   else
-    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$LOCAL_BACKUP_FOLDER" "$remote_folder" >> $LOG_FILE
+    rsync -azvh -P --modify-window=3601 --exclude='*/node_modules/*' --exclude='*/.git/*' --delete --backup --backup-dir="$remote_backup_folder" "$@" "$remote_folder" >> $LOG_FILE
   fi
 }
 
@@ -177,19 +177,20 @@ run_sanity_checks() {
 
 main() {
   notify "Started backup from $LOCAL_BACKUP_FOLDER"
-  backup_with_rsync
+  backup_with_rsync "$@"
   notify "Finished backup from $LOCAL_BACKUP_FOLDER"
 }
 
 record() {
   cmd=$1
+  shift
   run_sanity_checks
   set -e
   set -x
   if is_console; then
-    $cmd
+    $cmd "$@"
   else
-    recorded_run="$($cmd 2>&1)"
+    recorded_run="$($cmd "$@" 2>&1)"
     backup_info="$(cat "$LOG_FILE" | tail -40)"
     send_admin_email "[bkp][success] $LOCAL_BACKUP_FOLDER is safe!" "$recorded_run\n\n\n$backup_info"
   fi
@@ -197,4 +198,12 @@ record() {
   set +e
 }
 
-record main || bail "There was an error on $BOT_NAME: $?"
+# creates an array with only the folders that actually exists
+LOCAL_BACKUP_FOLDERS=()
+for folder in "$@"; do
+  if [ -d "$folder" ]; then
+    LOCAL_BACKUP_FOLDERS+=("$folder")
+  fi
+done
+
+record main "${LOCAL_BACKUP_FOLDERS[@]}" || bail "There was an error on $BOT_NAME: $?"
