@@ -178,8 +178,8 @@ let g:python_recommended_style=0
 
 call plug#begin(expand('~/.vim/plugged'))
 
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 Plug 'christoomey/vim-conflicted'
 Plug 'Lokaltog/vim-easymotion'
@@ -191,10 +191,10 @@ Plug 'junegunn/vim-emoji'
 Plug 'w0rp/ale'
 
 
-Plug 'Galooshi/vim-import-js'
-nnoremap <LEADER>iw :ImportJSWord<CR>
-nnoremap <LEADER>ig :ImportJSGoto<CR>
-nnoremap <LEADER>if :ImportJSFix<CR>
+" Plug 'Galooshi/vim-import-js'
+" nnoremap <LEADER>iw :ImportJSWord<CR>
+" nnoremap <LEADER>ig :ImportJSGoto<CR>
+" nnoremap <LEADER>if :ImportJSFix<CR>
 
 
 Plug 'mhinz/vim-grepper'
@@ -248,42 +248,12 @@ let g:user_emmet_settings = {
  \ }
 
 
-Plug 'ctrlpvim/ctrlp.vim'
-let g:ctrlp_map='<LEADER>p'
-let g:ctrlp_max_height=20
-let g:ctrlp_max_files=100000
-let g:ctrlp_working_path_mode='a'
-let g:ctrlp_clear_cache_on_exit=0
-if executable('rg')
-  set grepprg=rg\ --color=never
-  let g:ctrlp_user_command='rg %s --files --color=never --glob ""'
-  let g:ctrlp_use_caching=0
-elseif executable('ag')
-  set grepprg=ag\ --nogroup\ --nocolor
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-  let g:ctrlp_use_caching=0
-else
-  let g:ctrlp_user_command={
-    \ 'types': {
-      \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
-      \ 2: ['.hg', 'hg --cwd %s locate -I .'],
-    \ },
-    \ 'fallback': 'find %s -type f'
-  \ }
-  nmap <LEADER>y :CtrlPClearCache<CR>
-endif
-
-
-
-
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-nnoremap <LEADER>' cs"'<CR>
-nnoremap <LEADER>" cs'"<CR>
 
 
 "colorscheme
-Plug 'tomasr/molokai'
+Plug 'dracula/vim'
 
 
 Plug 'mattboehm/vim-accordion'
@@ -297,27 +267,77 @@ endfun
 
 
 Plug 'moll/vim-node'
-Plug 'sbdchd/neoformat'
-let g:neoformat_javascript_prettier={
-  \ 'exe': 'prettier',
-  \ 'args': ['--single-quote']
-\ }
-let g:neoformat_enabled_javascript = ['prettier']
-nnoremap <LEADER>fc :Neoformat<CR>
+" Plug 'sbdchd/neoformat'
+" let g:neoformat_javascript_prettier={
+"   \ 'exe': 'prettier',
+"   \ 'args': ['--single-quote']
+" \ }
+" let g:neoformat_enabled_javascript = ['prettier']
+" nnoremap <LEADER>fc :Neoformat<CR>
 
 
-fun! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed' || a:info.force
-    !./install.py --tern-completer
-  endif
-endfun
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
-nnoremap <LEADER>c :YcmCompleter GoToDefinition<CR>
-let g:ycm_python_binary_path = 'python'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Better display for messages
+set cmdheight=2
+" You will have bad experience for diagnostic messages when it's default 4000.
+set updatetime=300
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+Plug 'junegunn/fzf.vim'
+
+" Adds Rg command to search on file paths
+command! -bang -nargs=* Rgf
+  \ call fzf#run({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'sink': 'e', 'down': '~20%', 'options': ['--ansi', '--prompt', 'ripgrep> ', '--color', 'hl:4,hl+:12']})
+" Adds Rg command to search on file content
+command! -bang -nargs=* Rgc
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+nmap <LEADER>p :Rgf<CR>
+nmap <LEADER>c :Rgc<CR>
+
+let g:fzf_layout = { 'down': '~20%' }
+" Customize fzf colors to match your color scheme
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'border':  ['fg', 'Ignore'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
+
+Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 
 call plug#end()
@@ -330,12 +350,12 @@ let g:ale_lint_on_enter=0
 let g:ale_linters = {
 \ 'javascript': ['eslint', 'flow'],
 \}
-let g:ale_fixers = {
-\ 'javascript': ['eslint'],
-\}
+" let g:ale_fixers = {
+" \ 'javascript': ['eslint'],
+" \}
 
 
-colorscheme molokai
+colorscheme dracula
 
 
 " statusline
