@@ -125,7 +125,7 @@ if command_exists brew; then
   BREW_PREFIX=`brew --prefix`
 
   ## ruby
-  prepend_if_exists PATH `brew --prefix ruby`/bin
+  prepend_if_exists PATH "$(brew --prefix ruby)/bin"
 
   ## node
   prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
@@ -133,6 +133,8 @@ if command_exists brew; then
 
   prepend_if_exists PATH $BREW_PREFIX/bin
   prepend_if_exists PATH $BREW_PREFIX/sbin
+
+  append_if_exists PKG_CONFIG_PATH "$(brew --prefix libffi)/lib/pkgconfig"
 
   if command_exists complete; then
     # bash completion
@@ -172,6 +174,9 @@ prepend_if_exists PATH $HOME/bin
 
 # prepends my gdrive/code/gd/bin folder to the path
 prepend_if_exists PATH $HOME/gdrive/code/gd/bin
+
+# export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
+# export ANDROID_HOME="$ANDROID_SDK_ROOT"
 
 # node n
 export N_PREFIX="$HOME/.node_n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
