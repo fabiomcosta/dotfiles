@@ -90,7 +90,7 @@ if command_exists vim; then
   fi
 
   echo "Installing/Updating `hl "vim's plugins"`..."
-  vim -f +PlugInstall +qall
+  vim --noplugin -f +PlugInstall +qall
   if [ $? -eq 0 ]; then
     echo "${OK} `hl "vim's plugins"` updated successfuly.";
   else

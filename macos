@@ -26,9 +26,10 @@ fi
 
 echo "brew update... (can take a while)"
 brew update
-brew install macvim --with-lua --with-override-system-vim
-brew install git bash-completion tmux mosh bash-git-prompt rsync
+brew install macvim git bash-completion tmux mosh bash-git-prompt rsync
 
+# universal ctags
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 # install homebrew-cask
 brew tap caskroom/cask
 # so we can install the fira-code code
@@ -42,6 +43,13 @@ brew cask install \
   iterm2 \
   spectacle \
   font-fira-code
+
+echo "Setting up fish..."
+echo /usr/local/bin/fish | sudo tee -a /etc/shells
+chsh -s /usr/local/bin/fish
+brew install starship
+echo " eval (starship init fish)" > ~/.config/fish/config.fish
+echo "fish setup done."
 
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # Decreases the delay repetition on keyboard
