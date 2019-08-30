@@ -45,10 +45,11 @@ brew cask install \
   font-fira-code
 
 echo "Setting up fish..."
-echo /usr/local/bin/fish | sudo tee -a /etc/shells
+if not grep '/usr/local/bin/fish' /etc/shells > /dev/null
+  echo /usr/local/bin/fish | sudo tee -a /etc/shells
+end
 chsh -s /usr/local/bin/fish
 brew install starship
-echo " eval (starship init fish)" > ~/.config/fish/config.fish
 echo "fish setup done."
 
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
