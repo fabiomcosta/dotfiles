@@ -1,5 +1,5 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": ["js", "css", "Markdown"],
+  "coc.preferences.formatOnSaveFiletypes": ["javascript", "javascriptreact"],
   "prettier.eslintIntegration": true,
   "prettier.requireConfig": true,
   "languageserver": {
@@ -7,10 +7,10 @@
       "command": "flow",
       "args": ["lsp"],
       "filetypes": ["javascript", "javascriptreact"],
-      "initializationOptions": {},
       "requireRootPattern": true,
-      "settings": {},
-      "rootPatterns": [".flowconfig"]
+      "rootPatterns": [".flowconfig"],
+      "initializationOptions": {},
+      "settings": {}
     }
   }
 }
