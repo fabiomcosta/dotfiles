@@ -8,3 +8,4 @@ vim/.vim/bundle/
 vim/.vim/plugged/
 vim/.vim/autoload/
 node_modules/
+/.tags
