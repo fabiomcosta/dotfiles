@@ -26,7 +26,7 @@ fi
 
 echo "brew update... (can take a while)"
 brew update
-brew install macvim git bash-completion tmux mosh bash-git-prompt rsync bat prettyping tldr
+brew install macvim git bash-completion tmux mosh bash-git-prompt rsync bat prettyping tldr ripgrep
 
 # universal ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
@@ -42,7 +42,8 @@ brew cask install \
   imageoptim \
   iterm2 \
   spectacle \
-  font-fira-code
+  font-fira-code \
+  karabiner-elements
 
 echo "Setting up fish..."
 if not grep '/usr/local/bin/fish' /etc/shells > /dev/null

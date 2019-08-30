@@ -57,6 +57,7 @@ pushd $HOME &> /dev/null
   create_ln_for "./fish/config.fish" "$DIR/.config/fish/config.fish"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
+  create_ln_for "karabiner.json" "$DIR/.config/karabiner/karabiner.json"
 popd &> /dev/null
 
 # setup backup job
