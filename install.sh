@@ -54,6 +54,7 @@ pushd $HOME &> /dev/null
   create_ln_for ".vim" "$DIR/vim/.vim"
   create_ln_for ".vimrc" "$DIR/vim/.vimrc"
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
+  create_ln_for "./fish/config.fish" "$DIR/.config/fish/config.fish"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
 popd &> /dev/null
@@ -103,5 +104,3 @@ git config branch.master.rebase true
 
 pushd $HOME &> /dev/null
   echo "Sourcing `hl ".bash_profile"`...";
-  source ".bash_profile"
-popd &> /dev/null
