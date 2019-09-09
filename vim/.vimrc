@@ -135,7 +135,7 @@ vnoremap <DOWN> 12j
 vnoremap <UP> 12k
 
 inoremap jj <ESC>
-nnoremap ; :
+" nnoremap ; :
 
 " makes paste work on command-line mode
 cnoremap <C-v> <C-r>"
@@ -166,17 +166,17 @@ nnoremap <LEADER>] :tabnext<CR>
 " copies current buffer file path to register
 nnoremap cp :let @+=resolve(expand("%"))<CR>
 
-" move to previous autocomplete suggestion option
-" inoremap <expr> <DOWN> pumvisible() ? "\<C-n>" : "\<Tab>"
-" move to next autocomplete suggestion option
-" inoremap <expr> <UP> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " confirm completion, `<C-g>u` means break undo chain at current position.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " so vim won't force pep8 on all python files
 let g:python_recommended_style=0
 
-call plug#begin(expand('~/.vim/plugged'))
+if has("nvim")
+  call plug#begin(expand('~/.local/share/nvim/plugged'))
+else
+  call plug#begin(expand('~/.vim/plugged'))
+endif
 
 Plug 'Lokaltog/vim-easymotion'
 Plug 'godlygeek/tabular'
@@ -185,18 +185,13 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'junegunn/vim-emoji'
 Plug 'w0rp/ale'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
 
 
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 Plug 'tpope/vim-rhubarb'
 let g:github_enterprise_urls = ['https://github.secureserver.net']
-
-
-Plug 'yssl/QFEnter'
-let g:qfenter_keymap={}
-let g:qfenter_keymap.vopen=['<C-v>']
-let g:qfenter_keymap.hopen=['<C-CR>', '<C-s>', '<C-x>']
-let g:qfenter_keymap.topen=['<C-t>']
 
 
 Plug 'sheerun/vim-polyglot'
@@ -220,12 +215,8 @@ map g# <Plug>(incsearch-nohl-g#)
 map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
 
 
-Plug 'scrooloose/nerdtree', {'augroup': 'NERDTreeHijackNetrw'}
-noremap <LEADER>z :NERDTreeToggle<CR>
-
-
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-vinegar'
+noremap <LEADER>z :Lexplore<CR>
 
 
 " colorscheme

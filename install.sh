@@ -14,6 +14,7 @@ hl() {
 
 create_ln_for() {
   if [ ! -e "$1" ]; then
+    mkdir -p "$(dirname "$1")"
     ln -s "$2" "$1"
     echo "${OK} Symlink for `hl $1` created."
   elif [ -L "$1" ]; then
@@ -38,6 +39,17 @@ if [ $MACOS ]; then
   bash -c "$DIR/macos"
 fi
 
+pushd $HOME &> /dev/null
+  create_ln_for ".vim" "$DIR/vim/.vim"
+  create_ln_for ".vimrc" "$DIR/vim/.vimrc"
+  create_ln_for ".bash_profile" "$DIR/.bash_profile"
+  create_ln_for ".ackrc" "$DIR/.ackrc"
+  create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
+  create_ln_for ".config/karabiner/karabiner.json" "$DIR/karabiner.json"
+  create_ln_for ".config/nvim/init.vim" "$DIR/vim/.vimrc"
+  create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
+popd &> /dev/null
+
 curl -L https://git.io/n-install | bash -s -- -y lts
 
 if ! command_exists node; then
@@ -51,13 +63,6 @@ popd &> /dev/null
 
 pushd $HOME &> /dev/null
   $DIR/bin/apply_template.js ".gitconfig" "$DIR/.gitconfig"
-  create_ln_for ".vim" "$DIR/vim/.vim"
-  create_ln_for ".vimrc" "$DIR/vim/.vimrc"
-  create_ln_for ".bash_profile" "$DIR/.bash_profile"
-  create_ln_for "./fish/config.fish" "$DIR/.config/fish/config.fish"
-  create_ln_for ".ackrc" "$DIR/.ackrc"
-  create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
-  create_ln_for "karabiner.json" "$DIR/.config/karabiner/karabiner.json"
 popd &> /dev/null
 
 # setup backup job
@@ -84,18 +89,37 @@ if command_exists vim; then
   # install vim-plug
   if [ ! -d "$HOME/.vim/autoload/plug.vim" ]; then
     echo "Installing `hl 'vim-plug'`..."
-    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   else
     echo "${OK} `hl 'vim-plug'` is already installed."
   fi
 
   echo "Installing/Updating `hl "vim's plugins"`..."
-  vim --noplugin -f +PlugInstall +qall
+  vim -f +PlugInstall +qall
   if [ $? -eq 0 ]; then
     echo "${OK} `hl "vim's plugins"` updated successfuly.";
   else
     echo "${ERROR} We had a problem while updating `hl "vim's plugins"`.";
+    exit 1
+  fi
+fi
+
+if command_exists nvim; then
+  if [ ! -d "$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then
+    echo "Installing `hl 'vim-plug'` for neovim..."
+    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  else
+    echo "${OK} `hl 'vim-plug'` for neovim is already installed."
+  fi
+
+  echo "Installing/Updating `hl "neovim's plugins"`..."
+  nvim -f +PlugInstall +qall
+  if [ $? -eq 0 ]; then
+    echo "${OK} `hl "neovim's plugins"` updated successfuly.";
+  else
+    echo "${ERROR} We had a problem while updating `hl "neovim's plugins"`.";
     exit 1
   fi
 fi
