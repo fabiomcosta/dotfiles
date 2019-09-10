@@ -254,9 +254,8 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" Adds Rg command to search on file paths
-command! -bang -nargs=* Rgf
-  \ call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case -l .', 'options': ['--ansi', '--color', 'hl:4,hl+:12']}, 'right:50%')))
+" Adds Rg command to search on file paths, with a nice preview window to the right
+command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case -l .'}, 'right:50%')))
 
 " Adds Rg command to search on file content, with a nice preview window to the right.
 command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
