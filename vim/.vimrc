@@ -81,7 +81,7 @@ set tags=tags;/
 " enable ctrl-n and ctrl-p to scroll thru matches
 set wildmenu
 " make cmdline tab completion similar to bash
-set wildmode=list:longest
+set wildmode=longest:full,full
 " ignored files while searching files and stuff
 set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz,*.swf
 set wildignore+=*.swp,*.swo,*~,*.pyc
@@ -125,14 +125,13 @@ syntax on
 nnoremap j gj
 nnoremap k gk
 " moves cursor faster
-" nnoremap <C-j> 12j
-" nnoremap <C-k> 12k
-" vnoremap <C-j> 12j
-" vnoremap <C-k> 12k
 nnoremap <DOWN> 12j
 nnoremap <UP> 12k
 vnoremap <DOWN> 12j
 vnoremap <UP> 12k
+" moves the cursor around the buffer windows
+nnoremap <LEFT> <C-w>h
+nnoremap <RIGHT> <C-w>l
 
 inoremap jj <ESC>
 " nnoremap ; :
@@ -144,14 +143,6 @@ nnoremap <LEADER>ev <C-w><C-v><C-l>:e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
-
-" moves the cursor around the buffer windows
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-l> <C-w>l
-" nnoremap <C-j> <C-w>j
-" nnoremap <C-k> <C-w>k
-nnoremap <LEFT> <C-w>h
-nnoremap <RIGHT> <C-w>l
 
 " changes the size of the buffer windows
 nnoremap = <C-w>=
@@ -242,26 +233,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set updatetime=300
 " format current file with prettier
 nnoremap <LEADER>fc :CocCommand prettier.formatFile<CR>
-" nnoremap gd <Plug>(coc-definition)
-" nnoremap gy <Plug>(coc-type-definition)
-" nnoremap gi <Plug>(coc-implementation)
-" nnoremap gr <Plug>(coc-references)
 
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
-" Adds Rg command to search on file paths
-command! -bang -nargs=* Rgf
-  \ call fzf#run({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'sink': 'e', 'down': '~20%', 'options': ['--ansi', '--prompt', 'ripgrep> ', '--color', 'hl:4,hl+:12']})
-" Adds Rg command to search on file content
-command! -bang -nargs=* Rgc
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--exact --delimiter : --nth 4..'}, <bang>0)
-nmap <LEADER>p :Rgf<CR>
-nmap <LEADER>c :Rgc<CR>
-
 let g:fzf_layout = { 'down': '~20%' }
-" Customize fzf colors to match your color scheme
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
   \ 'bg':      ['bg', 'Normal'],
@@ -277,9 +254,17 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+" Adds Rg command to search on file paths
+command! -bang -nargs=* Rgf
+  \ call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case -l .', 'options': ['--ansi', '--color', 'hl:4,hl+:12']}, 'right:50%')))
+
+" Adds Rg command to search on file content, with a nice preview window to the right.
+command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
+
+nmap <LEADER>p :Rgf<CR>
+nmap <LEADER>c :Rgc<CR>
 
 Plug 'ludovicchabant/vim-gutentags'
-let g:gutentags_ctags_tagfile = '.tags'
 " improves perf of ctags by only generating tags for the non-ignored VCS files
 let g:gutentags_file_list_command = {
 \ 'markers': {
