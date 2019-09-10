@@ -187,6 +187,7 @@ Plug 'junegunn/vim-emoji'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'jeffkreeftmeijer/vim-numbertoggle'
 
 
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
