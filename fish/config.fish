@@ -79,3 +79,5 @@ set -x PATH $HOME/gdrive/code/gd/bin $PATH
 # set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 # set -x ANDROID_HOME "$ANDROID_SDK_ROOT"
 eval (starship init fish)
+# starts vim mode
+fish_vi_key_bindings
