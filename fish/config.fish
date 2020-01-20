@@ -24,6 +24,7 @@ alias d8="$DEV/tp/v8/out/Debug/d8"
 alias cat='bat'
 alias ping='prettyping --nolegend'
 alias help='tldr'
+alias oni2="$HOME/Applications/Onivim2.app/Contents/MacOS/Oni2"
 
 
 ## colors
@@ -79,5 +80,3 @@ set -x PATH $HOME/gdrive/code/gd/bin $PATH
 # set -x ANDROID_SDK_ROOT "/usr/local/share/android-sdk"
 # set -x ANDROID_HOME "$ANDROID_SDK_ROOT"
 eval (starship init fish)
-# starts vim mode
-fish_vi_key_bindings

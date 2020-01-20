@@ -18,7 +18,6 @@ if has("gui_running")
   set guioptions-=T " remove toolbar
   set guioptions-=r " remove right-hand scroll bar
   set guioptions-=L " remove left-hand scroll bar
-  set cursorline " cursorline is quite expensive when not on a gui
 
   " activates ligatures when supported
   set macligatures
@@ -29,7 +28,29 @@ if has("gui_running")
   endtry
 endif
 
-set lazyredraw
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if empty($TMUX)
+  if has("nvim")
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if has("termguicolors")
+    set termguicolors
+  endif
+endif
+
+" adds possibility of using 256 colors
+set t_8b=^[[48;2;%lu;%lu;%lum
+set t_8f=^[[38;2;%lu;%lu;%lum
+set t_Co=256
+
+" for the dark version
+set background=dark
 
 " default indent settings
 set expandtab
@@ -52,6 +73,8 @@ set showmode
 set showcmd
 set hidden
 set ruler
+set cursorline
+set lazyredraw
 " allows colors on long lines
 set synmaxcol=5000
 " allow backspacing over everything in insert mode
@@ -63,14 +86,11 @@ set number
 " prevents delay while pressing esc on insert mode
 set timeoutlen=1000 ttimeoutlen=0
 " uses OS clipboard if possible (check +clipboard)
-set clipboard=unnamed
+set clipboard^=unnamed,unnamedplus
 " store lots of :cmdline history
 set history=1000
 " mark the ideal max text width
 set colorcolumn=80
-" set termguicolors
-" adds possibility of using 256 colors
-set t_Co=256
 
 " some stuff to get the mouse going in term
 set mouse=a
@@ -88,6 +108,7 @@ set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*
+set wildignore+=tags
 set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
 " ignores case
@@ -124,25 +145,30 @@ syntax on
 
 nnoremap j gj
 nnoremap k gk
+
 " moves cursor faster
 nnoremap <DOWN> 12j
 nnoremap <UP> 12k
 vnoremap <DOWN> 12j
 vnoremap <UP> 12k
+
 " moves the cursor around the buffer windows
 nnoremap <LEFT> <C-w>h
 nnoremap <RIGHT> <C-w>l
 
 inoremap jj <ESC>
-" nnoremap ; :
+nnoremap ; :
 
 " makes paste work on command-line mode
 cnoremap <C-v> <C-r>"
 
 nnoremap <LEADER>ev :e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
+nnoremap <LEADER>ss :w<CR>
+nnoremap <LEADER>sq :wq<CR>
 nnoremap <LEADER>w :vsplit<CR><C-w>l
 nnoremap <LEADER>v :split<CR><C-w>j
+nnoremap <expr> <LEADER>b ":bot ".winheight(0)/4."split\<CR>"
 
 " changes the size of the buffer windows
 nnoremap = <C-w>=
@@ -153,6 +179,9 @@ nnoremap - :vertical resize -5<CR>
 nnoremap <LEADER>nt :tabnew<CR>
 nnoremap <LEADER>[ :tabprevious<CR>
 nnoremap <LEADER>] :tabnext<CR>
+
+" avoid going on ex mode
+nnoremap Q <Nop>
 
 " copies current buffer file path to register
 nnoremap cp :let @+=resolve(expand("%"))<CR>
@@ -179,6 +208,14 @@ Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
+Plug 'yuttie/comfortable-motion.vim'
+Plug 'tpope/vim-obsession'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'styled-components/vim-styled-components'
+
+
+Plug 'alvan/vim-closetag'
+let g:closetag_filetypes = 'html,xhtml,phtml,javascript,typescript'
 
 
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
@@ -208,11 +245,15 @@ map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
 
 
 Plug 'tpope/vim-vinegar'
-noremap <LEADER>z :Lexplore<CR>
+let g:netrw_liststyle=3
+noremap <LEADER>z :Vexplore<CR>
 
 
 " colorscheme
-Plug 'dracula/vim'
+" Plug 'dracula/vim'
+" Plug 'morhetz/gruvbox'
+Plug 'tomasiser/vim-code-dark'
+" Plug 'rakr/vim-one'
 
 
 Plug 'mattboehm/vim-accordion'
@@ -264,8 +305,9 @@ nmap <LEADER>p :Rgf<CR>
 nmap <LEADER>c :Rgc<CR>
 
 Plug 'ludovicchabant/vim-gutentags'
+let g:gutentags_cache_dir=$HOME . '/.cache/tags'
 " improves perf of ctags by only generating tags for the non-ignored VCS files
-let g:gutentags_file_list_command = {
+let g:gutentags_file_list_command={
 \ 'markers': {
     \ '.git': 'git ls-files',
     \ '.hg': 'hg files',
@@ -281,18 +323,24 @@ call plug#end()
 
 let g:ale_completion_enabled=1
 let g:ale_set_balloons=1
+let g:ale_set_loclist=0
+let g:ale_set_quickfix=1
 let g:ale_sign_error=emoji#for('poop')
 let g:ale_sign_warning=emoji#for('small_orange_diamond')
 let g:ale_echo_msg_format='[%linter%][%code] %%s'
-nmap gdc :ALEGoToDefinition<CR>
-nmap gdv :ALEGoToDefinitionInVSplit<CR>
+nmap gd :ALEGoToDefinition<CR>
 nmap gh :ALEHover<CR>
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:ale_linters = {
 \ 'javascript': ['eslint', 'flow-language-server'],
 \}
 
 
-colorscheme dracula
+" colorscheme dracula
+" colorscheme gruvbox
+colorscheme codedark
+" colorscheme one
 
 
 " statusline
@@ -397,5 +445,15 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
+if has("nvim")
+  " starts terminal mode on insert mode
+  " disables line numbers on a newly opened terminal window (not really working)
+  autocmd TermOpen term://* startinsert | setlocal nonumber
+  " close terminal buffer without showing the exit status of the shell
+  autocmd TermClose term://* call feedkeys("\<cr>")
+  " tnoremap <Esc> <C-\><C-n>
+else
+  autocmd TerminalOpen * setlocal nonumber
+endif
 
 filetype plugin indent on
