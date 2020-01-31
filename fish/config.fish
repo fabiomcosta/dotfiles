@@ -32,13 +32,6 @@ set -x TERM xterm-256color
 set -x CLICOLOR 1
 set -x LSCOLORS ExFxCxDxBxegedabagacad
 
-# node n
-# Added by n-install (see http://git.io/n-install-repo).
-set -x N_PREFIX "$HOME/.node_n";
-if not contains "$N_PREFIX/bin" $PATH
-  set -x PATH $PATH "$N_PREFIX/bin"
-end
-
 if command_exists brew
   ## brew
   set -x BREW_PREFIX (brew --prefix)

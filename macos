@@ -29,11 +29,13 @@ brew update
 brew install macvim git bash-completion tmux mosh bash-git-prompt rsync bat prettyping tldr ripgrep
 brew install neovim --HEAD
 
+# fast node manager
+brew install Schniz/tap/fnm
 # universal ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 # install homebrew-cask
 brew tap caskroom/cask
-# so we can install the fira-code code
+# so we can install the fira-code font
 brew tap caskroom/fonts
 
 # essential

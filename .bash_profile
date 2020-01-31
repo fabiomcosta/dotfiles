@@ -77,17 +77,6 @@ tmosh() {
   mosh -6 $1 -- bash -c "source ~/.bash_profile && tmux attach -d"
 }
 
-# d8
-d8_update() {
-  pushd $DEV/tp/v8/
-    git checkout master
-    git pull
-    gclient sync
-    GYP_GENERATORS=ninja build/gyp_v8
-    ninja -C out/Debug d8
-  popd
-}
-
 # sets bash vi mode
 set -o vi
 
@@ -177,9 +166,6 @@ prepend_if_exists PATH $HOME/gdrive/code/gd/bin
 
 # export ANDROID_SDK_ROOT="/usr/local/share/android-sdk"
 # export ANDROID_HOME="$ANDROID_SDK_ROOT"
-
-# node n
-export N_PREFIX="$HOME/.node_n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 
 execute_if_exists source "$HOME/.$(hostname)"
 ###-begin-gd-completions-###
