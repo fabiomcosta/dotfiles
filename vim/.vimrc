@@ -48,6 +48,7 @@ endif
 set t_8b=^[[48;2;%lu;%lu;%lum
 set t_8f=^[[38;2;%lu;%lu;%lum
 set t_Co=256
+set t_ut=
 
 " for the dark version
 set background=dark
@@ -250,7 +251,7 @@ noremap <LEADER>z :Vexplore<CR>
 
 
 " colorscheme
-" Plug 'dracula/vim'
+" Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'morhetz/gruvbox'
 Plug 'tomasiser/vim-code-dark'
 " Plug 'rakr/vim-one'
