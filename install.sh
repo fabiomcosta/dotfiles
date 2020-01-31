@@ -50,8 +50,6 @@ pushd $HOME &> /dev/null
   create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
 popd &> /dev/null
 
-curl -L https://git.io/n-install | bash -s -- -y lts
-
 if ! command_exists node; then
   echo "${ERROR} You need to install nodejs before running this script."
   exit 1
