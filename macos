@@ -33,8 +33,6 @@ brew install neovim --HEAD
 brew install Schniz/tap/fnm
 # universal ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
-# install homebrew-cask
-brew tap homebrew/cask-cask
 # so we can install the fira-code font
 brew tap homebrew/cask-fonts
 
@@ -49,9 +47,9 @@ brew cask install \
   karabiner-elements
 
 echo "Setting up fish..."
-if not grep '/usr/local/bin/fish' /etc/shells > /dev/null
+if ! grep '/usr/local/bin/fish' /etc/shells > /dev/null; then
   echo /usr/local/bin/fish | sudo tee -a /etc/shells
-end
+fi
 chsh -s /usr/local/bin/fish
 brew install starship
 echo "fish setup done."
@@ -95,5 +93,3 @@ ask_password_for "SparkPost email API key" sparkpost_email_api_key
 ask_password_for "Router's MAC address 2.4ghz" mac_address_24ghz
 ask_password_for "Router's MAC address 5.0ghz" mac_address_50ghz
 ask_password_for "Router's admin password" router_admin_password
-
-# setup timemachine backup
