@@ -212,7 +212,7 @@ Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'yuttie/comfortable-motion.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/vim-tmux-focus-events'
-Plug 'styled-components/vim-styled-components'
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 
 
 Plug 'alvan/vim-closetag'
