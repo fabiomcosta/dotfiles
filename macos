@@ -44,6 +44,7 @@ brew cask install \
   iterm2 \
   spectacle \
   font-fira-code \
+  font-jetbrains-mono \
   karabiner-elements
 
 echo "Setting up fish..."

@@ -23,7 +23,7 @@ if has("gui_running")
   set macligatures
 
   try
-    set guifont=Fira\ Code:h14
+    set guifont=JetbrainsMono:h14
   catch
   endtry
 endif
