@@ -34,9 +34,9 @@ brew install Schniz/tap/fnm
 # universal ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 # install homebrew-cask
-brew tap caskroom/cask
+brew tap homebrew/cask-cask
 # so we can install the fira-code font
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 
 # essential
 brew cask install \

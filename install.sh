@@ -39,15 +39,16 @@ if [ $MACOS ]; then
   bash -c "$DIR/macos"
 fi
 
-pushd $HOME &> /dev/null
+pushd $HOME &> /dev/nul
   create_ln_for ".vim" "$DIR/vim/.vim"
   create_ln_for ".vimrc" "$DIR/vim/.vimrc"
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
+  create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
   create_ln_for ".config/karabiner/karabiner.json" "$DIR/karabiner.json"
   create_ln_for ".config/nvim/init.vim" "$DIR/vim/.vimrc"
-  create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
+  create_ln_for ".config/nvim/coc-settings.json" "$DIR/vim/coc-settings.json"
 popd &> /dev/null
 
 if ! command_exists node; then
