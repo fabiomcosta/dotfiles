@@ -4,7 +4,7 @@
   "prettier.requireConfig": true,
   "languageserver": {
     "flow": {
-      "command": "flow",
+      "command": "${workspaceFolder}/node_modules/.bin/flow",
       "args": ["lsp"],
       "filetypes": ["javascript", "javascriptreact"],
       "requireRootPattern": true,
