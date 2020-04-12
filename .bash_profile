@@ -92,7 +92,7 @@ if command_exists rg && ! command_exists ack; then
   alias ack='rg'
 fi
 
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 
 alias la='ls -a'
 alias ll='ls -l'

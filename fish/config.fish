@@ -15,7 +15,7 @@ if command_exists rg && not command_exists ack
   alias ack='rg'
 end
 
-set -x FZF_DEFAULT_COMMAND 'rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+set -x FZF_DEFAULT_COMMAND 'rg --files --hidden --follow --glob "!.git/*"'
 
 alias la='ls -a'
 alias ll='ls -l'
