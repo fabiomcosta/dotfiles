@@ -45,6 +45,7 @@ pushd $HOME &> /dev/null
   create_ln_for ".bash_profile" "$DIR/.bash_profile"
   create_ln_for ".ackrc" "$DIR/.ackrc"
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
+  create_ln_for ".config/alacritty/alacritty.yml" "$DIR/alacritty.yml"
   create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
   create_ln_for ".config/karabiner/karabiner.json" "$DIR/karabiner.json"
   create_ln_for ".config/nvim/init.vim" "$DIR/vim/.vimrc"

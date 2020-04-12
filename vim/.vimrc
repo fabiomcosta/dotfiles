@@ -23,7 +23,7 @@ if has("gui_running")
   set macligatures
 
   try
-    set guifont=JetbrainsMono:h14
+    set guifont=JetbrainsMono:h16
   catch
   endtry
 endif
@@ -62,6 +62,7 @@ set shiftround
 
 set autoread
 set nobackup
+set nowritebackup
 set noswapfile
 set visualbell
 set noerrorbells
@@ -204,7 +205,6 @@ Plug 'godlygeek/tabular'
 Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
-Plug 'junegunn/vim-emoji'
 Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -213,6 +213,7 @@ Plug 'yuttie/comfortable-motion.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+" Plug 'junegunn/vim-emoji'
 
 
 Plug 'alvan/vim-closetag'
@@ -275,6 +276,35 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 set updatetime=300
 " format current file with prettier
 nnoremap <LEADER>fc :CocCommand prettier.formatFile<CR>
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
@@ -322,19 +352,19 @@ Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 call plug#end()
 
 
-let g:ale_completion_enabled=1
-let g:ale_set_balloons=1
+" let g:ale_completion_enabled=1
+" let g:ale_set_balloons=1
 let g:ale_set_loclist=0
 let g:ale_set_quickfix=1
-let g:ale_sign_error=emoji#for('poop')
-let g:ale_sign_warning=emoji#for('small_orange_diamond')
+" let g:ale_sign_error=emoji#for('poop')
+" let g:ale_sign_warning=emoji#for('small_orange_diamond')
 let g:ale_echo_msg_format='[%linter%][%code] %%s'
-nmap gd :ALEGoToDefinition<CR>
-nmap gh :ALEHover<CR>
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" nmap gd :ALEGoToDefinition<CR>
+" nmap gh :ALEHover<CR>
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
 let g:ale_linters = {
-\ 'javascript': ['eslint', 'flow-language-server'],
+\ 'javascript': ['eslint'],
 \}
 
 

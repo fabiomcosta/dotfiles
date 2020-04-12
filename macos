@@ -42,7 +42,8 @@ brew cask install \
   imagealpha \
   imageoptim \
   iterm2 \
-  spectacle \
+  alacritty \
+  rectangle \
   font-fira-code \
   font-jetbrains-mono \
   karabiner-elements

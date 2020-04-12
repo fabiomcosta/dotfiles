@@ -1,11 +1,12 @@
 {
+  "coc.tsserver.enableJavascript": false,
   "coc.preferences.formatOnSaveFiletypes": ["css", "javascript", "javascriptreact", "typescript", "typescriptreact", "json"],
   "prettier.eslintIntegration": true,
   "prettier.requireConfig": true,
   "languageserver": {
     "flow": {
       "command": "${workspaceFolder}/node_modules/.bin/flow",
-      "args": ["lsp"],
+      "args": ["lsp", "--lazy-mode", "ide"],
       "filetypes": ["javascript", "javascriptreact"],
       "requireRootPattern": true,
       "rootPatterns": [".flowconfig"],
