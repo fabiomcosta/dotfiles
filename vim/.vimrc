@@ -1,4 +1,4 @@
-" options not supported by neovim
+" options not supported by neovim,
 if !has("nvim")
   " Use Vim settings, rather then Vi settings (much better!).
   " This must be first, because it changes other options as a side effect.
@@ -86,7 +86,7 @@ set linespace=0
 " adds line numbers to the left
 set number
 " prevents delay while pressing esc on insert mode
-set timeoutlen=1000 ttimeoutlen=0
+set timeoutlen=500 ttimeoutlen=0
 " uses OS clipboard if possible (check +clipboard)
 set clipboard^=unnamed,unnamedplus
 " store lots of :cmdline history
@@ -166,11 +166,7 @@ cnoremap <C-v> <C-r>"
 
 nnoremap <LEADER>ev :e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
-nnoremap <LEADER>ss :w<CR>
-nnoremap <LEADER>sq :wq<CR>
-nnoremap <LEADER>w :vsplit<CR><C-w>l
-nnoremap <LEADER>v :split<CR><C-w>j
-nnoremap <expr> <LEADER>b ":bot ".winheight(0)/4."split\<CR>"
+nnoremap <LEADER>v :vsplit<CR><C-w>l
 
 " changes the size of the buffer windows
 nnoremap = <C-w>=
@@ -178,9 +174,9 @@ nnoremap + :vertical resize +5<CR>
 nnoremap - :vertical resize -5<CR>
 
 " tab related mappings
-nnoremap <LEADER>nt :tabnew<CR>
-nnoremap <LEADER>[ :tabprevious<CR>
-nnoremap <LEADER>] :tabnext<CR>
+nnoremap <LEADER>tc :tabnew<CR>
+nnoremap <LEADER>tp :tabprevious<CR>
+nnoremap <LEADER>tn :tabnext<CR>
 
 " avoid going on ex mode
 nnoremap Q <Nop>
@@ -202,10 +198,8 @@ endif
 
 Plug 'Lokaltog/vim-easymotion'
 Plug 'godlygeek/tabular'
-Plug 'jszakmeister/vim-togglecursor'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
-Plug 'w0rp/ale'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
@@ -213,6 +207,8 @@ Plug 'yuttie/comfortable-motion.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+" Plug 'jszakmeister/vim-togglecursor'
+" Plug 'w0rp/ale'
 " Plug 'junegunn/vim-emoji'
 
 
@@ -252,10 +248,9 @@ noremap <LEADER>z :Vexplore<CR>
 
 
 " colorscheme
-" Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug 'tomasiser/vim-code-dark'
 " Plug 'morhetz/gruvbox'
-Plug 'tomasiser/vim-code-dark'
-" Plug 'rakr/vim-one'
 
 
 Plug 'mattboehm/vim-accordion'
@@ -271,16 +266,32 @@ endfun
 Plug 'moll/vim-node'
 
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+function! CocAfterUpdate(info)
+  call :CocInstall coc-actions
+  call :CocInstall coc-css
+  call :CocInstall coc-eslint
+  call :CocInstall coc-flow
+  call :CocInstall coc-highlight
+  call :CocInstall coc-json
+  call :CocInstall coc-marketplace
+  call :CocInstall coc-prettier
+  call :CocInstall coc-snippets
+  call :CocInstall coc-tabnine
+  call :CocInstall coc-vimlsp
+  call :CocInstall coc-yaml
+endfunction
+Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release', 'do': 'CocAfterUpdate' }
+
+
 " You will have bad experience for diagnostic messages when it's default 4000.
 set updatetime=300
-" format current file with prettier
-nnoremap <LEADER>fc :CocCommand prettier.formatFile<CR>
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
 
 " Use K to show documentation in preview window.
 function! s:show_documentation()
@@ -292,19 +303,33 @@ function! s:show_documentation()
 endfunction
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+nnoremap <LEADER>fc :Format<CR>
+
+" coc-actions
+" Remap for do codeAction of selected region
+function! s:cocActionsOpenFromSelected(type) abort
+  execute 'CocCommand actions.open ' . a:type
 endfunction
+xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+
+" coc-snippets
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
 
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
@@ -326,14 +351,42 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
+
+function! s:open(cmd, target)
+  if stridx('edit', a:cmd) == 0 && fnamemodify(a:target, ':p') ==# expand('%:p')
+    return
+  endif
+  execute a:cmd fnameescape(a:target)
+endfunction
+
+function! s:fzf_rg_to_qf(line)
+  let parts = split(a:line, '[^:]\zs:\ze[^:]')
+  let text = join(parts[3:], ':')
+  let dict = {'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0], 'lnum': parts[1], 'text': text}
+  let dict.col = parts[2]
+  return dict
+endfunction
+
+function! s:fzf_rg_handler(lines)
+  let list = map(filter(a:lines, 'len(v:val)'), 's:fzf_rg_to_qf(v:val)')
+  if empty(list)
+    return
+  endif
+  let first = list[0]
+  call s:open('e', first.filename)
+  execute first.lnum
+  execute 'normal!' first.col.'|'
+  normal! zz
+endfunction
+
+" Adds Rg command to search on file content, with a nice preview window to the right.
+" command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
+command! -bang -nargs=* Rg call  fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 'options': '--exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
 " Adds Rg command to search on file paths, with a nice preview window to the right
 command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case -l .'}, 'right:50%')))
 
-" Adds Rg command to search on file content, with a nice preview window to the right.
-command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
-
 nmap <LEADER>p :Rgf<CR>
-nmap <LEADER>c :Rgc<CR>
+nmap <LEADER>c :Rg<CR>
 
 Plug 'ludovicchabant/vim-gutentags'
 let g:gutentags_cache_dir=$HOME . '/.cache/tags'
@@ -349,29 +402,47 @@ let g:gutentags_file_list_command={
 Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 
+Plug 'liuchengxu/vim-which-key'
+let g:mapleader = ','
+nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
+
+
+Plug 'vimwiki/vimwiki'
+let g:vimwiki_list = [{
+  \ 'path': '~/gdrive/documents/vimwiki',
+  \ 'syntax': 'markdown',
+  \ 'ext': '.md' }]
+let g:vimwiki_global_ext = 0
+
+function! s:vimwiki_open()
+  set filetype=markdown
+  setlocal spell
+endfunction
+autocmd FileType vimwiki :call s:vimwiki_open()
+
+
 call plug#end()
 
 
 " let g:ale_completion_enabled=1
 " let g:ale_set_balloons=1
-let g:ale_set_loclist=0
-let g:ale_set_quickfix=1
+" let g:ale_set_loclist=0
+" let g:ale_set_quickfix=1
 " let g:ale_sign_error=emoji#for('poop')
 " let g:ale_sign_warning=emoji#for('small_orange_diamond')
-let g:ale_echo_msg_format='[%linter%][%code] %%s'
+" let g:ale_echo_msg_format='[%linter%][%code] %%s'
 " nmap gd :ALEGoToDefinition<CR>
 " nmap gh :ALEHover<CR>
 " nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 " nmap <silent> <C-j> <Plug>(ale_next_wrap)
-let g:ale_linters = {
-\ 'javascript': ['eslint'],
-\}
+" let g:ale_linters = {
+" \ 'javascript': ['eslint'],
+" \}
 
 
-" colorscheme dracula
+colorscheme dracula
 " colorscheme gruvbox
-colorscheme codedark
-" colorscheme one
+" colorscheme codedark
 
 
 " statusline
