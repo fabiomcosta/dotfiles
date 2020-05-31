@@ -207,6 +207,8 @@ Plug 'yuttie/comfortable-motion.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+Plug 'moll/vim-node'
 " Plug 'jszakmeister/vim-togglecursor'
 " Plug 'w0rp/ale'
 " Plug 'junegunn/vim-emoji'
@@ -249,8 +251,9 @@ noremap <LEADER>z :Vexplore<CR>
 
 " colorscheme
 Plug 'dracula/vim', { 'as': 'dracula' }
-" Plug 'tomasiser/vim-code-dark'
-" Plug 'morhetz/gruvbox'
+Plug '~/gdrive/code/dracula-pro/themes/vim'
+let g:dracula_colorterm = 0
+Plug 'gruvbox-community/gruvbox'
 
 
 Plug 'mattboehm/vim-accordion'
@@ -261,9 +264,6 @@ autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 fun! s:AutoSetAccordionValue()
   exe ":AccordionAll " . string(floor(&columns/121))
 endfun
-
-
-Plug 'moll/vim-node'
 
 
 function! CocAfterUpdate(info)
@@ -361,8 +361,10 @@ endfunction
 
 function! s:fzf_rg_to_qf(line)
   let parts = split(a:line, '[^:]\zs:\ze[^:]')
-  let text = join(parts[3:], ':')
-  let dict = {'filename': &acd ? fnamemodify(parts[0], ':p') : parts[0], 'lnum': parts[1], 'text': text}
+  let dict = {}
+  let dict.filename = &acd ? fnamemodify(parts[0], ':p') : parts[0]
+  let dict.text = join(parts[3:], ':')
+  let dict.lnum = parts[1]
   let dict.col = parts[2]
   return dict
 endfunction
@@ -374,19 +376,20 @@ function! s:fzf_rg_handler(lines)
   endif
   let first = list[0]
   call s:open('e', first.filename)
-  execute first.lnum
-  execute 'normal!' first.col.'|'
+  execute 'normal! '.first.lnum.'G'
+  execute 'normal! '.first.col.'|'
   normal! zz
 endfunction
 
 " Adds Rg command to search on file content, with a nice preview window to the right.
 " command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
-command! -bang -nargs=* Rg call  fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 'options': '--exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
+command! -bang -nargs=* Rg  call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 'options': '--ansi --color --exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
 " Adds Rg command to search on file paths, with a nice preview window to the right
-command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=never --smart-case -l .'}, 'right:50%')))
+command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'options': '--ansi --color'}, 'right:50%')))
 
 nmap <LEADER>p :Rgf<CR>
 nmap <LEADER>c :Rg<CR>
+
 
 Plug 'ludovicchabant/vim-gutentags'
 let g:gutentags_cache_dir=$HOME . '/.cache/tags'
@@ -404,7 +407,7 @@ Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 Plug 'liuchengxu/vim-which-key'
 let g:mapleader = ','
-nnoremap <silent> <leader>      :<c-u>WhichKey ','<CR>
+nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 
 Plug 'vimwiki/vimwiki'
@@ -419,6 +422,11 @@ function! s:vimwiki_open()
   setlocal spell
 endfunction
 autocmd FileType vimwiki :call s:vimwiki_open()
+
+
+Plug 'alok/notational-fzf-vim'
+let g:nv_search_paths = ['~/gdrive/documents/vimwiki']
+nnoremap <silent> <LEADER>nv :NV<CR>
 
 
 call plug#end()
@@ -439,10 +447,10 @@ call plug#end()
 " \ 'javascript': ['eslint'],
 " \}
 
-
+"
 colorscheme dracula
+" colorscheme dracula_pro
 " colorscheme gruvbox
-" colorscheme codedark
 
 
 " statusline
