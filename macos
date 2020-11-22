@@ -38,12 +38,7 @@ brew tap homebrew/cask-fonts
 
 # essential
 brew cask install \
-  caffeine \
-  imagealpha \
-  imageoptim \
-  iterm2 \
   alacritty \
-  rectangle \
   font-fira-code \
   font-jetbrains-mono \
   karabiner-elements
@@ -92,6 +87,7 @@ defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 # setup passwords
 ask_password_for "Personal email" personal_email
 ask_password_for "SparkPost email API key" sparkpost_email_api_key
+ask_password_for "SendGrid email API key" sendgrid_email_api_key
 ask_password_for "Router's MAC address 2.4ghz" mac_address_24ghz
 ask_password_for "Router's MAC address 5.0ghz" mac_address_50ghz
 ask_password_for "Router's admin password" router_admin_password
