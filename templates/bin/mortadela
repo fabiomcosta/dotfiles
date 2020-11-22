@@ -6,7 +6,7 @@ find_pass() {
 }
 
 BOT_NAME='mortadela'
-BOT_EMAIL="$BOT_NAME@concretizeconstrucoes.com.br"
+BOT_EMAIL="$BOT_NAME@fabio.pw"
 
 REMOTE_USER='admin'
 REMOTE_PASSWORD="$(find_pass router_admin_password)"
@@ -18,6 +18,7 @@ REMOTE_BSSID_50GHZ="$(find_pass mac_address_50ghz)"
 REMOTE_IP="$(arp -a | grep -E "$REMOTE_BSSID_24GHZ|$REMOTE_BSSID_50GHZ" | head -1 | awk -F '[()]' '{print $2}')"
 
 SMB_SERVER_URI="//$REMOTE_USER:$REMOTE_PASSWORD@$REMOTE_IP/$REMOTE_VOLUME_NAME"
+SMB_SERVER_NOPWD_URI="//$REMOTE_USER@$REMOTE_IP/$REMOTE_VOLUME_NAME"
 
 ADMIN_EMAIL="$(find_pass personal_email)"
 EMAIL_API_KEY="$(find_pass sparkpost_email_api_key)"
@@ -96,7 +97,7 @@ is_rsync_instance_running() {
 
 backup_with_rsync() {
   # checks if the storage is already mounted and returns the folder
-  mount_path="$(mount | grep "$SMB_SERVER_URI" | cut -d ' ' -f3)"
+  mount_path="$(mount | grep "$SMB_SERVER_NOPWD_URI" | cut -d ' ' -f3)"
   if [[ -z "$mount_path" ]]; then
     mount_path="`mktemp -d /tmp/${BOT_NAME}_XXXXXX`"
     mount -t smbfs "$SMB_SERVER_URI" "$mount_path"
