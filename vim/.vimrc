@@ -202,13 +202,14 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-obsession'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'yuttie/comfortable-motion.vim'
-Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'moll/vim-node'
+" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'jszakmeister/vim-togglecursor'
 " Plug 'w0rp/ale'
 " Plug 'junegunn/vim-emoji'
@@ -262,25 +263,24 @@ nnoremap <LEADER>a4 :Accordion 4<CR>
 autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 
 fun! s:AutoSetAccordionValue()
-  exe ":AccordionAll " . string(floor(&columns/121))
+  execute ":AccordionAll " . string(floor(&columns/121))
 endfun
 
 
-function! CocAfterUpdate(info)
-  call :CocInstall coc-actions
-  call :CocInstall coc-css
-  call :CocInstall coc-eslint
-  call :CocInstall coc-flow
-  call :CocInstall coc-highlight
-  call :CocInstall coc-json
-  call :CocInstall coc-marketplace
-  call :CocInstall coc-prettier
-  call :CocInstall coc-snippets
-  call :CocInstall coc-tabnine
-  call :CocInstall coc-vimlsp
-  call :CocInstall coc-yaml
-endfunction
-Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release', 'do': 'CocAfterUpdate' }
+" function! CocAfterUpdate(info)
+  " CocInstall coc-actions
+  " CocInstall coc-css
+  " CocInstall coc-eslint
+  " CocInstall coc-flow
+  " CocInstall coc-highlight
+  " CocInstall coc-json
+  " CocInstall coc-marketplace
+  " CocInstall coc-prettier
+  " CocInstall coc-tabnine
+  " CocInstall coc-vimlsp
+  " CocInstall coc-yaml
+" endfunction
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
 " You will have bad experience for diagnostic messages when it's default 4000.
@@ -427,6 +427,19 @@ autocmd FileType vimwiki :call s:vimwiki_open()
 Plug 'alok/notational-fzf-vim'
 let g:nv_search_paths = ['~/gdrive/documents/vimwiki']
 nnoremap <silent> <LEADER>nv :NV<CR>
+
+
+Plug 'vim-test/vim-test'
+nmap <silent> t<C-n> :TestNearest<CR>
+nmap <silent> t<C-f> :TestFile<CR>
+nmap <silent> t<C-s> :TestSuite<CR>
+nmap <silent> t<C-l> :TestLast<CR>
+nmap <silent> t<C-g> :TestVisit<CR>
+let g:test#preserve_screen = 1
+let g:test#neovim#term_position = "topleft"
+let g:test#neovim#term_position = "vert"
+let g:test#neovim#term_position = "vert botright 30"
+let g:test#strategy = 'dispatch'
 
 
 call plug#end()

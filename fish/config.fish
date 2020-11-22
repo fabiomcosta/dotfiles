@@ -26,7 +26,6 @@ alias ping='prettyping --nolegend'
 alias help='tldr'
 alias oni2="$HOME/Applications/Onivim2.app/Contents/MacOS/Oni2"
 
-
 ## colors
 set -x TERM xterm-256color
 set -x CLICOLOR 1
@@ -37,16 +36,16 @@ if command_exists brew
   set -x BREW_PREFIX (brew --prefix)
 
   ## ruby
-  set -x PATH (brew --prefix ruby)"/bin" $PATH
+  set -x PATH $BREW_PREFIX/opt/ruby/bin $PATH
 
   ## node
   set -x NODE_PATH $BREW_PREFIX/lib/node_modules $NODE_PATH
-  set -x PATH $BREW_PREFIX/share/npm/bin  $PATH
+  set -x PATH $BREW_PREFIX/share/npm/bin $PATH
 
   set -x PATH $BREW_PREFIX/bin $PATH
   set -x PATH $BREW_PREFIX/sbin $PATH
 
-  set -x PKG_CONFIG_PATH $PKG_CONFIG_PATH (brew --prefix libffi)"/lib/pkgconfig"
+  set -x PKG_CONFIG_PATH $PKG_CONFIG_PATH $BREW_PREFIX/opt/libffi/lib/pkgconfig
 
 end
 
@@ -60,6 +59,9 @@ if command_exists pyenv
     status --is-interactive; and . (pyenv virtualenv-init -|psub)
   end
 end
+
+# prepends .carg folder from rust
+set -x PATH $HOME/.cargo/bin $PATH
 
 # prepends depot_tools from the chromium project
 set -x PATH $DEV/other/depot_tools $PATH
@@ -75,4 +77,4 @@ set -x PATH $HOME/gdrive/code/gd/bin $PATH
 eval (starship init fish)
 
 # fnm
-fnm env --multi --use-on-cd | source
+fnm env --use-on-cd | source

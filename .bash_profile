@@ -197,3 +197,5 @@ _yargs_completions()
 complete -F _yargs_completions gd
 ###-end-gd-completions-###
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

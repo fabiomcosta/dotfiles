@@ -1,4 +1,8 @@
 {
+  "tsserver.enable": false,
+  "tsserver.enableJavascript": false,
+  "javascript.validate.enable": false,
+  "coc.preferences.useQuickfixForLocations": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
     "javascript",
