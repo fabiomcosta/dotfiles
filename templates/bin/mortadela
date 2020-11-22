@@ -21,8 +21,8 @@ SMB_SERVER_URI="//$REMOTE_USER:$REMOTE_PASSWORD@$REMOTE_IP/$REMOTE_VOLUME_NAME"
 SMB_SERVER_NOPWD_URI="//$REMOTE_USER@$REMOTE_IP/$REMOTE_VOLUME_NAME"
 
 ADMIN_EMAIL="$(find_pass personal_email)"
-EMAIL_API_KEY="$(find_pass sparkpost_email_api_key)"
-EMAIL_API_SEND_URI='https://api.sparkpost.com/api/v1/transmissions'
+EMAIL_API_KEY="$(find_pass sendgrid_email_api_key)"
+EMAIL_API_SEND_URI='https://api.sendgrid.com/v3/mail/send'
 
 LOCAL_BACKUP_FOLDER="$1"
 REMOTE_BACKUP_FOLDER="auto_backup/$(hostname)/$USER"
@@ -67,22 +67,21 @@ send_admin_email() {
   local json_encoded_message="$(json_escape "$message")"
   read -r -d '' data <<EOM
 {
-  "recipients": [
-    {"address": {"email": "$ADMIN_EMAIL"}}
+  "personalizations": [
+    {"to": [{"email": "$ADMIN_EMAIL"}]}
   ],
-  "content": {
-    "from": {"name": "$BOT_NAME", "email": "$BOT_EMAIL"},
-    "subject": "$subject",
-    "text": $json_encoded_message
-  }
+  "from": {"email": "$BOT_EMAIL"},
+  "subject": "$subject",
+  "content": [{"type": "text/plain", "value": $json_encoded_message}]
 }
 EOM
-curl \
-  --silent \
-  -X POST \
-  -H "Content-Type: application/json" \
-  -H "Authorization: $EMAIL_API_KEY" \
-  -d "$data" $EMAIL_API_SEND_URI > /dev/null
+  echo "Sending email to $ADMIN_EMAIL $EMAIL_API_KEY $BOT_EMAIL"
+  curl \
+    --url "$EMAIL_API_SEND_URI" \
+    --request POST \
+    --header "Content-Type: application/json" \
+    --header "Authorization: Bearer $EMAIL_API_KEY" \
+    --data "$data"
 }
 
 bail() {
