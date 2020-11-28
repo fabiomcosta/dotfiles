@@ -2,7 +2,7 @@
 font:
   size: 12.0
   normal:
-    family: JetbrainsMono
+    family: 'JetBrains Mono'
     style: Regular
 
 # Colors (Dracula)
