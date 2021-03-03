@@ -39,7 +39,6 @@ brew tap homebrew/cask-fonts
 # essential
 brew cask install \
   alacritty \
-  font-fira-code \
   font-jetbrains-mono \
   karabiner-elements
 
