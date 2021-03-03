@@ -1,0 +1,33 @@
+---
+- name: Setup SBCs
+  hosts: sbc
+  remote_user: root
+  vars:
+    - hostname: "natal"
+    - timezone: "US/Pacific"
+  pre_tasks:
+    - name: Install needed network manager libs
+      ansible.builtin.package:
+        name:
+          - network-manager
+          - python-dbus
+        state: present
+  tasks:
+    - action: ping
+    # - name: Add an Ethernet connection with static IP configuration
+    #   community.general.nmcli:
+    #     conn_name: my-eth0
+    #     ifname: eth0
+    #     type: ethernet
+    #     ip4: 192.168.0.10
+    #     gw4: 192.168.0.1
+    #     state: present
+  roles:
+    - hostname
+    - timezone
+    - role: network
+      network_ether_interfaces:
+      - device: eth0
+        gateway: auto
+        bootproto: static
+        cidr: 192.168.0.10/24
