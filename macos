@@ -38,6 +38,7 @@ brew install \
   tmux \
   mosh \
   rsync \
+  fzf \
   bat \
   prettyping \
   tldr \
