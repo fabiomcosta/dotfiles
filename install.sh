@@ -47,7 +47,7 @@ pushd $HOME &> /dev/null
   create_ln_for ".tmux.conf" "$DIR/.tmux.conf"
   create_ln_for ".config/alacritty/alacritty.yml" "$DIR/alacritty.yml"
   create_ln_for ".config/fish/config.fish" "$DIR/fish/config.fish"
-  create_ln_for ".config/karabiner/karabiner.json" "$DIR/karabiner.json"
+  create_ln_for ".config/karabiner" "$DIR/karabiner"
   create_ln_for ".config/nvim/init.vim" "$DIR/vim/.vimrc"
   create_ln_for ".config/nvim/coc-settings.json" "$DIR/vim/.vim/coc-settings.json"
 popd &> /dev/null
