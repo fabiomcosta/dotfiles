@@ -402,7 +402,7 @@ let g:gutentags_file_list_command={
 \ }
 
 
-Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
+" Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 
 Plug 'liuchengxu/vim-which-key'
@@ -424,9 +424,9 @@ endfunction
 autocmd FileType vimwiki :call s:vimwiki_open()
 
 
-Plug 'alok/notational-fzf-vim'
-let g:nv_search_paths = ['~/gdrive/documents/vimwiki']
-nnoremap <silent> <LEADER>nv :NV<CR>
+" Plug 'alok/notational-fzf-vim'
+" let g:nv_search_paths = ['~/gdrive/documents/vimwiki']
+" nnoremap <silent> <LEADER>nv :NV<CR>
 
 
 Plug 'vim-test/vim-test'
