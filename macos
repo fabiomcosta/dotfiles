@@ -33,7 +33,6 @@ brew tap homebrew/cask-fonts
 
 brew install \
   fish \
-  homebrew/cask/macvim \
   neovim \
   git \
   tmux \
