@@ -19,28 +19,39 @@ command_exists() {
   hash $1 2> /dev/null
 }
 
+xcode-select --install
+
 if ! command_exists brew; then
   echo "Installing brew..."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 echo "brew update... (can take a while)"
 brew update
-brew install macvim git bash-completion tmux mosh bash-git-prompt rsync bat prettyping tldr ripgrep
-brew install neovim --HEAD
-
-# fast node manager
-brew install Schniz/tap/fnm
-# universal ctags
-brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 # so we can install the fira-code font
 brew tap homebrew/cask-fonts
 
-# essential
-brew cask install \
+brew install \
+  fish \
+  homebrew/cask/macvim \
+  neovim \
+  git \
+  tmux \
+  mosh \
+  rsync \
+  bat \
+  prettyping \
+  tldr \
+  ripgrep \
   alacritty \
   font-jetbrains-mono \
-  karabiner-elements
+  karabiner-elements \
+  fnm \
+  alfred \
+  hammerspoon
+
+# universal ctags
+brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 echo "Setting up fish..."
 if ! grep '/usr/local/bin/fish' /etc/shells > /dev/null; then
