@@ -66,15 +66,15 @@ pushd $HOME &> /dev/null
 popd &> /dev/null
 
 # setup backup job
-pushd $HOME &> /dev/null
-  mkdir -p bin
-  create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
-  $DIR/bin/apply_template.js \
-    "Library/LaunchAgents/com.fabs.mortadela.plist" \
-    "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
-  sudo chown root:wheel "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
-  sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
-popd &> /dev/null
+# pushd $HOME &> /dev/null
+#   mkdir -p bin
+#   create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
+#   $DIR/bin/apply_template.js \
+#     "Library/LaunchAgents/com.fabs.mortadela.plist" \
+#     "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
+#   sudo chown root:wheel "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
+#   sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
+# popd &> /dev/null
 
 # WE ARE EXPERIMENTING WITH TIME MACHINE BACKUP
 # LOOK AT `macos` FILE
@@ -82,28 +82,6 @@ popd &> /dev/null
 #   mkdir -p bin
 #   create_ln_for "bin/framboesa" "$DIR/templates/bin/framboesa"
 # popd &> /dev/null
-
-# updating vim's plugins
-if command_exists vim; then
-
-  # install vim-plug
-  if [ ! -d "$HOME/.vim/autoload/plug.vim" ]; then
-    echo "Installing `hl 'vim-plug'`..."
-    curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs \
-      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  else
-    echo "${OK} `hl 'vim-plug'` is already installed."
-  fi
-
-  echo "Installing/Updating `hl "vim's plugins"`..."
-  vim -f +PlugInstall +qall
-  if [ $? -eq 0 ]; then
-    echo "${OK} `hl "vim's plugins"` updated successfuly.";
-  else
-    echo "${ERROR} We had a problem while updating `hl "vim's plugins"`.";
-    exit 1
-  fi
-fi
 
 if command_exists nvim; then
   if [ ! -d "$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then
