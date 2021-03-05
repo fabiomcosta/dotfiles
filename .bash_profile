@@ -81,10 +81,12 @@ tmosh() {
 set -o vi
 
 ## aliases
-export EDITOR=`which vim`
-if command_exists mvim; then
-  alias vim='mvim -v'
-  alias vi='mvim -v'
+if command_exists nvim; then
+  alias vim='nvim'
+  alias vi='nvim'
+  export EDITOR=`which nvim`
+else
+  export EDITOR=`which vim`
 fi
 
 # because sometimes I type 'ack' accidentaly (muscle memory)
@@ -114,7 +116,7 @@ if command_exists brew; then
   BREW_PREFIX=`brew --prefix`
 
   ## ruby
-  prepend_if_exists PATH "$(brew --prefix ruby)/bin"
+  prepend_if_exists PATH "$BREW_PREFIX/opt/ruby/bin"
 
   ## node
   prepend_if_exists NODE_PATH $BREW_PREFIX/lib/node_modules
@@ -123,7 +125,7 @@ if command_exists brew; then
   prepend_if_exists PATH $BREW_PREFIX/bin
   prepend_if_exists PATH $BREW_PREFIX/sbin
 
-  append_if_exists PKG_CONFIG_PATH "$(brew --prefix libffi)/lib/pkgconfig"
+  append_if_exists PKG_CONFIG_PATH "$BREW_PREFIX/opt/libffi/lib/pkgconfig"
 
   if command_exists complete; then
     # bash completion

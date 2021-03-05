@@ -5,10 +5,12 @@ function command_exists
   type -q $cmd
 end
 
-set -x EDITOR (which vim)
-if command_exists mvim
-  alias vim='mvim -v'
-  alias vi='mvim -v'
+if command_exists nvim
+  alias vim='nvim'
+  alias vi='nvim'
+  set -x EDITOR (which nvim)
+else
+  set -x EDITOR (which vim)
 end
 
 if command_exists rg && not command_exists ack
