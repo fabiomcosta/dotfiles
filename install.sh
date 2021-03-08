@@ -72,24 +72,6 @@ pushd $HOME &> /dev/null
   $DIR/bin/apply_template.js ".gitconfig" "$DIR/.gitconfig"
 popd &> /dev/null
 
-# setup backup job
-# pushd $HOME &> /dev/null
-#   mkdir -p bin
-#   create_ln_for "bin/mortadela" "$DIR/templates/bin/mortadela"
-#   $DIR/bin/apply_template.js \
-#     "Library/LaunchAgents/com.fabs.mortadela.plist" \
-#     "$DIR/templates/LaunchAgents/com.fabs.mortadela.plist"
-#   sudo chown root:wheel "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
-#   sudo launchctl load -w "$HOME/Library/LaunchAgents/com.fabs.mortadela.plist"
-# popd &> /dev/null
-
-# WE ARE EXPERIMENTING WITH TIME MACHINE BACKUP
-# LOOK AT `macos` FILE
-# pushd $HOME &> /dev/null
-#   mkdir -p bin
-#   create_ln_for "bin/framboesa" "$DIR/templates/bin/framboesa"
-# popd &> /dev/null
-
 if command_exists nvim; then
   if [ ! -d "$HOME/.local/share/nvim/site/autoload/plug.vim" ]; then
     echo "Installing `hl 'vim-plug'` for neovim..."
