@@ -43,12 +43,14 @@ brew install \
   prettyping \
   tldr \
   ripgrep \
+  fnm \
   alacritty \
   font-jetbrains-mono \
   karabiner-elements \
-  fnm \
   alfred \
-  hammerspoon
+  hammerspoon \
+  google-backup-and-sync \
+  notion
 
 # universal ctags
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
