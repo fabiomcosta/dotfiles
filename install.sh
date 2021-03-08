@@ -35,6 +35,13 @@ command_exists() {
   hash $1 2> /dev/null
 }
 
+if [ ! -d "$(dirname $DIR)/secrets" ]; then
+  echo "Cloning secrets repo..."
+  git clone https://github.com/fabiomcosta/secrets.git "$(dirname $DIR)/secrets"
+else
+  echo "${OK} `hl 'secrets'` already available."
+fi
+
 if [ $MACOS ]; then
   bash -c "$DIR/macos"
 fi
@@ -100,6 +107,16 @@ if command_exists nvim; then
     echo "${ERROR} We had a problem while updating `hl "neovim's plugins"`.";
     exit 1
   fi
+fi
+
+if [ ! -d "$HOME/.keyboard" ]; then
+  echo "Cloning keyboard repo..."
+  git clone https://github.com/fabiomcosta/keyboard.git "$HOME/.keyboard"
+  pushd $HOME/.keyboard &> /dev/null
+    ./script/setup
+  popd &> /dev/null
+else
+  echo "${OK} `hl 'keyboard'` already available."
 fi
 
 echo "Setting rebase to be the default for the master branch on this repo..."
