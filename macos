@@ -46,6 +46,7 @@ brew install \
   fnm \
   alacritty \
   font-jetbrains-mono \
+  font-jetbrains-mono-nerd-font \
   karabiner-elements \
   alfred \
   hammerspoon \

@@ -23,7 +23,7 @@ if has("gui_running")
   set macligatures
 
   try
-    set guifont=JetbrainsMono:h16
+    set guifont="JetBrains Mono:h16"
   catch
   endtry
 endif
@@ -110,6 +110,7 @@ set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*
+set wildignore+=*/custom_modules/*
 set wildignore+=tags
 set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
@@ -209,6 +210,7 @@ Plug 'yuttie/comfortable-motion.vim'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'moll/vim-node'
+Plug 'jparise/vim-graphql'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'jszakmeister/vim-togglecursor'
 " Plug 'w0rp/ale'
@@ -267,69 +269,71 @@ fun! s:AutoSetAccordionValue()
 endfun
 
 
-" function! CocAfterUpdate(info)
-  " CocInstall coc-actions
-  " CocInstall coc-css
-  " CocInstall coc-eslint
-  " CocInstall coc-flow
-  " CocInstall coc-highlight
-  " CocInstall coc-json
-  " CocInstall coc-marketplace
-  " CocInstall coc-prettier
-  " CocInstall coc-tabnine
-  " CocInstall coc-vimlsp
-  " CocInstall coc-yaml
-" endfunction
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if !exists('g:vscode')
+  " function! CocAfterUpdate(info)
+  "   CocInstall coc-actions
+  "   CocInstall coc-css
+  "   CocInstall coc-eslint
+  "   CocInstall coc-flow
+  "   CocInstall coc-highlight
+  "   CocInstall coc-json
+  "   CocInstall coc-marketplace
+  "   CocInstall coc-prettier
+  "   CocInstall coc-tabnine
+  "   CocInstall coc-vimlsp
+  "   CocInstall coc-yaml
+  " endfunction
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
-" You will have bad experience for diagnostic messages when it's default 4000.
-set updatetime=300
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+  " You will have bad experience for diagnostic messages when it's default 4000.
+  set updatetime=300
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+  " Symbol renaming.
+  nmap <leader>rn <Plug>(coc-rename)
 
-" Use K to show documentation in preview window.
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+  " Use K to show documentation in preview window.
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
+  nnoremap <silent> K :call <SID>show_documentation()<CR>
 
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+  " Highlight symbol under cursor on CursorHold
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
+  " Add `:Format` command to format current buffer.
+  command! -nargs=0 Format :call CocAction('format')
 
-nnoremap <LEADER>fc :Format<CR>
+  nnoremap <LEADER>fc :Format<CR>
 
-" coc-actions
-" Remap for do codeAction of selected region
-function! s:cocActionsOpenFromSelected(type) abort
-  execute 'CocCommand actions.open ' . a:type
-endfunction
-xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
+  " coc-actions
+  " Remap for do codeAction of selected region
+  function! s:cocActionsOpenFromSelected(type) abort
+    execute 'CocCommand actions.open ' . a:type
+  endfunction
+  xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
+  nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
-" coc-snippets
-" Use <C-l> for trigger snippet expand.
-imap <C-l> <Plug>(coc-snippets-expand)
-" Use <C-j> for select text for visual placeholder of snippet.
-vmap <C-j> <Plug>(coc-snippets-select)
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-j>'
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-k>'
-" Use <C-j> for both expand and jump (make expand higher priority.)
-imap <C-j> <Plug>(coc-snippets-expand-jump)
+  " coc-snippets
+  " Use <C-l> for trigger snippet expand.
+  imap <C-l> <Plug>(coc-snippets-expand)
+  " Use <C-j> for select text for visual placeholder of snippet.
+  vmap <C-j> <Plug>(coc-snippets-select)
+  " Use <C-j> for jump to next placeholder, it's default of coc.nvim
+  let g:coc_snippet_next = '<c-j>'
+  " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+  let g:coc_snippet_prev = '<c-k>'
+  " Use <C-j> for both expand and jump (make expand higher priority.)
+  imap <C-j> <Plug>(coc-snippets-expand-jump)
+endif
 
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
@@ -383,9 +387,9 @@ endfunction
 
 " Adds Rg command to search on file content, with a nice preview window to the right.
 " command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
-command! -bang -nargs=* Rg  call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 'options': '--ansi --color --exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
+command! -bang -nargs=* Rg  call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 'options': '-m --ansi --color --exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
 " Adds Rg command to search on file paths, with a nice preview window to the right
-command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'options': '--ansi --color'}, 'right:50%')))
+command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'options': '-m --ansi --color'}, 'right:50%')))
 
 nmap <LEADER>p :Rgf<CR>
 nmap <LEADER>c :Rg<CR>
@@ -402,26 +406,35 @@ let g:gutentags_file_list_command={
 \ }
 
 
-" Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
-
-
 Plug 'liuchengxu/vim-which-key'
 let g:mapleader = ','
 nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 
-Plug 'vimwiki/vimwiki'
-let g:vimwiki_list = [{
-  \ 'path': '~/gdrive/documents/vimwiki',
-  \ 'syntax': 'markdown',
-  \ 'ext': '.md' }]
-let g:vimwiki_global_ext = 0
+if has("nvim")
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+lua <<EOF
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.typescript.used_by = "javascript"
+EOF
+endif
 
-function! s:vimwiki_open()
-  set filetype=markdown
-  setlocal spell
-endfunction
-autocmd FileType vimwiki :call s:vimwiki_open()
+
+" Plug 'vimwiki/vimwiki'
+" let g:vimwiki_list = [{
+"   \ 'path': '~/gdrive/documents/vimwiki',
+"   \ 'syntax': 'markdown',
+"   \ 'ext': '.md' }]
+" let g:vimwiki_global_ext = 0
+"
+" function! s:vimwiki_open()
+"   set filetype=markdown
+"   setlocal spell
+" endfunction
+" autocmd FileType vimwiki :call s:vimwiki_open()
+
+
+" Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
 
 
 " Plug 'alok/notational-fzf-vim'
@@ -429,17 +442,17 @@ autocmd FileType vimwiki :call s:vimwiki_open()
 " nnoremap <silent> <LEADER>nv :NV<CR>
 
 
-Plug 'vim-test/vim-test'
-nmap <silent> t<C-n> :TestNearest<CR>
-nmap <silent> t<C-f> :TestFile<CR>
-nmap <silent> t<C-s> :TestSuite<CR>
-nmap <silent> t<C-l> :TestLast<CR>
-nmap <silent> t<C-g> :TestVisit<CR>
-let g:test#preserve_screen = 1
-let g:test#neovim#term_position = "topleft"
-let g:test#neovim#term_position = "vert"
-let g:test#neovim#term_position = "vert botright 30"
-let g:test#strategy = 'dispatch'
+" Plug 'vim-test/vim-test'
+" nmap <silent> t<C-n> :TestNearest<CR>
+" nmap <silent> t<C-f> :TestFile<CR>
+" nmap <silent> t<C-s> :TestSuite<CR>
+" nmap <silent> t<C-l> :TestLast<CR>
+" nmap <silent> t<C-g> :TestVisit<CR>
+" let g:test#preserve_screen = 1
+" let g:test#neovim#term_position = "topleft"
+" let g:test#neovim#term_position = "vert"
+" let g:test#neovim#term_position = "vert botright 30"
+" let g:test#strategy = 'dispatch'
 
 
 call plug#end()
