@@ -151,8 +151,8 @@ nnoremap k gk
 
 " moves cursor faster
 nnoremap <DOWN> 12j
-nnoremap <UP> 12k
 vnoremap <DOWN> 12j
+nnoremap <UP> 12k
 vnoremap <UP> 12k
 
 " moves the cursor around the buffer windows
@@ -162,8 +162,9 @@ nnoremap <RIGHT> <C-w>l
 inoremap jj <ESC>
 nnoremap ; :
 
-" makes paste work on command-line mode
+" makes paste work on command-line and search modes
 cnoremap <C-v> <C-r>"
+snoremap <C-v> <C-r>"
 
 nnoremap <LEADER>ev :e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
@@ -265,7 +266,7 @@ nnoremap <LEADER>a4 :Accordion 4<CR>
 autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 
 fun! s:AutoSetAccordionValue()
-  execute ":AccordionAll " . string(floor(&columns/121))
+  execute ":AccordionAll " . string(floor(&columns/101))
 endfun
 
 
@@ -288,7 +289,6 @@ if !exists('g:vscode')
 
   " You will have bad experience for diagnostic messages when it's default 4000.
   set updatetime=300
-  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
   nmap <silent> gd <Plug>(coc-definition)
   nmap <silent> gy <Plug>(coc-type-definition)
   nmap <silent> gi <Plug>(coc-implementation)
@@ -339,59 +339,7 @@ endif
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
 Plug 'junegunn/fzf.vim'
 
-let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'border': 'sharp' } }
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
-
-
-function! s:open(cmd, target)
-  if stridx('edit', a:cmd) == 0 && fnamemodify(a:target, ':p') ==# expand('%:p')
-    return
-  endif
-  execute a:cmd fnameescape(a:target)
-endfunction
-
-function! s:fzf_rg_to_qf(line)
-  let parts = split(a:line, '[^:]\zs:\ze[^:]')
-  let dict = {}
-  let dict.filename = &acd ? fnamemodify(parts[0], ':p') : parts[0]
-  let dict.text = join(parts[3:], ':')
-  let dict.lnum = parts[1]
-  let dict.col = parts[2]
-  return dict
-endfunction
-
-function! s:fzf_rg_handler(lines)
-  let list = map(filter(a:lines, 'len(v:val)'), 's:fzf_rg_to_qf(v:val)')
-  if empty(list)
-    return
-  endif
-  let first = list[0]
-  call s:open('e', first.filename)
-  execute 'normal! '.first.lnum.'G'
-  execute 'normal! '.first.col.'|'
-  normal! zz
-endfunction
-
-" Adds Rg command to search on file content, with a nice preview window to the right.
-" command! -bang -nargs=* Rgc call fzf#vim#grep('rg --column --line-number --no-heading --color=never --smart-case '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--exact --delimiter : --nth 4..'}, 'right:50%'), <bang>0)
-command! -bang -nargs=* Rg  call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 'options': '-m --ansi --color --exact --delimiter : --nth 4..', 'sink*': function('s:fzf_rg_handler') }, 'right:50%')))
-" Adds Rg command to search on file paths, with a nice preview window to the right
-command! -bang -nargs=* Rgf call fzf#run(fzf#wrap(fzf#vim#with_preview({'source': 'rg --column --line-number --no-heading --color=always --smart-case -l .', 'options': '-m --ansi --color'}, 'right:50%')))
-
-nmap <LEADER>p :Rgf<CR>
+nmap <LEADER>p :Files<CR>
 nmap <LEADER>c :Rg<CR>
 
 
@@ -413,25 +361,7 @@ nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 if has("nvim")
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-lua <<EOF
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.typescript.used_by = "javascript"
-EOF
 endif
-
-
-" Plug 'vimwiki/vimwiki'
-" let g:vimwiki_list = [{
-"   \ 'path': '~/gdrive/documents/vimwiki',
-"   \ 'syntax': 'markdown',
-"   \ 'ext': '.md' }]
-" let g:vimwiki_global_ext = 0
-"
-" function! s:vimwiki_open()
-"   set filetype=markdown
-"   setlocal spell
-" endfunction
-" autocmd FileType vimwiki :call s:vimwiki_open()
 
 
 " Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
@@ -473,7 +403,24 @@ call plug#end()
 " \ 'javascript': ['eslint'],
 " \}
 
-"
+
+if has("nvim")
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { "typescript", "tsx" },
+  highlight = {
+    enable = true -- false will disable the whole extension
+  },
+  indent = {
+    enable = false
+  }
+}
+local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+parser_config.tsx.used_by = "javascript"
+EOF
+endif
+
+
 colorscheme dracula
 " colorscheme dracula_pro
 " colorscheme gruvbox
@@ -564,11 +511,48 @@ fun! NaiveIndentationDetector()
   echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
 endfun
 
-
 nnoremap <LEADER>fi :retab<CR>
 nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
 nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
+
+
+fun! CodeHubGetLineRange(mode)
+  if a:mode == 'n'
+    return line('.')
+  endif
+  let start_line = line("'<")
+  let end_line = line("'>")
+  if end_line == 0
+    return start_line
+  endif
+  return start_line . '-' . end_line
+endfun
+
+fun! CodeHubGetURL(mode)
+  let BASE_URL = 'https://www.internalfb.com/code/'
+  " TODO: maybe we can ge this from the remote URL?
+  let repo = 'whatsapp-wajs'
+  let git_path_prefix = trim(system('git rev-parse --show-prefix'))
+  let line_range = CodeHubGetLineRange(a:mode)
+  " echo line_range
+  " echo 'mode ' . mode()
+  let local_path = resolve(expand("%"))
+  let url = BASE_URL . repo . '/' . git_path_prefix . local_path . '?lines=' . line_range
+  echo 'copied ' . url
+  return url
+endfun
+
+fun! CodeHubOpenFile(mode)
+  let url = CodeHubGetURL(a:mode)
+  execute "silent !open '" . url . "'"
+  echo "opening " . url
+endfun
+
+nnoremap <LEADER>chg :call CodeHubOpenFile('n')<CR>
+vnoremap <LEADER>chg :<C-U>call CodeHubOpenFile('v')<CR>
+nnoremap <LEADER>chc :let @+=CodeHubGetURL('n')<CR>
+vnoremap <LEADER>chc :<C-U>let @+=CodeHubGetURL('v')<CR>
 
 
 "whitespace in the end of the lines stuff
