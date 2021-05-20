@@ -1,0 +1,5 @@
+--glob=!.git/*
+--glob=!custom_modules/*
+--glob=!submodules/*
+--hidden
+--follow
