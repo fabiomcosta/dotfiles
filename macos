@@ -20,6 +20,7 @@ command_exists() {
 }
 
 xcode-select --install
+softwareupdate --all --install --force
 
 if ! command_exists brew; then
   echo "Installing brew..."
@@ -28,15 +29,11 @@ fi
 
 echo "brew update... (can take a while)"
 brew update
-# so we can install the fira-code font
-brew tap homebrew/cask-fonts
 
 brew install \
   fish \
-  neovim \
   git \
   tmux \
-  mosh \
   rsync \
   fzf \
   bat \
@@ -51,10 +48,11 @@ brew install \
   alfred \
   hammerspoon \
   google-backup-and-sync \
-  notion
+  notion \
+  mistertea/et/et
 
 # universal ctags
-brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+brew install --HEAD neovim universal-ctags/universal-ctags/universal-ctags
 
 echo "Setting up fish..."
 if ! grep '/usr/local/bin/fish' /etc/shells > /dev/null; then
