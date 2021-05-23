@@ -13,7 +13,7 @@ import { dir, home, DIR, HOME } from './src/path.mjs';
 const IS_MACOS = os.platform() === 'darwin';
 
 // THIS SHOULD BE FOR MY OWN MACHINE ONLY
-// OR MAYBE APPLY DIFFENT TEMPLATES FOR EACH MACHINE
+// OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
 await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 
 const SECRETS_DIR = dir('..', 'secrets');

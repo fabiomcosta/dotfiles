@@ -214,10 +214,10 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'yuttie/comfortable-motion.vim'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'moll/vim-node'
 Plug 'jparise/vim-graphql'
+Plug 'christoomey/vim-tmux-navigator'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'jszakmeister/vim-togglecursor'
 " Plug 'w0rp/ale'
