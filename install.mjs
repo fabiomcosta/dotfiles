@@ -3,19 +3,14 @@
 import { $, cd } from 'zx';
 import os from 'os';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import fs from 'fs/promises';
 import { applyTemplate } from './src/apply_template.mjs';
-import { isDirectory, createSymlinkFor } from './src/fs_utils.mjs';
+import { isDirectory, createSymlinkFor } from './src/fs.mjs';
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
 import { commandExists } from './src/shell.mjs';
+import { dir, home, DIR, HOME } from './src/path.mjs';
 
-const DIR = path.dirname(fileURLToPath(import.meta.url));
-const HOME = os.homedir();
 const IS_MACOS = os.platform() === 'darwin';
-
-const dir = (...args) => path.join(DIR, ...args);
-const home = (...args) => path.join(HOME, ...args);
 
 // THIS SHOULD BE FOR MY OWN MACHINE ONLY
 // OR MAYBE APPLY DIFFENT TEMPLATES FOR EACH MACHINE
@@ -30,8 +25,7 @@ if (!(await isDirectory(SECRETS_DIR))) {
 }
 
 if (IS_MACOS) {
-  // TODO that file can also become JS
-  await $`bash -c ${dir('macos')}`;
+  await import('./macos.mjs');
 }
 
 createSymlinkFor(`${HOME}/.vim`, `${DIR}/vim/.vim`);

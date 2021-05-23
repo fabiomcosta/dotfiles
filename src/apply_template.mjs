@@ -2,7 +2,7 @@ import * as fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
 import template from 'lodash.template';
-import { exists } from './fs_utils.mjs';
+import { exists } from './fs.mjs';
 import { WARN, hl } from './log.mjs';
 
 export async function applyTemplate(origPath, destPath) {

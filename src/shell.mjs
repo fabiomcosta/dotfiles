@@ -14,3 +14,22 @@ export async function commandExists(commandName) {
     $.verbose = true;
   }
 }
+
+export async function $swallow(...args) {
+  try {
+    return await $(...args);
+  } catch (error) {
+    if (error.exitCode == null) {
+      throw error;
+    }
+  }
+}
+
+export async function $silent(...args) {
+  try {
+    $.verbose = false;
+    return await $(...args);
+  } finally {
+    $.verbose = true;
+  }
+}
