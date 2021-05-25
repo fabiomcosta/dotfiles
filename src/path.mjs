@@ -3,7 +3,10 @@ import os from 'os';
 import { fileURLToPath } from 'url';
 
 export const DIR = path.resolve(
-  path.dirname('..', fileURLToPath(import.meta.url))
+  fileURLToPath(import.meta.url),
+  '..',
+  '..',
+  'home'
 );
 export const HOME = os.homedir();
 

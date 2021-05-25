@@ -1,25 +1,47 @@
-import * as fs from 'fs/promises';
+import { question } from 'zx';
+import path from 'path';
 import { constants } from 'fs';
+import * as fs from 'fs/promises';
 import { OK, WARN, ERROR, hl } from './log.mjs';
 
-export async function exists(_path) {
+async function prompt(_question) {
+  const answer = await question(`${_question} [yN] `);
+  return ((answer || 'n').toLowerCase() !== 'n');
+}
+
+// If the path is a file, check if it exists.
+// If the path is a link, check if the linked path exists.
+export async function pathExists(_path) {
   try {
     await fs.access(_path);
     return true;
-  } catch (e) {
+  } catch (error) {
     return false;
   }
 }
 
+// If the path is a file, directory or link.
+export async function lpathExists(_path) {
+  try {
+    await fs.lstat(_path);
+    return true;
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      return false;
+    }
+    throw error;
+  }
+}
+
 export async function statOrNull(_path) {
-  if (!(await exists(_path))) {
+  if (!(await pathExists(_path))) {
     return null;
   }
   return await fs.stat(_path);
 }
 
 export async function lstatOrNull(_path) {
-  if (!(await exists(_path))) {
+  if (!(await lpathExists(_path))) {
     return null;
   }
   return await fs.lstat(_path);
@@ -31,9 +53,20 @@ export async function isDirectory(_path) {
 }
 
 export async function createSymlinkFor(origPath, destPath) {
-  const stat = await lstatOrNull(origPath);
+  let stat = await lstatOrNull(origPath);
   if (stat?.isSymbolicLink()) {
-    return OK`Symlink for ${hl(origPath)} was already created.`;
+    const origLinkPath = await fs.readlink(origPath);
+    if (origLinkPath === destPath) {
+      return OK`Symlink for ${hl(origPath)} was already created.`;
+    }
+    const answer = await prompt(`Symlink points to ${origLinkPath}, do you want it to point to ${destPath} instead?`);
+    if (!answer) {
+      return ERROR`${hl(
+        origPath
+      )} is a symlink that links to ${hl(origLinkPath)} but should link to ${hl(destPath)}`;
+    }
+    await fs.unlink(origPath);
+    stat = null;
   }
   if (stat?.isFile()) {
     return WARN`There is already a ${hl(
@@ -46,7 +79,7 @@ export async function createSymlinkFor(origPath, destPath) {
     )} directory inside your home directory.`;
   }
   if (stat != null) {
-    return ERROR` ${hl(
+    return ERROR`${hl(
       origPath
     )} isn't a symlink, folder or file. Do something!`;
   }

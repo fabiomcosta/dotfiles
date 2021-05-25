@@ -16,6 +16,7 @@ const IS_MACOS = os.platform() === 'darwin';
 // OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
 await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 
+// TODO make 'secrets' a git submodule?
 const SECRETS_DIR = dir('..', 'secrets');
 if (!(await isDirectory(SECRETS_DIR))) {
   console.log('Cloning secrets repo...');
@@ -28,23 +29,26 @@ if (IS_MACOS) {
   await import('./macos.mjs');
 }
 
-createSymlinkFor(`${HOME}/.vim`, `${DIR}/vim/.vim`);
-createSymlinkFor(`${HOME}/.vimrc`, `${DIR}/vim/.vimrc`);
-createSymlinkFor(`${HOME}/.bash_profile`, `${DIR}/.bash_profile`);
-createSymlinkFor(`${HOME}/.ackrc`, `${DIR}/.ackrc`);
-createSymlinkFor(`${HOME}/.ripgreprc`, `${DIR}/.ripgreprc`);
-createSymlinkFor(`${HOME}/.tmux.conf`, `${DIR}/.tmux.conf`);
-createSymlinkFor(
-  `${HOME}/.config/alacritty/alacritty.yml`,
-  `${DIR}/alacritty.yml`
+await createSymlinkFor(`${HOME}/.vim`, `${DIR}/.vim`);
+await createSymlinkFor(`${HOME}/.vimrc`, `${DIR}/.vimrc`);
+await createSymlinkFor(`${HOME}/.bash_profile`, `${DIR}/.bash_profile`);
+await createSymlinkFor(`${HOME}/.ackrc`, `${DIR}/.ackrc`);
+await createSymlinkFor(`${HOME}/.ripgreprc`, `${DIR}/.ripgreprc`);
+await createSymlinkFor(`${HOME}/.tmux.conf`, `${DIR}/.tmux.conf`);
+await createSymlinkFor(
+`${HOME}/.config/alacritty/alacritty.yml`,
+`${DIR}/.config/alacritty/alacritty.yml`
 );
-createSymlinkFor(`${HOME}/.config/fish/config.fish`, `${DIR}/fish/config.fish`);
-createSymlinkFor(`${HOME}/.config/karabiner`, `${DIR}/karabiner`);
-createSymlinkFor(`${HOME}/.config/nvim/init.vim`, `${DIR}/vim/.vimrc`);
-createSymlinkFor(
-  `${HOME}/.config/nvim/coc-settings.json`,
-  `${DIR}/vim/.vim/coc-settings.json`
+await createSymlinkFor(
+`${HOME}/.config/fish/config.fish`,
+`${DIR}/.config/fish/config.fish`
 );
+await createSymlinkFor(`${HOME}/.config/karabiner`, `${DIR}/.config/karabiner`);
+await createSymlinkFor(
+`${HOME}/.config/nvim/coc-settings.json`,
+`${DIR}/.config/nvim/coc-settings.json`
+);
+await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, `${DIR}/.vimrc`);
 
 const keyboardPath = home('.keyboard');
 if (await isDirectory(keyboardPath)) {

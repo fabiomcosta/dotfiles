@@ -4,8 +4,8 @@
 *.swo
 *.pyc
 .netrwhist
-vim/.vim/bundle/
-vim/.vim/plugged/
-vim/.vim/autoload/
 node_modules/
-karabiner/automatic_backups/
+home/.config/karabiner/automatic_backups/
+home/.vim/bundle/
+home/.vim/plugged/
+home/.vim/autoload/
