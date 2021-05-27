@@ -5,7 +5,12 @@ import os from 'os';
 import path from 'path';
 import fs from 'fs/promises';
 import { applyTemplate } from './src/apply_template.mjs';
-import { isDirectory, createSymlinkFor, createHomeSymlink } from './src/fs.mjs';
+import {
+  isDirectory,
+  isSymlink,
+  createSymlinkFor,
+  createHomeSymlink,
+} from './src/fs.mjs';
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
 import { commandExists } from './src/shell.mjs';
 import { dir, home, DIR, HOME } from './src/path.mjs';
@@ -31,18 +36,17 @@ await createHomeSymlink('.config/alacritty/alacritty.yml');
 await createHomeSymlink('.config/fish/config.fish');
 await createHomeSymlink('.config/karabiner');
 await createHomeSymlink('.config/nvim/coc-settings.json');
-await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, `${DIR}/.vimrc`);
+await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, dir('.vimrc'));
 
-// These configure some keyboard related things, and it does't make sense to
-// install it on any remote machines.
-if (!IS_REMOTE_SSH) {
-  const keyboardPath = home('.keyboard');
-  if (await isDirectory(keyboardPath)) {
-    OK`${hl('keyboard')} already available.`;
+// These configure macos keyboard related things, and it does't make sense to
+// install it on remote machines.
+if (IS_MACOS && !IS_REMOTE_SSH) {
+  const keyboardHomePath = home('.keyboard');
+  if (await isSymlink(keyboardHomePath)) {
+    OK`${hl('keyboard')} already installed.`;
   } else {
-    console.log('Cloning keyboard repo...');
-    await $`git clone https://github.com/fabiomcosta/keyboard.git ${keyboardPath}`;
-    cd(keyboardPath);
+    await createHomeSymlink('.keyboard');
+    cd(keyboardHomePath);
     await $`./script/setup`;
     cd(DIR);
   }

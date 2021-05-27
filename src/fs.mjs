@@ -53,6 +53,11 @@ export async function isDirectory(_path) {
   return Boolean(stat?.isDirectory());
 }
 
+export async function isSymlink(_path) {
+  const stat = await lstatOrNull(_path);
+  return Boolean(stat?.isSymbolicLink());
+}
+
 export async function createSymlinkFor(origPath, destPath) {
   let stat = await lstatOrNull(origPath);
   if (stat?.isSymbolicLink()) {

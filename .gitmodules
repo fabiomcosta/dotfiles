@@ -1,3 +1,6 @@
 [submodule "secrets"]
 	path = secrets
 	url = https://github.com/fabiomcosta/secrets.git
+[submodule "home/.keyboard"]
+	path = home/.keyboard
+	url = https://github.com/fabiomcosta/keyboard.git
