@@ -17,7 +17,7 @@ const IS_MACOS = os.platform() === 'darwin';
 await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 
 // TODO make 'secrets' a git submodule?
-const SECRETS_DIR = dir('..', 'secrets');
+const SECRETS_DIR = dir('..', '..', 'secrets');
 if (!(await isDirectory(SECRETS_DIR))) {
   console.log('Cloning secrets repo...');
   await $`git clone https://github.com/fabiomcosta/secrets.git ${SECRETS_DIR}`;
