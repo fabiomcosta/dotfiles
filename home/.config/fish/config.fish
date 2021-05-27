@@ -63,7 +63,7 @@ end
 set -x RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 
 # fzf
-set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob=!.git/*"
+set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob='!.git/*'"
 
 # prepends .carg folder from rust
 set -x PATH $HOME/.cargo/bin $PATH

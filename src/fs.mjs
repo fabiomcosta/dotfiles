@@ -3,10 +3,11 @@ import path from 'path';
 import { constants } from 'fs';
 import * as fs from 'fs/promises';
 import { OK, WARN, ERROR, hl } from './log.mjs';
+import { dir, home, DIR, HOME } from './src/path.mjs';
 
 async function prompt(_question) {
   const answer = await question(`${_question} [yN] `);
-  return ((answer || 'n').toLowerCase() !== 'n');
+  return (answer || 'n').toLowerCase() !== 'n';
 }
 
 // If the path is a file, check if it exists.
@@ -59,11 +60,13 @@ export async function createSymlinkFor(origPath, destPath) {
     if (origLinkPath === destPath) {
       return OK`Symlink for ${hl(origPath)} was already created.`;
     }
-    const answer = await prompt(`Symlink ${origPath} points to ${origLinkPath}, do you want it to point to ${destPath} instead?`);
+    const answer = await prompt(
+      `Symlink ${origPath} points to ${origLinkPath}, do you want it to point to ${destPath} instead?`
+    );
     if (!answer) {
-      return ERROR`${hl(
-        origPath
-      )} is a symlink that links to ${hl(origLinkPath)} but should link to ${hl(destPath)}`;
+      return ERROR`${hl(origPath)} is a symlink that links to ${hl(
+        origLinkPath
+      )} but should link to ${hl(destPath)}`;
     }
     await fs.unlink(origPath);
     stat = null;
@@ -86,4 +89,8 @@ export async function createSymlinkFor(origPath, destPath) {
   await fs.mkdir(path.dirname(origPath), { recursive: true });
   await fs.symlink(destPath, origPath);
   OK`Symlink for ${hl(origPath)} created.`;
+}
+
+export async function createHomeSymlink(_path) {
+  await createSymlinkFor(home(_path), dir(_path));
 }
