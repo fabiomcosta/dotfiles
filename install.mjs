@@ -24,6 +24,20 @@ await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 
 if (IS_MACOS) {
   await import('./macos.mjs');
+
+  // These configure macos keyboard related things, and it does't make sense to
+  // install it on remote machines.
+  if (!IS_REMOTE_SSH) {
+    const keyboardHomePath = home('.keyboard');
+    if (await isSymlink(keyboardHomePath)) {
+      OK`${hl('keyboard')} already installed.`;
+    } else {
+      await createHomeSymlink('.keyboard');
+      cd(keyboardHomePath);
+      await $`./script/setup`;
+      cd(DIR);
+    }
+  }
 }
 
 await createHomeSymlink('.vim');
@@ -37,20 +51,6 @@ await createHomeSymlink('.config/fish/config.fish');
 await createHomeSymlink('.config/karabiner');
 await createHomeSymlink('.config/nvim/coc-settings.json');
 await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, dir('.vimrc'));
-
-// These configure macos keyboard related things, and it does't make sense to
-// install it on remote machines.
-if (IS_MACOS && !IS_REMOTE_SSH) {
-  const keyboardHomePath = home('.keyboard');
-  if (await isSymlink(keyboardHomePath)) {
-    OK`${hl('keyboard')} already installed.`;
-  } else {
-    await createHomeSymlink('.keyboard');
-    cd(keyboardHomePath);
-    await $`./script/setup`;
-    cd(DIR);
-  }
-}
 
 console.log(
   'Setting rebase to be the default for the master branch on this repo...'
