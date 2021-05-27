@@ -11,6 +11,7 @@ import { commandExists } from './src/shell.mjs';
 import { dir, home, DIR, HOME } from './src/path.mjs';
 
 const IS_MACOS = os.platform() === 'darwin';
+const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
 
 // THIS SHOULD BE FOR MY OWN MACHINE ONLY
 // OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
@@ -41,15 +42,19 @@ await createHomeSymlink('.config/karabiner');
 await createHomeSymlink('.config/nvim/coc-settings.json');
 await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, `${DIR}/.vimrc`);
 
-const keyboardPath = home('.keyboard');
-if (await isDirectory(keyboardPath)) {
-  OK`${hl('keyboard')} already available.`;
-} else {
-  console.log('Cloning keyboard repo...');
-  await $`git clone https://github.com/fabiomcosta/keyboard.git ${keyboardPath}`;
-  cd(keyboardPath);
-  await $`./script/setup`;
-  cd(DIR);
+// These configure some keyboard related things, and it does't make sense to
+// install it on any remote machines.
+if (!IS_REMOTE_SSH) {
+  const keyboardPath = home('.keyboard');
+  if (await isDirectory(keyboardPath)) {
+    OK`${hl('keyboard')} already available.`;
+  } else {
+    console.log('Cloning keyboard repo...');
+    await $`git clone https://github.com/fabiomcosta/keyboard.git ${keyboardPath}`;
+    cd(keyboardPath);
+    await $`./script/setup`;
+    cd(DIR);
+  }
 }
 
 console.log(
