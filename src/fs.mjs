@@ -59,7 +59,7 @@ export async function createSymlinkFor(origPath, destPath) {
     if (origLinkPath === destPath) {
       return OK`Symlink for ${hl(origPath)} was already created.`;
     }
-    const answer = await prompt(`Symlink points to ${origLinkPath}, do you want it to point to ${destPath} instead?`);
+    const answer = await prompt(`Symlink ${origPath} points to ${origLinkPath}, do you want it to point to ${destPath} instead?`);
     if (!answer) {
       return ERROR`${hl(
         origPath

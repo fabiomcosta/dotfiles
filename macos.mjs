@@ -6,7 +6,9 @@ import { OK } from './src/log.mjs';
 console.log('Executing the OSX specific setup...');
 
 await $swallow`xcode-select --install`;
-await $`softwareupdate --all --install --force`;
+// This install even macos updates...
+// I think I'll just avoid it...
+// await $`softwareupdate --all --install --force`;
 
 if (!(await commandExists('brew'))) {
   console.log('Installing brew...');
