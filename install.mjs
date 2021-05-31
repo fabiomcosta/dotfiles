@@ -21,8 +21,6 @@ const IS_WORK_MACHINE = await $`hostname`.trim().endsWith('facebook.com');
 
 console.log({ IS_WORK_MACHINE });
 
-// THIS SHOULD BE FOR MY OWN MACHINE ONLY
-// OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
 if (IS_WORK_MACHINE) {
   await applyTemplate(
     secrets('facebook-devserver/.gitconfig'),
@@ -36,8 +34,6 @@ if (IS_MACOS) {
   await import('./macos.mjs');
 }
 
-// These configure macos keyboard related things, and it does't make sense to
-// install it on remote machines.
 if (IS_MACOS && !IS_REMOTE_SSH) {
   const keyboardHomePath = home('.keyboard');
   if (await isSymlink(keyboardHomePath)) {
@@ -48,17 +44,17 @@ if (IS_MACOS && !IS_REMOTE_SSH) {
     await $`./script/setup`;
     cd(DIR);
   }
+
+  await createHomeSymlink('.config/karabiner');
+  await createHomeSymlink('.config/alacritty/alacritty.yml');
 }
 
 await createHomeSymlink('.vim');
 await createHomeSymlink('.vimrc');
 await createHomeSymlink('.bash_profile');
-await createHomeSymlink('.ackrc');
 await createHomeSymlink('.ripgreprc');
 await createHomeSymlink('.tmux.conf');
-await createHomeSymlink('.config/alacritty/alacritty.yml');
 await createHomeSymlink('.config/fish/config.fish');
-await createHomeSymlink('.config/karabiner');
 await createHomeSymlink('.config/nvim/coc-settings.json');
 await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 
