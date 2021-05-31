@@ -217,7 +217,6 @@ Plug 'moll/vim-node'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-" Plug 'jszakmeister/vim-togglecursor'
 " Plug 'w0rp/ale'
 " Plug 'junegunn/vim-emoji'
 
