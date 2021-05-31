@@ -12,12 +12,12 @@ import {
   createHomeSymlink,
 } from './src/fs.mjs';
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
-import { commandExists } from './src/shell.mjs';
+import { commandExists, $silent } from './src/shell.mjs';
 import { dir, home, secrets, DIR } from './src/path.mjs';
 
 const IS_MACOS = os.platform() === 'darwin';
 const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
-const IS_WORK_MACHINE = (await $`hostname`).stdout
+const IS_WORK_MACHINE = (await $silent`hostname`).stdout
   .trim()
   .endsWith('facebook.com');
 
