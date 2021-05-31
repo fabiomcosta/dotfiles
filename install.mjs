@@ -17,7 +17,7 @@ import { dir, home, secrets, DIR } from './src/path.mjs';
 
 const IS_MACOS = os.platform() === 'darwin';
 const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
-const IS_WORK_MACHINE = await $`hostname`.output
+const IS_WORK_MACHINE = (await $`hostname`).stdout
   .trim()
   .endsWith('facebook.com');
 
