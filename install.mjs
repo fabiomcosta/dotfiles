@@ -13,7 +13,7 @@ import {
 } from './src/fs.mjs';
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
 import { commandExists } from './src/shell.mjs';
-import { dir, home, DIR } from './src/path.mjs';
+import { dir, home, secrets, DIR } from './src/path.mjs';
 
 const IS_MACOS = os.platform() === 'darwin';
 const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
@@ -23,7 +23,14 @@ console.log({ IS_WORK_MACHINE });
 
 // THIS SHOULD BE FOR MY OWN MACHINE ONLY
 // OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
-await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
+if (IS_WORK_MACHINE) {
+  await applyTemplate(
+    secrets('facebook-devserver/.gitconfig'),
+    home('.gitconfig')
+  );
+} else {
+  await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
+}
 
 if (IS_MACOS) {
   await import('./macos.mjs');
