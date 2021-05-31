@@ -21,8 +21,6 @@ const IS_WORK_MACHINE = (await $`hostname`).stdout
   .trim()
   .endsWith('facebook.com');
 
-console.log({ IS_WORK_MACHINE });
-
 if (IS_WORK_MACHINE) {
   await applyTemplate(
     secrets('facebook-devserver/.gitconfig'),
