@@ -204,7 +204,6 @@ else
   call plug#begin(expand('~/.vim/plugged'))
 endif
 
-Plug 'Lokaltog/vim-easymotion'
 Plug 'godlygeek/tabular'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
@@ -213,7 +212,6 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
 Plug 'jeffkreeftmeijer/vim-numbertoggle'
-Plug 'yuttie/comfortable-motion.vim'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'moll/vim-node'
 Plug 'jparise/vim-graphql'
@@ -339,14 +337,13 @@ if !exists('g:vscode')
   let g:coc_snippet_prev = '<c-k>'
   " Use <C-j> for both expand and jump (make expand higher priority.)
   imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'
+
+  nmap <LEADER>p :Files<CR>
+  nmap <LEADER>c :Rg<CR>
 endif
-
-
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-Plug 'junegunn/fzf.vim'
-
-nmap <LEADER>p :Files<CR>
-nmap <LEADER>c :Rg<CR>
 
 
 Plug 'ludovicchabant/vim-gutentags'
@@ -368,27 +365,6 @@ nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 if has("nvim")
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 endif
-
-
-" Plug 'kristijanhusak/vim-js-file-import', {'do': 'npm install'}
-
-
-" Plug 'alok/notational-fzf-vim'
-" let g:nv_search_paths = ['~/gdrive/documents/vimwiki']
-" nnoremap <silent> <LEADER>nv :NV<CR>
-
-
-" Plug 'vim-test/vim-test'
-" nmap <silent> t<C-n> :TestNearest<CR>
-" nmap <silent> t<C-f> :TestFile<CR>
-" nmap <silent> t<C-s> :TestSuite<CR>
-" nmap <silent> t<C-l> :TestLast<CR>
-" nmap <silent> t<C-g> :TestVisit<CR>
-" let g:test#preserve_screen = 1
-" let g:test#neovim#term_position = "topleft"
-" let g:test#neovim#term_position = "vert"
-" let g:test#neovim#term_position = "vert botright 30"
-" let g:test#strategy = 'dispatch'
 
 
 call plug#end()
