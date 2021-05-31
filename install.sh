@@ -14,6 +14,5 @@ fi
 
 pushd $DIR &> /dev/null
   npm install .
+  ./install.mjs
 popd &> /dev/null
-
-./install.mjs
