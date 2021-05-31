@@ -1,4 +1,4 @@
-import { $ } from 'zx';
+import { $, nothrow } from 'zx';
 
 export async function commandExists(commandName) {
   try {
@@ -16,13 +16,7 @@ export async function commandExists(commandName) {
 }
 
 export async function $swallow(...args) {
-  try {
-    return await $(...args);
-  } catch (error) {
-    if (error.exitCode == null) {
-      throw error;
-    }
-  }
+  return await nothrow($(...args));
 }
 
 export async function $silent(...args) {
