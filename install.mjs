@@ -30,6 +30,10 @@ if (IS_WORK_MACHINE) {
   await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 }
 
+if (IS_WORK_MACHINE) {
+  await createSymlinkFor(home('.npmrc'), secrets('facebook-devserver/.npmrc'));
+}
+
 if (IS_MACOS) {
   await import('./macos.mjs');
 }
