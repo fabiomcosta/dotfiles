@@ -1,20 +1,14 @@
 [user]
-	email = fabiomcosta@gmail.com
 	name = Fabio M. Costa
+	email = fabiomcosta@gmail.com
 [color]
 	ui = always
 	status = auto
 	branch = auto
 	interactive = auto
 	diff = auto
-[alias]
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
-	last = log -1 HEAD
 [core]
-	editor = vim
+	editor = nvim
 [push]
 	default = simple
 <% if (isMacos) { %>

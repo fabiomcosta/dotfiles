@@ -13,10 +13,13 @@ import {
 } from './src/fs.mjs';
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
 import { commandExists } from './src/shell.mjs';
-import { dir, home, DIR, HOME } from './src/path.mjs';
+import { dir, home, DIR } from './src/path.mjs';
 
 const IS_MACOS = os.platform() === 'darwin';
 const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
+const IS_WORK_MACHINE = await $`hostname`.trim().endsWith('facebook.com');
+
+console.log({ IS_WORK_MACHINE });
 
 // THIS SHOULD BE FOR MY OWN MACHINE ONLY
 // OR MAYBE APPLY DIFFERENT TEMPLATES FOR EACH MACHINE
@@ -24,19 +27,19 @@ await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
 
 if (IS_MACOS) {
   await import('./macos.mjs');
+}
 
-  // These configure macos keyboard related things, and it does't make sense to
-  // install it on remote machines.
-  if (!IS_REMOTE_SSH) {
-    const keyboardHomePath = home('.keyboard');
-    if (await isSymlink(keyboardHomePath)) {
-      OK`${hl('keyboard')} already installed.`;
-    } else {
-      await createHomeSymlink('.keyboard');
-      cd(keyboardHomePath);
-      await $`./script/setup`;
-      cd(DIR);
-    }
+// These configure macos keyboard related things, and it does't make sense to
+// install it on remote machines.
+if (IS_MACOS && !IS_REMOTE_SSH) {
+  const keyboardHomePath = home('.keyboard');
+  if (await isSymlink(keyboardHomePath)) {
+    OK`${hl('keyboard')} already installed.`;
+  } else {
+    await createHomeSymlink('.keyboard');
+    cd(keyboardHomePath);
+    await $`./script/setup`;
+    cd(DIR);
   }
 }
 
@@ -50,7 +53,7 @@ await createHomeSymlink('.config/alacritty/alacritty.yml');
 await createHomeSymlink('.config/fish/config.fish');
 await createHomeSymlink('.config/karabiner');
 await createHomeSymlink('.config/nvim/coc-settings.json');
-await createSymlinkFor(`${HOME}/.config/nvim/init.vim`, dir('.vimrc'));
+await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 
 console.log(
   'Setting rebase to be the default for the master branch on this repo...'
