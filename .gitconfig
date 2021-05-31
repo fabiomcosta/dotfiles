@@ -11,7 +11,5 @@
 	editor = nvim
 [push]
 	default = simple
-<% if (isMacos) { %>
 [credential]
-	helper = osxkeychain
-<% } %>
+	helper = store
