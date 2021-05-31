@@ -29,10 +29,11 @@ if (IS_WORK_MACHINE) {
     home('.gitconfig')
   );
 } else {
-  await applyTemplate(dir('.gitconfig'), home('.gitconfig'));
+  await createHomeSymlink('.gitconfig');
 }
 
 if (IS_WORK_MACHINE) {
+  // We actually want to do this before `npm i` on install.sh... tricky...
   await createSymlinkFor(home('.npmrc'), secrets('facebook-devserver/.npmrc'));
 }
 
