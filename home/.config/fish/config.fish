@@ -22,6 +22,9 @@ alias ping='prettyping --nolegend'
 alias help='tldr'
 alias oni2="$HOME/Applications/Onivim2.app/Contents/MacOS/Oni2"
 
+# hide fish welcome message
+set fish_greeting ''
+
 ## colors
 set -x TERM xterm-256color
 set -x CLICOLOR 1

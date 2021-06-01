@@ -33,6 +33,10 @@ if (IS_WORK_MACHINE) {
 if (IS_WORK_MACHINE) {
   // We actually want to do this before `npm i` on install.sh... tricky...
   await createSymlinkFor(home('.npmrc'), secrets('facebook-devserver/.npmrc'));
+  await createSymlinkFor(
+    home('.bashrc'),
+    secrets('facebook-devserver/.bashrc')
+  );
 }
 
 if (IS_MACOS) {
