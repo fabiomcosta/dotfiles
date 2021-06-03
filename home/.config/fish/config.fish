@@ -16,11 +16,16 @@ end
 alias la='ls -a'
 alias ll='ls -l'
 alias simpleserver='python -m SimpleHTTPServer'
-alias d8="$DEV/tp/v8/out/Debug/d8"
-alias cat='bat'
-alias ping='prettyping --nolegend'
-alias help='tldr'
 alias oni2="$HOME/Applications/Onivim2.app/Contents/MacOS/Oni2"
+if command_exists bat
+  alias cat='bat'
+end
+if command_exists prettyping
+  alias ping='prettyping --nolegend'
+end
+if command_exists tldr
+  alias help='tldr'
+end
 
 # hide fish welcome message
 set fish_greeting ''
