@@ -35,7 +35,7 @@ if (IS_MACOS) {
 }
 
 if (IS_WORK_MACHINE) {
-  await import('./facebook-devserver/install.mjs');
+  await import('./secrets/facebook-devserver/install.mjs');
 }
 
 if (IS_WORK_MACHINE) {
