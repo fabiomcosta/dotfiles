@@ -44,6 +44,11 @@ if empty($TMUX)
   endif
 endif
 
+" Recently vim can merge signcolumn and number column into one
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  set signcolumn=number
+endif
+
 " adds possibility of using 256 colors
 set t_8b=^[[48;2;%lu;%lu;%lum
 set t_8f=^[[38;2;%lu;%lu;%lum

@@ -24,6 +24,21 @@
       "requireRootPattern": true,
       "settings": {},
       "rootPatterns": [".flowconfig"]
+    },
+    "hack": {
+      "trace.server": "verbose",
+      "command": "hh_client",
+      "args": [
+        "lsp",
+        "--from",
+        "vim",
+        "--serverless-ide",
+        "--ranked-autocomplete"
+      ],
+      "filetypes": ["php"],
+      "initializationOptions": {
+        "cacheDirectory": "/tmp/hh_client"
+      }
     }
   }
 }
