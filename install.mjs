@@ -30,6 +30,14 @@ if (IS_WORK_MACHINE) {
   await createHomeSymlink('.gitconfig');
 }
 
+if (IS_MACOS) {
+  await import('./macos.mjs');
+}
+
+if (IS_WORK_MACHINE) {
+  await import('./facebook-devserver/install.mjs');
+}
+
 if (IS_WORK_MACHINE) {
   // We actually want to do this before `npm i` on install.sh... tricky...
   await createSymlinkFor(home('.npmrc'), secrets('facebook-devserver/.npmrc'));
@@ -41,10 +49,6 @@ if (IS_WORK_MACHINE) {
     home('.fb-vimrc'),
     secrets('facebook-devserver/.fb-vimrc')
   );
-}
-
-if (IS_MACOS) {
-  await import('./macos.mjs');
 }
 
 if (IS_MACOS && !IS_REMOTE_SSH) {
