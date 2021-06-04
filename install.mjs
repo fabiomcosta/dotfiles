@@ -37,6 +37,10 @@ if (IS_WORK_MACHINE) {
     home('.bashrc'),
     secrets('facebook-devserver/.bashrc')
   );
+  await createSymlinkFor(
+    home('.fb-vimrc'),
+    secrets('facebook-devserver/.fb-vimrc')
+  );
 }
 
 if (IS_MACOS) {

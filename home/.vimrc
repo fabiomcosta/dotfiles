@@ -1,4 +1,4 @@
-" options not supported by neovim,
+" options not supported by neovim
 if !has("nvim")
   " Use Vim settings, rather then Vi settings (much better!).
   " This must be first, because it changes other options as a side effect.
@@ -263,17 +263,17 @@ let g:dracula_colorterm = 0
 Plug 'gruvbox-community/gruvbox'
 
 
-Plug 'mattboehm/vim-accordion'
-nnoremap <LEADER>a2 :Accordion 2<CR>
-nnoremap <LEADER>a4 :Accordion 4<CR>
-autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
-
-fun! s:AutoSetAccordionValue()
-  execute ":AccordionAll " . string(floor(&columns/101))
-endfun
-
-
 if !exists('g:vscode')
+
+  Plug 'mattboehm/vim-accordion'
+  nnoremap <LEADER>a2 :Accordion 2<CR>
+  nnoremap <LEADER>a4 :Accordion 4<CR>
+  autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
+
+  fun! s:AutoSetAccordionValue()
+    execute ":AccordionAll " . string(floor(&columns/101))
+  endfun
+
   " function! CocAfterUpdate(info)
   "   CocInstall coc-actions
   "   CocInstall coc-css
@@ -337,6 +337,7 @@ if !exists('g:vscode')
   " Use <C-j> for both expand and jump (make expand higher priority.)
   imap <C-j> <Plug>(coc-snippets-expand-jump)
 
+
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 
@@ -390,7 +391,7 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = { "typescript", "tsx" },
   highlight = {
-    enable = true -- false will disable the whole extension
+    enable = true
   },
   indent = {
     enable = false
@@ -558,3 +559,11 @@ else
 endif
 
 filetype plugin indent on
+
+fun! SourceIfExists(file)
+  if filereadable(expand(a:file))
+    exe 'source' a:file
+  endif
+endfun
+
+call SourceIfExists($HOME . "/.fb-vimrc")
