@@ -31,7 +31,7 @@ end
 set fish_greeting ''
 
 ## colors
-set -x TERM xterm-256color
+set -x TERM tmux-256color
 set -x CLICOLOR 1
 set -x LSCOLORS ExFxCxDxBxegedabagacad
 
