@@ -22,6 +22,8 @@ if [ ! -z ${TMUX+x} ]; then
   target_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
 elif [ ! -z ${SSH_TTY+x} ]; then
   target_tty=$SSH_TTY
+elif [ ! -z ${TTY+x} ]; then
+  target_tty=$TTY
 else
   target_tty=$(tty)
 fi
