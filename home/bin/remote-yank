@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+# get data either from stdin or from file
+buf=$(cat "$@")
+
+# Get buffer length
+buflen=$(printf %s "$buf" | wc -c)
+maxlen=74994
+
+# warn if exceeds maxlen
+if [ "$buflen" -gt "$maxlen" ]; then
+  printf "input is %d bytes too long" "$(( buflen - maxlen ))" >&2
+fi
+
+esc="\e]52;;$(printf %s "$buf" | head -c $maxlen | base64 -w0 )\a"
+
+if [ ! -z ${TMUX+x} ]; then
+  esc="\033Ptmux;\033$esc\033\\"
+  # resolve target terminal to send escape sequence
+  # if we are on remote machine, send directly to SSH_TTY to transport escape sequence
+  # to terminal on local machine, so data lands in clipboard on our local machine
+  pane_active_tty=$(tmux list-panes -F "#{pane_active} #{pane_tty}" | awk '$1=="1" { print $2 }')
+fi
+
+# TODO when using ethernal terminal withous tmux
+# SSH_TTY is not defined and we end up throwing an error here.
+target_tty="${SSH_TTY:-$pane_active_tty}"
+printf "$esc" > "$target_tty"

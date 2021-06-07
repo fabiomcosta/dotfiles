@@ -49,6 +49,7 @@ if (IS_WORK_MACHINE) {
     home('.fb-vimrc'),
     secrets('facebook-devserver/.fb-vimrc')
   );
+  await createHomeSymlink('bin/remote-yank');
 }
 
 if (IS_MACOS && !IS_REMOTE_SSH) {
