@@ -34,6 +34,7 @@ if has("nvim-0.5.0") || has("patch-8.1.1564")
 endif
 
 " adds possibility of using 256 colors
+set termguicolors
 set t_8b=^[[48;2;%lu;%lu;%lum
 set t_8f=^[[38;2;%lu;%lu;%lum
 set t_Co=256
@@ -77,7 +78,8 @@ set number
 " prevents delay while pressing esc on insert mode
 set timeoutlen=500 ttimeoutlen=0
 " uses OS clipboard if possible (check +clipboard)
-set clipboard+=unnamedplus
+set clipboard^=unnamed,unnamedplus
+
 " store lots of :cmdline history
 set history=1000
 " mark the ideal max text width
@@ -548,8 +550,6 @@ else
   autocmd TerminalOpen * setlocal nonumber
 endif
 
-filetype plugin indent on
-
 fun! SourceIfExists(file)
   if filereadable(expand(a:file))
     exe 'source' a:file
@@ -557,3 +557,5 @@ fun! SourceIfExists(file)
 endfun
 
 call SourceIfExists($HOME . "/.fb-vimrc")
+
+filetype plugin indent on
