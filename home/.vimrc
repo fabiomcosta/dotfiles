@@ -208,6 +208,7 @@ Plug 'moll/vim-node'
 Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'rhysd/git-messenger.vim'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'w0rp/ale'
 " Plug 'junegunn/vim-emoji'
