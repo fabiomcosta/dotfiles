@@ -16,35 +16,8 @@ if (!(await commandExists('brew'))) {
 }
 
 console.log('brew update... (can take a while)');
-await $`brew update`;
-
-await $swallow`
-  brew install \
-    fish \
-    git \
-    tmux \
-    rsync \
-    fzf \
-    bat \
-    prettyping \
-    tldr \
-    ripgrep \
-    exa \
-    httpie \
-    fnm \
-    alacritty \
-    font-jetbrains-mono \
-    font-jetbrains-mono-nerd-font \
-    karabiner-elements \
-    alfred \
-    hammerspoon \
-    google-backup-and-sync \
-    notion \
-    mistertea/et/et
-`;
-
-// universal ctags
-await $swallow`brew install --HEAD neovim universal-ctags/universal-ctags/universal-ctags`;
+await $`brew bundle --verbose`;
+await $`brew cleanup`;
 
 // fish
 const isFishInstalled = Boolean(
@@ -58,8 +31,6 @@ if (!isFishInstalled) {
 } else {
   OK`fish already installed.`;
 }
-
-await $swallow`brew install starship`;
 
 await $`
 # Based on https://github.com/mathiasbynens/dotfiles/blob/master/.osx
