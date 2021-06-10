@@ -330,12 +330,12 @@ if !exists('g:vscode')
   " Use <C-j> for both expand and jump (make expand higher priority.)
   imap <C-j> <Plug>(coc-snippets-expand-jump)
 
+  " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  " Plug 'junegunn/fzf.vim'
+  "
+  " nmap <LEADER>p :Files<CR>
+  " nmap <LEADER>c :Rg<CR>
 
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'
-
-  nmap <LEADER>p :Files<CR>
-  nmap <LEADER>c :Rg<CR>
 endif
 
 
@@ -355,13 +355,51 @@ let g:mapleader = ','
 nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 
-if has("nvim")
+if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'camspiers/snap'
 endif
 
 
 call plug#end()
 
+
+if !exists('g:vscode') && has('nvim')
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = { 'typescript', 'tsx', 'lua' },
+  highlight = {
+    enable = true
+  },
+  indent = {
+    enable = false
+  }
+}
+local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+parser_config.tsx.used_by = 'javascript'
+
+
+local snap = require'snap'
+
+snap.register.map({'n'}, {'<LEADER>f'}, function ()
+  snap.run {
+    producer = snap.get'consumer.fzf'(snap.get'producer.ripgrep.file'),
+    select = snap.get'select.file'.select,
+    multiselect = snap.get'select.file'.multiselect,
+    views = {snap.get'preview.file'}
+  }
+end)
+snap.register.map({'n'}, {'<LEADER>c'}, function ()
+  snap.run({
+    prompt = 'Grep',
+    producer = snap.get'consumer.limit'(1000, snap.get'producer.ripgrep.vimgrep'),
+    select = snap.get'select.vimgrep'.select,
+    multiselect = snap.get'select.vimgrep'.multiselect,
+    views = {snap.get'preview.vimgrep'}
+  })
+end)
+EOF
+endif
 
 " let g:ale_completion_enabled=1
 " let g:ale_set_balloons=1
@@ -377,23 +415,6 @@ call plug#end()
 " let g:ale_linters = {
 " \ 'javascript': ['eslint'],
 " \}
-
-
-if has("nvim")
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { "typescript", "tsx" },
-  highlight = {
-    enable = true
-  },
-  indent = {
-    enable = false
-  }
-}
-local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-parser_config.tsx.used_by = "javascript"
-EOF
-endif
 
 
 colorscheme dracula
