@@ -339,17 +339,6 @@ if !exists('g:vscode')
 endif
 
 
-Plug 'ludovicchabant/vim-gutentags'
-let g:gutentags_cache_dir=$HOME . '/.cache/tags'
-" improves perf of ctags by only generating tags for the non-ignored VCS files
-let g:gutentags_file_list_command={
-\ 'markers': {
-    \ '.git': 'git ls-files',
-    \ '.hg': 'hg files',
-    \ },
-\ }
-
-
 Plug 'liuchengxu/vim-which-key'
 let g:mapleader = ','
 nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
