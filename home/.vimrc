@@ -195,32 +195,29 @@ else
   call plug#begin(expand('~/.vim/plugged'))
 endif
 
-Plug 'godlygeek/tabular'
 Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
-Plug 'jeffkreeftmeijer/vim-numbertoggle'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'moll/vim-node'
 Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'rhysd/git-messenger.vim'
+Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
+Plug 'tpope/vim-rhubarb'
+" Plug 'tpope/vim-dispatch'
+" Plug 'godlygeek/tabular'
+" Plug 'junegunn/vim-emoji'
+" Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'w0rp/ale'
-" Plug 'junegunn/vim-emoji'
 
 
 Plug 'alvan/vim-closetag'
 let g:closetag_filetypes = 'html,xhtml,phtml,javascript,typescript'
-
-
-Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
-Plug 'tpope/vim-rhubarb'
-let g:github_enterprise_urls = ['https://github.secureserver.net']
 
 
 Plug 'sheerun/vim-polyglot'
@@ -251,9 +248,9 @@ noremap <LEADER>z :Vexplore<CR>
 
 " colorscheme
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug '~/gdrive/code/dracula-pro/themes/vim'
-let g:dracula_colorterm = 0
-Plug 'gruvbox-community/gruvbox'
+" Plug '~/gdrive/code/dracula-pro/themes/vim'
+" let g:dracula_colorterm = 0
+" Plug 'gruvbox-community/gruvbox'
 
 
 if !exists('g:vscode')
@@ -267,8 +264,8 @@ if !exists('g:vscode')
     execute ":AccordionAll " . string(floor(&columns/101))
   endfun
 
+
   " function! CocAfterUpdate(info)
-  "   CocInstall coc-actions
   "   CocInstall coc-css
   "   CocInstall coc-eslint
   "   CocInstall coc-flow
@@ -276,12 +273,10 @@ if !exists('g:vscode')
   "   CocInstall coc-json
   "   CocInstall coc-marketplace
   "   CocInstall coc-prettier
-  "   CocInstall coc-tabnine
   "   CocInstall coc-vimlsp
   "   CocInstall coc-yaml
   " endfunction
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
-
 
   " You will have bad experience for diagnostic messages when it's default 4000.
   set updatetime=300
@@ -291,6 +286,8 @@ if !exists('g:vscode')
   nmap <silent> gr <Plug>(coc-references)
   " Symbol renaming.
   nmap <leader>rn <Plug>(coc-rename)
+  nmap <leader>qf <Plug>(coc-fix-current)
+  nmap <leader>ac <Plug>(coc-codeaction)
 
   " Use K to show documentation in preview window.
   function! s:show_documentation()
@@ -300,23 +297,13 @@ if !exists('g:vscode')
       call CocAction('doHover')
     endif
   endfunction
-  nnoremap <silent> K :call <SID>show_documentation()<CR>
-
+  nmap <silent> gh :call <SID>show_documentation()<CR>
   " Highlight symbol under cursor on CursorHold
   autocmd CursorHold * silent call CocActionAsync('highlight')
 
   " Add `:Format` command to format current buffer.
   command! -nargs=0 Format :call CocAction('format')
-
   nnoremap <LEADER>fc :Format<CR>
-
-  " coc-actions
-  " Remap for do codeAction of selected region
-  function! s:cocActionsOpenFromSelected(type) abort
-    execute 'CocCommand actions.open ' . a:type
-  endfunction
-  xmap <silent> <leader>a :<C-u>execute 'CocCommand actions.open ' . visualmode()<CR>
-  nmap <silent> <leader>a :<C-u>set operatorfunc=<SID>cocActionsOpenFromSelected<CR>g@
 
   " coc-snippets
   " Use <C-l> for trigger snippet expand.
@@ -330,11 +317,11 @@ if !exists('g:vscode')
   " Use <C-j> for both expand and jump (make expand higher priority.)
   imap <C-j> <Plug>(coc-snippets-expand-jump)
 
-  " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  " Plug 'junegunn/fzf.vim'
-  "
-  " nmap <LEADER>p :Files<CR>
-  " nmap <LEADER>c :Rg<CR>
+  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
+  Plug 'junegunn/fzf.vim'
+
+  nmap <LEADER>f :Files<CR>
+  nmap <LEADER>c :Rg<CR>
 
 endif
 
@@ -346,7 +333,7 @@ nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'camspiers/snap'
+  " Plug 'camspiers/snap'
 endif
 
 
@@ -366,29 +353,28 @@ require'nvim-treesitter.configs'.setup {
 }
 local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 parser_config.tsx.used_by = 'javascript'
-
-
-local snap = require'snap'
-
-snap.register.map({'n'}, {'<LEADER>f'}, function ()
-  snap.run {
-    producer = snap.get'consumer.fzf'(snap.get'producer.ripgrep.file'),
-    select = snap.get'select.file'.select,
-    multiselect = snap.get'select.file'.multiselect,
-    views = {snap.get'preview.file'}
-  }
-end)
-snap.register.map({'n'}, {'<LEADER>c'}, function ()
-  snap.run({
-    prompt = 'Grep',
-    producer = snap.get'consumer.limit'(1000, snap.get'producer.ripgrep.vimgrep'),
-    select = snap.get'select.vimgrep'.select,
-    multiselect = snap.get'select.vimgrep'.multiselect,
-    views = {snap.get'preview.vimgrep'}
-  })
-end)
 EOF
 endif
+
+" local snap = require'snap'
+"
+" snap.register.map({'n'}, {'<LEADER>f'}, function ()
+"   snap.run {
+"     producer = snap.get'consumer.fzf'(snap.get'producer.ripgrep.file'),
+"     select = snap.get'select.file'.select,
+"     multiselect = snap.get'select.file'.multiselect,
+"     views = {snap.get'preview.file'}
+"   }
+" end)
+" snap.register.map({'n'}, {'<LEADER>c'}, function ()
+"   snap.run({
+"     prompt = 'Grep',
+"     producer = snap.get'consumer.limit'(1000, snap.get'producer.ripgrep.vimgrep'),
+"     select = snap.get'select.vimgrep'.select,
+"     multiselect = snap.get'select.vimgrep'.multiselect,
+"     views = {snap.get'preview.vimgrep'}
+"   })
+" end)
 
 " let g:ale_completion_enabled=1
 " let g:ale_set_balloons=1
@@ -534,13 +520,13 @@ fun! CodeHubOpenFile(mode)
   echo "opening " . url
 endfun
 
-nnoremap <LEADER>chg :call CodeHubOpenFile('n')<CR>
-vnoremap <LEADER>chg :<C-U>call CodeHubOpenFile('v')<CR>
-nnoremap <LEADER>chc :let @+=CodeHubGetURL('n')<CR>
-vnoremap <LEADER>chc :<C-U>let @+=CodeHubGetURL('v')<CR>
+nnoremap <LEADER>hg :call CodeHubOpenFile('n')<CR>
+vnoremap <LEADER>hg :<C-U>call CodeHubOpenFile('v')<CR>
+nnoremap <LEADER>hc :let @+=CodeHubGetURL('n')<CR>
+vnoremap <LEADER>hc :<C-U>let @+=CodeHubGetURL('v')<CR>
 
 
-"whitespace in the end of the lines stuff
+"whitespace in the end of the lines
 "http://vim.wikia.com/wiki/Highlight_unwanted_spaces
 nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
 highlight ExtraWhitespace ctermbg=darkred guibg=darkred
