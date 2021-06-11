@@ -7,6 +7,9 @@ font:
 
 # Colors (Dracula)
 colors:
+  cursor:
+   text: '0x000000'
+   cursor: '0xffffff'
   primary:
     background: '#282a36'
     foreground: '#f8f8f2'
