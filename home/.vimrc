@@ -65,7 +65,6 @@ set showmode
 set showcmd
 set hidden
 set ruler
-set cursorline
 set lazyredraw
 " allows colors on long lines
 set synmaxcol=5000
@@ -179,6 +178,16 @@ nnoremap cp :let @+=resolve(expand("%"))<CR>
 
 " confirm completion, `<C-g>u` means break undo chain at current position.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Keeps selection when changing indentation
+" https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
+xnoremap < <gv
+xnoremap > >gv
+
+" Disable cursorline highlight on insert mode
+" https://github.com/mhinz/vim-galore#smarter-cursorline
+autocmd InsertLeave,WinEnter * set cursorline
+autocmd InsertEnter,WinLeave * set nocursorline
 
 " so vim won't force pep8 on all python files
 let g:python_recommended_style=0
@@ -408,32 +417,6 @@ fun! ChangeStatuslineColor()
   endif
   return ''
 endfun
-
-
-" from https://github.com/wincent/wincent/blob/master/.vim/plugin/term.vim
-" automagicaly enables paste mode when pasting content from iterm
-" make use of Xterm "bracketed paste mode"
-" http://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
-" http://stackoverflow.com/questions/5585129
-if &term =~ 'screen' || &term =~ 'xterm'
-  fun! s:BeginXTermPaste(ret)
-    set paste
-    return a:ret
-  endfun
-
-  " enable bracketed paste mode on entering Vim
-  let &t_ti .= "\e[?2004h"
-
-  " disable bracketed paste mode on leaving Vim
-  let &t_te = "\e[?2004l" . &t_te
-
-  set pastetoggle=<Esc>[201~
-  inoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("")
-  nnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("i")
-  vnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("c")
-  cnoremap <Esc>[200~ <nop>
-  cnoremap <Esc>[201~ <nop>
-endif
 
 
 "indentation stuff
