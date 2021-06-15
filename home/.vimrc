@@ -329,7 +329,7 @@ if !exists('g:vscode')
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
   Plug 'junegunn/fzf.vim'
 
-  nmap <LEADER>f :Files<CR>
+  nmap <LEADER>p :Files<CR>
   nmap <LEADER>c :Rg<CR>
 
 endif
