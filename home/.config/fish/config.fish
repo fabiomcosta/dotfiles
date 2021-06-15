@@ -26,6 +26,9 @@ end
 if command_exists tldr
   alias help='tldr'
 end
+if command_exists fwdproxy-config
+  alias with-proxy='env (fwdproxy-config --format=sh curl)'
+end
 
 # hide fish welcome message
 set fish_greeting ''
