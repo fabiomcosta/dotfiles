@@ -68,9 +68,6 @@ if command_exists pyenv
 end
 
 # ripgrep
-if command_exists rg && not command_exists ack
-  alias ack='rg'
-end
 set -x RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 
 # fzf
