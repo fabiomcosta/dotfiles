@@ -176,9 +176,6 @@ nnoremap Q <Nop>
 " copies current buffer file path to register
 nnoremap cp :let @+=resolve(expand("%"))<CR>
 
-" confirm completion, `<C-g>u` means break undo chain at current position.
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
 " Keeps selection when changing indentation
 " https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
 xnoremap < <gv
@@ -216,12 +213,8 @@ Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'rhysd/git-messenger.vim'
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
-Plug 'tpope/vim-rhubarb'
-" Plug 'tpope/vim-dispatch'
 " Plug 'godlygeek/tabular'
-" Plug 'junegunn/vim-emoji'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
-" Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 " Plug 'w0rp/ale'
 
 
@@ -273,76 +266,58 @@ if !exists('g:vscode')
     execute ":AccordionAll " . string(floor(&columns/101))
   endfun
 
-
   " function! CocAfterUpdate(info)
   "   CocInstall coc-css
   "   CocInstall coc-eslint
-  "   CocInstall coc-flow
-  "   CocInstall coc-highlight
   "   CocInstall coc-json
-  "   CocInstall coc-marketplace
   "   CocInstall coc-prettier
-  "   CocInstall coc-vimlsp
   "   CocInstall coc-yaml
   " endfunction
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-  " You will have bad experience for diagnostic messages when it's default 4000.
-  set updatetime=300
-  nmap <silent> gd <Plug>(coc-definition)
-  nmap <silent> gy <Plug>(coc-type-definition)
-  nmap <silent> gi <Plug>(coc-implementation)
-  nmap <silent> gr <Plug>(coc-references)
-  " Symbol renaming.
-  nmap <leader>rn <Plug>(coc-rename)
-  nmap <leader>qf <Plug>(coc-fix-current)
-  nmap <leader>ac <Plug>(coc-codeaction)
 
-  " Use K to show documentation in preview window.
-  function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-      execute 'h '.expand('<cword>')
-    else
-      call CocAction('doHover')
-    endif
-  endfunction
-  nmap <silent> gh :call <SID>show_documentation()<CR>
-  " Highlight symbol under cursor on CursorHold
-  autocmd CursorHold * silent call CocActionAsync('highlight')
+  Plug 'cohama/lexima.vim'
 
-  " Add `:Format` command to format current buffer.
-  command! -nargs=0 Format :call CocAction('format')
-  nnoremap <LEADER>fc :Format<CR>
 
-  " coc-snippets
-  " Use <C-l> for trigger snippet expand.
-  imap <C-l> <Plug>(coc-snippets-expand)
-  " Use <C-j> for select text for visual placeholder of snippet.
-  vmap <C-j> <Plug>(coc-snippets-select)
-  " Use <C-j> for jump to next placeholder, it's default of coc.nvim
-  let g:coc_snippet_next = '<c-j>'
-  " Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-  let g:coc_snippet_prev = '<c-k>'
-  " Use <C-j> for both expand and jump (make expand higher priority.)
-  imap <C-j> <Plug>(coc-snippets-expand-jump)
-
-  Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --bin' }
-  Plug 'junegunn/fzf.vim'
-
-  nmap <LEADER>p :Files<CR>
-  nmap <LEADER>c :Rg<CR>
+  Plug 'liuchengxu/vim-which-key'
+  let g:mapleader = ','
+  nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
 
 endif
 
 
-Plug 'liuchengxu/vim-which-key'
-let g:mapleader = ','
-nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
-
-
 if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  " Plug 'camspiers/snap'
+
+
+  Plug 'neovim/nvim-lspconfig'
+
+
+  Plug 'RishabhRD/popfix'
+  Plug 'RishabhRD/nvim-lsputils'
+
+
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+
+  nnoremap <LEADER>ff <cmd>Telescope find_files<cr>
+  nnoremap <LEADER>fg <cmd>Telescope live_grep<cr>
+  nnoremap <LEADER>fb <cmd>Telescope buffers<cr>
+  nnoremap <LEADER>fr <cmd>Telescope lsp_references<cr>
+  nnoremap <LEADER>fd <cmd>Telescope lsp_workspace_diagnostics<cr>
+
+
+  Plug 'kosayoda/nvim-lightbulb'
+  autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
+
+
+  set completeopt=menuone,noselect
+
+  Plug 'hrsh7th/nvim-compe'
+
+  inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+
 endif
 
 
@@ -363,42 +338,63 @@ require'nvim-treesitter.configs'.setup {
 local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 parser_config.tsx.used_by = 'javascript'
 EOF
+
+lua << EOF
+local nvim_lsp = require('lspconfig')
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  --Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { "flow" }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+
+lua <<EOF
+vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
+EOF
+
+lua <<EOF
+require'compe'.setup {
+  source = {
+    path = true;
+    buffer = true;
+    nvim_lsp = true;
+    nvim_lua = true;
+  };
+}
+EOF
+
 endif
-
-" local snap = require'snap'
-"
-" snap.register.map({'n'}, {'<LEADER>f'}, function ()
-"   snap.run {
-"     producer = snap.get'consumer.fzf'(snap.get'producer.ripgrep.file'),
-"     select = snap.get'select.file'.select,
-"     multiselect = snap.get'select.file'.multiselect,
-"     views = {snap.get'preview.file'}
-"   }
-" end)
-" snap.register.map({'n'}, {'<LEADER>c'}, function ()
-"   snap.run({
-"     prompt = 'Grep',
-"     producer = snap.get'consumer.limit'(1000, snap.get'producer.ripgrep.vimgrep'),
-"     select = snap.get'select.vimgrep'.select,
-"     multiselect = snap.get'select.vimgrep'.multiselect,
-"     views = {snap.get'preview.vimgrep'}
-"   })
-" end)
-
-" let g:ale_completion_enabled=1
-" let g:ale_set_balloons=1
-" let g:ale_set_loclist=0
-" let g:ale_set_quickfix=1
-" let g:ale_sign_error=emoji#for('poop')
-" let g:ale_sign_warning=emoji#for('small_orange_diamond')
-" let g:ale_echo_msg_format='[%linter%][%code] %%s'
-" nmap gd :ALEGoToDefinition<CR>
-" nmap gh :ALEHover<CR>
-" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nmap <silent> <C-j> <Plug>(ale_next_wrap)
-" let g:ale_linters = {
-" \ 'javascript': ['eslint'],
-" \}
 
 
 colorscheme dracula
@@ -407,6 +403,7 @@ colorscheme dracula
 
 
 " statusline
+hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 set laststatus=2
 set statusline=%#statusline#%{ChangeStatuslineColor()}%f%=%m%r%y
 fun! ChangeStatuslineColor()
@@ -417,7 +414,6 @@ fun! ChangeStatuslineColor()
   endif
   return ''
 endfun
-
 
 "indentation stuff
 fun! ToggleIndentationSize()
@@ -537,5 +533,27 @@ fun! SourceIfExists(file)
 endfun
 
 call SourceIfExists($HOME . "/.fb-vimrc")
+
+" fun! CompleteMonths(findstart, base)
+"   if a:findstart
+"     " locate the start of the word
+"     let line = getline('.')
+"     let start = col('.') - 1
+"     while start > 0 && line[start - 1] =~ '\a'
+"       let start -= 1
+"     endwhile
+"     return start
+"   else
+"     " find months matching with "a:base"
+"     let res = []
+"     for m in split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec")
+"       if m =~ '^' . a:base
+"   call add(res, m)
+"       endif
+"     endfor
+"     return res
+"   endif
+" endfun
+" set completefunc=CompleteMonths
 
 filetype plugin indent on

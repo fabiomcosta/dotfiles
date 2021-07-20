@@ -1,6 +1,5 @@
 {
-  "diagnostic.virtualText": true,
-  "diagnostic.virtualTextCurrentLineOnly": false,
+  "suggest.autoTrigger": "none",
   "diagnostic.errorSign": "●",
   "diagnostic.warningSign": "●",
   "diagnostic.infoSign": "●",
@@ -20,15 +19,6 @@
   "prettier.eslintIntegration": true,
   "prettier.requireConfig": true,
   "languageserver": {
-    "flow": {
-      "command": "flow",
-      "args": ["lsp"],
-      "filetypes": ["javascript", "javascriptreact"],
-      "initializationOptions": {},
-      "requireRootPattern": true,
-      "settings": {},
-      "rootPatterns": [".flowconfig"]
-    },
     "hack": {
       "trace.server": "verbose",
       "command": "hh_client",
