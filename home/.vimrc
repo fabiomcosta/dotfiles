@@ -152,7 +152,7 @@ nnoremap <RIGHT> <C-w>l
 inoremap jj <ESC>
 nnoremap ; :
 
-" makes paste work on command-line and search modes
+" makes ctrl-v work on command-line and search modes
 cnoremap <C-v> <C-r>"
 snoremap <C-v> <C-r>"
 
@@ -171,7 +171,7 @@ nnoremap <LEADER>tp :tabprevious<CR>
 nnoremap <LEADER>tn :tabnext<CR>
 
 " avoid going on ex mode
-nnoremap Q <Nop>
+nnoremap Q <NOP>
 
 " copies current buffer file path to register
 nnoremap cp :let @+=resolve(expand("%"))<CR>
@@ -211,15 +211,10 @@ Plug 'moll/vim-node'
 Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'rhysd/git-messenger.vim'
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
-
-
-Plug 'alvan/vim-closetag'
-let g:closetag_filetypes = 'html,xhtml,phtml,javascript,typescript'
 
 
 Plug 'sheerun/vim-polyglot'
@@ -248,6 +243,12 @@ let g:netrw_liststyle=3
 noremap <LEADER>z :Vexplore<CR>
 
 
+let g:git_messenger_floating_win_opts = { 'border': 'single' }
+let g:git_messenger_popup_content_margins = v:false
+nmap <LEADER>gm :GitMessenger<CR>
+Plug 'rhysd/git-messenger.vim'
+
+
 " colorscheme
 Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug '~/gdrive/code/dracula-pro/themes/vim'
@@ -255,7 +256,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 " Plug 'gruvbox-community/gruvbox'
 
 
-if !exists('g:vscode')
+if !exists('g:vscode') && has('nvim')
 
   Plug 'mattboehm/vim-accordion'
   nnoremap <LEADER>a2 :Accordion 2<CR>
@@ -281,42 +282,35 @@ if !exists('g:vscode')
 
   Plug 'liuchengxu/vim-which-key'
   let g:mapleader = ','
-  nnoremap <silent> <leader> :<c-u>WhichKey ','<CR>
-
-endif
+  nnoremap <SILENT> <LEADER> :<C-u>WhichKey ','<CR>
 
 
-if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+  Plug 'windwp/nvim-ts-autotag'
 
 
   Plug 'neovim/nvim-lspconfig'
-
-
-  Plug 'RishabhRD/popfix'
-  Plug 'RishabhRD/nvim-lsputils'
+  Plug 'glepnir/lspsaga.nvim'
 
 
   Plug 'nvim-lua/popup.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
 
-  nnoremap <LEADER>ff <cmd>Telescope find_files<cr>
-  nnoremap <LEADER>fg <cmd>Telescope live_grep<cr>
-  nnoremap <LEADER>fb <cmd>Telescope buffers<cr>
-  nnoremap <LEADER>fr <cmd>Telescope lsp_references<cr>
-  nnoremap <LEADER>fd <cmd>Telescope lsp_workspace_diagnostics<cr>
+  nnoremap <LEADER>ff <cmd>Telescope find_files<CR>
+  nnoremap <LEADER>fg <cmd>Telescope live_grep<CR>
+  nnoremap <LEADER>fb <cmd>Telescope buffers<CR>
+  nnoremap <LEADER>fr <cmd>Telescope lsp_references<CR>
+  nnoremap <LEADER>fd <cmd>Telescope lsp_workspace_diagnostics<CR>
+  nnoremap <LEADER>gs <cmd>Telescope git_status<CR>
+  nnoremap <LEADER>gb <cmd>Telescope git_branches<CR>
 
-
-  Plug 'kosayoda/nvim-lightbulb'
-  autocmd CursorHold,CursorHoldI * lua require'nvim-lightbulb'.update_lightbulb()
-
-
-  set completeopt=menuone,noselect
 
   Plug 'hrsh7th/nvim-compe'
 
-  inoremap <silent><expr> <CR>      compe#confirm('<CR>')
+
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'hoob3rt/lualine.nvim'
 
 endif
 
@@ -325,22 +319,39 @@ call plug#end()
 
 
 if !exists('g:vscode') && has('nvim')
+
 lua <<EOF
 require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 'typescript', 'tsx', 'lua' },
+  ensure_installed = { 'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql' },
   highlight = {
-    enable = true
+    enable = true,
   },
   indent = {
-    enable = false
+    enable = false,
+  },
+  autotag = {
+    enable = true,
   }
 }
 local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 parser_config.tsx.used_by = 'javascript'
 EOF
 
+
+lua << EOF
+local saga = require 'lspsaga'
+saga.init_lsp_saga()
+EOF
+
+
 lua << EOF
 local nvim_lsp = require('lspconfig')
+
+local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
+for type, icon in pairs(signs) do
+  local hl = "LspDiagnosticsSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -348,21 +359,26 @@ local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
-  --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   -- Mappings.
   local opts = { noremap=true, silent=true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
+
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gh', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
   buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+  -- lspsaga key bindings
+  buf_set_keymap('n', 'K', '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', opts)
+  buf_set_keymap('n', 'gf', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opts)
+  buf_set_keymap('n', 'gh', '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>e', '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>rn', '<cmd>lua require"lspsaga.rename".rename()<CR>', opts)
+  buf_set_keymap('n', '<LEADER>ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', opts)
+  buf_set_keymap('v', '<LEADER>ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>', opts)
+
+  buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require("lspsaga.floaterm").open_float_terminal("lazygit")<CR>', opts)
 
 end
 
@@ -379,19 +395,37 @@ for _, lsp in ipairs(servers) do
 end
 EOF
 
-lua <<EOF
-vim.lsp.handlers['textDocument/codeAction'] = require'lsputil.codeAction'.code_action_handler
-EOF
+set completeopt=menuone,noselect
+
+" NOTE: Order is important. You can't lazy load lexima.vim.
+let g:lexima_no_default_rules = v:true
+call lexima#set_default_rules()
+inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
 
 lua <<EOF
+-- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
 require'compe'.setup {
+  enabled = true;
+  autocomplete = true;
+  documentation = true;
+  preselect = 'enable';
+  min_length = 1;
+  throttle_time = 80;
+  source_timeout = 200;
+  incomplete_delay = 400;
+
   source = {
     path = true;
-    buffer = true;
     nvim_lsp = true;
-    nvim_lua = true;
   };
 }
+EOF
+
+
+lua <<EOF
+require('lualine').setup({
+  options = {theme = 'dracula'}
+})
 EOF
 
 endif
@@ -401,19 +435,6 @@ colorscheme dracula
 " colorscheme dracula_pro
 " colorscheme gruvbox
 
-
-" statusline
-hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
-set laststatus=2
-set statusline=%#statusline#%{ChangeStatuslineColor()}%f%=%m%r%y
-fun! ChangeStatuslineColor()
-  if getbufvar(bufnr('%'),'&mod')
-    hi! statusline guifg=#F92672 guibg=#232526 ctermfg=199 ctermbg=16
-  else
-    hi! statusline guifg=#455354 guibg=fg      ctermfg=238 ctermbg=253
-  endif
-  return ''
-endfun
 
 "indentation stuff
 fun! ToggleIndentationSize()
