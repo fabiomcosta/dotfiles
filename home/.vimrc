@@ -201,7 +201,6 @@ else
   call plug#begin(expand('~/.vim/plugged'))
 endif
 
-Plug 'tomtom/tcomment_vim'
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
@@ -215,6 +214,10 @@ Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
+
+
+Plug 'tpope/vim-commentary'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 
 Plug 'sheerun/vim-polyglot'
@@ -238,11 +241,6 @@ map g# <Plug>(incsearch-nohl-g#)
 map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
 
 
-Plug 'tpope/vim-vinegar'
-let g:netrw_liststyle=3
-noremap <LEADER>z :Vexplore<CR>
-
-
 let g:git_messenger_floating_win_opts = { 'border': 'single' }
 let g:git_messenger_popup_content_margins = v:false
 nmap <LEADER>gm :GitMessenger<CR>
@@ -257,6 +255,11 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 
 
 if !exists('g:vscode') && has('nvim')
+
+  Plug 'tpope/vim-vinegar'
+  let g:netrw_liststyle=3
+  noremap <LEADER>z :Vexplore<CR>
+
 
   Plug 'mattboehm/vim-accordion'
   nnoremap <LEADER>a2 :Accordion 2<CR>
@@ -312,6 +315,7 @@ if !exists('g:vscode') && has('nvim')
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'hoob3rt/lualine.nvim'
 
+
 endif
 
 
@@ -331,6 +335,9 @@ require'nvim-treesitter.configs'.setup {
   },
   autotag = {
     enable = true,
+  },
+  context_commentstring = {
+    enable = true
   }
 }
 local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
