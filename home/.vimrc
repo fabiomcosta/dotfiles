@@ -112,13 +112,10 @@ set smartcase
 " defaults to search for every match of the pattern
 set gdefault
 set showmatch
-" clears search
-nnoremap <TAB> %
-vnoremap <TAB> %
 
 " dont wrap lines
-set wrap
-" wrap lines at convenient points
+" set wrap
+" " wrap lines at convenient points
 set linebreak
 set textwidth=360
 set formatoptions=qrn1
@@ -174,7 +171,7 @@ nnoremap <LEADER>tn :tabnext<CR>
 nnoremap Q <NOP>
 
 " copies current buffer file path to register
-nnoremap cp :let @+=resolve(expand("%"))<CR>
+nnoremap cp :let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>
 
 " Keeps selection when changing indentation
 " https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
@@ -211,13 +208,10 @@ Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
+Plug 'tpope/vim-commentary'
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
-
-
-Plug 'tpope/vim-commentary'
-Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 
 Plug 'sheerun/vim-polyglot'
@@ -271,21 +265,13 @@ if !exists('g:vscode') && has('nvim')
   endfun
 
   " function! CocAfterUpdate(info)
-  "   CocInstall coc-css
   "   CocInstall coc-eslint
-  "   CocInstall coc-json
   "   CocInstall coc-prettier
-  "   CocInstall coc-yaml
   " endfunction
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
   Plug 'cohama/lexima.vim'
-
-
-  Plug 'liuchengxu/vim-which-key'
-  let g:mapleader = ','
-  nnoremap <SILENT> <LEADER> :<C-u>WhichKey ','<CR>
 
 
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -294,6 +280,7 @@ if !exists('g:vscode') && has('nvim')
 
   Plug 'neovim/nvim-lspconfig'
   Plug 'glepnir/lspsaga.nvim'
+  Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 
   Plug 'nvim-lua/popup.nvim'
@@ -315,91 +302,94 @@ if !exists('g:vscode') && has('nvim')
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'hoob3rt/lualine.nvim'
 
-
 endif
 
 
 call plug#end()
 
-
 if !exists('g:vscode') && has('nvim')
 
 lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = { 'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql' },
-  highlight = {
-    enable = true,
-  },
-  indent = {
-    enable = false,
-  },
-  autotag = {
-    enable = true,
-  },
-  context_commentstring = {
-    enable = true
-  }
-}
-local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
-parser_config.tsx.used_by = 'javascript'
-EOF
-
-
-lua << EOF
-local saga = require 'lspsaga'
-saga.init_lsp_saga()
-EOF
-
-
-lua << EOF
-local nvim_lsp = require('lspconfig')
-
-local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
-for type, icon in pairs(signs) do
-  local hl = "LspDiagnosticsSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-
-  -- lspsaga key bindings
-  buf_set_keymap('n', 'K', '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', opts)
-  buf_set_keymap('n', 'gf', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opts)
-  buf_set_keymap('n', 'gh', '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>e', '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>rn', '<cmd>lua require"lspsaga.rename".rename()<CR>', opts)
-  buf_set_keymap('n', '<LEADER>ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', opts)
-  buf_set_keymap('v', '<LEADER>ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>', opts)
-
-  buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require("lspsaga.floaterm").open_float_terminal("lazygit")<CR>', opts)
-
-end
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
-local servers = { "flow" }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
+  require'nvim-treesitter.configs'.setup {
+    ensure_installed = { 'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql', 'vim' },
+    highlight = {
+      enable = true,
+    },
+    indent = {
+      enable = false,
+    },
+    autotag = {
+      enable = true,
+    },
+    context_commentstring = {
+      enable = true
     }
   }
-end
+  local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+  parser_config.tsx.used_by = 'javascript'
+EOF
+
+lua <<EOF
+  local saga = require 'lspsaga'
+  saga.init_lsp_saga{
+    code_action_prompt = {
+      -- This was making the "lamp" icon show on the cursor's line all the time
+      -- for some projects.
+      enable = false,
+    }
+  }
+EOF
+
+
+lua <<EOF
+  local nvim_lsp = require('lspconfig')
+
+  local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
+  for type, icon in pairs(signs) do
+    local hl = "LspDiagnosticsSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+  end
+
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+
+    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+
+    -- lspsaga key bindings
+    buf_set_keymap('n', 'K', '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', opts)
+    buf_set_keymap('n', 'gh', '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', opts)
+    buf_set_keymap('n', 'gk', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>', opts)
+    buf_set_keymap('n', '<LEADER>e', '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>', opts)
+    buf_set_keymap('n', '<LEADER>rn', '<cmd>lua require"lspsaga.rename".rename()<CR>', opts)
+    buf_set_keymap('n', '<LEADER>ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', opts)
+    buf_set_keymap('v', '<LEADER>ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>', opts)
+
+    buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require("lspsaga.floaterm").open_float_terminal("lazygit")<CR>', opts)
+
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { 'flow' }
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup {
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
+    }
+  end
 EOF
 
 set completeopt=menuone,noselect
@@ -410,29 +400,28 @@ call lexima#set_default_rules()
 inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
 
 lua <<EOF
--- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
-require'compe'.setup {
-  enabled = true;
-  autocomplete = true;
-  documentation = true;
-  preselect = 'enable';
-  min_length = 1;
-  throttle_time = 80;
-  source_timeout = 200;
-  incomplete_delay = 400;
-
-  source = {
-    path = true;
-    nvim_lsp = true;
-  };
-}
+  -- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
+  require'compe'.setup {
+    enabled = true,
+    autocomplete = true,
+    documentation = true,
+    preselect = 'enable',
+    min_length = 1,
+    throttle_time = 80,
+    source_timeout = 200,
+    incomplete_delay = 400,
+    source = {
+      path = true,
+      nvim_lsp = true,
+    },
+  }
 EOF
 
 
 lua <<EOF
-require('lualine').setup({
-  options = {theme = 'dracula'}
-})
+  require('lualine').setup({
+    options = { theme = 'dracula' }
+  })
 EOF
 
 endif
@@ -495,7 +484,7 @@ nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
 nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
 
 
-fun! CodeHubGetLineRange(mode)
+fun! _CodeHubGetLineRange(mode)
   if a:mode == 'n'
     return line('.')
   endif
@@ -507,24 +496,28 @@ fun! CodeHubGetLineRange(mode)
   return start_line . '-' . end_line
 endfun
 
-fun! CodeHubGetURL(mode)
+fun! _CodeHubGetURL(mode)
   let BASE_URL = 'https://www.internalfb.com/code/'
   " TODO: maybe we can ge this from the remote URL?
   let repo = 'whatsapp-wajs'
   let git_path_prefix = trim(system('git rev-parse --show-prefix'))
-  let line_range = CodeHubGetLineRange(a:mode)
+  let line_range = _CodeHubGetLineRange(a:mode)
   " echo line_range
   " echo 'mode ' . mode()
-  let local_path = resolve(expand("%"))
+  let local_path = resolve(fnamemodify(expand("%"), ":~:."))
   let url = BASE_URL . repo . '/' . git_path_prefix . local_path . '?lines=' . line_range
+  return url
+endfun
+
+fun! CodeHubGetURL(mode)
+  let url = _CodeHubGetURL(a:mode)
   echo 'copied ' . url
   return url
 endfun
 
 fun! CodeHubOpenFile(mode)
-  let url = CodeHubGetURL(a:mode)
+  let url = _CodeHubGetURL(a:mode)
   execute "silent !open '" . url . "'"
-  echo "opening " . url
 endfun
 
 nnoremap <LEADER>hg :call CodeHubOpenFile('n')<CR>

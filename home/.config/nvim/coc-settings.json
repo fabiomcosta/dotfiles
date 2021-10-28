@@ -3,9 +3,6 @@
   "diagnostic.errorSign": "●",
   "diagnostic.warningSign": "●",
   "diagnostic.infoSign": "●",
-  "tsserver.enable": false,
-  "tsserver.enableJavascript": false,
-  "javascript.validate.enable": false,
   "coc.preferences.useQuickfixForLocations": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
@@ -18,6 +15,7 @@
   ],
   "prettier.eslintIntegration": true,
   "prettier.requireConfig": true,
+  "eslint.autoFixOnSave": true,
   "languageserver": {
     "hack": {
       "trace.server": "verbose",
