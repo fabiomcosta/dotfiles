@@ -8,6 +8,7 @@ if !has("nvim")
   set ttyfast
 endif
 
+
 let mapleader=","
 
 " fonts and other gui stuff
@@ -153,6 +154,10 @@ nnoremap ; :
 cnoremap <C-v> <C-r>"
 snoremap <C-v> <C-r>"
 
+" buffer navigation
+nnoremap <C-b> :bp<CR>
+nnoremap <C-n> :bn<CR>
+
 nnoremap <LEADER>ev :e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>v :vsplit<CR><C-w>l
@@ -201,54 +206,55 @@ endif
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
+Plug 'tpope/vim-commentary'
 Plug 'styled-components/vim-styled-components', { 'branch': 'main' }
 Plug 'moll/vim-node'
 Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'tpope/vim-fugitive', {'augroup': 'fugitive'}
-Plug 'tpope/vim-commentary'
+Plug 'editorconfig/editorconfig-vim'
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
 
 
-Plug 'sheerun/vim-polyglot'
-let g:javascript_plugin_flow=1
-
-
-Plug 'othree/eregex.vim'
-let g:eregex_default_enable=0
-
-
-Plug 'haya14busa/incsearch.vim'
-set hlsearch
-let g:incsearch#auto_nohlsearch=1
-map /  <Plug>(incsearch-forward)
-map n  <Plug>(incsearch-nohl-n)
-map N  <Plug>(incsearch-nohl-N)
-map *  <Plug>(incsearch-nohl-*)
-map #  <Plug>(incsearch-nohl-#)
-map g* <Plug>(incsearch-nohl-g*)
-map g# <Plug>(incsearch-nohl-g#)
-map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
-
-
-let g:git_messenger_floating_win_opts = { 'border': 'single' }
-let g:git_messenger_popup_content_margins = v:false
-nmap <LEADER>gm :GitMessenger<CR>
-Plug 'rhysd/git-messenger.vim'
-
-
-" colorscheme
-Plug 'dracula/vim', { 'as': 'dracula' }
-" Plug '~/gdrive/code/dracula-pro/themes/vim'
-" let g:dracula_colorterm = 0
-" Plug 'gruvbox-community/gruvbox'
-
-
 if !exists('g:vscode') && has('nvim')
+
+  Plug 'sheerun/vim-polyglot'
+  let g:javascript_plugin_flow=1
+
+
+  Plug 'othree/eregex.vim'
+  let g:eregex_default_enable=0
+
+
+  Plug 'haya14busa/incsearch.vim'
+  set hlsearch
+  let g:incsearch#auto_nohlsearch=1
+  map /  <Plug>(incsearch-forward)
+  map n  <Plug>(incsearch-nohl-n)
+  map N  <Plug>(incsearch-nohl-N)
+  map *  <Plug>(incsearch-nohl-*)
+  map #  <Plug>(incsearch-nohl-#)
+  map g* <Plug>(incsearch-nohl-g*)
+  map g# <Plug>(incsearch-nohl-g#)
+  map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
+
+
+  let g:git_messenger_floating_win_opts = { 'border': 'single' }
+  let g:git_messenger_popup_content_margins = v:false
+  nmap <LEADER>gm :GitMessenger<CR>
+  Plug 'rhysd/git-messenger.vim'
+
+
+  " colorscheme
+  Plug 'dracula/vim', { 'as': 'dracula' }
+  " Plug '~/gdrive/code/dracula-pro/themes/vim'
+  " let g:dracula_colorterm = 0
+  " Plug 'gruvbox-community/gruvbox'
+
 
   Plug 'tpope/vim-vinegar'
   let g:netrw_liststyle=3
@@ -279,7 +285,7 @@ if !exists('g:vscode') && has('nvim')
 
 
   Plug 'neovim/nvim-lspconfig'
-  Plug 'glepnir/lspsaga.nvim'
+  Plug 'tami5/lspsaga.nvim'
   Plug 'JoosepAlviste/nvim-ts-context-commentstring'
 
 
@@ -302,6 +308,19 @@ if !exists('g:vscode') && has('nvim')
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'hoob3rt/lualine.nvim'
 
+
+  Plug 'thaerkh/vim-workspace'
+  let g:workspace_autocreate = 1
+  let g:workspace_session_disable_on_args = 1
+  let g:workspace_autosave = 0
+  " This plugin functionality makes no sense, it's completely unrelated from its
+  " core functionality :|
+  let g:workspace_autosave_untrailspaces = 0
+  let g:workspace_autosave_untrailtabs = 0
+
+  let g:workspace_session_directory = expand('~/.local/share/nvim/sessions')
+  let g:workspace_undodir = expand('~/.local/share/nvim/sessions/.undodir')
+
 endif
 
 
@@ -309,127 +328,24 @@ call plug#end()
 
 if !exists('g:vscode') && has('nvim')
 
-lua <<EOF
-  require'nvim-treesitter.configs'.setup {
-    ensure_installed = { 'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql', 'vim' },
-    highlight = {
-      enable = true,
-    },
-    indent = {
-      enable = false,
-    },
-    autotag = {
-      enable = true,
-    },
-    context_commentstring = {
-      enable = true
-    }
-  }
-  local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
-  parser_config.tsx.used_by = 'javascript'
-EOF
-
-lua <<EOF
-  local saga = require 'lspsaga'
-  saga.init_lsp_saga{
-    code_action_prompt = {
-      -- This was making the "lamp" icon show on the cursor's line all the time
-      -- for some projects.
-      enable = false,
-    }
-  }
-EOF
-
-
-lua <<EOF
-  local nvim_lsp = require('lspconfig')
-
-  local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
-  for type, icon in pairs(signs) do
-    local hl = "LspDiagnosticsSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-  end
-
-  -- Use an on_attach function to only map the following keys
-  -- after the language server attaches to the current buffer
-  local on_attach = function(client, bufnr)
-    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-    -- Mappings.
-    local opts = { noremap=true, silent=true }
-
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-
-    buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
-
-    -- lspsaga key bindings
-    buf_set_keymap('n', 'K', '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>', opts)
-    buf_set_keymap('n', 'gh', '<cmd>lua require"lspsaga.provider".preview_definition()<CR>', opts)
-    buf_set_keymap('n', 'gk', '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>', opts)
-    buf_set_keymap('n', '[d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>', opts)
-    buf_set_keymap('n', ']d', '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>', opts)
-    buf_set_keymap('n', '<LEADER>e', '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>', opts)
-    buf_set_keymap('n', '<LEADER>rn', '<cmd>lua require"lspsaga.rename".rename()<CR>', opts)
-    buf_set_keymap('n', '<LEADER>ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', opts)
-    buf_set_keymap('v', '<LEADER>ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>', opts)
-
-    buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require("lspsaga.floaterm").open_float_terminal("lazygit")<CR>', opts)
-
-  end
-
-  -- Use a loop to conveniently call 'setup' on multiple servers and
-  -- map buffer local keybindings when the language server attaches
-  local servers = { 'flow' }
-  for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup {
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      }
-    }
-  end
-EOF
-
-set completeopt=menuone,noselect
-
 " NOTE: Order is important. You can't lazy load lexima.vim.
 let g:lexima_no_default_rules = v:true
 call lexima#set_default_rules()
 inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
 
 lua <<EOF
-  -- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
-  require'compe'.setup {
-    enabled = true,
-    autocomplete = true,
-    documentation = true,
-    preselect = 'enable',
-    min_length = 1,
-    throttle_time = 80,
-    source_timeout = 200,
-    incomplete_delay = 400,
-    source = {
-      path = true,
-      nvim_lsp = true,
-    },
-  }
-EOF
-
-
-lua <<EOF
-  require('lualine').setup({
-    options = { theme = 'dracula' }
-  })
+  require'init'
 EOF
 
 endif
 
+if !exists('g:vscode')
 
 colorscheme dracula
 " colorscheme dracula_pro
 " colorscheme gruvbox
+
+endif
 
 
 "indentation stuff
