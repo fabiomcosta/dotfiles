@@ -348,58 +348,6 @@ colorscheme dracula
 endif
 
 
-"indentation stuff
-fun! ToggleIndentationSize()
-  let n = 4
-  if &shiftwidth == 4
-    let n = 2
-  endif
-
-  let &tabstop=n
-  let &softtabstop=n
-  let &shiftwidth=n
-  echo "indentation width is now ".n."."
-endfun
-
-fun! ToggleIndentationType()
-  if &expandtab
-    set noexpandtab
-    echo "using tabs to indent."
-  else
-    set expandtab
-    echo "using spaces to indent."
-  endif
-endfun
-
-
-" sets expandtab based on the first
-" indented lines of a file
-fun! NaiveIndentationDetector()
-  let n = 1
-  let max_line_number = 10
-  while n < max_line_number && n < line("$")
-    let current_line = getline(n)
-    if current_line =~ '^\t'
-      set noexpandtab
-      echo "using tabs to indent."
-      return
-    endif
-    if current_line =~ '^ '
-      set expandtab
-      echo "using spaces to indent."
-      return
-    endif
-    let n = n + 1
-  endwhile
-  echo "couldn't detect indentation based on the first ".max_line_number." lines of this file."
-endfun
-
-nnoremap <LEADER>fi :retab<CR>
-nnoremap <LEADER>tit :call ToggleIndentationType()<CR>
-nnoremap <LEADER>tis :call ToggleIndentationSize()<CR>
-nnoremap <LEADER>di :call NaiveIndentationDetector()<CR>
-
-
 fun! _CodeHubGetLineRange(mode)
   if a:mode == 'n'
     return line('.')
