@@ -147,6 +147,7 @@ nnoremap <RIGHT> <C-w>l
 
 inoremap jj <ESC>
 nnoremap ; :
+vnoremap ; :
 
 " makes ctrl-v work on command-line and search modes
 cnoremap <C-v> <C-r>"
