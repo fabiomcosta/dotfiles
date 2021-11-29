@@ -253,7 +253,6 @@ if !exists('g:vscode') && has('nvim')
   Plug 'dracula/vim', { 'as': 'dracula' }
   " Plug '~/gdrive/code/dracula-pro/themes/vim'
   " let g:dracula_colorterm = 0
-  " Plug 'gruvbox-community/gruvbox'
 
 
   Plug 'tpope/vim-vinegar'
