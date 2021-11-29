@@ -128,8 +128,6 @@ set listchars=tab:▸\ ,eol:¬
 " folding options
 set foldmethod=indent
 set nofoldenable
-nnoremap <SPACE> za
-vnoremap <SPACE> zf
 
 " turn on syntax highlighting
 syntax on
