@@ -1,13 +1,3 @@
-" options not supported by neovim
-if !has("nvim")
-  " Use Vim settings, rather then Vi settings (much better!).
-  " This must be first, because it changes other options as a side effect.
-  set nocompatible
-
-  set ttymouse=xterm
-  set ttyfast
-endif
-
 
 let mapleader=","
 
@@ -30,9 +20,7 @@ if has("gui_running")
 endif
 
 " Recently vim can merge signcolumn and number column into one
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-  set signcolumn=number
-endif
+set signcolumn=number
 
 " adds possibility of using 256 colors
 set termguicolors
@@ -190,17 +178,13 @@ autocmd InsertEnter,WinLeave * set nocursorline
 " so vim won't force pep8 on all python files
 let g:python_recommended_style=0
 
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+let data_dir = stdpath('data') . '/site'
 if empty(glob(data_dir . '/autoload/plug.vim'))
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-if has("nvim")
-  call plug#begin(expand('~/.local/share/nvim/plugged'))
-else
-  call plug#begin(expand('~/.vim/plugged'))
-endif
+call plug#begin(expand('~/.local/share/nvim/plugged'))
 
 Plug 'jordwalke/VimAutoMakeDirectory'
 Plug 'tpope/vim-surround'
@@ -214,13 +198,12 @@ Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'editorconfig/editorconfig-vim'
-Plug 'TimUntersberger/neogit'
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
 
 
-if !exists('g:vscode') && has('nvim')
+if !exists('g:vscode')
 
   Plug 'sheerun/vim-polyglot'
   let g:javascript_plugin_flow=1
@@ -304,6 +287,9 @@ if !exists('g:vscode') && has('nvim')
   Plug 'hrsh7th/nvim-compe'
 
 
+  Plug 'TimUntersberger/neogit'
+
+
   Plug 'kyazdani42/nvim-web-devicons'
   Plug 'hoob3rt/lualine.nvim'
 
@@ -320,12 +306,13 @@ if !exists('g:vscode') && has('nvim')
   let g:workspace_session_directory = expand('~/.local/share/nvim/sessions')
   let g:workspace_undodir = expand('~/.local/share/nvim/sessions/.undodir')
 
+
 endif
 
 
 call plug#end()
 
-if !exists('g:vscode') && has('nvim')
+if !exists('g:vscode')
 
   " NOTE: Order is important. You can't lazy load lexima.vim.
   let g:lexima_no_default_rules = v:true
@@ -398,16 +385,12 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd BufWinLeave * call clearmatches()
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 
-if has("nvim")
-  " starts terminal mode on insert mode
-  " disables line numbers on a newly opened terminal window (not really working)
-  autocmd TermOpen term://* startinsert | setlocal nonumber
-  " close terminal buffer without showing the exit status of the shell
-  autocmd TermClose term://* call feedkeys("\<cr>")
-  " tnoremap <Esc> <C-\><C-n>
-else
-  autocmd TerminalOpen * setlocal nonumber
-endif
+" starts terminal mode on insert mode
+" disables line numbers on a newly opened terminal window (not really working)
+autocmd TermOpen term://* startinsert | setlocal nonumber
+" close terminal buffer without showing the exit status of the shell
+autocmd TermClose term://* call feedkeys("\<cr>")
+" tnoremap <Esc> <C-\><C-n>
 
 fun! SourceIfExists(file)
   if filereadable(expand(a:file))
