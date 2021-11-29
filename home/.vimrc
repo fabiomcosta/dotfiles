@@ -327,10 +327,10 @@ call plug#end()
 
 if !exists('g:vscode') && has('nvim')
 
-" NOTE: Order is important. You can't lazy load lexima.vim.
-let g:lexima_no_default_rules = v:true
-call lexima#set_default_rules()
-inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
+  " NOTE: Order is important. You can't lazy load lexima.vim.
+  let g:lexima_no_default_rules = v:true
+  call lexima#set_default_rules()
+  inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
 
 lua <<EOF
   require'init'
@@ -340,9 +340,8 @@ endif
 
 if !exists('g:vscode')
 
-colorscheme dracula
-" colorscheme dracula_pro
-" colorscheme gruvbox
+  colorscheme dracula
+  " colorscheme dracula_pro
 
 endif
 
