@@ -142,10 +142,6 @@ vnoremap ; :
 cnoremap <C-v> <C-r>"
 snoremap <C-v> <C-r>"
 
-" buffer navigation
-nnoremap <C-b> :bp<CR>
-nnoremap <C-n> :bn<CR>
-
 nnoremap <LEADER>ev :e $MYVIMRC<CR>
 nnoremap <LEADER>sv :so $MYVIMRC<CR>
 nnoremap <LEADER>v :vsplit<CR><C-w>l
@@ -170,6 +166,9 @@ nnoremap cp :let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>
 " https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
 xnoremap < <gv
 xnoremap > >gv
+
+nnoremap <C-b> :bp<CR>
+nnoremap <C-n> :bn<CR>
 
 " Disable cursorline highlight on insert mode
 " https://github.com/mhinz/vim-galore#smarter-cursorline
