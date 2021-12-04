@@ -47,7 +47,7 @@ set noswapfile
 set visualbell
 set noerrorbells
 set encoding=utf-8
-set scrolloff=3
+set scrolloff=8
 set autoindent
 set copyindent
 set title
