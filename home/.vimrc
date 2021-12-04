@@ -323,6 +323,18 @@ if !exists('g:vscode')
   let g:workspace_undodir = expand('~/.local/share/nvim/sessions/.undodir')
 
 
+  Plug 'voldikss/vim-floaterm'
+  Plug 'vim-test/vim-test'
+  let g:test#strategy = "floaterm"
+  let g:test#neovim#start_normal = 1
+  let g:test#basic#start_normal = 1
+  nmap <silent> <LEADER>tn :TestNearest<CR>
+  nmap <silent> <LEADER>tf :TestFile<CR>
+  nmap <silent> <LEADER>ts :TestSuite<CR>
+  nmap <silent> <LEADER>tl :TestLast<CR>
+  nmap <silent> <LEADER>tg :TestVisit<CR>
+
+
 endif
 
 
@@ -405,7 +417,7 @@ autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
 " disables line numbers on a newly opened terminal window (not really working)
 autocmd TermOpen term://* startinsert | setlocal nonumber
 " close terminal buffer without showing the exit status of the shell
-autocmd TermClose term://* call feedkeys("\<cr>")
+" autocmd TermClose term://* call feedkeys("\<cr>")
 " tnoremap <Esc> <C-\><C-n>
 
 fun! SourceIfExists(file)
