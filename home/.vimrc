@@ -19,6 +19,7 @@ if has("gui_running")
   endtry
 endif
 
+set shell=bash
 " Recently vim can merge signcolumn and number column into one
 set signcolumn=number
 
