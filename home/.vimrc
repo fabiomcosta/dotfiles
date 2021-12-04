@@ -244,10 +244,10 @@ if !exists('g:vscode')
   map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
 
 
+  Plug 'rhysd/git-messenger.vim'
   let g:git_messenger_floating_win_opts = { 'border': 'single' }
   let g:git_messenger_popup_content_margins = v:false
   nmap <LEADER>gm :GitMessenger<CR>
-  Plug 'rhysd/git-messenger.vim'
 
 
   " colorscheme
