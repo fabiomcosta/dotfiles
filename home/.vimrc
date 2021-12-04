@@ -203,6 +203,24 @@ Plug 'editorconfig/editorconfig-vim'
 " Plug 'w0rp/ale'
 
 
+Plug 'tpope/vim-projectionist'
+
+let g:projectionist_heuristics = {
+  \   "jest.config.js|jest.config.ts": {
+  \     "**/__tests__/*.test.js": {
+  \       "alternate": "{}.js",
+  \       "type": "test"
+  \     },
+  \     "*.js": {
+  \       "alternate": "{dirname}/__tests__/{basename}.test.js",
+  \       "type": "source"
+  \     }
+  \   }
+  \}
+
+nnoremap <LEADER>a :A<CR>
+
+
 if !exists('g:vscode')
 
   Plug 'sheerun/vim-polyglot'
