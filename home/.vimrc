@@ -262,8 +262,6 @@ if !exists('g:vscode')
 
 
   Plug 'mattboehm/vim-accordion'
-  nnoremap <LEADER>a2 :Accordion 2<CR>
-  nnoremap <LEADER>a4 :Accordion 4<CR>
   autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
 
   fun! s:AutoSetAccordionValue()
