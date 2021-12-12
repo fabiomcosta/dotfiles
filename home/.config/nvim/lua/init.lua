@@ -17,6 +17,55 @@ local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
 parser_config.tsx.used_by = 'javascript'
 
 
+local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
+for type, icon in pairs(signs) do
+  local hl = "LspDiagnosticsSign" .. type
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
+end
+
+
+vim.o.completeopt = 'menu,menuone,noselect'
+
+local cmp = require'cmp'
+
+cmp.setup({
+  mapping = {
+    ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+    ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+    ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+    ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+    ['<C-e>'] = cmp.mapping({
+      i = cmp.mapping.abort(),
+      c = cmp.mapping.close(),
+    }),
+    -- Accept currently selected item. If none selected, `select` first item.
+    -- Set `select` to `false` to only confirm explicitly selected items.
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+  },
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline('/', {
+  sources = {
+    { name = 'buffer' }
+  }
+})
+
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+-- cmp.setup.cmdline(':', {
+--   sources = cmp.config.sources({
+--     { name = 'path' }
+--   }, {
+--     { name = 'cmdline' }
+--   })
+-- })
+
+
 require('lspsaga').init_lsp_saga({
   code_action_prompt = {
     -- This was making the "lamp" icon show on the cursor's line all the time
@@ -27,12 +76,6 @@ require('lspsaga').init_lsp_saga({
 
 
 local nvim_lsp = require('lspconfig')
-
-local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
-for type, icon in pairs(signs) do
-  local hl = "LspDiagnosticsSign" .. type
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-end
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -63,16 +106,20 @@ local on_attach = function(client, bufnr)
 
 end
 
+local capabilities = require('cmp_nvim_lsp')
+  .update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 -- Use a loop to conveniently call 'setup' on multiple servers and
 -- map buffer local keybindings when the language server attaches
 local servers = { 'flow' }
 for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
+  nvim_lsp[lsp].setup({
+    capabilities = capabilities,
     on_attach = on_attach,
     flags = {
       debounce_text_changes = 150,
     }
-  }
+  })
 end
 
 -- nvim_lsp.flow.setup {
@@ -83,24 +130,35 @@ end
 --   }
 -- }
 
-
-vim.o.completeopt = 'menuone,noselect'
-
--- https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion
-require('compe').setup({
-  enabled = true,
-  autocomplete = true,
-  documentation = true,
-  preselect = 'enable',
-  min_length = 1,
-  throttle_time = 80,
-  source_timeout = 200,
-  incomplete_delay = 400,
-  source = {
-    path = true,
-    nvim_lsp = true,
-  },
-})
+local lsp_installer = require('nvim-lsp-installer')
+lsp_installer.on_server_ready(function(server)
+  local opts = {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+  if server.name == 'sumneko_lua' then
+    opts.settings = {
+      Lua = {
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = {'vim', 'hs'},
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
+      },
+    }
+  end
+  server:setup(opts)
+end)
 
 
 require('lualine').setup({
@@ -112,3 +170,10 @@ require('neogit').setup({
   disable_commit_confirmation = true,
   disable_insert_on_commit = false
 })
+
+
+require('bufjump').setup()
+
+local opts = { silent=true, noremap=true }
+vim.api.nvim_set_keymap('n', '<C-p>', ':lua require("bufjump").backward()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<C-n>', ':lua require("bufjump").forward()<CR>', opts)

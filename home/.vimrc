@@ -19,6 +19,7 @@ if has("gui_running")
   endtry
 endif
 
+" Some plugins might have sudden bugs with fish. This fixes that.
 set shell=bash
 " Recently vim can merge signcolumn and number column into one
 set signcolumn=number
@@ -90,7 +91,7 @@ set wildignore+=*.swp,*.swo,*~,*.pyc
 set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
 set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
 set wildignore+=*/.sass-cache/*
-set wildignore+=*/custom_modules/*
+set wildignore+=*/submodules/*,*/custom_modules/*
 set wildignore+=tags
 set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
 
@@ -117,6 +118,8 @@ set listchars=tab:▸\ ,eol:¬
 " folding options
 set foldmethod=indent
 set nofoldenable
+
+set jumpoptions+=stack
 
 " turn on syntax highlighting
 syntax on
@@ -167,9 +170,6 @@ nnoremap cp :let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>
 xnoremap < <gv
 xnoremap > >gv
 
-nnoremap <C-b> :bp<CR>
-nnoremap <C-n> :bn<CR>
-
 " Disable cursorline highlight on insert mode
 " https://github.com/mhinz/vim-galore#smarter-cursorline
 autocmd InsertLeave,WinEnter * set cursorline
@@ -198,6 +198,7 @@ Plug 'hhvm/vim-hack'
 Plug 'jparise/vim-graphql'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'editorconfig/editorconfig-vim'
+Plug 'kwkarlwang/bufjump.nvim'
 " Plug 'godlygeek/tabular'
 " Plug 'jeffkreeftmeijer/vim-numbertoggle'
 " Plug 'w0rp/ale'
@@ -219,6 +220,8 @@ let g:projectionist_heuristics = {
   \}
 
 nnoremap <LEADER>a :A<CR>
+
+
 
 
 if !exists('g:vscode')
@@ -283,8 +286,14 @@ if !exists('g:vscode')
 
 
   Plug 'neovim/nvim-lspconfig'
+  Plug 'williamboman/nvim-lsp-installer'
   Plug 'tami5/lspsaga.nvim'
   Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+  Plug 'hrsh7th/cmp-nvim-lsp'
+  Plug 'hrsh7th/cmp-buffer'
+  Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-cmdline'
+  Plug 'hrsh7th/nvim-cmp'
 
 
   Plug 'nvim-lua/popup.nvim'
@@ -298,9 +307,6 @@ if !exists('g:vscode')
   nnoremap <LEADER>fd <cmd>Telescope lsp_workspace_diagnostics<CR>
   nnoremap <LEADER>gs <cmd>Telescope git_status<CR>
   nnoremap <LEADER>gb <cmd>Telescope git_branches<CR>
-
-
-  Plug 'hrsh7th/nvim-compe'
 
 
   Plug 'TimUntersberger/neogit'
@@ -342,18 +348,9 @@ call plug#end()
 
 if !exists('g:vscode')
 
-  " NOTE: Order is important. You can't lazy load lexima.vim.
-  let g:lexima_no_default_rules = v:true
-  call lexima#set_default_rules()
-  inoremap <silent><expr> <CR> compe#confirm(lexima#expand('<LT>CR>', 'i'))
-
 lua <<EOF
   require'init'
 EOF
-
-endif
-
-if !exists('g:vscode')
 
   colorscheme dracula
   " colorscheme dracula_pro
