@@ -176,9 +176,7 @@ autocmd InsertLeave,WinEnter * set cursorline
 autocmd InsertEnter,WinLeave * set nocursorline
 
 lua <<EOF
-if vim.g.vscode == nil then
   require('init')
-end
 EOF
 
 

@@ -1,14 +1,7 @@
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
 
-local fn = vim.fn
-local packer_bootstrap = nil
-local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if fn.empty(fn.glob(install_path)) > 0 then
-  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
-end
-
-return require('packer').startup(function(use)
+local function onNeovimVSCode(use)
   use 'wbthomason/packer.nvim'
   use 'jordwalke/VimAutoMakeDirectory'
   use 'tpope/vim-surround'
@@ -45,7 +38,10 @@ return require('packer').startup(function(use)
 
   use 'ntpeters/vim-better-whitespace'
   vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', { silent=true, noremap=true })
+end
 
+
+local function onPureNeovim(use)
 
   use 'sheerun/vim-polyglot'
   vim.g.javascript_plugin_flow = 1
@@ -341,7 +337,21 @@ return require('packer').startup(function(use)
   vim.cmd [[colorscheme dracula]]
   -- vim.cmd [[colorscheme dracula_pro]]
 
+end
 
+
+local packer_bootstrap = nil
+local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if not vim.fn.isdirectory(install_path) then
+  packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+end
+
+return require('packer').startup(function(use)
+  if vim.g.vscode == nil then
+    onPureNeovim(use)
+  else
+    onNeovimVSCode(use)
+  end
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
