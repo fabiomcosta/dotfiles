@@ -1,6 +1,3 @@
-
-let g:mapleader=","
-
 " fonts and other gui stuff
 " make sure to install the powerline patched font
 " version of the font you like
@@ -19,9 +16,9 @@ if has("gui_running")
   endtry
 endif
 
-" Some plugins might have sudden bugs with fish. This fixes that.
+" avoiding possible issues on plugins that are generaly only tested on bash.
 set shell=bash
-" Recently vim can merge signcolumn and number column into one
+" vim can merge signcolumn and number column into one
 set signcolumn=number
 
 " adds possibility of using 256 colors
@@ -121,71 +118,9 @@ set nofoldenable
 
 set jumpoptions+=stack
 
-" turn on syntax highlighting
-syntax on
-
-nnoremap j gj
-nnoremap k gk
-
-" moves cursor faster
-nnoremap <DOWN> 12j
-vnoremap <DOWN> 12j
-nnoremap <UP> 12k
-vnoremap <UP> 12k
-
-" moves the cursor around the buffer windows
-nnoremap <LEFT> <C-w>h
-nnoremap <RIGHT> <C-w>l
-
-inoremap jj <ESC>
-nnoremap ; :
-vnoremap ; :
-
-" makes ctrl-v work on command-line and search modes
-cnoremap <C-v> <C-r>"
-snoremap <C-v> <C-r>"
-
-nnoremap <LEADER>ev :e $MYVIMRC<CR>
-nnoremap <LEADER>sv :so $MYVIMRC<CR>
-nnoremap <LEADER>v :vsplit<CR><C-w>l
-
-" changes the size of the buffer windows
-nnoremap = <C-w>=
-nnoremap + :vertical resize +5<CR>
-nnoremap - :vertical resize -5<CR>
-
-" tab related mappings
-nnoremap <LEADER>tc :tabnew<CR>
-nnoremap <LEADER>tp :tabprevious<CR>
-nnoremap <LEADER>tn :tabnext<CR>
-
-" avoid going on ex mode
-nnoremap Q <NOP>
-
-" copies current buffer file path to register
-nnoremap cp :let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>
-
-" Keeps selection when changing indentation
-" https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-xnoremap < <gv
-xnoremap > >gv
-
-" Disable cursorline highlight on insert mode
-" https://github.com/mhinz/vim-galore#smarter-cursorline
-autocmd InsertLeave,WinEnter * set cursorline
-autocmd InsertEnter,WinLeave * set nocursorline
-
 lua <<EOF
   require('init')
 EOF
-
-
-" starts terminal mode on insert mode
-" disables line numbers on a newly opened terminal window (not really working)
-" autocmd TermOpen term://* startinsert | setlocal nonumber
-" close terminal buffer without showing the exit status of the shell
-" autocmd TermClose term://* call feedkeys("\<cr>")
-" tnoremap <Esc> <C-\><C-n>
 
 
 fun! _CodeHubGetLineRange(mode)

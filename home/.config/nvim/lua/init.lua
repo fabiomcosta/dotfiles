@@ -1,3 +1,60 @@
+
+vim.g.mapleader=","
+
+-- turn on syntax highlighting
+vim.cmd [[syntax on]]
+
+vim.api.nvim_set_keymap('n', 'j', 'gj', {noremap=true})
+vim.api.nvim_set_keymap('n', 'k', 'gk', {noremap=true})
+
+-- moves cursor faster
+vim.api.nvim_set_keymap('n', '<DOWN>', '12j', {noremap=true})
+vim.api.nvim_set_keymap('v', '<DOWN>', '12j', {noremap=true})
+vim.api.nvim_set_keymap('n', '<UP>', '12k', {noremap=true})
+vim.api.nvim_set_keymap('v', '<UP>', '12k', {noremap=true})
+
+-- moves the cursor around the buffer windows
+vim.api.nvim_set_keymap('n', '<LEFT>', '<C-w>h', {noremap=true})
+vim.api.nvim_set_keymap('n', '<RIGHT>', '<C-w>l', {noremap=true})
+
+vim.api.nvim_set_keymap('i', 'jj', '<ESC>', {noremap=true})
+vim.api.nvim_set_keymap('n', ';', ':', {noremap=true})
+vim.api.nvim_set_keymap('v', ';', ':', {noremap=true})
+
+-- makes ctrl-v work on command-line and search modes
+vim.api.nvim_set_keymap('c', '<C-v>', '<C-r>"', {noremap=true})
+vim.api.nvim_set_keymap('s', '<C-v>', '<C-r>"', {noremap=true})
+
+vim.api.nvim_set_keymap('n', '<LEADER>ev', ':e $MYVIMRC<CR>', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>v', ':vsplit<CR><C-w>l', {noremap=true})
+
+-- changes the size of the buffer windows
+vim.api.nvim_set_keymap('n', '=', '<C-w>=', {noremap=true})
+vim.api.nvim_set_keymap('n', '+', ':vertical resize +5<CR>', {noremap=true})
+vim.api.nvim_set_keymap('n', '-', ':vertical resize -5<CR>', {noremap=true})
+
+-- tab related mappings
+vim.api.nvim_set_keymap('n', '<LEADER>tc', ':tabnew<CR>', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>tp', ':tabprevious<CR>', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>tn', ':tabnext<CR>', {noremap=true})
+
+-- avoid going on ex mode
+vim.api.nvim_set_keymap('n', 'Q', '<NOP>', {noremap=true})
+
+-- copies current buffer file path to register
+vim.api.nvim_set_keymap('n', 'cp', ':let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>', {noremap=true})
+
+-- Keeps selection when changing indentation
+-- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
+vim.api.nvim_set_keymap('x', '<', '<gv', {noremap=true})
+vim.api.nvim_set_keymap('x', '>', '>gv', {noremap=true})
+
+-- Disable cursorline highlight on insert mode
+-- https://github.com/mhinz/vim-galore#smarter-cursorline
+vim.cmd [[autocmd InsertLeave,WinEnter * set cursorline]]
+vim.cmd [[autocmd InsertEnter,WinLeave * set nocursorline]]
+
+
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
 
@@ -336,6 +393,13 @@ local function onPureNeovim(use)
   -- TODO is there a native lua way to do this?
   vim.cmd [[colorscheme dracula]]
   -- vim.cmd [[colorscheme dracula_pro]]
+
+  -- starts terminal mode on insert mode
+  -- disables line numbers on a newly opened terminal window (not really working)
+  -- autocmd TermOpen term://* startinsert | setlocal nonumber
+  -- close terminal buffer without showing the exit status of the shell
+  -- autocmd TermClose term://* call feedkeys("\<cr>")
+  -- tnoremap <Esc> <C-\><C-n>
 
 end
 
