@@ -1,5 +1,5 @@
 
-let mapleader=","
+let g:mapleader=","
 
 " fonts and other gui stuff
 " make sure to install the powerline patched font
@@ -176,7 +176,9 @@ autocmd InsertLeave,WinEnter * set cursorline
 autocmd InsertEnter,WinLeave * set nocursorline
 
 " so vim won't force pep8 on all python files
-let g:python_recommended_style=0
+lua <<EOF
+  vim.g.python_recommended_style = 0
+EOF
 
 let data_dir = stdpath('data') . '/site'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -205,140 +207,169 @@ Plug 'kwkarlwang/bufjump.nvim'
 
 
 Plug 'tpope/vim-projectionist'
-
-let g:projectionist_heuristics = {
-  \   "jest.config.js|jest.config.ts": {
-  \     "**/__tests__/*.test.js": {
-  \       "alternate": "{}.js",
-  \       "type": "test"
-  \     },
-  \     "*.js": {
-  \       "alternate": "{dirname}/__tests__/{basename}.test.js",
-  \       "type": "source"
-  \     }
-  \   }
-  \}
-
-nnoremap <LEADER>a :A<CR>
-
-
+lua <<EOF
+  vim.api.nvim_set_keymap('n', '<LEADER>a', ':A<CR>', { silent=true, noremap=true })
+  vim.g.projectionist_heuristics = {
+    ['jest.config.js|jest.config.ts']= {
+      ['**/__tests__/*.test.js']= {
+        alternate='{}.js',
+        type='test'
+      },
+      ['*.js']= {
+        alternate='{dirname}/__tests__/{basename}.test.js',
+        type='source'
+      }
+    }
+  }
+EOF
 
 
 if !exists('g:vscode')
 
-  Plug 'sheerun/vim-polyglot'
-  let g:javascript_plugin_flow=1
+Plug 'ntpeters/vim-better-whitespace'
+lua <<EOF
+  vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', { silent=true, noremap=true })
+EOF
 
 
-  Plug 'othree/eregex.vim'
-  let g:eregex_default_enable=0
+Plug 'sheerun/vim-polyglot'
+lua <<EOF
+  vim.g.javascript_plugin_flow = 1
+EOF
 
 
-  Plug 'haya14busa/incsearch.vim'
-  set hlsearch
-  let g:incsearch#auto_nohlsearch=1
-  map /  <Plug>(incsearch-forward)
-  map n  <Plug>(incsearch-nohl-n)
-  map N  <Plug>(incsearch-nohl-N)
-  map *  <Plug>(incsearch-nohl-*)
-  map #  <Plug>(incsearch-nohl-#)
-  map g* <Plug>(incsearch-nohl-g*)
-  map g# <Plug>(incsearch-nohl-g#)
-  map <LEADER>/ <Plug>(incsearch-forward)<C-r><C-w><CR>
+Plug 'othree/eregex.vim'
+lua <<EOF
+  vim.g.eregex_default_enable = 0
+EOF
 
 
-  Plug 'rhysd/git-messenger.vim'
-  let g:git_messenger_floating_win_opts = { 'border': 'single' }
-  let g:git_messenger_popup_content_margins = v:false
-  nmap <LEADER>gm :GitMessenger<CR>
+Plug 'haya14busa/incsearch.vim'
+lua <<EOF
+  vim.o.hlsearch = true
+  vim.g['incsearch#auto_nohlsearch'] = 1
+  vim.api.nvim_set_keymap('', '/', '<Plug>(incsearch-forward)', { noremap=false })
+  vim.api.nvim_set_keymap('', 'n', '<Plug>(incsearch-nohl-n)', { noremap=false })
+  vim.api.nvim_set_keymap('', 'N', '<Plug>(incsearch-nohl-N)', { noremap=false })
+  vim.api.nvim_set_keymap('', '*', '<Plug>(incsearch-nohl-*)', { noremap=false })
+  vim.api.nvim_set_keymap('', '#', '<Plug>(incsearch-nohl-#)', { noremap=false })
+  vim.api.nvim_set_keymap('', 'g*', '<Plug>(incsearch-nohl-g*)', { noremap=false })
+  vim.api.nvim_set_keymap('', 'g#', '<Plug>(incsearch-nohl-g#)', { noremap=false })
+  vim.api.nvim_set_keymap('', '<LEADER>/', '<Plug>(incsearch-forward)<C-r><C-w><CR>', { noremap=false })
+EOF
 
 
-  " colorscheme
-  Plug 'dracula/vim', { 'as': 'dracula' }
-  " Plug '~/gdrive/code/dracula-pro/themes/vim'
-  " let g:dracula_colorterm = 0
+Plug 'rhysd/git-messenger.vim'
+lua <<EOF
+  vim.g.git_messenger_floating_win_opts = { border='single' }
+  vim.g.git_messenger_popup_content_margins = false
+  vim.api.nvim_set_keymap('n', '<LEADER>gm', ':GitMessenger<CR>', { silent=true, noremap=false })
+EOF
 
 
-  Plug 'tpope/vim-vinegar'
-  let g:netrw_liststyle=3
-  noremap <LEADER>z :Vexplore<CR>
+" colorscheme
+Plug 'dracula/vim', { 'as': 'dracula' }
+" Plug '~/gdrive/code/dracula-pro/themes/vim'
+lua <<EOF
+  -- vim.g.dracula_colorterm = 0
+EOF
 
 
-  Plug 'mattboehm/vim-accordion'
-  autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
-
-  fun! s:AutoSetAccordionValue()
-    execute ":AccordionAll " . string(floor(&columns/101))
-  endfun
-
-  " function! CocAfterUpdate(info)
-  "   CocInstall coc-eslint
-  "   CocInstall coc-prettier
-  " endfunction
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'tpope/vim-vinegar'
+lua <<EOF
+  vim.g.netrw_liststyle = 3
+  vim.api.nvim_set_keymap('n', '<LEADER>z', ':Vexplore<CR>', { silent=true, noremap=true })
+EOF
 
 
-  Plug 'cohama/lexima.vim'
+Plug 'mattboehm/vim-accordion'
+lua <<EOF
+-- TODO when autocmd is support on lua we can try to move this to lua properly
+vim.api.nvim_exec(
+[[
+fun! s:AutoSetAccordionValue()
+  execute ":AccordionAll " . string(floor(&columns/101))
+endfun
+
+autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
+]], false)
+EOF
 
 
-  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-  Plug 'windwp/nvim-ts-autotag'
+" function! CocAfterUpdate(info)
+"   CocInstall coc-eslint
+"   CocInstall coc-prettier
+" endfunction
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'williamboman/nvim-lsp-installer'
-  Plug 'tami5/lspsaga.nvim'
-  Plug 'JoosepAlviste/nvim-ts-context-commentstring'
-  Plug 'hrsh7th/cmp-nvim-lsp'
-  Plug 'hrsh7th/cmp-buffer'
-  Plug 'hrsh7th/cmp-path'
-  Plug 'hrsh7th/cmp-cmdline'
-  Plug 'hrsh7th/nvim-cmp'
+Plug 'cohama/lexima.vim'
 
 
-  Plug 'nvim-lua/popup.nvim'
-  Plug 'nvim-lua/plenary.nvim'
-  Plug 'nvim-telescope/telescope.nvim'
-
-  nnoremap <LEADER>ff <cmd>Telescope find_files<CR>
-  nnoremap <LEADER>fg <cmd>Telescope live_grep<CR>
-  nnoremap <LEADER>fb <cmd>Telescope buffers<CR>
-  nnoremap <LEADER>fr <cmd>Telescope lsp_references<CR>
-  nnoremap <LEADER>fd <cmd>Telescope lsp_workspace_diagnostics<CR>
-  nnoremap <LEADER>gs <cmd>Telescope git_status<CR>
-  nnoremap <LEADER>gb <cmd>Telescope git_branches<CR>
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'windwp/nvim-ts-autotag'
 
 
-  Plug 'TimUntersberger/neogit'
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+Plug 'tami5/lspsaga.nvim'
+Plug 'JoosepAlviste/nvim-ts-context-commentstring'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
 
 
-  Plug 'kyazdani42/nvim-web-devicons'
-  Plug 'hoob3rt/lualine.nvim'
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+lua <<EOF
+  vim.api.nvim_set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope lsp_workspace_diagnostics<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>', { silent=false, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>gb', '<cmd>Telescope git_branches<CR>', { silent=false, noremap=true })
+EOF
 
 
-  Plug 'thaerkh/vim-workspace'
-  let g:workspace_autocreate = 1
-  let g:workspace_session_disable_on_args = 1
-  let g:workspace_autosave = 0
-  " This plugin functionality makes no sense, it's completely unrelated from its
-  " core functionality :|
-  let g:workspace_autosave_untrailspaces = 0
-  let g:workspace_autosave_untrailtabs = 0
-
-  let g:workspace_session_directory = expand('~/.local/share/nvim/sessions')
-  let g:workspace_undodir = expand('~/.local/share/nvim/sessions/.undodir')
+Plug 'TimUntersberger/neogit'
 
 
-  Plug 'voldikss/vim-floaterm'
-  Plug 'vim-test/vim-test'
-  let g:test#strategy = "floaterm"
-  let g:test#neovim#start_normal = 1
-  let g:test#basic#start_normal = 1
-  nmap <silent> <LEADER>tn :TestNearest<CR>
-  nmap <silent> <LEADER>tf :TestFile<CR>
-  nmap <silent> <LEADER>ts :TestSuite<CR>
-  nmap <silent> <LEADER>tl :TestLast<CR>
-  nmap <silent> <LEADER>tg :TestVisit<CR>
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'hoob3rt/lualine.nvim'
+
+
+Plug 'thaerkh/vim-workspace'
+lua <<EOF
+  vim.g.workspace_autocreate = 1
+  vim.g.workspace_session_disable_on_args = 1
+  vim.g.workspace_autosave = 0
+  -- This plugin functionality makes no sense, it's completely unrelated from its
+  -- core functionality :|
+  vim.g.workspace_autosave_untrailspaces = 0
+  vim.g.workspace_autosave_untrailtabs = 0
+
+  vim.g.workspace_session_directory = vim.fn.expand('~/.local/share/nvim/sessions')
+  vim.g.workspace_undodir = vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
+EOF
+
+
+Plug 'voldikss/vim-floaterm'
+Plug 'vim-test/vim-test'
+lua <<EOF
+  vim.g['test#strategy'] = 'floaterm'
+  vim.g['test#neovim#start_normal'] = 1
+  vim.g['test#basic#start_normal'] = 1
+
+  vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>tf', ':TestFile<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>ts', ':TestSuite<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>tl', ':TestLast<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { silent=true, noremap=false })
+EOF
 
 
 endif
@@ -349,13 +380,21 @@ call plug#end()
 if !exists('g:vscode')
 
 lua <<EOF
-  require'init'
+  require('init')
+  -- TODO is there a native lua way to do this?
+  vim.cmd('colorscheme dracula')
+  -- vim.cmd('colorscheme dracula_pro')
 EOF
 
-  colorscheme dracula
-  " colorscheme dracula_pro
-
 endif
+
+
+" starts terminal mode on insert mode
+" disables line numbers on a newly opened terminal window (not really working)
+" autocmd TermOpen term://* startinsert | setlocal nonumber
+" close terminal buffer without showing the exit status of the shell
+" autocmd TermClose term://* call feedkeys("\<cr>")
+" tnoremap <Esc> <C-\><C-n>
 
 
 fun! _CodeHubGetLineRange(mode)
@@ -400,51 +439,13 @@ nnoremap <LEADER>hc :let @+=CodeHubGetURL('n')<CR>
 vnoremap <LEADER>hc :<C-U>let @+=CodeHubGetURL('v')<CR>
 
 
-"whitespace in the end of the lines
-"http://vim.wikia.com/wiki/Highlight_unwanted_spaces
-nnoremap <LEADER>W a<ESC><Bar>:%s/\s\+$//<Bar><CR>``:noh<CR>
-highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-match ExtraWhitespace /\s\+$/
-autocmd WinEnter,InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd BufWinLeave * call clearmatches()
-autocmd ColorScheme * highlight ExtraWhitespace ctermbg=darkred guibg=darkred
-
-" starts terminal mode on insert mode
-" disables line numbers on a newly opened terminal window (not really working)
-autocmd TermOpen term://* startinsert | setlocal nonumber
-" close terminal buffer without showing the exit status of the shell
-" autocmd TermClose term://* call feedkeys("\<cr>")
-" tnoremap <Esc> <C-\><C-n>
-
 fun! SourceIfExists(file)
   if filereadable(expand(a:file))
     exe 'source' a:file
   endif
 endfun
 
-call SourceIfExists($HOME . "/.fb-vimrc")
+call SourceIfExists($HOME . '/.fb-vimrc')
 
-" fun! CompleteMonths(findstart, base)
-"   if a:findstart
-"     " locate the start of the word
-"     let line = getline('.')
-"     let start = col('.') - 1
-"     while start > 0 && line[start - 1] =~ '\a'
-"       let start -= 1
-"     endwhile
-"     return start
-"   else
-"     " find months matching with "a:base"
-"     let res = []
-"     for m in split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec")
-"       if m =~ '^' . a:base
-"   call add(res, m)
-"       endif
-"     endfor
-"     return res
-"   endif
-" endfun
-" set completefunc=CompleteMonths
 
 filetype plugin indent on
