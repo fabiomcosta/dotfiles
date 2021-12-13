@@ -1,127 +1,6 @@
-" fonts and other gui stuff
-" make sure to install the powerline patched font
-" version of the font you like
-" https://github.com/Lokaltog/powerline-fonts
-if has("gui_running")
-  set guioptions-=T " remove toolbar
-  set guioptions-=r " remove right-hand scroll bar
-  set guioptions-=L " remove left-hand scroll bar
-
-  " activates ligatures when supported
-  set macligatures
-
-  try
-    set guifont="JetBrains Mono:h16"
-  catch
-  endtry
-endif
-
-" avoiding possible issues on plugins that are generaly only tested on bash.
-set shell=bash
-" vim can merge signcolumn and number column into one
-set signcolumn=number
-
-" adds possibility of using 256 colors
-set termguicolors
-set t_8b=^[[48;2;%lu;%lu;%lum
-set t_8f=^[[38;2;%lu;%lu;%lum
-set t_Co=256
-set t_ut=
-
-" for the dark version
-set background=dark
-
-" default indent settings
-set expandtab
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set shiftround
-
-set autoread
-set nobackup
-set nowritebackup
-set noswapfile
-set visualbell
-set noerrorbells
-set encoding=utf-8
-set scrolloff=8
-set autoindent
-set copyindent
-set title
-set showmode
-set showcmd
-set hidden
-set ruler
-set lazyredraw
-" allows colors on long lines
-set synmaxcol=5000
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-" font line-height
-set linespace=0
-" adds line numbers to the left
-set number
-" prevents delay while pressing esc on insert mode
-set timeoutlen=500 ttimeoutlen=0
-" uses OS clipboard if possible (check +clipboard)
-set clipboard^=unnamed,unnamedplus
-
-" store lots of :cmdline history
-set history=1000
-" mark the ideal max text width
-set colorcolumn=80
-
-" some stuff to get the mouse going in term
-set mouse=a
-
-" keep going up dirs until a tags file is found
-set tags=tags;/
-
-" enable ctrl-n and ctrl-p to scroll thru matches
-set wildmenu
-" make cmdline tab completion similar to bash
-set wildmode=longest:full,full
-" ignored files while searching files and stuff
-set wildignore+=*.so,*.dll,*.exe,*.zip,*.tar,*.gz,*.swf
-set wildignore+=*.swp,*.swo,*~,*.pyc
-set wildignore+=*.psd,*.png,*.gif,*.jpeg,*.jpg,*.pdf
-set wildignore+=*/.git/*,*/.hq/*,*/.svn/*,*/tmp/*
-set wildignore+=*/.sass-cache/*
-set wildignore+=*/submodules/*,*/custom_modules/*
-set wildignore+=tags
-set wildignore+=*.i,*.d,*.sql3 "other exotic extensions
-
-" ignores case
-set ignorecase
-" do not ignore case if explicitly defined on the search
-" by search for an uppercased pattern
-set smartcase
-" defaults to search for every match of the pattern
-set gdefault
-set showmatch
-
-" dont wrap lines
-" set wrap
-" " wrap lines at convenient points
-set linebreak
-set textwidth=360
-set formatoptions=qrn1
-
-" display tabs and trailing spaces
-set list
-set listchars=tab:▸\ ,eol:¬
-
-" folding options
-set foldmethod=indent
-set nofoldenable
-
-set jumpoptions+=stack
-
 lua <<EOF
   require('init')
 EOF
-
 
 fun! _CodeHubGetLineRange(mode)
   if a:mode == 'n'
@@ -143,7 +22,7 @@ fun! _CodeHubGetURL(mode)
   let line_range = _CodeHubGetLineRange(a:mode)
   " echo line_range
   " echo 'mode ' . mode()
-  let local_path = resolve(fnamemodify(expand("%"), ":~:."))
+  let local_path = resolve(fnamemodify(expand('%'), ':~:.'))
   let url = BASE_URL . repo . '/' . git_path_prefix . local_path . '?lines=' . line_range
   return url
 endfun
@@ -172,6 +51,3 @@ fun! SourceIfExists(file)
 endfun
 
 call SourceIfExists($HOME . '/.fb-vimrc')
-
-
-filetype plugin indent on
