@@ -224,14 +224,14 @@ local function onPureNeovim(use)
   use 'haya14busa/incsearch.vim'
   vim.o.hlsearch = true
   vim.g['incsearch#auto_nohlsearch'] = 1
-  vim.api.nvim_set_keymap('', '/', '<Plug>(incsearch-forward)', { noremap=false })
-  vim.api.nvim_set_keymap('', 'n', '<Plug>(incsearch-nohl-n)', { noremap=false })
-  vim.api.nvim_set_keymap('', 'N', '<Plug>(incsearch-nohl-N)', { noremap=false })
-  vim.api.nvim_set_keymap('', '*', '<Plug>(incsearch-nohl-*)', { noremap=false })
-  vim.api.nvim_set_keymap('', '#', '<Plug>(incsearch-nohl-#)', { noremap=false })
-  vim.api.nvim_set_keymap('', 'g*', '<Plug>(incsearch-nohl-g*)', { noremap=false })
-  vim.api.nvim_set_keymap('', 'g#', '<Plug>(incsearch-nohl-g#)', { noremap=false })
-  vim.api.nvim_set_keymap('', '<LEADER>/', '<Plug>(incsearch-forward)<C-r><C-w><CR>', { noremap=false })
+  vim.api.nvim_set_keymap('', '/', '<Plug>(incsearch-forward)', {noremap=false})
+  vim.api.nvim_set_keymap('', 'n', '<Plug>(incsearch-nohl-n)', {noremap=false})
+  vim.api.nvim_set_keymap('', 'N', '<Plug>(incsearch-nohl-N)', {noremap=false})
+  vim.api.nvim_set_keymap('', '*', '<Plug>(incsearch-nohl-*)', {noremap=false})
+  vim.api.nvim_set_keymap('', '#', '<Plug>(incsearch-nohl-#)', {noremap=false})
+  vim.api.nvim_set_keymap('', 'g*', '<Plug>(incsearch-nohl-g*)', {noremap=false})
+  vim.api.nvim_set_keymap('', 'g#', '<Plug>(incsearch-nohl-g#)', {noremap=false})
+  vim.api.nvim_set_keymap('', '<LEADER>/', '<Plug>(incsearch-forward)<C-r><C-w><CR>', {noremap=false})
 
 
   use 'rhysd/git-messenger.vim'
@@ -270,6 +270,7 @@ local function onPureNeovim(use)
 
 
   use 'cohama/lexima.vim'
+  vim.cmd [[autocmd FileType TelescopePrompt let b:lexima_disabled = 1]]
 
 
   use 'kwkarlwang/bufjump.nvim'
@@ -311,9 +312,9 @@ local function onPureNeovim(use)
   local cmp = require'cmp'
   cmp.setup({
     mapping = {
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i', 'c'}),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
       ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
       ['<C-e>'] = cmp.mapping({
         i = cmp.mapping.abort(),
@@ -321,18 +322,18 @@ local function onPureNeovim(use)
       }),
       -- Accept currently selected item. If none selected, `select` first item.
       -- Set `select` to `false` to only confirm explicitly selected items.
-      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+      ['<CR>'] = cmp.mapping.confirm({select = true}),
     },
     sources = cmp.config.sources({
-      { name = 'nvim_lsp' },
+      {name = 'nvim_lsp'},
     }, {
-      { name = 'buffer' },
+      {name = 'buffer'},
     })
   })
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
     sources = {
-      { name = 'buffer' }
+      {name = 'buffer'}
     }
   })
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
@@ -365,7 +366,7 @@ local function onPureNeovim(use)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
     -- Mappings.
-    local opts = { noremap=true, silent=true }
+    local opts = {noremap=true, silent=true}
 
     -- See `:help vim.lsp.*` for documentation on any of the below functions
 
@@ -452,15 +453,23 @@ local function onPureNeovim(use)
 
 
   use 'nvim-lua/popup.nvim'
-  use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
-  vim.api.nvim_set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope lsp_workspace_diagnostics<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>', { silent=false, noremap=true })
-  vim.api.nvim_set_keymap('n', '<LEADER>gb', '<cmd>Telescope git_branches<CR>', { silent=false, noremap=true })
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim'} },
+  }
+  require('telescope').setup({})
+  require('telescope').load_extension('fzy_native')
+
+  vim.api.nvim_set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>', {silent=false, noremap=true})
+  -- TODO, it would be nice to check if the current lsp supports find_references, and if doesn't fallback
+  -- to a livegrep of the current word
+  -- vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope grep_string<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope lsp_workspace_diagnostics<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>gb', '<cmd>Telescope git_branches<CR>', {silent=false, noremap=true})
 
 
   use 'TimUntersberger/neogit'
@@ -470,8 +479,10 @@ local function onPureNeovim(use)
   })
 
 
-  use 'kyazdani42/nvim-web-devicons'
-  use 'hoob3rt/lualine.nvim'
+  use {
+    'hoob3rt/lualine.nvim',
+    requires = { {'kyazdani42/nvim-web-devicons'} },
+  }
   require('lualine').setup({
     options = { theme = 'dracula' }
   })
@@ -490,17 +501,19 @@ local function onPureNeovim(use)
   vim.g.workspace_undodir = vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
 
 
-  use 'voldikss/vim-floaterm'
-  use 'vim-test/vim-test'
+  use {
+    'vim-test/vim-test',
+    requires = { {'voldikss/vim-floaterm'} },
+  }
   vim.g['test#strategy'] = 'floaterm'
   vim.g['test#neovim#start_normal'] = 1
   vim.g['test#basic#start_normal'] = 1
 
-  vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR>', { silent=true, noremap=false })
-  vim.api.nvim_set_keymap('n', '<LEADER>tf', ':TestFile<CR>', { silent=true, noremap=false })
-  vim.api.nvim_set_keymap('n', '<LEADER>ts', ':TestSuite<CR>', { silent=true, noremap=false })
-  vim.api.nvim_set_keymap('n', '<LEADER>tl', ':TestLast<CR>', { silent=true, noremap=false })
-  vim.api.nvim_set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR>', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tf', ':TestFile<CR>', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>ts', ':TestSuite<CR>', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tl', ':TestLast<CR>', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', {silent=true, noremap=false})
 
 
   -- TODO is there a native lua way to do this?
@@ -514,21 +527,33 @@ local function onPureNeovim(use)
   -- autocmd TermClose term://* call feedkeys("\<cr>")
   -- tnoremap <Esc> <C-\><C-n>
 
-end
+  vim.api.nvim_set_keymap('n', '<LEADER>hg', '<cmd>lua require("codehub").openURL("n")<CR>', {noremap=true})
+  vim.api.nvim_set_keymap('v', '<LEADER>hg', ':<C-U>lua require("codehub").openURL("v")<CR>', {noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>hc', '<cmd>lua require("codehub").copyURL("n")<CR>', {noremap=true})
+  vim.api.nvim_set_keymap('v', '<LEADER>hc', ':<C-U>lua require("codehub").copyURL("v")<CR>', {noremap=true})
 
+  local function sourceIfExists(file)
+    if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
+      vim.cmd('source ' .. file)
+    end
+  end
+
+  sourceIfExists(vim.env.HOME .. '/.fb-vimrc')
+
+end
 
 local packer_bootstrap = nil
 local install_path = vim.fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
-if not vim.fn.isdirectory(install_path) then
+if vim.fn.isdirectory(install_path) == 0 then
   packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
 return require('packer').startup(function(use)
   if vim.g.vscode == nil then
     onPureNeovim(use)
-  else
-    onNeovimVSCode(use)
   end
+  onNeovimVSCode(use)
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
