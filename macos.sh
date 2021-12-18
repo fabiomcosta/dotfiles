@@ -21,4 +21,5 @@ defaults write com.apple.screencapture disable-shadow -bool true
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
 # Disable the sound effects on boot
-sudo nvram SystemAudioVolume=' '
+# Very sounds like zx is buggy while asking for password, disabling this for now.
+# sudo nvram SystemAudioVolume=' '
