@@ -1,0 +1,5 @@
+{:profiles  {:Goku {:default true :sim 50 :delay 500 :alone 500 :held 500}}}
+{:main [
+  {:des   "caps_lock"
+    :rules [[:##caps_lock :left_control nil {:alone :escape}]]}
+]}
