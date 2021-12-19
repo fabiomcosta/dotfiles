@@ -1,5 +1,90 @@
-{:profiles  {:Goku {:default true :sim 50 :delay 500 :alone 500 :held 500}}}
-{:main [
-  {:des   "caps_lock"
-    :rules [[:##caps_lock :left_control nil {:alone :escape}]]}
-]}
+;; !  | means mandatory -   modifier(s) alone when pressend change behavior
+;; #  | means optional  -   modifiers are optional (but atleast one necessary)
+
+;; :!Ca is keycode :a and prefix a with !C
+
+;; C  | left_command
+;; T  | left_control
+;; O  | left_option
+;; S  | left_shift
+;; F  | fn
+;; Q  | right_command
+;; W  | right_control
+;; E  | right_option
+;; R  | right_shift
+
+;; ## | optional any
+;; !! | command + control + optional + shift (hyper)
+
+{
+  :profiles  {:Goku {:default true :sim 50 :delay 500 :alone 500 :held 500}}
+
+  :devices   {:macbook-internal [{:vendor_id 1452  :product_id 832}]
+              :kadv2            [{:vendor_id 10730 :product_id 258}]}
+
+  :applications {
+    :chrome ["^com\\.google\\.Chrome$"]
+  }
+
+  :tos {
+    :hyper-key {:key :!CTOleft_shift}
+  }
+
+  ; :simlayer-threshold 210
+
+  ;; each manipulator has a description and multiple rules
+
+  ;;{:des "..."                                       ;; -> description
+  ;; :rules[
+  ;;          [<from>  <to>  <conditions>]            ;; -> rule 1
+  ;;          [<from>  <to>  <conditions>]            ;; -> rule 2
+  ;; ]}
+
+  ;; rule [:period ["period-mode" 1] nil {:afterup ["period-mode" 0] :alone :period}]
+  ;;       |_____| |_______________| |_| |_________________________________________|
+  ;;        <from>    <to>      <conditions>         <other options>
+
+  :main [
+    {:des   "Caps lock: alone -> ESC, hold -> Left Control"
+      :rules [[:##caps_lock :left_control nil {:alone :escape}]]}
+    {:des   "Enter: alone -> Enter, hold -> Right Control"
+      :rules [[:##return_or_enter :right_control nil {:alone :return_or_enter}]]}
+
+    ;; (S)uper (D)uper Mode
+    ;; idea from https://github.com/jasonrudolph/keyboard
+    ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
+    {:des   "Super Duper Mode"
+       :rules [
+        [{:sim [:s :d]
+          :simo {:interrupt true
+                :dorder :insensitive
+                :uorder :insensitive
+                :afterup {:set ["super-duper-mode" 0]}}
+         }
+         {:set ["super-duper-mode" 1]}
+        ]
+        [:##j :down_arrow :super-duper-mode]
+        [:##k :up_arrow :super-duper-mode]
+        [:##h :left_arrow :super-duper-mode]
+        [:##l :right_arrow :super-duper-mode]
+        [:##f :right_shift :super-duper-mode]
+        [:##a :left_command :super-duper-mode]
+        [:##i :!CSopen_bracket :super-duper-mode]
+        [:##o :!CSclose_bracket :super-duper-mode]
+        [:##m :!Cw :super-duper-mode]
+    ]}
+
+    {:des   "Apple keyboards: right option -> Hyper"
+      :rules [:macbook-internal [:##right_option :!CTOleft_shift]]}
+
+    {:des   "Kinesis Advantage: end, page_down -> hyper"
+       :rules [:kadv2
+        [:end       :hyper-key]
+        [:page_down :hyper-key]
+        [:left_arrow :vk_none]
+        [:right_arrow :vk_none]
+        [:up_arrow :vk_none]
+        [:down_arrow :vk_none]
+    ]}
+  ]
+}
