@@ -1,3 +1,6 @@
+;; Implementation of this keyboard layout
+;; http://www.keyboard-layout-editor.com/#/gists/5ddb4214a2999a9ba0b298dbecbd0685
+
 ;; !  | means mandatory -   modifier(s) alone when pressend change behavior
 ;; #  | means optional  -   modifiers are optional (but atleast one necessary)
 
@@ -28,9 +31,8 @@
 
   :tos {
     :hyper-key {:key :!CTOleft_shift}
+    ; :meh-key {:key :!TOleft_shift}
   }
-
-  ; :simlayer-threshold 210
 
   ;; each manipulator has a description and multiple rules
 
@@ -45,46 +47,120 @@
   ;;        <from>    <to>      <conditions>         <other options>
 
   :main [
-    {:des   "Caps lock: alone -> ESC, hold -> Left Control"
-      :rules [[:##caps_lock :left_control nil {:alone :escape}]]}
-    {:des   "Enter: alone -> Enter, hold -> Right Control"
+    {:des "tab: hold -> left_option"
+      :rules [[:##tab :left_option nil {:alone :tab}]]}
+
+    {:des   "backslash: hold -> right_option"
+      :rules [[:##backslash :right_option nil {:alone :backslash}]]}
+    {:des   "quote: hold -> right_command"
+      :rules [[:##quote :right_command nil {:alone :quote}]]}
+
+    {:des   "enter: alone -> return_or_enter, hold -> right_control"
       :rules [[:##return_or_enter :right_control nil {:alone :return_or_enter}]]}
+    {:des   "delete: alone -> delete, hold -> left_control"
+      :rules [[:##delete_forward :left_control nil {:alone :delete_forward}]]}
+
+    {:des   "left_shift: alone -> equal_sign"
+      :rules [[:##left_shift :left_shift nil {:alone :equal_sign}]]}
+    {:des   "right_shift: alone -> hyphen"
+      :rules [[:##right_shift :right_shift nil {:alone :hyphen}]]}
 
     ;; (S)uper (D)uper Mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
-    {:des   "Super Duper Mode"
+    {:des "Toggle Super Duper Mode"
        :rules [
         [{:sim [:s :d]
-          :simo {:interrupt true
-                :dorder :insensitive
-                :uorder :insensitive
-                :afterup {:set ["super-duper-mode" 0]}}
+          :simo {
+            :interrupt true
+            :dorder :insensitive
+            :uorder :insensitive
+            :afterup {:set ["super-duper-mode" 0]}}
          }
          {:set ["super-duper-mode" 1]}
         ]
-        [:##j :down_arrow :super-duper-mode]
-        [:##k :up_arrow :super-duper-mode]
-        [:##h :left_arrow :super-duper-mode]
-        [:##l :right_arrow :super-duper-mode]
-        [:##f :right_shift :super-duper-mode]
-        [:##a :left_command :super-duper-mode]
-        [:##i :!CSopen_bracket :super-duper-mode]
-        [:##o :!CSclose_bracket :super-duper-mode]
-        [:##m :!Cw :super-duper-mode]
+    ]}
+    {:des "Super Duper Mode"
+       :rules [:super-duper-mode
+        [:##j :down_arrow ]
+        [:##k :up_arrow]
+        [:##h :left_arrow]
+        [:##l :right_arrow]
+        [:##f :right_shift]
+        [:##a :left_command]
+        [:##i :!CSopen_bracket]
+        [:##o :!CSclose_bracket]
+        [:##u :!Ct]
+        [:##m :!Cw]
     ]}
 
-    {:des   "Apple keyboards: right option -> Hyper"
-      :rules [:macbook-internal [:##right_option :!CTOleft_shift]]}
+    ;; Meh layer/mode: a numbers + symbols layer
+    {:des "Meh Mode"
+       :rules [:meh-mode
+        ;; Left hand home row
+        [:##f :!S9]
+        [:##d :open_bracket]
+        [:##s :!Sopen_bracket]
+        [:##a :!Sgrave_accent_and_tilde]
+        ;; Right hand home row
+        [:##j :!S0]
+        [:##k :close_bracket]
+        [:##l :!Sclose_bracket]
+        [:##semicolon :grave_accent_and_tilde]
+        ;; Numbers
+        [:##q :1]
+        [:##w :2]
+        [:##e :3]
+        [:##r :4]
+        [:##t :5]
+        [:##y :6]
+        [:##y :7]
+        [:##i :8]
+        [:##o :9]
+        [:##p :0]
+        ;; Symbols
+        [:##z :!S1]
+        [:##x :!S2]
+        [:##c :!S3]
+        [:##v :!S4]
+        [:##m :!S5]
+        [:##comma :!S6]
+        [:##period :!S7]
+        [:##slash :!S8]
+    ]}
 
-    {:des   "Kinesis Advantage: end, page_down -> hyper"
+
+    {:des "Apple keyboards"
+      :rules [:macbook-internal
+        [:##right_option :hyper-key]
+        ;; caps_lock: alone -> escape, hold -> left_control
+        [:##caps_lock :left_control nil {:alone :escape}]
+    ]}
+
+    {:des "Kinesis Advantage"
        :rules [:kadv2
-        [:end       :hyper-key]
-        [:page_down :hyper-key]
-        [:left_arrow :vk_none]
-        [:right_arrow :vk_none]
-        [:up_arrow :vk_none]
-        [:down_arrow :vk_none]
+        [:##left_arrow :vk_none]
+        [:##right_arrow :vk_none]
+        [:##up_arrow :vk_none]
+        [:##down_arrow :vk_none]
+        [:##right_option :vk_none]
+        [:##left_option :vk_none]
+        [:##page_up :vk_none]
+        [:##home :vk_none]
+        [:##hyphen :vk_none]
+        [:##equal_sign :vk_none]
+        [:##non_us_backslash :vk_none]
+        [:##end :vk_none]
+        [:##page_down :vk_none]
+        [:##grave_accent_and_tilde :vk_none]
+        [:##open_bracket :vk_none]
+        [:##close_bracket :vk_none]
+
+        ;; caps_lock: alone -> escape, hold -> left_command
+        [:##caps_lock :left_command nil {:alone :escape}]
+        [:##right_command :hyper-key]
+
+        [:##left_command ["meh-mode" 1] nil {:afterup ["meh-mode" 0]}]
     ]}
   ]
 }
