@@ -266,8 +266,8 @@ local function onPureNeovim(use)
   use {'neoclide/coc.nvim', branch='release'}
 
 
-  use 'cohama/lexima.vim'
-  vim.cmd [[autocmd FileType TelescopePrompt let b:lexima_disabled = 1]]
+  -- use 'cohama/lexima.vim'
+  -- vim.cmd [[autocmd FileType TelescopePrompt let b:lexima_disabled = 1]]
 
 
   use 'kwkarlwang/bufjump.nvim'
