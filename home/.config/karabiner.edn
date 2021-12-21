@@ -20,7 +20,15 @@
 ;; !! | command + control + optional + shift (hyper)
 
 {
-  :profiles  {:Goku {:default true :sim 50 :delay 500 :alone 500 :held 500}}
+  :profiles  {
+    :Goku {
+      :default true
+      :sim 50     ; Keys need to be pressed within this threshold to be considered simultaneous
+      :delay 500  ; Time after which the key press is delayed
+      :held 500   ; TODO: not sure what it's for
+      :alone 1000  ; Hold for .. ms to register single tap
+    }
+  }
 
   :devices   {:macbook-internal [{:vendor_id 1452  :product_id 832}]
               :kadv2            [{:vendor_id 10730 :product_id 258}]}
@@ -47,46 +55,29 @@
   ;;        <from>    <to>      <conditions>         <other options>
 
   :main [
-    {:des "tab: hold -> left_option"
-      :rules [[:##tab :left_option nil {:alone :tab}]]}
-
-    {:des   "backslash: hold -> right_option"
-      :rules [[:##backslash :right_option nil {:alone :backslash}]]}
-    {:des   "quote: hold -> right_command"
-      :rules [[:##quote :right_command nil {:alone :quote}]]}
-
-    {:des   "enter: alone -> return_or_enter, hold -> right_control"
-      :rules [[:##return_or_enter :right_control nil {:alone :return_or_enter}]]}
-    {:des   "delete: alone -> delete, hold -> left_control"
-      :rules [[:##delete_forward :left_control nil {:alone :delete_forward}]]}
-
-    {:des   "left_shift: alone -> equal_sign"
-      :rules [[:##left_shift :left_shift nil {:alone :equal_sign}]]}
-    {:des   "right_shift: alone -> hyphen"
-      :rules [[:##right_shift :right_shift nil {:alone :hyphen}]]}
-
-    ;; (S)uper (D)uper Mode
+    ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
-    {:des "Toggle Super Duper Mode"
+    {:des " Toggle Navigation Mode"
        :rules [
         [{:sim [:s :d]
           :simo {
             :interrupt true
-            :dorder :insensitive
-            :uorder :insensitive
-            :afterup {:set ["super-duper-mode" 0]}}
+            :afterup {:set ["navigation-mode" 0]}}
          }
-         {:set ["super-duper-mode" 1]}
+         {:set ["navigation-mode" 1]}
         ]
     ]}
-    {:des "Super Duper Mode"
-       :rules [:super-duper-mode
+    {:des "Navigation Mode"
+       :rules [:navigation-mode
         [:##j :down_arrow ]
         [:##k :up_arrow]
         [:##h :left_arrow]
         [:##l :right_arrow]
         [:##f :right_shift]
+        [:##r :!Cc]
+        [:##v :!Cv]
+
         [:##a :left_command]
         [:##i :!CSopen_bracket]
         [:##o :!CSclose_bracket]
@@ -99,13 +90,13 @@
        :rules [:meh-mode
         ;; Left hand home row
         [:##f :!S9]
-        [:##d :open_bracket]
-        [:##s :!Sopen_bracket]
+        [:##d :!Sopen_bracket]
+        [:##s :open_bracket]
         [:##a :!Sgrave_accent_and_tilde]
         ;; Right hand home row
         [:##j :!S0]
-        [:##k :close_bracket]
-        [:##l :!Sclose_bracket]
+        [:##k :!Sclose_bracket]
+        [:##l :close_bracket]
         [:##semicolon :grave_accent_and_tilde]
         ;; Numbers
         [:##q :1]
@@ -114,7 +105,7 @@
         [:##r :4]
         [:##t :5]
         [:##y :6]
-        [:##y :7]
+        [:##u :7]
         [:##i :8]
         [:##o :9]
         [:##p :0]
@@ -139,28 +130,58 @@
 
     {:des "Kinesis Advantage"
        :rules [:kadv2
+        ;; Disable arrow keys
         [:##left_arrow :vk_none]
         [:##right_arrow :vk_none]
         [:##up_arrow :vk_none]
         [:##down_arrow :vk_none]
+        ;; Disable some thumb cluster keys
         [:##right_option :vk_none]
         [:##left_option :vk_none]
         [:##page_up :vk_none]
         [:##home :vk_none]
-        [:##hyphen :vk_none]
-        [:##equal_sign :vk_none]
-        [:##non_us_backslash :vk_none]
         [:##end :vk_none]
         [:##page_down :vk_none]
+        ;; Disable some base layour keys
+        [:##non_us_backslash :vk_none]
         [:##grave_accent_and_tilde :vk_none]
         [:##open_bracket :vk_none]
         [:##close_bracket :vk_none]
+        ;; Disable number row
+        [:##hyphen :vk_none]
+        [:##equal_sign :vk_none]
+        [:##1 :vk_none]
+        [:##2 :vk_none]
+        [:##3 :vk_none]
+        [:##4 :vk_none]
+        [:##5 :vk_none]
+        [:##6 :vk_none]
+        [:##7 :vk_none]
+        [:##8 :vk_none]
+        [:##9 :vk_none]
+        [:##0 :vk_none]
 
+        ;; "tab: hold -> left_option"
+        [:##tab :left_option nil {:alone :tab}]
         ;; caps_lock: alone -> escape, hold -> left_command
         [:##caps_lock :left_command nil {:alone :escape}]
+        ;; "backslash: hold -> right_option"
+        [:##backslash :right_option nil {:alone :backslash}]
+        ;; "quote: hold -> right_command"
+        [:##quote :right_command nil {:alone :quote}]
+        ;; "enter: alone -> return_or_enter, hold -> right_control"
+        [:##return_or_enter :right_control nil {:alone :return_or_enter}]
+        ;; "delete: alone -> delete, hold -> meh-mode"
+        [:##delete_forward ["meh-mode" 1] nil {:afterup ["meh-mode" 0] :alone :delete_forward}]
+        ;; "left_shift: alone -> equal_sign"
+        [:##left_shift :left_shift nil {:alone :equal_sign}]
+        ;; "right_shift: alone -> hyphen"
+        [:##right_shift :right_shift nil {:alone :hyphen}]
+        ;; "left and right commands: hyper-key"
         [:##right_command :hyper-key]
+        [:##left_command :hyper-key]
 
-        [:##left_command ["meh-mode" 1] nil {:afterup ["meh-mode" 0]}]
+        ;; TODO dev layer? https://wiki.monosor.com/keyboard
     ]}
   ]
 }

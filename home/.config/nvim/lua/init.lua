@@ -9,74 +9,74 @@ if vim.fn.has('gui_running') > 0 then
   vim.opt.guioptions:remove('L') -- remove left-hand scroll bar
 
   -- activates ligatures when supported
-  vim.o.macligatures = true
-  vim.o.guifont = 'JetBrainsMono Nerd Font:h16'
+  vim.opt.macligatures = true
+  vim.opt.guifont = 'JetBrainsMono Nerd Font:h16'
 end
 
 vim.g.mapleader = ','
 
 -- avoiding possible issues on plugins that are generaly only tested on bash.
-vim.o.shell = 'bash'
+vim.opt.shell = 'bash'
 -- vim can merge signcolumn and number column into one
-vim.o.signcolumn = 'number'
+vim.opt.signcolumn = 'number'
 
 -- adds possibility of using 256 colors
-vim.o.termguicolors = true
--- vim.o.t_8b = '^[[48;2;%lu;%lu;%lum'
--- vim.o.t_8f = '^[[38;2;%lu;%lu;%lum'
--- vim.o.t_Co = '256'
--- vim.o.t_ut = nil
+vim.opt.termguicolors = true
+-- vim.opt.t_8b = '^[[48;2;%lu;%lu;%lum'
+-- vim.opt.t_8f = '^[[38;2;%lu;%lu;%lum'
+-- vim.opt.t_Co = '256'
+-- vim.opt.t_ut = nil
 
 -- for the dark version
-vim.o.background = 'dark'
+vim.opt.background = 'dark'
 
 -- default indent settings
-vim.o.expandtab = true
-vim.o.tabstop = 2
-vim.o.softtabstop = 2
-vim.o.shiftwidth = 2
-vim.o.shiftround = true
+vim.opt.expandtab = true
+vim.opt.tabstop = 2
+vim.opt.softtabstop = 2
+vim.opt.shiftwidth = 2
+vim.opt.shiftround = true
 
-vim.o.autoread = true
-vim.o.backup = false
-vim.o.writebackup = false
-vim.o.swapfile = false
-vim.o.visualbell = true
-vim.o.errorbells = false
-vim.o.encoding = 'utf-8'
-vim.o.scrolloff = 8
-vim.o.autoindent = true
-vim.o.copyindent = true
-vim.o.title = true
-vim.o.showmode = true
-vim.o.showcmd = true
-vim.o.hidden = true
-vim.o.ruler = true
-vim.o.lazyredraw = true
+vim.opt.autoread = true
+vim.opt.backup = false
+vim.opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.visualbell = true
+vim.opt.errorbells = false
+vim.opt.encoding = 'utf-8'
+vim.opt.scrolloff = 8
+vim.opt.autoindent = true
+vim.opt.copyindent = true
+vim.opt.title = true
+vim.opt.showmode = true
+vim.opt.showcmd = true
+vim.opt.hidden = true
+vim.opt.ruler = true
+vim.opt.lazyredraw = true
 -- allows colors on long lines
-vim.o.synmaxcol = 5000
+vim.opt.synmaxcol = 5000
 -- allow backspacing over everything in insert mode
 vim.opt.backspace = {'indent', 'eol', 'start'}
 -- font line-height
-vim.o.linespace = 0
+vim.opt.linespace = 0
 -- adds line numbers to the left
-vim.o.number = true
+vim.opt.number = true
 -- prevents delay while pressing esc on insert mode
-vim.o.timeoutlen = 5000
-vim.o.ttimeoutlen = 0
+vim.opt.timeoutlen = 5000
+vim.opt.ttimeoutlen = 0
 -- uses OS clipboard if possible (check +clipboard)
 vim.opt.clipboard:append({'unnamed', 'unnamedplus'})
 -- store lots of :cmdline history
-vim.o.history = 1000
+vim.opt.history = 1000
 -- mark the ideal max text width
-vim.o.colorcolumn = '80'
+vim.opt.colorcolumn = '80'
 -- some stuff to get the mouse going in term
-vim.o.mouse = 'a'
+vim.opt.mouse = 'a'
 -- keep going up dirs until a tags file is found
-vim.o.tags = 'tags;/'
+vim.opt.tags = 'tags;/'
 
 -- enable ctrl-n and ctrl-p to scroll through matches
-vim.o.wildmenu = true
+vim.opt.wildmenu = true
 -- make cmdline tab completion similar to bash
 vim.opt.wildmode = {'longest', 'full'}
 -- ignored files while searching files and stuff
@@ -92,25 +92,25 @@ vim.opt.wildignore = {
 }
 
 -- ignores case
-vim.o.ignorecase = true
+vim.opt.ignorecase = true
 -- do not ignore case if explicitly defined on the search
 -- by search for an uppercased pattern
-vim.o.smartcase = true
+vim.opt.smartcase = true
 -- defaults to search for every match of the pattern
-vim.o.gdefault = true
-vim.o.showmatch = true
+vim.opt.gdefault = true
+vim.opt.showmatch = true
 -- dont wrap lines
-vim.o.wrap = true
+vim.opt.wrap = true
 -- wrap lines at convenient points
-vim.o.linebreak = true
-vim.o.textwidth = 360
-vim.o.formatoptions = 'qrn1'
+vim.opt.linebreak = true
+vim.opt.textwidth = 360
+vim.opt.formatoptions = 'qrn1'
 -- -- display tabs and trailing spaces
-vim.o.list = true
+vim.opt.list = true
 vim.opt.listchars = {tab='▸\\ ', eol='¬'}
 -- folding options
-vim.o.foldmethod = 'indent'
-vim.o.foldenable = false
+vim.opt.foldmethod = 'indent'
+vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({'stack'})
 
@@ -125,10 +125,6 @@ vim.api.nvim_set_keymap('n', '<DOWN>', '12j', {noremap=true})
 vim.api.nvim_set_keymap('v', '<DOWN>', '12j', {noremap=true})
 vim.api.nvim_set_keymap('n', '<UP>', '12k', {noremap=true})
 vim.api.nvim_set_keymap('v', '<UP>', '12k', {noremap=true})
-
--- moves the cursor around the buffer windows
-vim.api.nvim_set_keymap('n', '<LEFT>', '<C-w>h', {noremap=true})
-vim.api.nvim_set_keymap('n', '<RIGHT>', '<C-w>l', {noremap=true})
 
 vim.api.nvim_set_keymap('i', 'jj', '<ESC>', {noremap=true})
 vim.api.nvim_set_keymap('n', ';', ':', {noremap=true})
@@ -485,7 +481,15 @@ local function onPureNeovim(use)
     requires = { {'kyazdani42/nvim-web-devicons'} },
   }
   require('lualine').setup({
-    options = { theme = 'dracula' }
+    options = {
+      theme = 'dracula',
+    },
+    sections = {
+      lualine_c = {{'filename', path = 1}}
+    },
+    inactive_sections = {
+      lualine_c = {{'filename', path = 1}},
+    }
   })
 
 
