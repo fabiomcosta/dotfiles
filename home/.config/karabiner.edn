@@ -24,7 +24,7 @@
     :Goku {
       :default true
       :sim 50     ; Keys need to be pressed within this threshold to be considered simultaneous
-      :delay 500  ; Time after which the key press is delayed
+      :delay 200  ; Time after which the key press is delayed
       :held 200   ; Delay to register held key
       :alone 200  ; Hold for .. ms to register single tap
     }
@@ -183,59 +183,12 @@
 
     {:des "Kinesis Advantage delayed modifiers"
        :rules [:kadv2
-        ;; "quote: hold -> right_command" with a delay before command is actually activated
-        [:##quote ["delayed-modifier" 1] nil {:held [["delayed-modifier" 0] {:key :right_command :halt true}] :afterup [:quote ["delayed-modifier" 0]]}]
-        ;; "spacebar hold -> hyper_key" with a delay before hyper_key is actually activated
-        [:##spacebar ["delayed-modifier" 1] nil {:held [["delayed-modifier" 0] {:key :!CTOleft_shift :halt true}] :afterup [:spacebar ["delayed-modifier" 0]]}]
-        ;; Bear with me here...
-        ;; I wanted my quote key to be quote alone/tap and command on hold.
-        ;; So I started by setting it to the following:
-        ;;
-        ;; [:##quote :right_command nil {:alone :quote}]
-        ;;
-        ;; That worked well for a while, but I started to notice some weird
-        ;; behavior while I was typing, like programs would minimize or a new
-        ;; tab would open while on Chrome.
-        ;; Eventually I realized that the issue was that when I was typing fast
-        ;; my quote key would turn into command and the next key press would
-        ;; cause a cmd+key hotkey to happen, which wasn't intended.
-        ;; After a lot of research I came up with what I have now, but with
-        ;; another problem showed up...
-        ;; With this rule, when tipying quote and the next key simultaneously
-        ;; that next key would take precedence and be rendered before the quote.
-        ;;
-        ;; The following lines make sure that any simultaneous key pressed with
-        ;; the quote modifier, will only be rendered on keyup, fixing the issue.
-        ;;
-        ;; this was pretty painful... but I couldn't find an alternative to fix
-        ;; the issue. Please let me know if you have a better solution.
-        [:##a nil :delayed-modifier {:afterup :a}]
-        [:##b nil :delayed-modifier {:afterup :b}]
-        [:##c nil :delayed-modifier {:afterup :c}]
-        [:##d nil :delayed-modifier {:afterup :d}]
-        [:##e nil :delayed-modifier {:afterup :e}]
-        [:##f nil :delayed-modifier {:afterup :f}]
-        [:##g nil :delayed-modifier {:afterup :g}]
-        [:##h nil :delayed-modifier {:afterup :h}]
-        [:##i nil :delayed-modifier {:afterup :i}]
-        [:##j nil :delayed-modifier {:afterup :j}]
-        [:##k nil :delayed-modifier {:afterup :k}]
-        [:##l nil :delayed-modifier {:afterup :l}]
-        [:##m nil :delayed-modifier {:afterup :m}]
-        [:##n nil :delayed-modifier {:afterup :n}]
-        [:##o nil :delayed-modifier {:afterup :o}]
-        [:##p nil :delayed-modifier {:afterup :p}]
-        [:##q nil :delayed-modifier {:afterup :q}]
-        [:##r nil :delayed-modifier {:afterup :r}]
-        [:##s nil :delayed-modifier {:afterup :s}]
-        [:##t nil :delayed-modifier {:afterup :t}]
-        [:##u nil :delayed-modifier {:afterup :u}]
-        [:##v nil :delayed-modifier {:afterup :v}]
-        [:##w nil :delayed-modifier {:afterup :w}]
-        [:##x nil :delayed-modifier {:afterup :x}]
-        [:##y nil :delayed-modifier {:afterup :y}]
-        [:##z nil :delayed-modifier {:afterup :z}]
-        [:##delete_or_backspace nil :delayed-modifier {:afterup :delete_or_backspace}]
+        ;; "quote: hold -> right_command" with a delay before command is actually activated.
+        ;; If another key is pressed at the same time (fast typing) the :quote key events are going to happen before that next key events.
+        [:##quote nil nil {:held :right_command :delayed {:invoked :quote :canceled :quote}}]
+        ;; "spacebar hold -> hyper_key" with a delay before hyper_key is actually activated.
+        ;; If another key is pressed at the same time (fast typing) the :spacebar key events are going to happen before that next key events.
+        [:##spacebar nil nil {:held :hyper_key :delayed {:invoked :spacebar :canceled :spacebar}}]
     ]}
 
   ]
