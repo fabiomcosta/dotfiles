@@ -25,8 +25,8 @@
       :default true
       :sim 50     ; Keys need to be pressed within this threshold to be considered simultaneous
       :delay 500  ; Time after which the key press is delayed
-      :held 500   ; TODO: not sure what it's for
-      :alone 1000  ; Hold for .. ms to register single tap
+      :held 200   ; Delay to register held key
+      :alone 200  ; Hold for .. ms to register single tap
     }
   }
 
@@ -38,8 +38,8 @@
   }
 
   :tos {
-    :hyper-key {:key :!CTOleft_shift}
-    ; :meh-key {:key :!TOleft_shift}
+    :hyper_key {:key :!CTOleft_shift}
+    ; :meh_key {:key :!TOleft_shift}
   }
 
   ;; each manipulator has a description and multiple rules
@@ -123,7 +123,7 @@
 
     {:des "Apple keyboards"
       :rules [:macbook-internal
-        [:##right_option :hyper-key]
+        [:##right_option :hyper_key]
         ;; caps_lock: alone -> escape, hold -> left_control
         [:##caps_lock :left_control nil {:alone :escape}]
     ]}
@@ -142,6 +142,8 @@
         [:##home :vk_none]
         [:##end :vk_none]
         [:##page_down :vk_none]
+        [:##left_command :vk_none]
+        [:##right_command :vk_none]
         ;; Disable some base layour keys
         [:##non_us_backslash :vk_none]
         [:##grave_accent_and_tilde :vk_none]
@@ -167,9 +169,6 @@
         [:##caps_lock :left_command nil {:alone :escape}]
         ;; "backslash: hold -> right_option"
         [:##backslash :right_option nil {:alone :backslash}]
-        ;; "quote: hold -> right_command" with a delay before command is actually activated
-        ;; See https://karabiner-elements.pqrs.org/docs/json/typical-complex-modifications-examples/#open-alfred-4-if-escape-is-held-down
-        [:##quote :quote nil {:held :right_command :params {:held 120}}]
         ;; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
         ;; "delete: alone -> delete, hold -> meh-mode"
@@ -178,11 +177,66 @@
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
         [:##right_shift :right_shift nil {:alone :hyphen}]
-        ;; "left and right commands: hyper-key"
-        [:##right_command :hyper-key]
-        [:##left_command :hyper-key]
 
         ;; TODO dev layer? https://wiki.monosor.com/keyboard
     ]}
+
+    {:des "Kinesis Advantage delayed modifiers"
+       :rules [:kadv2
+        ;; "quote: hold -> right_command" with a delay before command is actually activated
+        [:##quote ["delayed-modifier" 1] nil {:held [["delayed-modifier" 0] {:key :right_command :halt true}] :afterup [:quote ["delayed-modifier" 0]]}]
+        ;; "spacebar hold -> hyper_key" with a delay before hyper_key is actually activated
+        [:##spacebar ["delayed-modifier" 1] nil {:held [["delayed-modifier" 0] {:key :!CTOleft_shift :halt true}] :afterup [:spacebar ["delayed-modifier" 0]]}]
+        ;; Bear with me here...
+        ;; I wanted my quote key to be quote alone/tap and command on hold.
+        ;; So I started by setting it to the following:
+        ;;
+        ;; [:##quote :right_command nil {:alone :quote}]
+        ;;
+        ;; That worked well for a while, but I started to notice some weird
+        ;; behavior while I was typing, like programs would minimize or a new
+        ;; tab would open while on Chrome.
+        ;; Eventually I realized that the issue was that when I was typing fast
+        ;; my quote key would turn into command and the next key press would
+        ;; cause a cmd+key hotkey to happen, which wasn't intended.
+        ;; After a lot of research I came up with what I have now, but with
+        ;; another problem showed up...
+        ;; With this rule, when tipying quote and the next key simultaneously
+        ;; that next key would take precedence and be rendered before the quote.
+        ;;
+        ;; The following lines make sure that any simultaneous key pressed with
+        ;; the quote modifier, will only be rendered on keyup, fixing the issue.
+        ;;
+        ;; this was pretty painful... but I couldn't find an alternative to fix
+        ;; the issue. Please let me know if you have a better solution.
+        [:##a nil :delayed-modifier {:afterup :a}]
+        [:##b nil :delayed-modifier {:afterup :b}]
+        [:##c nil :delayed-modifier {:afterup :c}]
+        [:##d nil :delayed-modifier {:afterup :d}]
+        [:##e nil :delayed-modifier {:afterup :e}]
+        [:##f nil :delayed-modifier {:afterup :f}]
+        [:##g nil :delayed-modifier {:afterup :g}]
+        [:##h nil :delayed-modifier {:afterup :h}]
+        [:##i nil :delayed-modifier {:afterup :i}]
+        [:##j nil :delayed-modifier {:afterup :j}]
+        [:##k nil :delayed-modifier {:afterup :k}]
+        [:##l nil :delayed-modifier {:afterup :l}]
+        [:##m nil :delayed-modifier {:afterup :m}]
+        [:##n nil :delayed-modifier {:afterup :n}]
+        [:##o nil :delayed-modifier {:afterup :o}]
+        [:##p nil :delayed-modifier {:afterup :p}]
+        [:##q nil :delayed-modifier {:afterup :q}]
+        [:##r nil :delayed-modifier {:afterup :r}]
+        [:##s nil :delayed-modifier {:afterup :s}]
+        [:##t nil :delayed-modifier {:afterup :t}]
+        [:##u nil :delayed-modifier {:afterup :u}]
+        [:##v nil :delayed-modifier {:afterup :v}]
+        [:##w nil :delayed-modifier {:afterup :w}]
+        [:##x nil :delayed-modifier {:afterup :x}]
+        [:##y nil :delayed-modifier {:afterup :y}]
+        [:##z nil :delayed-modifier {:afterup :z}]
+        [:##delete_or_backspace nil :delayed-modifier {:afterup :delete_or_backspace}]
+    ]}
+
   ]
 }

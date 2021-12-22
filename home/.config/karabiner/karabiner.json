@@ -853,8 +853,8 @@
       "parameters" : {
         "basic.simultaneous_threshold_milliseconds" : 50,
         "basic.to_delayed_action_delay_milliseconds" : 500,
-        "basic.to_if_alone_timeout_milliseconds" : 1000,
-        "basic.to_if_held_down_threshold_milliseconds" : 500
+        "basic.to_if_alone_timeout_milliseconds" : 200,
+        "basic.to_if_held_down_threshold_milliseconds" : 200
       },
       "rules" : [ {
         "description" : " Toggle Navigation Mode",
@@ -1746,6 +1746,42 @@
           "type" : "basic"
         }, {
           "from" : {
+            "key_code" : "left_command",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "right_command",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
             "key_code" : "non_us_backslash",
             "modifiers" : {
               "optional" : [ "any" ]
@@ -2096,30 +2132,6 @@
           } ],
           "type" : "basic"
         }, {
-          "to_if_held_down" : [ {
-            "key_code" : "right_command"
-          } ],
-          "parameters" : {
-            "basic.to_if_held_down_threshold_milliseconds" : 120
-          },
-          "from" : {
-            "key_code" : "quote",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "quote"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
           "to_if_alone" : [ {
             "key_code" : "return_or_enter"
           } ],
@@ -2212,16 +2224,38 @@
             "type" : "device_if"
           } ],
           "type" : "basic"
-        }, {
-          "from" : {
+        } ]
+      }, {
+        "description" : "Kinesis Advantage delayed modifiers",
+        "manipulators" : [ {
+          "to_if_held_down" : [ {
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 0
+            }
+          }, {
             "key_code" : "right_command",
+            "halt" : true
+          } ],
+          "to_after_key_up" : [ {
+            "key_code" : "quote"
+          }, {
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 0
+            }
+          } ],
+          "from" : {
+            "key_code" : "quote",
             "modifiers" : {
               "optional" : [ "any" ]
             }
           },
           "to" : [ {
-            "key_code" : "left_shift",
-            "modifiers" : [ "left_command", "left_control", "left_option" ]
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 1
+            }
           } ],
           "conditions" : [ {
             "identifiers" : [ {
@@ -2232,17 +2266,631 @@
           } ],
           "type" : "basic"
         }, {
+          "to_if_held_down" : [ {
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 0
+            }
+          }, {
+            "key_code" : "left_shift",
+            "modifiers" : [ "left_command", "left_control", "left_option" ],
+            "halt" : true
+          } ],
+          "to_after_key_up" : [ {
+            "key_code" : "spacebar"
+          }, {
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 0
+            }
+          } ],
           "from" : {
-            "key_code" : "left_command",
+            "key_code" : "spacebar",
             "modifiers" : {
               "optional" : [ "any" ]
             }
           },
           "to" : [ {
-            "key_code" : "left_shift",
-            "modifiers" : [ "left_command", "left_control", "left_option" ]
+            "set_variable" : {
+              "name" : "delayed-modifier",
+              "value" : 1
+            }
           } ],
           "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "a"
+          } ],
+          "from" : {
+            "key_code" : "a",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "b"
+          } ],
+          "from" : {
+            "key_code" : "b",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "c"
+          } ],
+          "from" : {
+            "key_code" : "c",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "d"
+          } ],
+          "from" : {
+            "key_code" : "d",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "e"
+          } ],
+          "from" : {
+            "key_code" : "e",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "f"
+          } ],
+          "from" : {
+            "key_code" : "f",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "g"
+          } ],
+          "from" : {
+            "key_code" : "g",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "h"
+          } ],
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "i"
+          } ],
+          "from" : {
+            "key_code" : "i",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "j"
+          } ],
+          "from" : {
+            "key_code" : "j",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "k"
+          } ],
+          "from" : {
+            "key_code" : "k",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "l"
+          } ],
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "m"
+          } ],
+          "from" : {
+            "key_code" : "m",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "n"
+          } ],
+          "from" : {
+            "key_code" : "n",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "o"
+          } ],
+          "from" : {
+            "key_code" : "o",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "p"
+          } ],
+          "from" : {
+            "key_code" : "p",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "q"
+          } ],
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "r"
+          } ],
+          "from" : {
+            "key_code" : "r",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "s"
+          } ],
+          "from" : {
+            "key_code" : "s",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "t"
+          } ],
+          "from" : {
+            "key_code" : "t",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "u"
+          } ],
+          "from" : {
+            "key_code" : "u",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "v"
+          } ],
+          "from" : {
+            "key_code" : "v",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "w"
+          } ],
+          "from" : {
+            "key_code" : "w",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "x"
+          } ],
+          "from" : {
+            "key_code" : "x",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "y"
+          } ],
+          "from" : {
+            "key_code" : "y",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "z"
+          } ],
+          "from" : {
+            "key_code" : "z",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "identifiers" : [ {
+              "vendor_id" : 10730,
+              "product_id" : 258
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_after_key_up" : [ {
+            "key_code" : "delete_or_backspace"
+          } ],
+          "from" : {
+            "key_code" : "delete_or_backspace",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "delayed-modifier",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
             "identifiers" : [ {
               "vendor_id" : 10730,
               "product_id" : 258
