@@ -167,9 +167,9 @@
         [:##caps_lock :left_command nil {:alone :escape}]
         ;; "backslash: hold -> right_option"
         [:##backslash :right_option nil {:alone :backslash}]
-        ;; "quote: hold -> right_command" with a 200 delay before command is actually activated
+        ;; "quote: hold -> right_command" with a delay before command is actually activated
         ;; See https://karabiner-elements.pqrs.org/docs/json/typical-complex-modifications-examples/#open-alfred-4-if-escape-is-held-down
-        [:##quote nil nil {:alone :quote :held :right_command :params {:alone 200 :held 200}}]
+        [:##quote :quote nil {:held :right_command :params {:held 120}}]
         ;; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
         ;; "delete: alone -> delete, hold -> meh-mode"
