@@ -37,6 +37,14 @@
     :chrome ["^com\\.google\\.Chrome$"]
   }
 
+  :templates {
+    :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"%s\")'"
+  }
+
+  :simlayers {
+    :open_mode {:key :o}
+  }
+
   :tos {
     :hyper_key {:key :!CTOleft_shift}
     ; :meh_key {:key :!TOleft_shift}
@@ -58,18 +66,18 @@
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
-    {:des " Toggle Navigation Mode"
+    {:des " toggle navigation mode"
        :rules [
         [{:sim [:s :d]
           :simo {
             :interrupt true
-            :afterup {:set ["navigation-mode" 0]}}
+            :afterup {:set ["navigation_mode" 0]}}
          }
-         {:set ["navigation-mode" 1]}
+         {:set ["navigation_mode" 1]}
         ]
     ]}
-    {:des "Navigation Mode"
-       :rules [:navigation-mode
+    {:des "navigation mode"
+       :rules [:navigation_mode
         [:##j :down_arrow ]
         [:##k :up_arrow]
         [:##h :left_arrow]
@@ -85,9 +93,21 @@
         [:##m :!Cw]
     ]}
 
+    {:des "open mode"
+       :rules [:open_mode
+        [:a [:hsl "Spotify"]]
+        [:b [:hsl "Google Chrome"]]
+        [:c [:hsl "Workplace Chat"]]
+        [:e [:hsl "Finder"]]
+        [:f [:hsl "VS Code @ FB"]]
+        [:m [:hsl "Microsoft Outlook"]]
+        [:t [:hsl "Alacritty"]]
+        [:n [:hsl "Notion"]]
+    ]}
+
     ;; Meh layer/mode: a numbers + symbols layer
-    {:des "Meh Mode"
-       :rules [:meh-mode
+    {:des "meh mode"
+       :rules [:meh_mode
         ;; Left hand home row
         [:##f :!S9]
         [:##d :!Sopen_bracket]
@@ -120,15 +140,17 @@
         [:##slash :!S8]
     ]}
 
-
-    {:des "Apple keyboards"
-      :rules [:macbook-internal
-        [:##right_option :hyper_key]
+    {:des "any device"
+      :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
         [:##caps_lock :left_control nil {:alone :escape}]
     ]}
 
-    {:des "Kinesis Advantage"
+    {:des "apple keyboards"
+      :rules [:macbook-internal
+    ]}
+
+    {:des "kinesis advantage"
        :rules [:kadv2
         ;; Disable arrow keys
         [:##left_arrow :vk_none]
@@ -142,8 +164,6 @@
         [:##home :vk_none]
         [:##end :vk_none]
         [:##page_down :vk_none]
-        [:##left_command :vk_none]
-        [:##right_command :vk_none]
         ;; Disable some base layour keys
         [:##non_us_backslash :vk_none]
         [:##grave_accent_and_tilde :vk_none]
@@ -165,14 +185,12 @@
 
         ;; "tab: hold -> left_option"
         [:##tab :left_option nil {:alone :tab}]
-        ;; caps_lock: alone -> escape, hold -> left_command
-        [:##caps_lock :left_command nil {:alone :escape}]
         ;; "backslash: hold -> right_option"
         [:##backslash :right_option nil {:alone :backslash}]
         ;; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
         ;; "delete: alone -> delete, hold -> meh-mode"
-        [:##delete_forward ["meh-mode" 1] nil {:afterup ["meh-mode" 0] :alone :delete_forward}]
+        [:##delete_forward ["meh_mode" 1] nil {:afterup ["meh_mode" 0] :alone :delete_forward}]
         ;; "left_shift: alone -> equal_sign"
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
@@ -180,16 +198,5 @@
 
         ;; TODO dev layer? https://wiki.monosor.com/keyboard
     ]}
-
-    {:des "Kinesis Advantage delayed modifiers"
-       :rules [:kadv2
-        ;; "quote: hold -> right_command" with a delay before command is actually activated.
-        ;; If another key is pressed at the same time (fast typing) the :quote key events are going to happen before that next key events.
-        [:##quote nil nil {:held :right_command :delayed {:invoked :quote :canceled :quote}}]
-        ;; "spacebar hold -> hyper_key" with a delay before hyper_key is actually activated.
-        ;; If another key is pressed at the same time (fast typing) the :spacebar key events are going to happen before that next key events.
-        [:##spacebar nil nil {:held :hyper_key :delayed {:invoked :spacebar :canceled :spacebar}}]
-    ]}
-
   ]
 }

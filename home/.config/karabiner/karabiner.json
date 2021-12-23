@@ -857,7 +857,7 @@
         "basic.to_if_held_down_threshold_milliseconds" : 200
       },
       "rules" : [ {
-        "description" : " Toggle Navigation Mode",
+        "description" : " toggle navigation mode",
         "manipulators" : [ {
           "from" : {
             "simultaneous" : [ {
@@ -872,7 +872,7 @@
               "key_up_when" : "any",
               "to_after_key_up" : [ {
                 "set_variable" : {
-                  "name" : "navigation-mode",
+                  "name" : "navigation_mode",
                   "value" : 0
                 }
               } ]
@@ -880,14 +880,14 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "navigation-mode",
+              "name" : "navigation_mode",
               "value" : 1
             }
           } ],
           "type" : "basic"
         } ]
       }, {
-        "description" : "Navigation Mode",
+        "description" : "navigation mode",
         "manipulators" : [ {
           "from" : {
             "key_code" : "j",
@@ -899,7 +899,7 @@
             "key_code" : "down_arrow"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -915,7 +915,7 @@
             "key_code" : "up_arrow"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -931,7 +931,7 @@
             "key_code" : "left_arrow"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -947,7 +947,7 @@
             "key_code" : "right_arrow"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -963,7 +963,7 @@
             "key_code" : "right_shift"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -980,7 +980,7 @@
             "modifiers" : [ "left_command" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -997,7 +997,7 @@
             "modifiers" : [ "left_command" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1013,7 +1013,7 @@
             "key_code" : "left_command"
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1030,7 +1030,7 @@
             "modifiers" : [ "left_command", "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1047,7 +1047,7 @@
             "modifiers" : [ "left_command", "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1064,7 +1064,7 @@
             "modifiers" : [ "left_command" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1081,14 +1081,377 @@
             "modifiers" : [ "left_command" ]
           } ],
           "conditions" : [ {
-            "name" : "navigation-mode",
+            "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
           "type" : "basic"
         } ]
       }, {
-        "description" : "Meh Mode",
+        "description" : "open mode",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "a"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Spotify\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Spotify\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "a"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "b"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Google Chrome\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Google Chrome\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "b"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "c"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Workplace Chat\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Workplace Chat\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "c"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "e"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Finder\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Finder\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "e"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "f"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"VS Code @ FB\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"VS Code @ FB\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "f"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "m"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Microsoft Outlook\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Microsoft Outlook\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "m"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "t"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Alacritty\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Alacritty\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "t"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "n"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Notion\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Notion\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "o"
+            }, {
+              "key_code" : "n"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        } ]
+      }, {
+        "description" : "meh mode",
         "manipulators" : [ {
           "from" : {
             "key_code" : "f",
@@ -1101,7 +1464,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1118,7 +1481,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1134,7 +1497,7 @@
             "key_code" : "open_bracket"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1151,7 +1514,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1168,7 +1531,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1185,7 +1548,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1201,7 +1564,7 @@
             "key_code" : "close_bracket"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1217,7 +1580,7 @@
             "key_code" : "grave_accent_and_tilde"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1233,7 +1596,7 @@
             "key_code" : "1"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1249,7 +1612,7 @@
             "key_code" : "2"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1265,7 +1628,7 @@
             "key_code" : "3"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1281,7 +1644,7 @@
             "key_code" : "4"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1297,7 +1660,7 @@
             "key_code" : "5"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1313,7 +1676,7 @@
             "key_code" : "6"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1329,7 +1692,7 @@
             "key_code" : "7"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1345,7 +1708,7 @@
             "key_code" : "8"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1361,7 +1724,7 @@
             "key_code" : "9"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1377,7 +1740,7 @@
             "key_code" : "0"
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1394,7 +1757,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1411,7 +1774,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1428,7 +1791,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1445,7 +1808,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1462,7 +1825,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1479,7 +1842,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1496,7 +1859,7 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
@@ -1513,34 +1876,15 @@
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
-            "name" : "meh-mode",
+            "name" : "meh_mode",
             "value" : 1,
             "type" : "variable_if"
           } ],
           "type" : "basic"
         } ]
       }, {
-        "description" : "Apple keyboards",
+        "description" : "any device",
         "manipulators" : [ {
-          "from" : {
-            "key_code" : "right_option",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_shift",
-            "modifiers" : [ "left_command", "left_control", "left_option" ]
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 832
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
           "to_if_alone" : [ {
             "key_code" : "escape"
           } ],
@@ -1553,17 +1897,10 @@
           "to" : [ {
             "key_code" : "left_control"
           } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 1452,
-              "product_id" : 832
-            } ],
-            "type" : "device_if"
-          } ],
           "type" : "basic"
         } ]
       }, {
-        "description" : "Kinesis Advantage",
+        "description" : "kinesis advantage",
         "manipulators" : [ {
           "from" : {
             "key_code" : "left_arrow",
@@ -1729,42 +2066,6 @@
         }, {
           "from" : {
             "key_code" : "page_down",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "vk_none"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "left_command",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "vk_none"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "right_command",
             "modifiers" : {
               "optional" : [ "any" ]
             }
@@ -2091,27 +2392,6 @@
           "type" : "basic"
         }, {
           "to_if_alone" : [ {
-            "key_code" : "escape"
-          } ],
-          "from" : {
-            "key_code" : "caps_lock",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_command"
-          } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "to_if_alone" : [ {
             "key_code" : "backslash"
           } ],
           "from" : {
@@ -2158,7 +2438,7 @@
           } ],
           "to_after_key_up" : [ {
             "set_variable" : {
-              "name" : "meh-mode",
+              "name" : "meh_mode",
               "value" : 0
             }
           } ],
@@ -2170,7 +2450,7 @@
           },
           "to" : [ {
             "set_variable" : {
-              "name" : "meh-mode",
+              "name" : "meh_mode",
               "value" : 1
             }
           } ],
@@ -2216,62 +2496,6 @@
           "to" : [ {
             "key_code" : "right_shift"
           } ],
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
-        "description" : "Kinesis Advantage delayed modifiers",
-        "manipulators" : [ {
-          "to_if_held_down" : [ {
-            "key_code" : "right_command"
-          } ],
-          "to_delayed_action" : {
-            "to_if_invoked" : [ {
-              "key_code" : "quote"
-            } ],
-            "to_if_canceled" : [ {
-              "key_code" : "quote"
-            } ]
-          },
-          "from" : {
-            "key_code" : "quote",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "conditions" : [ {
-            "identifiers" : [ {
-              "vendor_id" : 10730,
-              "product_id" : 258
-            } ],
-            "type" : "device_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "to_if_held_down" : [ {
-            "key_code" : "left_shift",
-            "modifiers" : [ "left_command", "left_control", "left_option" ]
-          } ],
-          "to_delayed_action" : {
-            "to_if_invoked" : [ {
-              "key_code" : "spacebar"
-            } ],
-            "to_if_canceled" : [ {
-              "key_code" : "spacebar"
-            } ]
-          },
-          "from" : {
-            "key_code" : "spacebar",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
           "conditions" : [ {
             "identifiers" : [ {
               "vendor_id" : 10730,
