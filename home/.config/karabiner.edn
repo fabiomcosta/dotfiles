@@ -43,6 +43,7 @@
 
   :simlayers {
     :open_mode {:key :o}
+    :symbols_mode {:key :s}
   }
 
   :tos {
@@ -105,19 +106,33 @@
         [:n [:hsl "Notion"]]
     ]}
 
+    {:des "symbols mode"
+       :rules [:symbols_mode
+        [:y :!Squote]
+        [:h :quote]
+        [:n :grave_accent_and_tilde]
+        [:u :!Sopen_bracket]
+        [:j :!S9]
+        [:m :open_bracket]
+        [:i :!Sclose_bracket]
+        [:k :!S0]
+        [:comma :close_bracket]
+        [:l :!Sgrave_accent_and_tilde]
+    ]}
+
     ;; Meh layer/mode: a numbers + symbols layer
     {:des "meh mode"
        :rules [:meh_mode
-        ;; Left hand home row
-        [:##f :!S9]
-        [:##d :!Sopen_bracket]
-        [:##s :open_bracket]
-        [:##a :!Sgrave_accent_and_tilde]
-        ;; Right hand home row
-        [:##j :!S0]
-        [:##k :!Sclose_bracket]
-        [:##l :close_bracket]
-        [:##semicolon :grave_accent_and_tilde]
+        ;; Symbols left hand home row
+        [:##f :!S4]
+        [:##d :!S3]
+        [:##s :!S2]
+        [:##a :!S1]
+        ;; Symbols right hand home row
+        [:##j :!S5]
+        [:##k :!S6]
+        [:##l :!S7]
+        [:##semicolon :!S8]
         ;; Numbers
         [:##q :1]
         [:##w :2]
@@ -129,15 +144,6 @@
         [:##i :8]
         [:##o :9]
         [:##p :0]
-        ;; Symbols
-        [:##z :!S1]
-        [:##x :!S2]
-        [:##c :!S3]
-        [:##v :!S4]
-        [:##m :!S5]
-        [:##comma :!S6]
-        [:##period :!S7]
-        [:##slash :!S8]
     ]}
 
     {:des "any device"
