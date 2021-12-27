@@ -44,6 +44,7 @@
   :simlayers {
     :open_mode {:key :o}
     :symbols_mode {:key :s}
+    :media_mode {:key :m}
   }
 
   :tos {
@@ -118,6 +119,21 @@
         [:k :!S0]
         [:comma :close_bracket]
         [:l :!Sgrave_accent_and_tilde]
+    ]}
+
+    {:des "media mode"
+       :rules [:media_mode
+        [:q :display_brightness_decrement]
+        [:w :display_brightness_increment]
+        [:e :illumination_decrement]
+        [:r :illumination_increment]
+        [:a :mission_control]
+        [:s :rewind]
+        [:d :play_or_pause]
+        [:f :fastforward]
+        [:x :mute]
+        [:c :volume_decrement]
+        [:v :volume_increment]
     ]}
 
     ;; Meh layer/mode: a numbers + symbols layer
