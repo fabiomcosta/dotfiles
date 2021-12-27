@@ -47,7 +47,7 @@
   }
 
   :tos {
-    :hyper_key {:key :!CTOleft_shift}
+    ; :hyper_key {:key :!CTOleft_shift}
     ; :meh_key {:key :!TOleft_shift}
   }
 
@@ -154,6 +154,11 @@
 
     {:des "apple keyboards"
       :rules [:macbook-internal
+        ;; Disable arrow keys
+        [:##left_arrow :vk_none]
+        [:##right_arrow :vk_none]
+        [:##up_arrow :vk_none]
+        [:##down_arrow :vk_none]
     ]}
 
     {:des "kinesis advantage"
