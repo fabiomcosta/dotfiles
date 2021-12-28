@@ -1,8 +1,8 @@
 ;; Implementation of this keyboard layout
 ;; http://www.keyboard-layout-editor.com/#/gists/5ddb4214a2999a9ba0b298dbecbd0685
 
-;; !  | means mandatory -   modifier(s) alone when pressend change behavior
-;; #  | means optional  -   modifiers are optional (but atleast one necessary)
+;; !  | means mandatory -   modifier(s) alone when pressed change behavior
+;; #  | means optional  -   modifiers are optional (but at least one necessary)
 
 ;; :!Ca is keycode :a and prefix a with !C
 
@@ -24,14 +24,14 @@
     :Goku {
       :default true
       :sim 50     ; Keys need to be pressed within this threshold to be considered simultaneous
-      :delay 200  ; Time after which the key press is delayed
-      :held 200   ; Delay to register held key
-      :alone 200  ; Hold for .. ms to register single tap
+      :delay 210  ; Time after which the key press is delayed
+      :held 210   ; Delay to register held key
+      :alone 210  ; Hold for .. ms to register single tap
     }
   }
 
   :devices {
-    :macbook-internal [{:vendor_id 1452  :product_id 832}]
+    :macbook_internal [{:vendor_id 1452  :product_id 832}]
     :kadv2            [{:vendor_id 10730 :product_id 258}]
   }
 
@@ -71,6 +71,25 @@
   ;;        <from>    <to>      <conditions>         <other options>
 
   :main [
+    ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
+    {:des "mouse keys mode"
+      :rules [
+        [:##j {:mkey {:vwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##h {:mkey {:hwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##k {:mkey {:vwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##l {:mkey {:hwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        :mouse_keys_mode
+        [:##j {:mkey {:y 3072}}]
+        [:##k {:mkey {:y -3072}}]
+        [:##h {:mkey {:x -3072}}]
+        [:##l {:mkey {:x 3072}}]
+        [:##v {:pkey :button1}]
+        [:##b {:pkey :button3}]
+        [:##n {:pkey :button2}]
+        [:##s ["mouse_keys_mode_scroll" 1] nil {:afterup ["mouse_keys_mode_scroll" 0]}]
+        [:##f {:mkey {:speed 0.5}}]
+    ]}
+
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
@@ -177,24 +196,6 @@
         [:##p :0]
     ]}
 
-    ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
-    {:des "mouse keys mode"
-      :rules [
-        [:##j {:mkey {:vwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##h {:mkey {:hwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##k {:mkey {:vwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##l {:mkey {:hwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        :mouse_keys_mode
-        [:##j {:mkey {:y 3072}}]
-        [:##k {:mkey {:y -3072}}]
-        [:##h {:mkey {:x -3072}}]
-        [:##l {:mkey {:x 3072}}]
-        [:##v {:pkey :button1}]
-        [:##b {:pkey :button3}]
-        [:##n {:pkey :button2}]
-        [:##s ["mouse_keys_mode_scroll" 1] nil {:afterup ["mouse_keys_mode_scroll" 0]}]
-        [:##f {:mkey {:speed 0.5}}]]}
-
     {:des "any device"
       :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
@@ -202,7 +203,7 @@
     ]}
 
     {:des "apple keyboards"
-      :rules [:macbook-internal
+      :rules [:macbook_internal
         ;; Disable arrow keys
         [:##left_arrow :vk_none]
         [:##right_arrow :vk_none]
@@ -255,8 +256,6 @@
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
         [:##right_shift :right_shift nil {:alone :hyphen}]
-
-        ;; TODO dev layer? https://wiki.monosor.com/keyboard
     ]}
   ]
 }
