@@ -260,7 +260,6 @@ local function onPureNeovim(use)
 
 
   -- function! CocAfterUpdate(info)
-  --   CocInstall coc-eslint
   --   CocInstall coc-prettier
   -- endfunction
   use {'neoclide/coc.nvim', branch='release'}
@@ -390,7 +389,7 @@ local function onPureNeovim(use)
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  local servers = { 'flow' }
+  local servers = {'flow'}
   for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup({
       capabilities = capabilities,
@@ -417,7 +416,17 @@ local function onPureNeovim(use)
         debounce_text_changes = 150,
       }
     }
-    if server.name == 'sumneko_lua' then
+    if server.name == 'eslint' then
+      opts.on_attach = function(client, bufnr)
+        -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
+        -- the resolved capabilities of the eslint server ourselves!
+        client.resolved_capabilities.document_formatting = true
+        on_attach(client, bufnr)
+      end
+      opts.settings = {
+        format = { enable = true }, -- this will enable formatting
+      }
+    elseif server.name == 'sumneko_lua' then
       opts.settings = {
         Lua = {
           diagnostics = {
@@ -452,7 +461,7 @@ local function onPureNeovim(use)
   use 'nvim-lua/popup.nvim'
   use {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim'} },
+    requires = {{'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim'}},
   }
   require('telescope').setup({})
   require('telescope').load_extension('fzy_native')
