@@ -857,7 +857,7 @@
         "basic.to_if_held_down_threshold_milliseconds" : 200
       },
       "rules" : [ {
-        "description" : " toggle navigation mode",
+        "description" : "toggle navigation mode",
         "manipulators" : [ {
           "from" : {
             "simultaneous" : [ {
@@ -883,6 +883,92 @@
               "name" : "navigation_mode",
               "value" : 1
             }
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
+        "description" : "navigation mode (outlook)",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "i",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "open_bracket",
+            "modifiers" : [ "left_control" ]
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.microsoft\\.Outlook$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "o",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "close_bracket",
+            "modifiers" : [ "left_control" ]
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.microsoft\\.Outlook$" ]
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
+        "description" : "navigation mode (workplace chat)",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "i",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "open_bracket",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^workplace-desktop$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "o",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "close_bracket",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^workplace-desktop$" ]
           } ],
           "type" : "basic"
         } ]
@@ -921,6 +1007,10 @@
           } ],
           "type" : "basic"
         }, {
+          "to_if_held_down" : [ {
+            "key_code" : "left_arrow",
+            "modifiers" : [ "left_option" ]
+          } ],
           "from" : {
             "key_code" : "h",
             "modifiers" : {
@@ -937,6 +1027,10 @@
           } ],
           "type" : "basic"
         }, {
+          "to_if_held_down" : [ {
+            "key_code" : "right_arrow",
+            "modifiers" : [ "left_option" ]
+          } ],
           "from" : {
             "key_code" : "l",
             "modifiers" : {
@@ -1105,7 +1199,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1150,7 +1244,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1195,7 +1289,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1240,7 +1334,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1285,7 +1379,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1330,7 +1424,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1375,7 +1469,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1420,7 +1514,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1469,7 +1563,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1482,7 +1576,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "y"
             } ],
@@ -1515,7 +1609,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1527,7 +1621,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "h"
             } ],
@@ -1560,7 +1654,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1572,7 +1666,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "n"
             } ],
@@ -1606,7 +1700,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1619,7 +1713,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "u"
             } ],
@@ -1653,7 +1747,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1666,7 +1760,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "j"
             } ],
@@ -1699,7 +1793,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1711,7 +1805,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "m"
             } ],
@@ -1745,7 +1839,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1758,7 +1852,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "i"
             } ],
@@ -1792,7 +1886,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1805,7 +1899,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "k"
             } ],
@@ -1838,7 +1932,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1850,7 +1944,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "comma"
             } ],
@@ -1884,7 +1978,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1897,7 +1991,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "s"
+              "key_code" : "f"
             }, {
               "key_code" : "l"
             } ],
@@ -1933,7 +2027,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -1978,7 +2072,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2023,7 +2117,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2068,7 +2162,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2113,7 +2207,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2158,7 +2252,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2203,7 +2297,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2248,7 +2342,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2293,7 +2387,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2338,7 +2432,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2383,7 +2477,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 210
           },
           "to" : [ {
             "set_variable" : {
@@ -2711,6 +2805,782 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        } ]
+      }, {
+        "description" : "mouse keys mode",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "j",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "vertical_wheel" : 32
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "vertical_wheel" : 32
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "j"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          } ]
+        }, {
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "horizontal_wheel" : 32
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "horizontal_wheel" : 32
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "h"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          } ]
+        }, {
+          "from" : {
+            "key_code" : "k",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "vertical_wheel" : -32
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "vertical_wheel" : -32
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "k"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          } ]
+        }, {
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "horizontal_wheel" : -32
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "horizontal_wheel" : -32
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "name" : "mouse_keys_mode_scroll",
+            "value" : 1,
+            "type" : "variable_if"
+          } ]
+        }, {
+          "from" : {
+            "key_code" : "j",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "y" : 3072
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "y" : 3072
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "j"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "k",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "y" : -3072
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "y" : -3072
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "k"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "x" : -3072
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "x" : -3072
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "h"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "x" : 3072
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "x" : 3072
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "v",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "pointing_button" : "button1"
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "pointing_button" : "button1"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "v"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "b",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "pointing_button" : "button3"
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "pointing_button" : "button3"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "b"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "n",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "pointing_button" : "button2"
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "pointing_button" : "button2"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "n"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "to_after_key_up" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode_scroll",
+              "value" : 0
+            }
+          } ],
+          "from" : {
+            "key_code" : "s",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode_scroll",
+              "value" : 1
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "set_variable" : {
+              "name" : "mouse_keys_mode_scroll",
+              "value" : 1
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "s"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "f",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "mouse_key" : {
+              "speed_multiplier" : 0.5
+            }
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_keys_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_keys_mode",
+              "value" : 1
+            }
+          }, {
+            "mouse_key" : {
+              "speed_multiplier" : 0.5
+            }
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
+              "key_code" : "f"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_keys_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         } ]
       }, {
         "description" : "any device",

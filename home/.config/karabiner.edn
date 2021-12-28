@@ -30,21 +30,27 @@
     }
   }
 
-  :devices   {:macbook-internal [{:vendor_id 1452  :product_id 832}]
-              :kadv2            [{:vendor_id 10730 :product_id 258}]}
+  :devices {
+    :macbook-internal [{:vendor_id 1452  :product_id 832}]
+    :kadv2            [{:vendor_id 10730 :product_id 258}]
+  }
 
   :applications {
     :chrome ["^com\\.google\\.Chrome$"]
+    :outlook ["^com\\.microsoft\\.Outlook$"]
+    :workplace_chat ["^workplace-desktop$"]
   }
 
   :templates {
     :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"%s\")'"
   }
 
+  :simlayer-threshold 210
   :simlayers {
     :open_mode {:key :o}
-    :symbols_mode {:key :s}
+    :symbols_mode {:key :f}
     :media_mode {:key :m}
+    :mouse_keys_mode {:key :a :afterup {:set ["mouse_keys_mode_scroll" 0]}}
   }
 
   :tos {
@@ -68,26 +74,35 @@
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
-    {:des " toggle navigation mode"
-       :rules [
+    {:des "toggle navigation mode"
+      :rules [
         [{:sim [:s :d]
           :simo {
             :interrupt true
             :afterup {:set ["navigation_mode" 0]}}
-         }
-         {:set ["navigation_mode" 1]}
+          }
+          {:set ["navigation_mode" 1]}
         ]
     ]}
+    {:des "navigation mode (outlook)"
+      :rules [:navigation_mode
+        [:##i :!Topen_bracket :outlook]
+        [:##o :!Tclose_bracket :outlook]
+    ]}
+    {:des "navigation mode (workplace chat)"
+      :rules [:navigation_mode
+        [:##i :!Copen_bracket :workplace_chat]
+        [:##o :!Cclose_bracket :workplace_chat]
+    ]}
     {:des "navigation mode"
-       :rules [:navigation_mode
-        [:##j :down_arrow ]
+      :rules [:navigation_mode
+        [:##j :down_arrow]
         [:##k :up_arrow]
-        [:##h :left_arrow]
-        [:##l :right_arrow]
+        [:##h :left_arrow nil {:held :!Oleft_arrow}]
+        [:##l :right_arrow nil {:held :!Oright_arrow}]
         [:##f :right_shift]
         [:##r :!Cc]
         [:##v :!Cv]
-
         [:##a :left_command]
         [:##i :!CSopen_bracket]
         [:##o :!CSclose_bracket]
@@ -96,7 +111,7 @@
     ]}
 
     {:des "open mode"
-       :rules [:open_mode
+      :rules [:open_mode
         [:a [:hsl "Spotify"]]
         [:b [:hsl "Google Chrome"]]
         [:c [:hsl "Workplace Chat"]]
@@ -108,7 +123,7 @@
     ]}
 
     {:des "symbols mode"
-       :rules [:symbols_mode
+      :rules [:symbols_mode
         [:y :!Squote]
         [:h :quote]
         [:n :grave_accent_and_tilde]
@@ -122,7 +137,7 @@
     ]}
 
     {:des "media mode"
-       :rules [:media_mode
+      :rules [:media_mode
         [:q :display_brightness_decrement]
         [:w :display_brightness_increment]
         [:e :illumination_decrement]
@@ -138,7 +153,7 @@
 
     ;; Meh layer/mode: a numbers + symbols layer
     {:des "meh mode"
-       :rules [:meh_mode
+      :rules [:meh_mode
         ;; Symbols left hand home row
         [:##f :!S4]
         [:##d :!S3]
@@ -162,6 +177,24 @@
         [:##p :0]
     ]}
 
+    ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
+    {:des "mouse keys mode"
+      :rules [
+        [:##j {:mkey {:vwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##h {:mkey {:hwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##k {:mkey {:vwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        [:##l {:mkey {:hwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
+        :mouse_keys_mode
+        [:##j {:mkey {:y 3072}}]
+        [:##k {:mkey {:y -3072}}]
+        [:##h {:mkey {:x -3072}}]
+        [:##l {:mkey {:x 3072}}]
+        [:##v {:pkey :button1}]
+        [:##b {:pkey :button3}]
+        [:##n {:pkey :button2}]
+        [:##s ["mouse_keys_mode_scroll" 1] nil {:afterup ["mouse_keys_mode_scroll" 0]}]
+        [:##f {:mkey {:speed 0.5}}]]}
+
     {:des "any device"
       :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
@@ -178,7 +211,7 @@
     ]}
 
     {:des "kinesis advantage"
-       :rules [:kadv2
+      :rules [:kadv2
         ;; Disable arrow keys
         [:##left_arrow :vk_none]
         [:##right_arrow :vk_none]
