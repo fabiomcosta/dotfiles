@@ -182,6 +182,7 @@ local function onNeovimVSCode(use)
   use 'jparise/vim-graphql'
   use 'christoomey/vim-tmux-navigator'
   use 'editorconfig/editorconfig-vim'
+  use 'ojroques/vim-oscyank'
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
   -- use 'w0rp/ale'
