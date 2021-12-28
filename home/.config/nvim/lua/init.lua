@@ -298,16 +298,31 @@ local function onPureNeovim(use)
   parser_config.tsx.used_by = 'javascript'
 
 
+  use 'onsails/lspkind-nvim'
+
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
 
+  use 'L3MON4D3/LuaSnip'
+  use 'rafamadriz/friendly-snippets'
+  use 'saadparwaiz1/cmp_luasnip'
+
   vim.o.completeopt = 'menu,menuone,noselect'
 
-  local cmp = require'cmp'
+  local cmp = require('cmp')
+  local lspkind = require('lspkind')
   cmp.setup({
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
+    formatting = {
+      format = lspkind.cmp_format(),
+    },
     mapping = {
       ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), {'i', 'c'}),
       ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
@@ -323,16 +338,18 @@ local function onPureNeovim(use)
     },
     sources = cmp.config.sources({
       {name = 'nvim_lsp'},
+      {name = 'luasnip'},
     }, {
       {name = 'buffer'},
     })
   })
+
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-  cmp.setup.cmdline('/', {
-    sources = {
-      {name = 'buffer'}
-    }
-  })
+  -- cmp.setup.cmdline('/', {
+  --   sources = {
+  --     {name = 'buffer'}
+  --   }
+  -- })
   -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
   -- cmp.setup.cmdline(':', {
   --   sources = cmp.config.sources({
@@ -359,8 +376,17 @@ local function onPureNeovim(use)
 
   -- Use an on_attach function to only map the following keys
   -- after the language server attaches to the current buffer
-  local on_attach = function(_, bufnr)
+  local on_attach = function(client, bufnr)
     local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+
+    if client.resolved_capabilities.document_formatting then
+      vim.cmd [[
+        augroup Format
+        autocmd! * <buffer>
+        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+        augroup END
+      ]]
+    end
 
     -- Mappings.
     local opts = {noremap=true, silent=true}
