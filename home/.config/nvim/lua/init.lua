@@ -114,6 +114,8 @@ vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({'stack'})
 
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
 -- turn on syntax highlighting
 vim.cmd [[syntax on]]
 
@@ -280,7 +282,7 @@ local function onPureNeovim(use)
   use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
   use 'windwp/nvim-ts-autotag'
   require('nvim-treesitter.configs').setup({
-    ensure_installed = { 'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql', 'vim' },
+    ensure_installed = {'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql', 'vim'},
     highlight = {
       enable = true,
     },
@@ -299,25 +301,29 @@ local function onPureNeovim(use)
 
 
   use 'onsails/lspkind-nvim'
-
+  use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
-  use 'hrsh7th/nvim-cmp'
 
-  use 'L3MON4D3/LuaSnip'
+  use 'hrsh7th/cmp-vsnip'
+  use 'hrsh7th/vim-vsnip'
+
   use 'rafamadriz/friendly-snippets'
-  use 'saadparwaiz1/cmp_luasnip'
 
-  vim.o.completeopt = 'menu,menuone,noselect'
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
+
+  local feedkey = function(key, mode)
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
+  end
+
   cmp.setup({
     snippet = {
       expand = function(args)
-        require('luasnip').lsp_expand(args.body)
+        vim.fn["vsnip#anonymous"](args.body)
       end,
     },
     formatting = {
@@ -335,29 +341,28 @@ local function onPureNeovim(use)
       -- Accept currently selected item. If none selected, `select` first item.
       -- Set `select` to `false` to only confirm explicitly selected items.
       ['<CR>'] = cmp.mapping.confirm({select = true}),
+      ['<Tab>'] = cmp.mapping(function(fallback)
+        if vim.fn["vsnip#available"](1) == 1 then
+          return feedkey("<Plug>(vsnip-expand-or-jump)", "")
+        end
+        fallback()
+      end, {'i', 's'}),
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if vim.fn["vsnip#jumpable"](-1) == 1 then
+          return feedkey("<Plug>(vsnip-jump-prev)", "")
+        end
+        fallback()
+      end, {'i', 's'}),
     },
-    sources = cmp.config.sources({
+    documentation = {
+      border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+    },
+    sources = {
       {name = 'nvim_lsp'},
-      {name = 'luasnip'},
-    }, {
+      {name = 'vsnip'},
       {name = 'buffer'},
-    })
+    },
   })
-
-  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-  -- cmp.setup.cmdline('/', {
-  --   sources = {
-  --     {name = 'buffer'}
-  --   }
-  -- })
-  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-  -- cmp.setup.cmdline(':', {
-  --   sources = cmp.config.sources({
-  --     { name = 'path' }
-  --   }, {
-  --     { name = 'cmdline' }
-  --   })
-  -- })
 
 
   local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
@@ -388,10 +393,15 @@ local function onPureNeovim(use)
       ]]
     end
 
+    -- Use lsp find_references if its available, and fallback to a grep_string.
+    if client.resolved_capabilities.find_references then
+      vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>', {silent=false, noremap=true})
+    else
+      vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope grep_string<CR>', {silent=false, noremap=true})
+    end
+
     -- Mappings.
     local opts = {noremap=true, silent=true}
-
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
 
     buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
     buf_set_keymap('n', '<LEADER>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
@@ -406,8 +416,7 @@ local function onPureNeovim(use)
     buf_set_keymap('n', '<LEADER>rn', '<cmd>lua require"lspsaga.rename".rename()<CR>', opts)
     buf_set_keymap('n', '<LEADER>ca', '<cmd>lua require"lspsaga.codeaction".code_action()<CR>', opts)
     buf_set_keymap('v', '<LEADER>ca', ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>', opts)
-
-    buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require("lspsaga.floaterm").open_float_terminal("lazygit")<CR>', opts)
+    buf_set_keymap('n', '<LEADER>lg', '<cmd>lua require"lspsaga.floaterm".open_float_terminal("lazygit")<CR>', opts)
 
   end
 
@@ -496,10 +505,6 @@ local function onPureNeovim(use)
   vim.api.nvim_set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>', {silent=false, noremap=true})
-  -- TODO, it would be nice to check if the current lsp supports find_references, and if doesn't fallback
-  -- to a livegrep of the current word
-  -- vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>', {silent=false, noremap=true})
-  vim.api.nvim_set_keymap('n', '<LEADER>fr', '<cmd>Telescope grep_string<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope lsp_workspace_diagnostics<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>gb', '<cmd>Telescope git_branches<CR>', {silent=false, noremap=true})
@@ -589,17 +594,26 @@ if vim.fn.isdirectory(install_path) == 0 then
   packer_bootstrap = vim.fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
 end
 
-return require('packer').startup(function(use)
-  if vim.g.vscode == nil then
-    onPureNeovim(use)
-  end
-  onNeovimVSCode(use)
+return require('packer').startup({
+    function(use)
+    if vim.g.vscode == nil then
+      onPureNeovim(use)
+    end
+    onNeovimVSCode(use)
 
-  -- Automatically set up your configuration after cloning packer.nvim
-  -- Put this at the end after all plugins
-  if packer_bootstrap then
-    require('packer').sync()
-  end
+    -- Automatically set up your configuration after cloning packer.nvim
+    -- Put this at the end after all plugins
+    if packer_bootstrap then
+      require('packer').sync()
+    end
 
-  vim.cmd [[filetype plugin indent on]]
-end)
+    vim.cmd [[filetype plugin indent on]]
+  end,
+  config = {
+    display = {
+      open_fn = function()
+        return require('packer.util').float({ border = 'single' })
+      end
+    }
+  }
+})
