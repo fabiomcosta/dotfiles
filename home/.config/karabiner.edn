@@ -39,6 +39,7 @@
     :chrome ["^com\\.google\\.Chrome$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
     :workplace_chat ["^workplace-desktop$"]
+    :terminal ["^io\\.alacritty$"]
   }
 
   :templates {
@@ -88,7 +89,7 @@
         [:##n {:pkey :button2}]
         [:##s ["mouse_keys_mode_scroll" 1] nil {:afterup ["mouse_keys_mode_scroll" 0]}]
         [:##f {:mkey {:speed 0.5}}]
-    ]}
+      ]}
 
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
@@ -117,8 +118,13 @@
       :rules [:navigation_mode
         [:##j :down_arrow]
         [:##k :up_arrow]
-        [:##h :left_arrow nil {:held :!Oleft_arrow}]
-        [:##l :right_arrow nil {:held :!Oright_arrow}]
+
+        ; vim's command mode doesn't work well with option+arrow keys
+        [:##h :left_arrow :!terminal {:held :!Oleft_arrow}]
+        [:##l :right_arrow :!terminal {:held :!Oright_arrow}]
+        [:##h :left_arrow :terminal]
+        [:##l :right_arrow :terminal]
+
         [:##f :right_shift]
         [:##r :!Cc]
         [:##v :!Cv]
