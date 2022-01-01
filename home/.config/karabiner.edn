@@ -51,6 +51,7 @@
     :open_mode {:key :o}
     :symbols_mode {:key :f}
     :media_mode {:key :m}
+    :fn_mode {:key :z}
     :mouse_keys_mode {:key :a :afterup {:set ["mouse_keys_mode_scroll" 0]}}
   }
 
@@ -174,6 +175,22 @@
         [:x :mute]
         [:c :volume_decrement]
         [:v :volume_increment]
+    ]}
+
+    {:des "fn mode"
+      :rules [:fn_mode
+        [:q :f1]
+        [:w :f2]
+        [:e :f3]
+        [:r :f4]
+        [:t :f5]
+        [:y :f6]
+        [:u :f7]
+        [:i :f8]
+        [:o :f9]
+        [:p :f10]
+        [:l :f11]
+        [:semicolon :f12]
     ]}
 
     ;; Meh layer/mode: a numbers + symbols layer
