@@ -219,12 +219,6 @@
         [:##p :0]
     ]}
 
-    {:des "any device"
-      :rules [
-        ;; caps_lock: alone -> escape, hold -> left_control
-        [:##caps_lock :left_control nil {:alone :escape}]
-    ]}
-
     {:des "apple keyboards"
       :rules [:macbook_internal
         ;; Disable arrow keys
@@ -279,6 +273,12 @@
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
         [:##right_shift :right_shift nil {:alone :hyphen}]
+    ]}
+
+    {:des "any device"
+      :rules [
+        ;; caps_lock: alone -> escape, hold -> left_control
+        [:##caps_lock :left_control nil {:alone :escape}]
     ]}
   ]
 }
