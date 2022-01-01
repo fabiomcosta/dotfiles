@@ -139,6 +139,7 @@ vim.api.nvim_set_keymap('s', '<C-v>', '<C-r>"', {noremap=true})
 local currentFilePath = debug.getinfo(1).source:sub(2)
 vim.api.nvim_set_keymap('n', '<LEADER>ev', ':e ' .. currentFilePath .. '<CR>', {noremap=true})
 vim.api.nvim_set_keymap('n', '<LEADER>v', ':vsplit<CR><C-w>l', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>h', ':split<CR><C-w>j', {noremap=true})
 
 -- changes the size of the buffer windows
 vim.api.nvim_set_keymap('n', '=', '<C-w>=', {noremap=true})
@@ -187,7 +188,6 @@ local function onNeovimVSCode(use)
   use 'ojroques/vim-oscyank'
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
-  -- use 'w0rp/ale'
 
 
   use 'tpope/vim-projectionist'
@@ -204,14 +204,20 @@ local function onNeovimVSCode(use)
       }
     }
   }
-
-
-  use 'ntpeters/vim-better-whitespace'
-  vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', { silent=true, noremap=true })
 end
 
 
 local function onPureNeovim(use)
+
+  use {'dracula/vim', as='dracula'}
+  -- use 'folke/tokyonight.nvim'
+  -- use '~/gdrive/code/dracula-pro/themes/vim'
+  -- vim.g.dracula_colorterm = 0
+
+
+  use 'ntpeters/vim-better-whitespace'
+  vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', { silent=true, noremap=true })
+
 
   use 'sheerun/vim-polyglot'
   vim.g.javascript_plugin_flow = 1
@@ -222,7 +228,7 @@ local function onPureNeovim(use)
 
 
   use 'haya14busa/incsearch.vim'
-  vim.o.hlsearch = true
+  vim.opt.hlsearch = true
   vim.g['incsearch#auto_nohlsearch'] = 1
   vim.api.nvim_set_keymap('', '/', '<Plug>(incsearch-forward)', {noremap=false})
   vim.api.nvim_set_keymap('', 'n', '<Plug>(incsearch-nohl-n)', {noremap=false})
@@ -240,14 +246,12 @@ local function onPureNeovim(use)
   vim.api.nvim_set_keymap('n', '<LEADER>gm', ':GitMessenger<CR>', { silent=true, noremap=false })
 
 
-  use {'dracula/vim', as='dracula'}
-  -- use '~/gdrive/code/dracula-pro/themes/vim'
-  -- vim.g.dracula_colorterm = 0
-
-
   use 'tpope/vim-vinegar'
   vim.g.netrw_liststyle = 3
   vim.api.nvim_set_keymap('n', '<LEADER>z', ':Vexplore<CR>', { silent=true, noremap=true })
+
+
+  use 'tversteeg/registers.nvim'
 
 
   use 'mattboehm/vim-accordion'
@@ -268,13 +272,8 @@ local function onPureNeovim(use)
   use {'neoclide/coc.nvim', branch='release'}
 
 
-  -- use 'cohama/lexima.vim'
-  -- vim.cmd [[autocmd FileType TelescopePrompt let b:lexima_disabled = 1]]
-
-
   use 'kwkarlwang/bufjump.nvim'
   require('bufjump').setup()
-
   vim.api.nvim_set_keymap('n', '<C-p>', ':lua require("bufjump").backward()<CR>', {silent=true, noremap=true})
   vim.api.nvim_set_keymap('n', '<C-n>', ':lua require("bufjump").forward()<CR>', {silent=true, noremap=true})
 
@@ -363,13 +362,6 @@ local function onPureNeovim(use)
       {name = 'buffer'},
     },
   })
-
-
-  local signs = { Error = "●", Warning = "●", Hint = "●", Information = "●" }
-  for type, icon in pairs(signs) do
-    local hl = "LspDiagnosticsSign" .. type
-    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-  end
 
 
   use 'neovim/nvim-lspconfig'
@@ -505,9 +497,8 @@ local function onPureNeovim(use)
   vim.api.nvim_set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>', {silent=false, noremap=true})
-  vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope lsp_workspace_diagnostics<CR>', {silent=false, noremap=true})
+  vim.api.nvim_set_keymap('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>', {silent=false, noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>', {silent=false, noremap=true})
-  vim.api.nvim_set_keymap('n', '<LEADER>gb', '<cmd>Telescope git_branches<CR>', {silent=false, noremap=true})
 
 
   use 'TimUntersberger/neogit'
@@ -524,6 +515,7 @@ local function onPureNeovim(use)
   require('lualine').setup({
     options = {
       theme = 'dracula',
+      -- theme = 'tokyonight',
     },
     sections = {
       lualine_c = {{'filename', path = 1}}
@@ -549,21 +541,22 @@ local function onPureNeovim(use)
 
   use {
     'vim-test/vim-test',
-    requires = { {'voldikss/vim-floaterm'} },
+    requires = {{'voldikss/vim-floaterm'}},
   }
-  vim.g['test#strategy'] = 'floaterm'
+  vim.g['test#strategy'] = 'neovim'
+  vim.g['test#neovim#term_position'] = 'botright 12'
   vim.g['test#neovim#start_normal'] = 1
-  vim.g['test#basic#start_normal'] = 1
 
-  vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR>', {silent=true, noremap=false})
-  vim.api.nvim_set_keymap('n', '<LEADER>tf', ':TestFile<CR>', {silent=true, noremap=false})
-  vim.api.nvim_set_keymap('n', '<LEADER>ts', ':TestSuite<CR>', {silent=true, noremap=false})
-  vim.api.nvim_set_keymap('n', '<LEADER>tl', ':TestLast<CR>', {silent=true, noremap=false})
-  vim.api.nvim_set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR><C-w>k', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tf', ':TestFile<CR><C-w>k', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>ts', ':TestSuite<CR><C-w>k', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tl', ':TestLast<CR><C-w>k', {silent=true, noremap=false})
+  vim.api.nvim_set_keymap('n', '<LEADER>tg', ':TestVisit<CR><C-w>k', {silent=true, noremap=false})
 
 
   -- TODO is there a native lua way to do this?
   vim.cmd [[colorscheme dracula]]
+  -- vim.cmd [[colorscheme tokyonight]]
   -- vim.cmd [[colorscheme dracula_pro]]
 
   -- starts terminal mode on insert mode
