@@ -129,6 +129,7 @@
         [:##f :right_shift]
         [:##r :!Cc]
         [:##v :!Cv]
+        [:##g :!Cx]
         [:##a :left_command]
         [:##i :!CSopen_bracket]
         [:##o :!CSclose_bracket]
@@ -150,16 +151,22 @@
 
     {:des "symbols mode"
       :rules [:symbols_mode
-        [:y :!Squote]
-        [:h :quote]
-        [:n :grave_accent_and_tilde]
-        [:u :!Sopen_bracket]
-        [:j :!S9]
-        [:m :open_bracket]
-        [:i :!Sclose_bracket]
-        [:k :!S0]
-        [:comma :close_bracket]
-        [:l :!Sgrave_accent_and_tilde]
+        [:y :!Sgrave_accent_and_tilde] ; ~
+        [:h :grave_accent_and_tilde]   ; `
+        [:u :!Sopen_bracket]           ; {
+        [:i :!Sclose_bracket]          ; }
+        [:j :!S9]                      ; (
+        [:k :!S0]                      ; )
+        [:m :open_bracket]             ; [
+        [:comma :close_bracket]        ; ]
+        [:o :!S1]                      ; !
+        [:p :!S2]                      ; @
+        [:l :!S3]                      ; #
+        [:semicolon :!S8]              ; *
+        [:period :!S6]                 ; ^
+        [:slash :!S4]                  ; $
+        [:a :!S5]                      ; %
+        [:s :!S7]                      ; &
     ]}
 
     {:des "media mode"

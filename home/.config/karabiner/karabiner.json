@@ -1918,6 +1918,23 @@
           "type" : "basic"
         }, {
           "from" : {
+            "key_code" : "g",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "x",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
             "key_code" : "a",
             "modifiers" : {
               "optional" : [ "any" ]
@@ -2371,7 +2388,7 @@
             "key_code" : "y"
           },
           "to" : [ {
-            "key_code" : "quote",
+            "key_code" : "grave_accent_and_tilde",
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
@@ -2391,7 +2408,7 @@
               "value" : 1
             }
           }, {
-            "key_code" : "quote",
+            "key_code" : "grave_accent_and_tilde",
             "modifiers" : [ "left_shift" ]
           } ],
           "from" : {
@@ -2418,7 +2435,7 @@
             "key_code" : "h"
           },
           "to" : [ {
-            "key_code" : "quote"
+            "key_code" : "grave_accent_and_tilde"
           } ],
           "conditions" : [ {
             "name" : "symbols_mode",
@@ -2437,58 +2454,13 @@
               "value" : 1
             }
           }, {
-            "key_code" : "quote"
+            "key_code" : "grave_accent_and_tilde"
           } ],
           "from" : {
             "simultaneous" : [ {
               "key_code" : "f"
             }, {
               "key_code" : "h"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "symbols_mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "n"
-          },
-          "to" : [ {
-            "key_code" : "grave_accent_and_tilde"
-          } ],
-          "conditions" : [ {
-            "name" : "symbols_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 210
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "grave_accent_and_tilde"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "f"
-            }, {
-              "key_code" : "n"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -2552,98 +2524,6 @@
           }
         }, {
           "from" : {
-            "key_code" : "j"
-          },
-          "to" : [ {
-            "key_code" : "9",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "conditions" : [ {
-            "name" : "symbols_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 210
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "9",
-            "modifiers" : [ "left_shift" ]
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "f"
-            }, {
-              "key_code" : "j"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "symbols_mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "m"
-          },
-          "to" : [ {
-            "key_code" : "open_bracket"
-          } ],
-          "conditions" : [ {
-            "name" : "symbols_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 210
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 1
-            }
-          }, {
-            "key_code" : "open_bracket"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "f"
-            }, {
-              "key_code" : "m"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "symbols_mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
             "key_code" : "i"
           },
           "to" : [ {
@@ -2675,6 +2555,53 @@
               "key_code" : "f"
             }, {
               "key_code" : "i"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "j"
+          },
+          "to" : [ {
+            "key_code" : "9",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "9",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "j"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -2738,6 +2665,51 @@
           }
         }, {
           "from" : {
+            "key_code" : "m"
+          },
+          "to" : [ {
+            "key_code" : "open_bracket"
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "open_bracket"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "m"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
             "key_code" : "comma"
           },
           "to" : [ {
@@ -2783,10 +2755,10 @@
           }
         }, {
           "from" : {
-            "key_code" : "l"
+            "key_code" : "o"
           },
           "to" : [ {
-            "key_code" : "grave_accent_and_tilde",
+            "key_code" : "1",
             "modifiers" : [ "left_shift" ]
           } ],
           "conditions" : [ {
@@ -2806,7 +2778,101 @@
               "value" : 1
             }
           }, {
-            "key_code" : "grave_accent_and_tilde",
+            "key_code" : "1",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "o"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "p"
+          },
+          "to" : [ {
+            "key_code" : "2",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "2",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "p"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "l"
+          },
+          "to" : [ {
+            "key_code" : "3",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "3",
             "modifiers" : [ "left_shift" ]
           } ],
           "from" : {
@@ -2814,6 +2880,241 @@
               "key_code" : "f"
             }, {
               "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "semicolon"
+          },
+          "to" : [ {
+            "key_code" : "8",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "8",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "semicolon"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "period"
+          },
+          "to" : [ {
+            "key_code" : "6",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "6",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "period"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "slash"
+          },
+          "to" : [ {
+            "key_code" : "4",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "4",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "slash"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "a"
+          },
+          "to" : [ {
+            "key_code" : "5",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "5",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "a"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "symbols_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "s"
+          },
+          "to" : [ {
+            "key_code" : "7",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "conditions" : [ {
+            "name" : "symbols_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "7",
+            "modifiers" : [ "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "f"
+            }, {
+              "key_code" : "s"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
