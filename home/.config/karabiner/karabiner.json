@@ -1884,6 +1884,22 @@
           "type" : "basic"
         }, {
           "from" : {
+            "key_code" : "a",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "left_command"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
             "key_code" : "r",
             "modifiers" : {
               "optional" : [ "any" ]
@@ -1935,22 +1951,6 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "a",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_command"
-          } ],
-          "conditions" : [ {
-            "name" : "navigation_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
             "key_code" : "i",
             "modifiers" : {
               "optional" : [ "any" ]
@@ -1964,6 +1964,9 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -1981,6 +1984,53 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "i",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "p"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "o",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "n"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {

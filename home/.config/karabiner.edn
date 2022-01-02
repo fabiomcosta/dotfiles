@@ -117,23 +117,30 @@
     ]}
     {:des "navigation mode"
       :rules [:navigation_mode
+        ; arrow keys vim style
         [:##j :down_arrow]
         [:##k :up_arrow]
-
         ; vim's command mode doesn't work well with option+arrow keys
         [:##h :left_arrow :!terminal {:held :!Oleft_arrow}]
         [:##l :right_arrow :!terminal {:held :!Oright_arrow}]
         [:##h :left_arrow :terminal]
         [:##l :right_arrow :terminal]
-
+        ; modifiers
         [:##f :right_shift]
+        [:##a :left_command]
+        ; cut/copy/paste
         [:##r :!Cc]
         [:##v :!Cv]
         [:##g :!Cx]
-        [:##a :left_command]
-        [:##i :!CSopen_bracket]
-        [:##o :!CSclose_bracket]
+        ; tab navigation mostly on browsers
+        [:##i :!CSopen_bracket :!terminal]
+        [:##o :!CSclose_bracket :!terminal]
+        ; tab navigation on terminal/tmux
+        [:##i [:!Ta :p] :terminal]
+        [:##o [:!Ta :n] :terminal]
+        ; new tab
         [:##u :!Ct]
+        ; close tab
         [:##m :!Cw]
     ]}
 
