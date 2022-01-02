@@ -138,8 +138,8 @@ vim.api.nvim_set_keymap('s', '<C-v>', '<C-r>"', {noremap=true})
 
 local currentFilePath = debug.getinfo(1).source:sub(2)
 vim.api.nvim_set_keymap('n', '<LEADER>ev', ':e ' .. currentFilePath .. '<CR>', {noremap=true})
-vim.api.nvim_set_keymap('n', '<LEADER>v', ':vsplit<CR><C-w>l', {noremap=true})
-vim.api.nvim_set_keymap('n', '<LEADER>h', ':split<CR><C-w>j', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', {noremap=true})
+vim.api.nvim_set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', {noremap=true})
 
 -- changes the size of the buffer windows
 vim.api.nvim_set_keymap('n', '=', '<C-w>=', {noremap=true})
