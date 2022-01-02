@@ -46,7 +46,7 @@
     :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"%s\")'"
   }
 
-  :simlayer-threshold 210
+  :simlayer-threshold 250
   :simlayers {
     :open_mode {:key :o}
     :symbols_mode {:key :f}
