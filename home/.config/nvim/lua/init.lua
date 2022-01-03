@@ -570,7 +570,7 @@ local function onPureNeovim(use)
 
   " This makes sure that accordion won't change the height of horizontal
   " windows/buffers.
-  autocmd WinNew,WinEnter * set winfixheight
+  autocmd WinNew * set winfixheight
   autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
   ]], false)
 
