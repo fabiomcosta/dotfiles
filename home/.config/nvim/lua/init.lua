@@ -216,7 +216,7 @@ local function onPureNeovim(use)
 
 
   use 'ntpeters/vim-better-whitespace'
-  vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', { silent=true, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>', {silent=true, noremap=true})
 
 
   use 'sheerun/vim-polyglot'
@@ -243,12 +243,12 @@ local function onPureNeovim(use)
   use 'rhysd/git-messenger.vim'
   vim.g.git_messenger_floating_win_opts = { border='single' }
   vim.g.git_messenger_popup_content_margins = false
-  vim.api.nvim_set_keymap('n', '<LEADER>gm', ':GitMessenger<CR>', { silent=true, noremap=false })
+  vim.api.nvim_set_keymap('n', '<LEADER>gm', ':GitMessenger<CR>', {silent=true, noremap=false})
 
 
   use 'tpope/vim-vinegar'
   vim.g.netrw_liststyle = 3
-  vim.api.nvim_set_keymap('n', '<LEADER>z', ':Vexplore<CR>', { silent=true, noremap=true })
+  vim.api.nvim_set_keymap('n', '<LEADER>z', ':Vexplore<CR>', {silent=true, noremap=true})
 
 
   use 'tversteeg/registers.nvim'
@@ -268,6 +268,7 @@ local function onPureNeovim(use)
 
   use {'nvim-treesitter/nvim-treesitter', run=':TSUpdate'}
   use 'windwp/nvim-ts-autotag'
+  use 'nvim-treesitter/nvim-treesitter-refactor'
   require('nvim-treesitter.configs').setup({
     ensure_installed = {'javascript', 'typescript', 'tsx', 'lua', 'html', 'fish', 'json', 'yaml', 'scss', 'css', 'python', 'bash', 'erlang', 'graphql', 'vim'},
     highlight = {
@@ -281,24 +282,31 @@ local function onPureNeovim(use)
     },
     context_commentstring = {
       enable = true
-    }
+    },
+    refactor = {
+      highlight_definitions = { enable = true },
+      smart_rename = {
+        enable = true,
+        keymaps = {
+          smart_rename = 'grr',
+        },
+      },
+    },
   })
   local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
   parser_config.tsx.used_by = 'javascript'
 
 
   use 'onsails/lspkind-nvim'
+  use 'hrsh7th/vim-vsnip'
+  use 'rafamadriz/friendly-snippets'
+
   use 'hrsh7th/nvim-cmp'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
-
   use 'hrsh7th/cmp-vsnip'
-  use 'hrsh7th/vim-vsnip'
-
-  use 'rafamadriz/friendly-snippets'
-
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')

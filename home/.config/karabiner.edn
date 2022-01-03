@@ -163,8 +163,8 @@
         [:semicolon :!S8]              ; *
         [:period :!S6]                 ; ^
         [:slash :!S4]                  ; $
-        [:n :!S5]                      ; %
-        [:quote :!S7]                  ; &
+        [:n :!S7]                      ; &
+        [:quote :!S5]                  ; %
     ]}
 
     {:des "media mode"
@@ -201,16 +201,6 @@
     ;; Meh layer/mode: a numbers + symbols layer
     {:des "meh mode"
       :rules [:meh_mode
-        ;; Symbols left hand home row
-        [:##f :!S4]
-        [:##d :!S3]
-        [:##s :!S2]
-        [:##a :!S1]
-        ;; Symbols right hand home row
-        [:##j :!S5]
-        [:##k :!S6]
-        [:##l :!S7]
-        [:##semicolon :!S8]
         ;; Numbers
         [:##q :1]
         [:##w :2]
@@ -222,6 +212,16 @@
         [:##i :8]
         [:##o :9]
         [:##p :0]
+        ;; Symbols left hand home row
+        [:##f :!S4]
+        [:##d :!S3]
+        [:##s :!S2]
+        [:##a :!S1]
+        ;; Symbols right hand home row
+        [:##j :!S5]
+        [:##k :!S6]
+        [:##l :!S7]
+        [:##semicolon :!S8]
     ]}
 
     {:des "apple keyboards"
