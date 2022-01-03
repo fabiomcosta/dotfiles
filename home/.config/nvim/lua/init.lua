@@ -367,8 +367,8 @@ local function onPureNeovim(use)
     if client.resolved_capabilities.document_formatting then
       vim.cmd [[
         augroup Format
-        autocmd! * <buffer>
-        autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+          autocmd! * <buffer>
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
         augroup END
       ]]
     end
@@ -561,18 +561,11 @@ local function onPureNeovim(use)
 
 
   use 'mattboehm/vim-accordion'
+  -- This makes sure that accordion won't change the height of horizontal
+  -- windows/buffers when it calls "wincmd =", and the same for us.
+  vim.cmd [[autocmd WinNew * set winfixheight]]
   -- TODO when autocmd is supported on lua we can try to move this to lua properly
-  vim.api.nvim_exec(
-  [[
-  fun! s:AutoSetAccordionValue()
-    execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))
-  endfun
-
-  " This makes sure that accordion won't change the height of horizontal
-  " windows/buffers.
-  autocmd WinNew * set winfixheight
-  autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
-  ]], false)
+  vim.cmd [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
 
 
   local function sourceIfExists(file)
