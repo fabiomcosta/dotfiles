@@ -254,18 +254,6 @@ local function onPureNeovim(use)
   use 'tversteeg/registers.nvim'
 
 
-  use 'mattboehm/vim-accordion'
-  -- TODO when autocmd is supported on lua we can try to move this to lua properly
-  vim.api.nvim_exec(
-  [[
-  fun! s:AutoSetAccordionValue()
-    execute ":AccordionAll " . string(floor(&columns/101))
-  endfun
-
-  autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
-  ]], false)
-
-
   -- function! CocAfterUpdate(info)
   --   CocInstall coc-prettier
   -- endfunction
@@ -544,7 +532,7 @@ local function onPureNeovim(use)
     requires = {{'voldikss/vim-floaterm'}},
   }
   vim.g['test#strategy'] = 'neovim'
-  vim.g['test#neovim#term_position'] = 'botright 12'
+  vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
 
   vim.api.nvim_set_keymap('n', '<LEADER>tn', ':TestNearest<CR><C-w>k', {silent=true, noremap=false})
@@ -570,6 +558,22 @@ local function onPureNeovim(use)
   vim.api.nvim_set_keymap('v', '<LEADER>hg', ':<C-U>lua require("codehub").openURL("v")<CR>', {noremap=true})
   vim.api.nvim_set_keymap('n', '<LEADER>hc', '<cmd>lua require("codehub").copyURL("n")<CR>', {noremap=true})
   vim.api.nvim_set_keymap('v', '<LEADER>hc', ':<C-U>lua require("codehub").copyURL("v")<CR>', {noremap=true})
+
+
+  use 'mattboehm/vim-accordion'
+  -- TODO when autocmd is supported on lua we can try to move this to lua properly
+  vim.api.nvim_exec(
+  [[
+  fun! s:AutoSetAccordionValue()
+    execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))
+  endfun
+
+  " This makes sure that accordion won't change the height of horizontal
+  " windows/buffers.
+  autocmd WinNew,WinEnter * set winfixheight
+  autocmd VimEnter,VimResized * call s:AutoSetAccordionValue()
+  ]], false)
+
 
   local function sourceIfExists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
