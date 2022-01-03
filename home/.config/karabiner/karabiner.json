@@ -1633,36 +1633,6 @@
           }
         } ]
       }, {
-        "description" : "toggle navigation mode",
-        "manipulators" : [ {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "s"
-            }, {
-              "key_code" : "d"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "insensitive",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "navigation_mode",
-                  "value" : 0
-                }
-              } ]
-            }
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "navigation_mode",
-              "value" : 1
-            }
-          } ],
-          "type" : "basic"
-        } ]
-      }, {
         "description" : "navigation mode (outlook)",
         "manipulators" : [ {
           "from" : {
@@ -1685,6 +1655,43 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "open_bracket",
+            "modifiers" : [ "left_control" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "i"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.microsoft\\.Outlook$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "o",
             "modifiers" : {
@@ -1704,6 +1711,43 @@
             "bundle_identifiers" : [ "^com\\.microsoft\\.Outlook$" ]
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "close_bracket",
+            "modifiers" : [ "left_control" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "o"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.microsoft\\.Outlook$" ]
+          } ]
         } ]
       }, {
         "description" : "navigation mode (workplace chat)",
@@ -1728,6 +1772,43 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "open_bracket",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "i"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^workplace-desktop$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "o",
             "modifiers" : {
@@ -1747,6 +1828,43 @@
             "bundle_identifiers" : [ "^workplace-desktop$" ]
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "close_bracket",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "o"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^workplace-desktop$" ]
+          } ]
         } ]
       }, {
         "description" : "navigation mode",
@@ -1767,6 +1885,38 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "down_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "j"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "k",
             "modifiers" : {
@@ -1782,6 +1932,38 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "up_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "k"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         }, {
           "to_if_held_down" : [ {
             "key_code" : "left_arrow",
@@ -1806,6 +1988,46 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "left_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "h"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "to_if_held_down" : [ {
+            "key_code" : "left_arrow",
+            "modifiers" : [ "left_option" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "to_if_held_down" : [ {
             "key_code" : "right_arrow",
             "modifiers" : [ "left_option" ]
@@ -1829,6 +2051,46 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "right_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "to_if_held_down" : [ {
+            "key_code" : "right_arrow",
+            "modifiers" : [ "left_option" ]
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "h",
             "modifiers" : {
@@ -1847,6 +2109,42 @@
             "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "left_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "h"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
         }, {
           "from" : {
             "key_code" : "l",
@@ -1867,6 +2165,42 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "right_arrow"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "f",
             "modifiers" : {
@@ -1883,6 +2217,38 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "right_shift"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "f"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "a",
             "modifiers" : {
@@ -1898,6 +2264,38 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "left_command"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "a"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         }, {
           "from" : {
             "key_code" : "r",
@@ -1916,6 +2314,39 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "c",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "r"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "v",
             "modifiers" : {
@@ -1933,6 +2364,39 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "v",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "v"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "g",
             "modifiers" : {
@@ -1949,6 +2413,39 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "x",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "g"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         }, {
           "from" : {
             "key_code" : "i",
@@ -1970,6 +2467,43 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "open_bracket",
+            "modifiers" : [ "left_command", "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "i"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "o",
             "modifiers" : {
@@ -1989,6 +2523,43 @@
             "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "close_bracket",
+            "modifiers" : [ "left_command", "left_shift" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "o"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
         }, {
           "from" : {
             "key_code" : "i",
@@ -2012,6 +2583,45 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "p"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "i"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "o",
             "modifiers" : {
@@ -2034,6 +2644,45 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "n"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "o"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          },
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ]
+        }, {
           "from" : {
             "key_code" : "u",
             "modifiers" : {
@@ -2051,6 +2700,39 @@
           } ],
           "type" : "basic"
         }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "t",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "u"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
           "from" : {
             "key_code" : "m",
             "modifiers" : {
@@ -2067,6 +2749,39 @@
             "type" : "variable_if"
           } ],
           "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 250
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "navigation_mode",
+              "value" : 1
+            }
+          }, {
+            "key_code" : "w",
+            "modifiers" : [ "left_command" ]
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "m"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "navigation_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         } ]
       }, {
         "description" : "open mode",
@@ -2463,7 +3178,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "y"
             } ],
@@ -2508,7 +3223,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "h"
             } ],
@@ -2555,7 +3270,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "u"
             } ],
@@ -2602,7 +3317,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "i"
             } ],
@@ -2649,7 +3364,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "j"
             } ],
@@ -2696,7 +3411,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "k"
             } ],
@@ -2741,7 +3456,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "m"
             } ],
@@ -2786,7 +3501,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "comma"
             } ],
@@ -2833,7 +3548,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "o"
             } ],
@@ -2880,7 +3595,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "p"
             } ],
@@ -2927,7 +3642,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "l"
             } ],
@@ -2974,7 +3689,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "semicolon"
             } ],
@@ -3021,7 +3736,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "period"
             } ],
@@ -3068,7 +3783,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
               "key_code" : "slash"
             } ],
@@ -3087,7 +3802,7 @@
           }
         }, {
           "from" : {
-            "key_code" : "a"
+            "key_code" : "n"
           },
           "to" : [ {
             "key_code" : "5",
@@ -3115,9 +3830,9 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
+              "key_code" : "s"
             }, {
-              "key_code" : "a"
+              "key_code" : "n"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -3134,7 +3849,7 @@
           }
         }, {
           "from" : {
-            "key_code" : "s"
+            "key_code" : "quote"
           },
           "to" : [ {
             "key_code" : "7",
@@ -3162,9 +3877,9 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
-            }, {
               "key_code" : "s"
+            }, {
+              "key_code" : "quote"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,

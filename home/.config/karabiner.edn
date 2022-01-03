@@ -48,8 +48,9 @@
 
   :simlayer-threshold 250
   :simlayers {
+    :navigation_mode {:key :d}
     :open_mode {:key :o}
-    :symbols_mode {:key :f}
+    :symbols_mode {:key :s}
     :media_mode {:key :m}
     :fn_mode {:key :z}
     :mouse_keys_mode {:key :a :afterup {:set ["mouse_keys_mode_scroll" 0]}}
@@ -95,16 +96,6 @@
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
     ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
-    {:des "toggle navigation mode"
-      :rules [
-        [{:sim [:s :d]
-          :simo {
-            :interrupt true
-            :afterup {:set ["navigation_mode" 0]}}
-          }
-          {:set ["navigation_mode" 1]}
-        ]
-    ]}
     {:des "navigation mode (outlook)"
       :rules [:navigation_mode
         [:##i :!Topen_bracket :outlook]
@@ -172,8 +163,8 @@
         [:semicolon :!S8]              ; *
         [:period :!S6]                 ; ^
         [:slash :!S4]                  ; $
-        [:a :!S5]                      ; %
-        [:s :!S7]                      ; &
+        [:n :!S5]                      ; %
+        [:quote :!S7]                  ; &
     ]}
 
     {:des "media mode"
