@@ -14,23 +14,5 @@
     "markdown"
   ],
   "prettier.eslintIntegration": true,
-  "prettier.requireConfig": true,
-  "eslint.autoFixOnSave": true,
-  "languageserver": {
-    "hack": {
-      "trace.server": "verbose",
-      "command": "hh_client",
-      "args": [
-        "lsp",
-        "--from",
-        "vim",
-        "--serverless-ide",
-        "--ranked-autocomplete"
-      ],
-      "filetypes": ["php"],
-      "initializationOptions": {
-        "cacheDirectory": "/tmp/hh_client"
-      }
-    }
-  }
+  "prettier.requireConfig": true
 }
