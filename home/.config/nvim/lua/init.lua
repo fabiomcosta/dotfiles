@@ -254,12 +254,6 @@ local function onPureNeovim(use)
   use 'tversteeg/registers.nvim'
 
 
-  -- function! CocAfterUpdate(info)
-  --   CocInstall coc-prettier
-  -- endfunction
-  use {'neoclide/coc.nvim', branch='release'}
-
-
   use 'kwkarlwang/bufjump.nvim'
   require('bufjump').setup()
   vim.api.nvim_set_keymap('n', '<C-p>', ':lua require("bufjump").backward()<CR>', {silent=true, noremap=true})

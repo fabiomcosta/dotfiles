@@ -73,7 +73,6 @@ await createHomeSymlink('.ripgreprc');
 await createHomeSymlink('.tmux.conf');
 await createHomeSymlink('.tmux/tmux.remote.conf');
 await createHomeSymlink('.config/fish/config.fish');
-await createHomeSymlink('.config/nvim/coc-settings.json');
 await createHomeSymlink('.config/nvim/lua');
 await createHomeSymlink('.config/karabiner.edn');
 await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
