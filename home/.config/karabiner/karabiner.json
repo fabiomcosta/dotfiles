@@ -2790,7 +2790,7 @@
             "key_code" : "a"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Spotify\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -2809,7 +2809,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Spotify\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -2835,7 +2835,7 @@
             "key_code" : "b"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Google Chrome\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -2854,7 +2854,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Google Chrome\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -2880,7 +2880,7 @@
             "key_code" : "c"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Workplace Chat\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -2899,7 +2899,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Workplace Chat\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -2925,7 +2925,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Finder\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -2944,7 +2944,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Finder\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -2970,7 +2970,7 @@
             "key_code" : "f"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"VS Code @ FB\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -2989,7 +2989,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"VS Code @ FB\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -3015,7 +3015,7 @@
             "key_code" : "m"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -3034,7 +3034,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -3060,7 +3060,7 @@
             "key_code" : "t"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Alacritty\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -3079,7 +3079,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Alacritty\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -3105,7 +3105,7 @@
             "key_code" : "n"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Notion\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -3124,7 +3124,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"Notion\")'"
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
           } ],
           "from" : {
             "simultaneous" : [ {

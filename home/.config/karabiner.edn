@@ -43,7 +43,7 @@
   }
 
   :templates {
-    :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").goToApplication(\"%s\")'"
+    :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
   }
 
   :simlayer-threshold 250
@@ -140,8 +140,8 @@
         [:a [:hsl "Spotify"]]
         [:b [:hsl "Google Chrome"]]
         [:c [:hsl "Workplace Chat"]]
-        [:e [:hsl "Finder"]]
-        [:f [:hsl "VS Code @ FB"]]
+        [:e [:hsl "VS Code @ FB"]]
+        [:f [:hsl "Finder"]]
         [:m [:hsl "Microsoft Outlook"]]
         [:t [:hsl "Alacritty"]]
         [:n [:hsl "Notion"]]
