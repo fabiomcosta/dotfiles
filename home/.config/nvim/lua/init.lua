@@ -1,3 +1,5 @@
+local set_keymap = vim.api.nvim_set_keymap
+
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
 -- version of the font you like
@@ -138,63 +140,48 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 -- turn on syntax highlighting
 vim.cmd([[syntax on]])
 
-vim.api.nvim_set_keymap('n', 'j', 'gj', { noremap = true })
-vim.api.nvim_set_keymap('n', 'k', 'gk', { noremap = true })
+set_keymap('n', 'j', 'gj', { noremap = true })
+set_keymap('n', 'k', 'gk', { noremap = true })
 
 -- moves cursor faster
-vim.api.nvim_set_keymap('n', '<DOWN>', '12j', { noremap = true })
-vim.api.nvim_set_keymap('v', '<DOWN>', '12j', { noremap = true })
-vim.api.nvim_set_keymap('n', '<UP>', '12k', { noremap = true })
-vim.api.nvim_set_keymap('v', '<UP>', '12k', { noremap = true })
+set_keymap('n', '<DOWN>', '12j', { noremap = true })
+set_keymap('v', '<DOWN>', '12j', { noremap = true })
+set_keymap('n', '<UP>', '12k', { noremap = true })
+set_keymap('v', '<UP>', '12k', { noremap = true })
 
-vim.api.nvim_set_keymap('i', 'jj', '<ESC>', { noremap = true })
-vim.api.nvim_set_keymap('n', ';', ':', { noremap = true })
-vim.api.nvim_set_keymap('v', ';', ':', { noremap = true })
+set_keymap('i', 'jj', '<ESC>', { noremap = true })
+set_keymap('n', ';', ':', { noremap = true })
+set_keymap('v', ';', ':', { noremap = true })
 
 -- makes ctrl-v work on command-line and search modes
-vim.api.nvim_set_keymap('c', '<C-v>', '<C-r>"', { noremap = true })
-vim.api.nvim_set_keymap('s', '<C-v>', '<C-r>"', { noremap = true })
+set_keymap('c', '<C-v>', '<C-r>"', { noremap = true })
+set_keymap('s', '<C-v>', '<C-r>"', { noremap = true })
 
 local currentFilePath = debug.getinfo(1).source:sub(2)
-vim.api.nvim_set_keymap(
+set_keymap(
   'n',
   '<LEADER>ev',
   ':e ' .. currentFilePath .. '<CR>',
   { noremap = true }
 )
-vim.api.nvim_set_keymap(
-  'n',
-  '<LEADER>\\',
-  ':vsplit<CR><C-w>l',
-  { noremap = true }
-)
-vim.api.nvim_set_keymap(
-  'n',
-  '<LEADER>-',
-  ':split<CR><C-w>j',
-  { noremap = true }
-)
+set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', { noremap = true })
+set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', { noremap = true })
 
 -- changes the size of the buffer windows
-vim.api.nvim_set_keymap('n', '=', '<C-w>=', { noremap = true })
-vim.api.nvim_set_keymap('n', '+', ':vertical resize +5<CR>', { noremap = true })
-vim.api.nvim_set_keymap('n', '-', ':vertical resize -5<CR>', { noremap = true })
+set_keymap('n', '=', '<C-w>=', { noremap = true })
+set_keymap('n', '+', ':vertical resize +5<CR>', { noremap = true })
+set_keymap('n', '-', ':vertical resize -5<CR>', { noremap = true })
 
 -- tab related mappings
-vim.api.nvim_set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true })
-vim.api.nvim_set_keymap(
-  'n',
-  '<LEADER>tp',
-  ':tabprevious<CR>',
-  { noremap = true }
-)
-vim.api.nvim_set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
+set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true })
+set_keymap('n', '<LEADER>tp', ':tabprevious<CR>', { noremap = true })
+set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
 
 -- avoid going on ex mode
-vim.api.nvim_set_keymap('n', 'Q', '<NOP>', { noremap = true })
+set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
 -- copies current buffer file path to register
-vim.api.nvim_set_keymap(
+set_keymap(
   'n',
   'cp',
   ':let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>',
@@ -203,8 +190,8 @@ vim.api.nvim_set_keymap(
 
 -- Keeps selection when changing indentation
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-vim.api.nvim_set_keymap('x', '<', '<gv', { noremap = true })
-vim.api.nvim_set_keymap('x', '>', '>gv', { noremap = true })
+set_keymap('x', '<', '<gv', { noremap = true })
+set_keymap('x', '>', '>gv', { noremap = true })
 
 -- Disable cursorline highlight on insert mode
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
@@ -233,12 +220,7 @@ local function onNeovimVSCode(use)
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
 
   use('tpope/vim-projectionist')
-  vim.api.nvim_set_keymap(
-    'n',
-    '<LEADER>a',
-    ':A<CR>',
-    { silent = true, noremap = true }
-  )
+  set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
   vim.g.projectionist_heuristics = {
     ['jest.config.js|jest.config.ts'] = {
       ['**/__tests__/*.test.js'] = {
@@ -260,7 +242,7 @@ local function onPureNeovim(use)
   -- vim.g.dracula_colorterm = 0
 
   use('ntpeters/vim-better-whitespace')
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>W',
     ':StripWhitespace<CR>',
@@ -276,49 +258,14 @@ local function onPureNeovim(use)
   use('haya14busa/incsearch.vim')
   vim.opt.hlsearch = true
   vim.g['incsearch#auto_nohlsearch'] = 1
-  vim.api.nvim_set_keymap(
-    '',
-    '/',
-    '<Plug>(incsearch-forward)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    'n',
-    '<Plug>(incsearch-nohl-n)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    'N',
-    '<Plug>(incsearch-nohl-N)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    '*',
-    '<Plug>(incsearch-nohl-*)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    '#',
-    '<Plug>(incsearch-nohl-#)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    'g*',
-    '<Plug>(incsearch-nohl-g*)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
-    '',
-    'g#',
-    '<Plug>(incsearch-nohl-g#)',
-    { noremap = false }
-  )
-  vim.api.nvim_set_keymap(
+  set_keymap('', '/', '<Plug>(incsearch-forward)', { noremap = false })
+  set_keymap('', 'n', '<Plug>(incsearch-nohl-n)', { noremap = false })
+  set_keymap('', 'N', '<Plug>(incsearch-nohl-N)', { noremap = false })
+  set_keymap('', '*', '<Plug>(incsearch-nohl-*)', { noremap = false })
+  set_keymap('', '#', '<Plug>(incsearch-nohl-#)', { noremap = false })
+  set_keymap('', 'g*', '<Plug>(incsearch-nohl-g*)', { noremap = false })
+  set_keymap('', 'g#', '<Plug>(incsearch-nohl-g#)', { noremap = false })
+  set_keymap(
     '',
     '<LEADER>/',
     '<Plug>(incsearch-forward)<C-r><C-w><CR>',
@@ -328,7 +275,7 @@ local function onPureNeovim(use)
   use('rhysd/git-messenger.vim')
   vim.g.git_messenger_floating_win_opts = { border = 'single' }
   vim.g.git_messenger_popup_content_margins = false
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>gm',
     ':GitMessenger<CR>',
@@ -337,7 +284,7 @@ local function onPureNeovim(use)
 
   use('tpope/vim-vinegar')
   vim.g.netrw_liststyle = 3
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>z',
     ':Vexplore<CR>',
@@ -348,13 +295,13 @@ local function onPureNeovim(use)
 
   use('kwkarlwang/bufjump.nvim')
   require('bufjump').setup()
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<C-p>',
     ':lua require("bufjump").backward()<CR>',
     { silent = true, noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<C-n>',
     ':lua require("bufjump").forward()<CR>',
@@ -483,7 +430,6 @@ local function onPureNeovim(use)
 
   local auto_format_on_save = function(client)
     if client.resolved_capabilities.document_formatting then
-      print('ALOW', client.name, vim.inspect(client.resolved_capabilities))
       vim.cmd([[
         augroup Format
           autocmd! * <buffer>
@@ -500,14 +446,14 @@ local function onPureNeovim(use)
 
     -- Use lsp find_references if its available, and fallback to a grep_string.
     if client.resolved_capabilities.find_references then
-      vim.api.nvim_set_keymap(
+      set_keymap(
         'n',
         '<LEADER>fr',
         '<cmd>Telescope lsp_references<CR>',
         { silent = false, noremap = true }
       )
     else
-      vim.api.nvim_set_keymap(
+      set_keymap(
         'n',
         '<LEADER>fr',
         '<cmd>Telescope grep_string<CR>',
@@ -519,11 +465,7 @@ local function onPureNeovim(use)
       vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
     -- Mappings.
-    local opts = {
-
-      noremap = true,
-      silent = true,
-    }
+    local opts = { noremap = true, silent = true }
 
     buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
     buf_set_keymap(
@@ -622,11 +564,10 @@ local function onPureNeovim(use)
 
   local null_ls = require('null-ls')
   null_ls.setup({
-    debug = true,
     on_attach = auto_format_on_save,
     sources = {
       null_ls.builtins.formatting.stylua,
-      null_ls.builtins.formatting.prettier,
+      -- null_ls.builtins.formatting.prettier,
     },
   })
 
@@ -689,31 +630,31 @@ local function onPureNeovim(use)
   require('telescope').setup({})
   require('telescope').load_extension('fzy_native')
 
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>ff',
     '<cmd>Telescope find_files<CR>',
     { silent = false, noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>fg',
     '<cmd>Telescope live_grep<CR>',
     { silent = false, noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>fb',
     '<cmd>Telescope buffers<CR>',
     { silent = false, noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>fd',
     '<cmd>Telescope diagnostics<CR>',
     { silent = false, noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>gs',
     '<cmd>Telescope git_status<CR>',
@@ -767,31 +708,31 @@ local function onPureNeovim(use)
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
 
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>tn',
     ':TestNearest<CR><C-w>k',
     { silent = true, noremap = false }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>tf',
     ':TestFile<CR><C-w>k',
     { silent = true, noremap = false }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>ts',
     ':TestSuite<CR><C-w>k',
     { silent = true, noremap = false }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>tl',
     ':TestLast<CR><C-w>k',
     { silent = true, noremap = false }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>tg',
     ':TestVisit<CR><C-w>k',
@@ -810,25 +751,25 @@ local function onPureNeovim(use)
   -- autocmd TermClose term://* call feedkeys("\<cr>")
   -- tnoremap <Esc> <C-\><C-n>
 
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>hg',
     '<cmd>lua require("codehub").openURL("n")<CR>',
     { noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'v',
     '<LEADER>hg',
     ':<C-U>lua require("codehub").openURL("v")<CR>',
     { noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'n',
     '<LEADER>hc',
     '<cmd>lua require("codehub").copyURL("n")<CR>',
     { noremap = true }
   )
-  vim.api.nvim_set_keymap(
+  set_keymap(
     'v',
     '<LEADER>hc',
     ':<C-U>lua require("codehub").copyURL("v")<CR>',
