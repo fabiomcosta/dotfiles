@@ -3992,7 +3992,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "key_code" : "illumination_decrement"
+            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
           } ],
           "conditions" : [ {
             "name" : "media_mode",
@@ -4011,7 +4011,7 @@
               "value" : 1
             }
           }, {
-            "key_code" : "illumination_decrement"
+            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -4037,7 +4037,7 @@
             "key_code" : "r"
           },
           "to" : [ {
-            "key_code" : "illumination_increment"
+            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
           } ],
           "conditions" : [ {
             "name" : "media_mode",
@@ -4056,7 +4056,7 @@
               "value" : 1
             }
           }, {
-            "key_code" : "illumination_increment"
+            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
           } ],
           "from" : {
             "simultaneous" : [ {

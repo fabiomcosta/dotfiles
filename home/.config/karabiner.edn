@@ -44,6 +44,8 @@
 
   :templates {
     :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
+    :external_display_brightness_increment "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
+    :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
   }
 
   :simlayer-threshold 250
@@ -171,8 +173,10 @@
       :rules [:media_mode
         [:q :display_brightness_decrement]
         [:w :display_brightness_increment]
-        [:e :illumination_decrement]
-        [:r :illumination_increment]
+        [:e [:external_display_brightness_decrement]]
+        [:r [:external_display_brightness_increment]]
+        ; [:e :illumination_decrement]
+        ; [:r :illumination_increment]
         [:a :mission_control]
         [:s :rewind]
         [:d :play_or_pause]
