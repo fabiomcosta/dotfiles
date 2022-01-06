@@ -45,7 +45,10 @@ vim.opt.swapfile = false
 vim.opt.visualbell = true
 vim.opt.errorbells = false
 vim.opt.encoding = 'utf-8'
-vim.opt.scrolloff = 8
+-- a large value will help prevent the weid scroll jump while changing focus
+-- between buffers. It also helps keep the cursor more to the center of
+-- the screen.
+vim.opt.scrolloff = 999
 vim.opt.autoindent = true
 vim.opt.copyindent = true
 vim.opt.title = true
