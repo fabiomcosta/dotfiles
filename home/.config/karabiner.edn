@@ -23,10 +23,10 @@
   :profiles  {
     :Goku {
       :default true
-      :sim 50     ; Keys need to be pressed within this threshold to be considered simultaneous
-      :delay 210  ; Time after which the key press is delayed
-      :held 210   ; Delay to register held key
-      :alone 210  ; Hold for .. ms to register single tap
+      :sim 280    ; Keys need to be pressed within this threshold to be considered simultaneous
+      :delay 280  ; Time after which the key press is delayed
+      :held 280   ; Delay to register held key
+      :alone 280  ; Hold for .. ms to register single tap
     }
   }
 
@@ -48,14 +48,15 @@
     :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
   }
 
-  :simlayer-threshold 250
+  ; :simlayer-threshold 280
   :simlayers {
     :navigation_mode {:key :d}
     :open_mode {:key :o}
+    :numbers_mode {:key :n}
     :symbols_mode {:key :s}
     :media_mode {:key :m}
     :fn_mode {:key :z}
-    :mouse_keys_mode {:key :a :afterup {:set ["mouse_keys_mode_scroll" 0]}}
+    :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
   }
 
   :tos {
@@ -79,11 +80,11 @@
     ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
     {:des "mouse keys mode"
       :rules [
-        [:##j {:mkey {:vwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##h {:mkey {:hwheel 32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##k {:mkey {:vwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        [:##l {:mkey {:hwheel -32}} [:mouse_keys_mode_scroll :mouse_keys_mode]]
-        :mouse_keys_mode
+        [:##j {:mkey {:vwheel 32}} [:mouse_mode_scroll :mouse_mode]]
+        [:##h {:mkey {:hwheel 32}} [:mouse_mode_scroll :mouse_mode]]
+        [:##k {:mkey {:vwheel -32}} [:mouse_mode_scroll :mouse_mode]]
+        [:##l {:mkey {:hwheel -32}} [:mouse_mode_scroll :mouse_mode]]
+        :mouse_mode
         [:##j {:mkey {:y 3072}}]
         [:##k {:mkey {:y -3072}}]
         [:##h {:mkey {:x -3072}}]
@@ -91,7 +92,7 @@
         [:##v {:pkey :button1}]
         [:##b {:pkey :button3}]
         [:##n {:pkey :button2}]
-        [:##s ["mouse_keys_mode_scroll" 1] nil {:afterup ["mouse_keys_mode_scroll" 0]}]
+        [:##s ["mouse_mode_scroll" 1] nil {:afterup ["mouse_mode_scroll" 0]}]
         [:##f {:mkey {:speed 0.5}}]
       ]}
 
@@ -149,6 +150,20 @@
         [:n [:hsl "Notion"]]
     ]}
 
+    {:des "numbers mode"
+      :rules [:numbers_mode
+        [:q :1]
+        [:w :2]
+        [:e :3]
+        [:r :4]
+        [:t :5]
+        [:y :6]
+        [:u :7]
+        [:i :8]
+        [:o :9]
+        [:p :0]
+    ]}
+
     {:des "symbols mode"
       :rules [:symbols_mode
         [:y :!Sgrave_accent_and_tilde] ; ~
@@ -203,30 +218,20 @@
     ]}
 
     ;; Meh layer/mode: a numbers + symbols layer
-    {:des "meh mode"
-      :rules [:meh_mode
-        ;; Numbers
-        [:##q :1]
-        [:##w :2]
-        [:##e :3]
-        [:##r :4]
-        [:##t :5]
-        [:##y :6]
-        [:##u :7]
-        [:##i :8]
-        [:##o :9]
-        [:##p :0]
-        ;; Symbols left hand home row
-        [:##f :!S4]
-        [:##d :!S3]
-        [:##s :!S2]
-        [:##a :!S1]
-        ;; Symbols right hand home row
-        [:##j :!S5]
-        [:##k :!S6]
-        [:##l :!S7]
-        [:##semicolon :!S8]
-    ]}
+    ; {:des "meh mode"
+    ;   :rules [:meh_mode
+    ;     ;; Numbers
+    ;     [:##q :1]
+    ;     [:##w :2]
+    ;     [:##e :3]
+    ;     [:##r :4]
+    ;     [:##t :5]
+    ;     [:##y :6]
+    ;     [:##u :7]
+    ;     [:##i :8]
+    ;     [:##o :9]
+    ;     [:##p :0]
+    ; ]}
 
     {:des "apple keyboards"
       :rules [:macbook_internal
@@ -276,18 +281,41 @@
         [:##backslash :right_option nil {:alone :backslash}]
         ;; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
-        ;; "delete: alone -> delete, hold -> meh-mode"
-        [:##delete_forward ["meh_mode" 1] nil {:afterup ["meh_mode" 0] :alone :delete_forward}]
         ;; "left_shift: alone -> equal_sign"
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
         [:##right_shift :right_shift nil {:alone :hyphen}]
     ]}
 
+    {:des "simlayer togglers"
+      :rules [:kadv2
+        [
+          {:sim [:delete_forward :d] :simo {:interrupt true}}
+          ["navigation_mode" 1]
+          ["navigation_mode" 0]
+        ]
+        [
+          {:sim [:delete_forward :n] :simo {:interrupt true}}
+          ["numbers_mode" 1]
+          ["numbers_mode" 0]
+        ]
+        [
+          {:sim [:delete_forward :s] :simo {:interrupt true}}
+          ["symbols_mode" 1]
+          ["symbols_mode" 0]
+        ]
+        [
+          {:sim [:delete_forward :a] :simo {:interrupt true}}
+          ["mouse_mode" 1]
+          ["mouse_mode" 0]
+        ]
+        [:delete_forward [["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]]]
+    ]}
+
     {:des "any device"
       :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
-        [:##caps_lock :left_control nil {:alone :escape}]
+        [:##caps_lock [:left_control ["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]] nil {:alone :escape}]
     ]}
   ]
 }
