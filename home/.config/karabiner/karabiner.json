@@ -851,10 +851,10 @@
   }, {
     "complex_modifications" : {
       "parameters" : {
-        "basic.simultaneous_threshold_milliseconds" : 280,
-        "basic.to_delayed_action_delay_milliseconds" : 280,
-        "basic.to_if_alone_timeout_milliseconds" : 280,
-        "basic.to_if_held_down_threshold_milliseconds" : 280
+        "basic.simultaneous_threshold_milliseconds" : 210,
+        "basic.to_delayed_action_delay_milliseconds" : 210,
+        "basic.to_if_alone_timeout_milliseconds" : 210,
+        "basic.to_if_held_down_threshold_milliseconds" : 210
       },
       "rules" : [ {
         "description" : "mouse keys mode",

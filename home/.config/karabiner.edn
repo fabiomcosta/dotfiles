@@ -23,10 +23,10 @@
   :profiles  {
     :Goku {
       :default true
-      :sim 280    ; Keys need to be pressed within this threshold to be considered simultaneous
-      :delay 280  ; Time after which the key press is delayed
-      :held 280   ; Delay to register held key
-      :alone 280  ; Hold for .. ms to register single tap
+      :sim 210    ; Keys need to be pressed within this threshold to be considered simultaneous
+      :delay 210  ; Time after which the key press is delayed
+      :held 210   ; Delay to register held key
+      :alone 210  ; Hold for .. ms to register single tap
     }
   }
 
@@ -48,7 +48,7 @@
     :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
   }
 
-  ; :simlayer-threshold 280
+  ; :simlayer-threshold 210
   :simlayers {
     :navigation_mode {:key :d}
     :open_mode {:key :o}
