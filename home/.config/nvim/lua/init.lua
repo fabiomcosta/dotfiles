@@ -1,5 +1,13 @@
 local set_keymap = vim.api.nvim_set_keymap
 
+local replace_termcodes = function(str)
+  return vim.api.nvim_replace_termcodes(str, true, true, true)
+end
+
+local feedkey = function(key, mode)
+  vim.api.nvim_feedkeys(replace_termcodes(key), mode, true)
+end
+
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
 -- version of the font you like
@@ -349,7 +357,7 @@ local function onPureNeovim(use)
       smart_rename = {
         enable = true,
         keymaps = {
-          smart_rename = 'grr',
+          smart_rename = '<LEADER>rn',
         },
       },
     },
@@ -370,14 +378,6 @@ local function onPureNeovim(use)
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
-
-  local feedkey = function(key, mode)
-    vim.api.nvim_feedkeys(
-      vim.api.nvim_replace_termcodes(key, true, true, true),
-      mode,
-      true
-    )
-  end
 
   cmp.setup({
     snippet = {
@@ -513,12 +513,6 @@ local function onPureNeovim(use)
       'n',
       '<LEADER>e',
       '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>',
-      opts
-    )
-    buf_set_keymap(
-      'n',
-      '<LEADER>rn',
-      '<cmd>lua require"lspsaga.rename".rename()<CR>',
       opts
     )
     buf_set_keymap(
@@ -714,32 +708,45 @@ local function onPureNeovim(use)
   set_keymap(
     'n',
     '<LEADER>tn',
-    ':TestNearest<CR><C-w>k',
+    ':TestNearest<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tf',
-    ':TestFile<CR><C-w>k',
+    ':TestFile<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>ts',
-    ':TestSuite<CR><C-w>k',
+    ':TestSuite<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tl',
-    ':TestLast<CR><C-w>k',
+    ':TestLast<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tg',
-    ':TestVisit<CR><C-w>k',
+    ':TestVisit<CR><C-w>p',
     { silent = true, noremap = false }
+  )
+
+  -- This will not work 100% of the times, but I don't know yet how I
+  -- could find exactly the vim-test terminal and then close it, so this
+  -- will do for now.
+  _G.fabs_vim_test_close_test_window = function()
+    return replace_termcodes('<C-w>' .. vim.fn.winnr('$') .. 'c')
+  end
+  set_keymap(
+    'n',
+    '<LEADER>tc',
+    'v:lua.fabs_vim_test_close_test_window()',
+    { silent = true, noremap = false, expr = true }
   )
 
   -- TODO is there a native lua way to do this?
