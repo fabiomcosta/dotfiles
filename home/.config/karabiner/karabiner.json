@@ -5975,26 +5975,6 @@
           },
           "to" : [ {
             "key_code" : "left_control"
-          }, {
-            "set_variable" : {
-              "name" : "navigation_mode",
-              "value" : 0
-            }
-          }, {
-            "set_variable" : {
-              "name" : "numbers_mode",
-              "value" : 0
-            }
-          }, {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 0
-            }
-          }, {
-            "set_variable" : {
-              "name" : "mouse_mode",
-              "value" : 0
-            }
           } ],
           "type" : "basic"
         } ]

@@ -302,7 +302,8 @@
     {:des "any device"
       :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
-        [:##caps_lock [:left_control ["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]] nil {:alone :escape}]
+        ; [:##caps_lock [:left_control ["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]] nil {:alone :escape}]
+        [:##caps_lock :left_control nil {:alone :escape}]
     ]}
   ]
 }
