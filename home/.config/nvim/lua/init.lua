@@ -180,8 +180,10 @@ set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', { noremap = true })
 
 -- changes the size of the buffer windows
 set_keymap('n', '=', '<C-w>=', { noremap = true })
-set_keymap('n', '+', ':vertical resize +5<CR>', { noremap = true })
-set_keymap('n', '-', ':vertical resize -5<CR>', { noremap = true })
+set_keymap('n', '<RIGHT>', ':vertical resize +5<CR>', { noremap = true })
+set_keymap('n', '<LEFT>', ':vertical resize -5<CR>', { noremap = true })
+set_keymap('n', '+', ':resize +5<CR>', { noremap = true })
+set_keymap('n', '-', ':resize -5<CR>', { noremap = true })
 
 -- tab related mappings
 set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true })
@@ -195,7 +197,7 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 set_keymap(
   'n',
   'cp',
-  ':let @+=resolve(fnamemodify(expand("%"), ":~:."))<CR>',
+  ':let @+ = resolve(fnamemodify(expand("%"), ":~:."))<CR>',
   { noremap = true }
 )
 
@@ -224,11 +226,40 @@ local function onNeovimVSCode(use)
   use('moll/vim-node')
   use('hhvm/vim-hack')
   use('jparise/vim-graphql')
-  use('christoomey/vim-tmux-navigator')
+
   use('editorconfig/editorconfig-vim')
   use('ojroques/vim-oscyank')
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
+
+  -- These are the default, but I wanted them to be explicitly defined here
+  -- so I can change them in the future if needed.
+  use('christoomey/vim-tmux-navigator')
+  vim.g.tmux_navigator_no_mappings = 1
+  set_keymap(
+    'n',
+    '<C-h>',
+    ':TmuxNavigateLeft<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<C-j>',
+    ':TmuxNavigateDown<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<C-k>',
+    ':TmuxNavigateUp<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<C-l>',
+    ':TmuxNavigateRight<CR>',
+    { silent = true, noremap = true }
+  )
 
   use('tpope/vim-projectionist')
   set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
