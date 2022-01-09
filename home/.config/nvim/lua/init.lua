@@ -739,13 +739,12 @@ local function onPureNeovim(use)
   -- This will not work 100% of the times, but I don't know yet how I
   -- could find exactly the vim-test terminal and then close it, so this
   -- will do for now.
-  _G.fabs_vim_test_close_test_window = function()
-    return replace_termcodes('<C-w>' .. vim.fn.winnr('$') .. 'c')
-  end
   set_keymap(
     'n',
     '<LEADER>tc',
-    'v:lua.fabs_vim_test_close_test_window()',
+    -- Closes the last window accoring to vim's order, so either the bottom-most
+    -- or if there is none on the bottom, the last to the right.
+    '"<C-w>" . winnr("$") . "c"',
     { silent = true, noremap = false, expr = true }
   )
 
