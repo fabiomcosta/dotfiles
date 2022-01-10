@@ -50,18 +50,22 @@
 
   ; :simlayer-threshold 210
   :simlayers {
-    :navigation_mode {:key :d}
-    :open_mode {:key :o}
+    ; :navigation_mode {:key :d}
     ; :numbers_mode {:key :n}
+    :open_mode {:key :o}
     :symbols_mode {:key :s}
     :media_mode {:key :m}
     :fn_mode {:key :f}
     :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
   }
 
-  :tos {
+  ; :layers {
+  ;   :navigation_mode {:key :d}
+  ; }
+
+  ; :tos {
     ; :hyper_key {:key :!CTOleft_shift}
-  }
+  ; }
 
   ;; each manipulator has a description and multiple rules
 
@@ -93,7 +97,64 @@
         [:##n {:pkey :button2}]
         [:##s ["mouse_mode_scroll" 1] nil {:afterup ["mouse_mode_scroll" 0]}]
         [:##f {:mkey {:speed 0.5}}]
-      ]}
+    ]}
+
+    ;; I'd consider this a new type of layer, it's different from
+    ;; simlayers and layers, let me try to explain.
+    ;;
+    ;; This new type of layer is very similar to what's called "layer" on goku,
+    ;; in the sense that when holding the key that defines the layer, the key
+    ;; itself won't be triggered nor repea will, but it fixes the issue that
+    ;; woudln't allow fast typing using that key by adding these simultaneous
+    ;; interrupt events on each other key that can be simultaneously pressed
+    ;; with the layer key.
+    ;; This means that the layer is only really activated if the layer key is
+    ;; pressed adn held for a little while, and not used simultaneously with
+    ;; other keys.
+    ;; This is perfect for home row modifier configurations, for example.
+    {:des "navigation mode, fluid typing protection"
+      :rules [
+        [{:sim [:d :q] :simo {:interrupt true :dorder :strict}} [:d :q]]
+        [{:sim [:d :w] :simo {:interrupt true :dorder :strict}} [:d :w]]
+        [{:sim [:d :r] :simo {:interrupt true :dorder :strict}} [:d :r]]
+        [{:sim [:d :t] :simo {:interrupt true :dorder :strict}} [:d :t]]
+        [{:sim [:d :a] :simo {:interrupt true :dorder :strict}} [:d :a]]
+        [{:sim [:d :s] :simo {:interrupt true :dorder :strict}} [:d :s]]
+        [{:sim [:d :f] :simo {:interrupt true :dorder :strict}} [:d :f]]
+        [{:sim [:d :g] :simo {:interrupt true :dorder :strict}} [:d :g]]
+        [{:sim [:d :z] :simo {:interrupt true :dorder :strict}} [:d :z]]
+        [{:sim [:d :x] :simo {:interrupt true :dorder :strict}} [:d :x]]
+        [{:sim [:d :v] :simo {:interrupt true :dorder :strict}} [:d :v]]
+        [{:sim [:d :b] :simo {:interrupt true :dorder :strict}} [:d :b]]
+        [{:sim [:d :y] :simo {:interrupt true :dorder :strict}} [:d :y]]
+        [{:sim [:d :u] :simo {:interrupt true :dorder :strict}} [:d :u]]
+        [{:sim [:d :i] :simo {:interrupt true :dorder :strict}} [:d :i]]
+        [{:sim [:d :o] :simo {:interrupt true :dorder :strict}} [:d :o]]
+        [{:sim [:d :p] :simo {:interrupt true :dorder :strict}} [:d :p]]
+        [{:sim [:d :h] :simo {:interrupt true :dorder :strict}} [:d :h]]
+        [{:sim [:d :l] :simo {:interrupt true :dorder :strict}} [:d :l]]
+        [{:sim [:d :semicolon] :simo {:interrupt true :dorder :strict}} [:d :semicolon]]
+        [{:sim [:d :n] :simo {:interrupt true :dorder :strict}} [:d :n]]
+        [{:sim [:d :m] :simo {:interrupt true :dorder :strict}} [:d :m]]
+        [{:sim [:d :comma] :simo {:interrupt true :dorder :strict}} [:d :comma]]
+        [{:sim [:d :period] :simo {:interrupt true :dorder :strict}} [:d :period]]
+        [{:sim [:d :slash] :simo {:interrupt true :dorder :strict}} [:d :slash]]
+        ; These keys are also for the same finger as the "d" finger, so they
+        ; are unlikely to be pressed at the same time. Minor nit.
+        ; [{:sim [:d :e] :simo {:interrupt true :dorder :strict}} [:d :e]]
+        ; [{:sim [:d :d] :simo {:interrupt true :dorder :strict}} [:d :d]]
+        ; [{:sim [:d :c] :simo {:interrupt true :dorder :strict}} [:d :c]]
+
+        ; When intending to activate navigation mode, j and k are frequently the
+        ; first keys I'll press along with that, so there are higher changes
+        ; that I actually want to activate navigation mode in that case.
+        ; [{:sim [:d :j] :simo {:interrupt true :dorder :strict}} [:d :j]]
+        ; [{:sim [:d :k] :simo {:interrupt true :dorder :strict}} [:d :k]]
+    ]}
+    {:des "toggle navigation mode"
+      :rules [
+        [:##d ["navigation_mode" 1] nil {:alone :d :afterup ["navigation_mode" 0]}]
+    ]}
 
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
@@ -274,35 +335,9 @@
         [:##delete_forward ["numbers_mode" 1] nil {:afterup ["numbers_mode" 0]}]
     ]}
 
-;     {:des "simlayer togglers"
-;       :rules [:kadv2
-;         [
-;           {:sim [:delete_forward :d] :simo {:interrupt true}}
-;           ["navigation_mode" 1]
-;           ["navigation_mode" 0]
-;         ]
-;         [
-;           {:sim [:delete_forward :n] :simo {:interrupt true}}
-;           ["numbers_mode" 1]
-;           ["numbers_mode" 0]
-;         ]
-;         [
-;           {:sim [:delete_forward :s] :simo {:interrupt true}}
-;           ["symbols_mode" 1]
-;           ["symbols_mode" 0]
-;         ]
-;         [
-;           {:sim [:delete_forward :a] :simo {:interrupt true}}
-;           ["mouse_mode" 1]
-;           ["mouse_mode" 0]
-;         ]
-;         [:delete_forward [["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]]]
-;     ]}
-
     {:des "any device"
       :rules [
         ;; caps_lock: alone -> escape, hold -> left_control
-        ; [:##caps_lock [:left_control ["navigation_mode" 0] ["numbers_mode" 0] ["symbols_mode" 0] ["mouse_mode" 0]] nil {:alone :escape}]
         [:##caps_lock :left_control nil {:alone :escape}]
     ]}
   ]
