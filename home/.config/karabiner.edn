@@ -59,14 +59,6 @@
     :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
   }
 
-  ; :layers {
-  ;   :navigation_mode {:key :d}
-  ; }
-
-  ; :tos {
-    ; :hyper_key {:key :!CTOleft_shift}
-  ; }
-
   ;; each manipulator has a description and multiple rules
 
   ;;{:des "..."                                       ;; -> description
