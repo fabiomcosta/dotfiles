@@ -1,11 +1,15 @@
 local set_keymap = vim.api.nvim_set_keymap
 
-local replace_termcodes = function(str)
+local function replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-local feedkey = function(key, mode)
+local function feedkey(key, mode)
   vim.api.nvim_feedkeys(replace_termcodes(key), mode, true)
+end
+
+local function starts_with(str, start)
+  return str:sub(1, #start) == start
 end
 
 -- fonts and other gui stuff
@@ -736,47 +740,52 @@ local function onPureNeovim(use)
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
 
+  _G.fabs_test_close_last_term_window = function()
+    -- get buffer name from last windows
+    local last_window_index = vim.fn.winnr('$')
+    local last_buffer_name = vim.fn.bufname(vim.fn.winbufnr(last_window_index))
+    if starts_with(last_buffer_name, 'term://') then
+      return replace_termcodes('<C-w>' .. last_window_index .. 'c')
+    end
+    return ''
+  end
+  set_keymap(
+    'n',
+    '<LEADER>tc',
+    -- Closes the last term window according to vim's order, so either the
+    -- bottom-most or if there is none on the bottom, the last to the right.
+    'v:lua.fabs_test_close_last_term_window()',
+    { silent = true, noremap = false, expr = true }
+  )
   set_keymap(
     'n',
     '<LEADER>tn',
-    ':TestNearest<CR><C-w>p',
+    '<LEADER>tc:TestNearest --watch<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tf',
-    ':TestFile<CR><C-w>p',
+    '<LEADER>tc:TestFile<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>ts',
-    ':TestSuite<CR><C-w>p',
+    '<LEADER>tc:TestSuite<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tl',
-    ':TestLast<CR><C-w>p',
+    '<LEADER>tc:TestLast<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tg',
-    ':TestVisit<CR><C-w>p',
+    ':TestVisit<CR>',
     { silent = true, noremap = false }
-  )
-
-  -- This will not work 100% of the times, but I don't know yet how I
-  -- could find exactly the vim-test terminal and then close it, so this
-  -- will do for now.
-  set_keymap(
-    'n',
-    '<LEADER>tc',
-    -- Closes the last window accoring to vim's order, so either the bottom-most
-    -- or if there is none on the bottom, the last to the right.
-    '"<C-w>" . winnr("$") . "c"',
-    { silent = true, noremap = false, expr = true }
   )
 
   -- TODO is there a native lua way to do this?
