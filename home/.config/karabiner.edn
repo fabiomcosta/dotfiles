@@ -50,8 +50,6 @@
 
   ; :simlayer-threshold 210
   :simlayers {
-    ; :navigation_mode {:key :d}
-    ; :numbers_mode {:key :n}
     :open_mode {:key :o}
     :symbols_mode {:key :s}
     :media_mode {:key :m}
@@ -91,6 +89,10 @@
         [:##f {:mkey {:speed 0.5}}]
     ]}
 
+    ;; Navigation Mode, based on (S)uper (D)uper mode
+    ;; idea from https://github.com/jasonrudolph/keyboard
+    ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
+
     ;; I'd consider this a new type of layer, it's different from
     ;; simlayers and layers, let me try to explain.
     ;;
@@ -123,14 +125,19 @@
         [{:sim [:d :i] :simo {:interrupt true :dorder :strict}} [:d :i]]
         [{:sim [:d :o] :simo {:interrupt true :dorder :strict}} [:d :o]]
         [{:sim [:d :p] :simo {:interrupt true :dorder :strict}} [:d :p]]
-        [{:sim [:d :h] :simo {:interrupt true :dorder :strict}} [:d :h]]
-        [{:sim [:d :l] :simo {:interrupt true :dorder :strict}} [:d :l]]
-        [{:sim [:d :semicolon] :simo {:interrupt true :dorder :strict}} [:d :semicolon]]
         [{:sim [:d :n] :simo {:interrupt true :dorder :strict}} [:d :n]]
         [{:sim [:d :m] :simo {:interrupt true :dorder :strict}} [:d :m]]
         [{:sim [:d :comma] :simo {:interrupt true :dorder :strict}} [:d :comma]]
-        [{:sim [:d :period] :simo {:interrupt true :dorder :strict}} [:d :period]]
         [{:sim [:d :slash] :simo {:interrupt true :dorder :strict}} [:d :slash]]
+        [{:sim [:d :quote] :simo {:interrupt true :dorder :strict}} [:d :quote]]
+        [{:sim [:d :period] :simo {:interrupt true :dorder :strict}} [:d :period]]
+        [{:sim [:d :hyphen] :simo {:interrupt true :dorder :strict}} [:d :hyphen]]
+        [{:sim [:d :spacebar] :simo {:interrupt true :dorder :strict}} [:d :spacebar]]
+        [{:sim [:d :semicolon] :simo {:interrupt true :dorder :strict}} [:d :semicolon]]
+        [{:sim [:d :backslash] :simo {:interrupt true :dorder :strict}} [:d :backslash]]
+        [{:sim [:d :equal_sign] :simo {:interrupt true :dorder :strict}} [:d :equal_sign]]
+        [{:sim [:d :return_or_enter] :simo {:interrupt true :dorder :strict}} [:d :return_or_enter]]
+        [{:sim [:d :delete_or_backspace] :simo {:interrupt true :dorder :strict}} [:d :delete_or_backspace]]
         ; These keys are also for the same finger as the "d" finger, so they
         ; are unlikely to be pressed at the same time. Minor nit.
         ; [{:sim [:d :e] :simo {:interrupt true :dorder :strict}} [:d :e]]
@@ -140,17 +147,15 @@
         ; When intending to activate navigation mode, j and k are frequently the
         ; first keys I'll press along with that, so there are higher changes
         ; that I actually want to activate navigation mode in that case.
+        ; [{:sim [:d :h] :simo {:interrupt true :dorder :strict}} [:d :h]]
         ; [{:sim [:d :j] :simo {:interrupt true :dorder :strict}} [:d :j]]
         ; [{:sim [:d :k] :simo {:interrupt true :dorder :strict}} [:d :k]]
+        ; [{:sim [:d :l] :simo {:interrupt true :dorder :strict}} [:d :l]]
     ]}
     {:des "toggle navigation mode"
       :rules [
-        [:##d ["navigation_mode" 1] nil {:alone :d :afterup ["navigation_mode" 0]}]
+        [:d ["navigation_mode" 1] nil {:alone :d :afterup ["navigation_mode" 0]}]
     ]}
-
-    ;; Navigation Mode, based on (S)uper (D)uper mode
-    ;; idea from https://github.com/jasonrudolph/keyboard
-    ;; implementation from https://gist.github.com/narze/1eb7d0f14b6177ea0360f5dc214867b0
     {:des "navigation mode (outlook)"
       :rules [:navigation_mode
         [:##i :!Topen_bracket :outlook]
@@ -161,7 +166,12 @@
         [:##i :!Copen_bracket :workplace_chat]
         [:##o :!Cclose_bracket :workplace_chat]
     ]}
-    {:des "navigation mode"
+    {:des "navigation mode (terminal)"
+      :rules [:navigation_mode
+        [:##i [:!Ta :p] :terminal]
+        [:##o [:!Ta :n] :terminal]
+    ]}
+    {:des "navigation mode (all)"
       :rules [:navigation_mode
         ; arrow keys vim style
         [:##j :down_arrow]
@@ -179,11 +189,8 @@
         [:##v :!Cv]
         [:##g :!Cx]
         ; tab navigation mostly on browsers
-        [:##i :!CSopen_bracket :!terminal]
-        [:##o :!CSclose_bracket :!terminal]
-        ; tab navigation on terminal/tmux
-        [:##i [:!Ta :p] :terminal]
-        [:##o [:!Ta :n] :terminal]
+        [:##i :!CSopen_bracket]
+        [:##o :!CSclose_bracket]
         ; new tab
         [:##u :!Ct]
         ; close tab

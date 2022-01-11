@@ -1979,66 +1979,6 @@
             "simultaneous" : [ {
               "key_code" : "d"
             }, {
-              "key_code" : "h"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "h"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "l"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "l"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "semicolon"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "semicolon"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
               "key_code" : "n"
             } ],
             "simultaneous_options" : {
@@ -2099,6 +2039,46 @@
             "simultaneous" : [ {
               "key_code" : "d"
             }, {
+              "key_code" : "slash"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "slash"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "quote"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "quote"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
               "key_code" : "period"
             } ],
             "simultaneous_options" : {
@@ -2119,7 +2099,7 @@
             "simultaneous" : [ {
               "key_code" : "d"
             }, {
-              "key_code" : "slash"
+              "key_code" : "hyphen"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -2131,7 +2111,127 @@
           "to" : [ {
             "key_code" : "d"
           }, {
-            "key_code" : "slash"
+            "key_code" : "hyphen"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "spacebar"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "spacebar"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "semicolon"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "semicolon"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "backslash"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "backslash"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "equal_sign"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "equal_sign"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "return_or_enter"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "return_or_enter"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "delete_or_backspace"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "d"
+          }, {
+            "key_code" : "delete_or_backspace"
           } ],
           "type" : "basic"
         } ]
@@ -2148,10 +2248,7 @@
             }
           } ],
           "from" : {
-            "key_code" : "d",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
+            "key_code" : "d"
           },
           "to" : [ {
             "set_variable" : {
@@ -2248,7 +2345,54 @@
           "type" : "basic"
         } ]
       }, {
-        "description" : "navigation mode",
+        "description" : "navigation mode (terminal)",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "i",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "p"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "o",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "a",
+            "modifiers" : [ "left_control" ]
+          }, {
+            "key_code" : "n"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
+        "description" : "navigation mode (all)",
         "manipulators" : [ {
           "from" : {
             "key_code" : "j",
@@ -2463,9 +2607,6 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_unless",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2483,53 +2624,6 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_unless",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "i",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "a",
-            "modifiers" : [ "left_control" ]
-          }, {
-            "key_code" : "p"
-          } ],
-          "conditions" : [ {
-            "name" : "navigation_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "o",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "a",
-            "modifiers" : [ "left_control" ]
-          }, {
-            "key_code" : "n"
-          } ],
-          "conditions" : [ {
-            "name" : "navigation_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
