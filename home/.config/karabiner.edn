@@ -23,7 +23,7 @@
   :profiles  {
     :Goku {
       :default true
-      :sim 210    ; Keys need to be pressed within this threshold to be considered simultaneous
+      :sim 160    ; Keys need to be pressed within this threshold to be considered simultaneous
       :delay 210  ; Time after which the key press is delayed
       :held 210   ; Delay to register held key
       :alone 210  ; Hold for .. ms to register single tap
@@ -36,7 +36,7 @@
   }
 
   :applications {
-    :chrome ["^com\\.google\\.Chrome$"]
+    :browser ["^com\\.google\\.Chrome$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
     :workplace_chat ["^workplace-desktop$"]
     :terminal ["^io\\.alacritty$"]
@@ -44,17 +44,20 @@
 
   :templates {
     :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
+    ;; https://github.com/kfix/ddcctl
+    ;; -i 16 is display-port 2
+    ;; -d 1 is display 1
     :external_display_brightness_increment "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
     :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
   }
 
-  ; :simlayer-threshold 210
+  :simlayer-threshold 160
   :simlayers {
     :open_mode {:key :o}
     :symbols_mode {:key :s}
     :media_mode {:key :m}
     :fn_mode {:key :f}
-    :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
+    :mouse_mode {:key :d :afterup {:set ["mouse_mode_scroll" 0]}}
   }
 
   ;; each manipulator has a description and multiple rules
@@ -73,18 +76,18 @@
     ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
     {:des "mouse keys mode"
       :rules [
-        [:##j {:mkey {:vwheel 32}} [:mouse_mode_scroll :mouse_mode]]
-        [:##h {:mkey {:hwheel 32}} [:mouse_mode_scroll :mouse_mode]]
-        [:##k {:mkey {:vwheel -32}} [:mouse_mode_scroll :mouse_mode]]
-        [:##l {:mkey {:hwheel -32}} [:mouse_mode_scroll :mouse_mode]]
+        [:##j {:mkey {:vwheel 120}} [:mouse_mode_scroll :mouse_mode]]
+        [:##h {:mkey {:hwheel 120}} [:mouse_mode_scroll :mouse_mode]]
+        [:##k {:mkey {:vwheel -120}} [:mouse_mode_scroll :mouse_mode]]
+        [:##l {:mkey {:hwheel -120}} [:mouse_mode_scroll :mouse_mode]]
         :mouse_mode
         [:##j {:mkey {:y 3072}}]
         [:##k {:mkey {:y -3072}}]
         [:##h {:mkey {:x -3072}}]
         [:##l {:mkey {:x 3072}}]
-        [:##v {:pkey :button1}]
-        [:##b {:pkey :button3}]
-        [:##n {:pkey :button2}]
+        [:##c {:pkey :button1}]
+        [:##v {:pkey :button3}]
+        [:##b {:pkey :button2}]
         [:##s ["mouse_mode_scroll" 1] nil {:afterup ["mouse_mode_scroll" 0]}]
         [:##f {:mkey {:speed 0.5}}]
     ]}
@@ -108,53 +111,49 @@
     ;; This is perfect for home row modifier configurations, for example.
     {:des "navigation mode, fluid typing protection"
       :rules [
-        [{:sim [:d :q] :simo {:interrupt true :dorder :strict}} [:d :q]]
-        [{:sim [:d :w] :simo {:interrupt true :dorder :strict}} [:d :w]]
-        [{:sim [:d :r] :simo {:interrupt true :dorder :strict}} [:d :r]]
-        [{:sim [:d :t] :simo {:interrupt true :dorder :strict}} [:d :t]]
-        [{:sim [:d :a] :simo {:interrupt true :dorder :strict}} [:d :a]]
-        [{:sim [:d :s] :simo {:interrupt true :dorder :strict}} [:d :s]]
-        [{:sim [:d :f] :simo {:interrupt true :dorder :strict}} [:d :f]]
-        [{:sim [:d :g] :simo {:interrupt true :dorder :strict}} [:d :g]]
-        [{:sim [:d :z] :simo {:interrupt true :dorder :strict}} [:d :z]]
-        [{:sim [:d :x] :simo {:interrupt true :dorder :strict}} [:d :x]]
-        [{:sim [:d :v] :simo {:interrupt true :dorder :strict}} [:d :v]]
-        [{:sim [:d :b] :simo {:interrupt true :dorder :strict}} [:d :b]]
-        [{:sim [:d :y] :simo {:interrupt true :dorder :strict}} [:d :y]]
-        [{:sim [:d :u] :simo {:interrupt true :dorder :strict}} [:d :u]]
-        [{:sim [:d :i] :simo {:interrupt true :dorder :strict}} [:d :i]]
-        [{:sim [:d :o] :simo {:interrupt true :dorder :strict}} [:d :o]]
-        [{:sim [:d :p] :simo {:interrupt true :dorder :strict}} [:d :p]]
-        [{:sim [:d :n] :simo {:interrupt true :dorder :strict}} [:d :n]]
-        [{:sim [:d :m] :simo {:interrupt true :dorder :strict}} [:d :m]]
-        [{:sim [:d :comma] :simo {:interrupt true :dorder :strict}} [:d :comma]]
-        [{:sim [:d :slash] :simo {:interrupt true :dorder :strict}} [:d :slash]]
-        [{:sim [:d :quote] :simo {:interrupt true :dorder :strict}} [:d :quote]]
-        [{:sim [:d :period] :simo {:interrupt true :dorder :strict}} [:d :period]]
-        [{:sim [:d :hyphen] :simo {:interrupt true :dorder :strict}} [:d :hyphen]]
-        [{:sim [:d :spacebar] :simo {:interrupt true :dorder :strict}} [:d :spacebar]]
-        [{:sim [:d :semicolon] :simo {:interrupt true :dorder :strict}} [:d :semicolon]]
-        [{:sim [:d :backslash] :simo {:interrupt true :dorder :strict}} [:d :backslash]]
-        [{:sim [:d :equal_sign] :simo {:interrupt true :dorder :strict}} [:d :equal_sign]]
-        [{:sim [:d :return_or_enter] :simo {:interrupt true :dorder :strict}} [:d :return_or_enter]]
-        [{:sim [:d :delete_or_backspace] :simo {:interrupt true :dorder :strict}} [:d :delete_or_backspace]]
-        ; These keys are also for the same finger as the "d" finger, so they
-        ; are unlikely to be pressed at the same time. Minor nit.
-        ; [{:sim [:d :e] :simo {:interrupt true :dorder :strict}} [:d :e]]
-        ; [{:sim [:d :d] :simo {:interrupt true :dorder :strict}} [:d :d]]
-        ; [{:sim [:d :c] :simo {:interrupt true :dorder :strict}} [:d :c]]
+        [{:sim [:a :w] :simo {:interrupt true :dorder :strict}} [:a :w]]
+        [{:sim [:a :e] :simo {:interrupt true :dorder :strict}} [:a :e]]
+        [{:sim [:a :r] :simo {:interrupt true :dorder :strict}} [:a :r]]
+        [{:sim [:a :t] :simo {:interrupt true :dorder :strict}} [:a :t]]
+        [{:sim [:a :s] :simo {:interrupt true :dorder :strict}} [:a :s]]
+        [{:sim [:a :f] :simo {:interrupt true :dorder :strict}} [:a :f]]
+        [{:sim [:a :d] :simo {:interrupt true :dorder :strict}} [:a :d]]
+        [{:sim [:a :g] :simo {:interrupt true :dorder :strict}} [:a :g]]
+        [{:sim [:a :x] :simo {:interrupt true :dorder :strict}} [:a :x]]
+        [{:sim [:a :c] :simo {:interrupt true :dorder :strict}} [:a :c]]
+        [{:sim [:a :v] :simo {:interrupt true :dorder :strict}} [:a :v]]
+        [{:sim [:a :b] :simo {:interrupt true :dorder :strict}} [:a :b]]
+        [{:sim [:a :y] :simo {:interrupt true :dorder :strict}} [:a :y]]
+        [{:sim [:a :u] :simo {:interrupt true :dorder :strict}} [:a :u]]
+        [{:sim [:a :i] :simo {:interrupt true :dorder :strict}} [:a :i]]
+        [{:sim [:a :o] :simo {:interrupt true :dorder :strict}} [:a :o]]
+        [{:sim [:a :p] :simo {:interrupt true :dorder :strict}} [:a :p]]
+        [{:sim [:a :n] :simo {:interrupt true :dorder :strict}} [:a :n]]
+        [{:sim [:a :m] :simo {:interrupt true :dorder :strict}} [:a :m]]
+        [{:sim [:a :comma] :simo {:interrupt true :dorder :strict}} [:a :comma]]
+        [{:sim [:a :slash] :simo {:interrupt true :dorder :strict}} [:a :slash]]
+        [{:sim [:a :period] :simo {:interrupt true :dorder :strict}} [:a :period]]
+        [{:sim [:a :spacebar] :simo {:interrupt true :dorder :strict}} [:a :spacebar]]
+        [{:sim [:a :semicolon] :simo {:interrupt true :dorder :strict}} [:a :semicolon]]
+        [{:sim [:a :return_or_enter] :simo {:interrupt true :dorder :strict}} [:a :return_or_enter]]
+        [{:sim [:a :delete_or_backspace] :simo {:interrupt true :dorder :strict}} [:a :delete_or_backspace]]
+        ;; These keys are also for the same finger as the "a" finger, so they
+        ;; are unlikely to be pressed at the same time. Minor nit.
+        ;; [{:sim [:a :a] :simo {:interrupt true :dorder :strict}} [:a :a]]
+        ;; [{:sim [:a :q] :simo {:interrupt true :dorder :strict}} [:a :q]]
+        ;; [{:sim [:a :z] :simo {:interrupt true :dorder :strict}} [:a :z]]
 
-        ; When intending to activate navigation mode, j and k are frequently the
-        ; first keys I'll press along with that, so there are higher changes
-        ; that I actually want to activate navigation mode in that case.
-        ; [{:sim [:d :h] :simo {:interrupt true :dorder :strict}} [:d :h]]
-        ; [{:sim [:d :j] :simo {:interrupt true :dorder :strict}} [:d :j]]
-        ; [{:sim [:d :k] :simo {:interrupt true :dorder :strict}} [:d :k]]
-        ; [{:sim [:d :l] :simo {:interrupt true :dorder :strict}} [:d :l]]
+        ;; When intending to activate navigation mode, j and k are frequently the
+        ;; first keys I'll press along with that, so there are higher changes
+        ;; that I actually want to activate navigation mode in that case.
+        ;; [{:sim [:a :h] :simo {:interrupt true :dorder :strict}} [:a :h]]
+        ;; [{:sim [:a :j] :simo {:interrupt true :dorder :strict}} [:a :j]]
+        ;; [{:sim [:a :k] :simo {:interrupt true :dorder :strict}} [:a :k]]
+        ;; [{:sim [:a :l] :simo {:interrupt true :dorder :strict}} [:a :l]]
     ]}
     {:des "toggle navigation mode"
       :rules [
-        [:d ["navigation_mode" 1] nil {:alone :d :afterup ["navigation_mode" 0]}]
+        [:a ["navigation_mode" 1] nil {:alone :a :afterup ["navigation_mode" 0]}]
     ]}
     {:des "navigation mode (outlook)"
       :rules [:navigation_mode
@@ -170,24 +169,24 @@
       :rules [:navigation_mode
         [:##i [:!Ta :p] :terminal]
         [:##o [:!Ta :n] :terminal]
+        ; vim's command mode doesn't work well with option+arrow keys
+        ; modifiers
+        [:##h :left_arrow :terminal]
+        [:##l :right_arrow :terminal]
     ]}
     {:des "navigation mode (all)"
       :rules [:navigation_mode
         ; arrow keys vim style
         [:##j :down_arrow]
         [:##k :up_arrow]
-        ; vim's command mode doesn't work well with option+arrow keys
-        [:##h :left_arrow :!terminal {:held :!Oleft_arrow}]
-        [:##l :right_arrow :!terminal {:held :!Oright_arrow}]
-        [:##h :left_arrow :terminal]
-        [:##l :right_arrow :terminal]
-        ; modifiers
+        [:##h :left_arrow {:held :!Oleft_arrow}]
+        [:##l :right_arrow {:held :!Oright_arrow}]
         [:##f :right_shift]
         [:##a :left_command]
         ; cut/copy/paste
-        [:##r :!Cc]
+        [:##c :!Cc]
         [:##v :!Cv]
-        [:##g :!Cx]
+        [:##x :!Cx]
         ; tab navigation mostly on browsers
         [:##i :!CSopen_bracket]
         [:##o :!CSclose_bracket]
@@ -278,6 +277,22 @@
         [:##s :!SC5] ; activates screen-recording mode
     ]}
 
+    {:des "disable cmd+q"
+      :rules [
+        [:!Cq :vk_none]
+        [:!Qq :vk_none]
+        [:q {:key :q :repeat false} nil {:held {:key :!Cq :repeat false} :params {:held 1000}}]
+    ]}
+
+    {:des "when on the browser"
+      :rules [:browser
+        [:l {:key :l :repeat false} nil {:held {:key :!Cl :repeat false} :params {:held 400}}]
+        [:r {:key :r :repeat false} nil {:held {:key :!CSr :repeat false} :params {:held 400}}]
+        ; The keyup on the "i" has to happen "quickly" for the devtools to open
+        ; so I decreased the helf time to 300.
+        [:i {:key :i :repeat false} nil {:held {:key :!COi :repeat false} :params {:held 300}}]
+    ]}
+
     {:des "apple keyboards"
       :rules [:macbook_internal
         ;; Disable arrow keys
@@ -330,7 +345,8 @@
         [:##left_shift :left_shift nil {:alone :equal_sign}]
         ;; "right_shift: alone -> hyphen"
         [:##right_shift :right_shift nil {:alone :hyphen}]
-
+        ;; "delete_forward: activates numbers mode while holding it. The
+        ;; original deletion trigger is disabled.
         [:##delete_forward ["numbers_mode" 1] nil {:afterup ["numbers_mode" 0]}]
     ]}
 

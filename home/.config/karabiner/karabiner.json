@@ -851,7 +851,7 @@
   }, {
     "complex_modifications" : {
       "parameters" : {
-        "basic.simultaneous_threshold_milliseconds" : 210,
+        "basic.simultaneous_threshold_milliseconds" : 160,
         "basic.to_delayed_action_delay_milliseconds" : 210,
         "basic.to_if_alone_timeout_milliseconds" : 210,
         "basic.to_if_held_down_threshold_milliseconds" : 210
@@ -867,7 +867,7 @@
           },
           "to" : [ {
             "mouse_key" : {
-              "vertical_wheel" : 32
+              "vertical_wheel" : 120
             }
           } ],
           "conditions" : [ {
@@ -883,7 +883,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -892,12 +892,12 @@
             }
           }, {
             "mouse_key" : {
-              "vertical_wheel" : 32
+              "vertical_wheel" : 120
             }
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "j"
             } ],
@@ -933,7 +933,7 @@
           },
           "to" : [ {
             "mouse_key" : {
-              "horizontal_wheel" : 32
+              "horizontal_wheel" : 120
             }
           } ],
           "conditions" : [ {
@@ -949,7 +949,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -958,12 +958,12 @@
             }
           }, {
             "mouse_key" : {
-              "horizontal_wheel" : 32
+              "horizontal_wheel" : 120
             }
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "h"
             } ],
@@ -999,7 +999,7 @@
           },
           "to" : [ {
             "mouse_key" : {
-              "vertical_wheel" : -32
+              "vertical_wheel" : -120
             }
           } ],
           "conditions" : [ {
@@ -1015,7 +1015,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1024,12 +1024,12 @@
             }
           }, {
             "mouse_key" : {
-              "vertical_wheel" : -32
+              "vertical_wheel" : -120
             }
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "k"
             } ],
@@ -1065,7 +1065,7 @@
           },
           "to" : [ {
             "mouse_key" : {
-              "horizontal_wheel" : -32
+              "horizontal_wheel" : -120
             }
           } ],
           "conditions" : [ {
@@ -1081,7 +1081,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1090,12 +1090,12 @@
             }
           }, {
             "mouse_key" : {
-              "horizontal_wheel" : -32
+              "horizontal_wheel" : -120
             }
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "l"
             } ],
@@ -1143,7 +1143,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1157,7 +1157,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "j"
             } ],
@@ -1200,7 +1200,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1214,7 +1214,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "k"
             } ],
@@ -1257,7 +1257,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1271,7 +1271,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "h"
             } ],
@@ -1314,7 +1314,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1328,9 +1328,62 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "l"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "mouse_mode",
+                  "value" : 0
+                }
+              }, {
+                "set_variable" : {
+                  "name" : "mouse_mode_scroll",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
+        }, {
+          "from" : {
+            "key_code" : "c",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "pointing_button" : "button1"
+          } ],
+          "conditions" : [ {
+            "name" : "mouse_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 160
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "mouse_mode",
+              "value" : 1
+            }
+          }, {
+            "pointing_button" : "button1"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "d"
+            }, {
+              "key_code" : "c"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -1358,7 +1411,7 @@
             }
           },
           "to" : [ {
-            "pointing_button" : "button1"
+            "pointing_button" : "button3"
           } ],
           "conditions" : [ {
             "name" : "mouse_mode",
@@ -1369,7 +1422,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1377,11 +1430,11 @@
               "value" : 1
             }
           }, {
-            "pointing_button" : "button1"
+            "pointing_button" : "button3"
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "v"
             } ],
@@ -1411,7 +1464,7 @@
             }
           },
           "to" : [ {
-            "pointing_button" : "button3"
+            "pointing_button" : "button2"
           } ],
           "conditions" : [ {
             "name" : "mouse_mode",
@@ -1422,7 +1475,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1430,66 +1483,13 @@
               "value" : 1
             }
           }, {
-            "pointing_button" : "button3"
+            "pointing_button" : "button2"
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "b"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "strict_inverse",
-              "key_up_when" : "any",
-              "to_after_key_up" : [ {
-                "set_variable" : {
-                  "name" : "mouse_mode",
-                  "value" : 0
-                }
-              }, {
-                "set_variable" : {
-                  "name" : "mouse_mode_scroll",
-                  "value" : 0
-                }
-              } ]
-            }
-          }
-        }, {
-          "from" : {
-            "key_code" : "n",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "pointing_button" : "button2"
-          } ],
-          "conditions" : [ {
-            "name" : "mouse_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          } ],
-          "type" : "basic"
-        }, {
-          "type" : "basic",
-          "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
-          },
-          "to" : [ {
-            "set_variable" : {
-              "name" : "mouse_mode",
-              "value" : 1
-            }
-          }, {
-            "pointing_button" : "button2"
-          } ],
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "a"
-            }, {
-              "key_code" : "n"
             } ],
             "simultaneous_options" : {
               "detect_key_down_uninterruptedly" : true,
@@ -1537,7 +1537,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1552,7 +1552,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "s"
             } ],
@@ -1595,7 +1595,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -1609,7 +1609,7 @@
           } ],
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "a"
+              "key_code" : "d"
             }, {
               "key_code" : "f"
             } ],
@@ -1637,27 +1637,7 @@
         "manipulators" : [ {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "q"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "q"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "w"
             } ],
@@ -1669,7 +1649,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "w"
           } ],
@@ -1677,7 +1657,27 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
+            }, {
+              "key_code" : "e"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "a"
+          }, {
+            "key_code" : "e"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
             }, {
               "key_code" : "r"
             } ],
@@ -1689,7 +1689,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "r"
           } ],
@@ -1697,7 +1697,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "t"
             } ],
@@ -1709,7 +1709,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "t"
           } ],
@@ -1717,27 +1717,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
               "key_code" : "a"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "a"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
             }, {
               "key_code" : "s"
             } ],
@@ -1749,7 +1729,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "s"
           } ],
@@ -1757,7 +1737,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "f"
             } ],
@@ -1769,7 +1749,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "f"
           } ],
@@ -1777,7 +1757,27 @@
         }, {
           "from" : {
             "simultaneous" : [ {
+              "key_code" : "a"
+            }, {
               "key_code" : "d"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "a"
+          }, {
+            "key_code" : "d"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
             }, {
               "key_code" : "g"
             } ],
@@ -1789,7 +1789,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "g"
           } ],
@@ -1797,27 +1797,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "z"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "z"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "x"
             } ],
@@ -1829,7 +1809,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "x"
           } ],
@@ -1837,7 +1817,27 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
+            }, {
+              "key_code" : "c"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "insensitive",
+              "key_up_when" : "any"
+            }
+          },
+          "to" : [ {
+            "key_code" : "a"
+          }, {
+            "key_code" : "c"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "a"
             }, {
               "key_code" : "v"
             } ],
@@ -1849,7 +1849,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "v"
           } ],
@@ -1857,7 +1857,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "b"
             } ],
@@ -1869,7 +1869,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "b"
           } ],
@@ -1877,7 +1877,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "y"
             } ],
@@ -1889,7 +1889,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "y"
           } ],
@@ -1897,7 +1897,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "u"
             } ],
@@ -1909,7 +1909,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "u"
           } ],
@@ -1917,7 +1917,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "i"
             } ],
@@ -1929,7 +1929,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "i"
           } ],
@@ -1937,7 +1937,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "o"
             } ],
@@ -1949,7 +1949,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "o"
           } ],
@@ -1957,7 +1957,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "p"
             } ],
@@ -1969,7 +1969,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "p"
           } ],
@@ -1977,7 +1977,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "n"
             } ],
@@ -1989,7 +1989,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "n"
           } ],
@@ -1997,7 +1997,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "m"
             } ],
@@ -2009,7 +2009,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "m"
           } ],
@@ -2017,7 +2017,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "comma"
             } ],
@@ -2029,7 +2029,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "comma"
           } ],
@@ -2037,7 +2037,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "slash"
             } ],
@@ -2049,7 +2049,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "slash"
           } ],
@@ -2057,27 +2057,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "quote"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "quote"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "period"
             } ],
@@ -2089,7 +2069,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "period"
           } ],
@@ -2097,27 +2077,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "hyphen"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "hyphen"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "spacebar"
             } ],
@@ -2129,7 +2089,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "spacebar"
           } ],
@@ -2137,7 +2097,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "semicolon"
             } ],
@@ -2149,7 +2109,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "semicolon"
           } ],
@@ -2157,47 +2117,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "backslash"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "backslash"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
-            }, {
-              "key_code" : "equal_sign"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : true,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "d"
-          }, {
-            "key_code" : "equal_sign"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "return_or_enter"
             } ],
@@ -2209,7 +2129,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "return_or_enter"
           } ],
@@ -2217,7 +2137,7 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "d"
+              "key_code" : "a"
             }, {
               "key_code" : "delete_or_backspace"
             } ],
@@ -2229,7 +2149,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           }, {
             "key_code" : "delete_or_backspace"
           } ],
@@ -2239,7 +2159,7 @@
         "description" : "toggle navigation mode",
         "manipulators" : [ {
           "to_if_alone" : [ {
-            "key_code" : "d"
+            "key_code" : "a"
           } ],
           "to_after_key_up" : [ {
             "set_variable" : {
@@ -2248,7 +2168,7 @@
             }
           } ],
           "from" : {
-            "key_code" : "d"
+            "key_code" : "a"
           },
           "to" : [ {
             "set_variable" : {
@@ -2390,6 +2310,44 @@
             "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "h",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "left_arrow"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "l",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "right_arrow"
+          } ],
+          "conditions" : [ {
+            "name" : "navigation_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          }, {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+          } ],
+          "type" : "basic"
         } ]
       }, {
         "description" : "navigation mode (all)",
@@ -2426,10 +2384,6 @@
           } ],
           "type" : "basic"
         }, {
-          "to_if_held_down" : [ {
-            "key_code" : "left_arrow",
-            "modifiers" : [ "left_option" ]
-          } ],
           "from" : {
             "key_code" : "h",
             "modifiers" : {
@@ -2443,51 +2397,6 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_unless",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "to_if_held_down" : [ {
-            "key_code" : "right_arrow",
-            "modifiers" : [ "left_option" ]
-          } ],
-          "from" : {
-            "key_code" : "l",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "right_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "navigation_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_unless",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "h",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "left_arrow"
-          } ],
-          "conditions" : [ {
-            "name" : "navigation_mode",
-            "value" : 1,
-            "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2504,9 +2413,6 @@
             "name" : "navigation_mode",
             "value" : 1,
             "type" : "variable_if"
-          }, {
-            "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2543,7 +2449,7 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "r",
+            "key_code" : "c",
             "modifiers" : {
               "optional" : [ "any" ]
             }
@@ -2577,7 +2483,7 @@
           "type" : "basic"
         }, {
           "from" : {
-            "key_code" : "g",
+            "key_code" : "x",
             "modifiers" : {
               "optional" : [ "any" ]
             }
@@ -2679,7 +2585,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2724,7 +2630,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2769,7 +2675,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2814,7 +2720,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2859,7 +2765,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2904,7 +2810,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2949,7 +2855,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -2994,7 +2900,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3209,7 +3115,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3258,7 +3164,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3307,7 +3213,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3357,7 +3263,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3407,7 +3313,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3457,7 +3363,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3506,7 +3412,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3554,7 +3460,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3603,7 +3509,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3653,7 +3559,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3703,7 +3609,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3753,7 +3659,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3803,7 +3709,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3853,7 +3759,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3903,7 +3809,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -3953,7 +3859,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4002,7 +3908,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4047,7 +3953,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4092,7 +3998,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4137,7 +4043,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4182,7 +4088,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4227,7 +4133,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4272,7 +4178,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4317,7 +4223,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4362,7 +4268,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4407,7 +4313,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4452,7 +4358,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4503,7 +4409,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4551,7 +4457,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4599,7 +4505,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4647,7 +4553,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4695,7 +4601,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4743,7 +4649,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4791,7 +4697,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4839,7 +4745,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4887,7 +4793,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4935,7 +4841,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -4983,7 +4889,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -5031,7 +4937,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -5080,7 +4986,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -5130,7 +5036,7 @@
         }, {
           "type" : "basic",
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 250
+            "basic.simultaneous_threshold_milliseconds" : 160
           },
           "to" : [ {
             "set_variable" : {
@@ -5160,6 +5066,114 @@
               } ]
             }
           }
+        } ]
+      }, {
+        "description" : "disable cmd+q",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "left_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_held_down" : [ {
+            "key_code" : "q",
+            "modifiers" : [ "left_command" ],
+            "repeat" : false
+          } ],
+          "parameters" : {
+            "basic.to_if_held_down_threshold_milliseconds" : 1000
+          },
+          "from" : {
+            "key_code" : "q"
+          },
+          "to" : [ {
+            "key_code" : "q",
+            "repeat" : false
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
+        "description" : "when on the browser",
+        "manipulators" : [ {
+          "to_if_held_down" : [ {
+            "key_code" : "l",
+            "modifiers" : [ "left_command" ],
+            "repeat" : false
+          } ],
+          "parameters" : {
+            "basic.to_if_held_down_threshold_milliseconds" : 400
+          },
+          "from" : {
+            "key_code" : "l"
+          },
+          "to" : [ {
+            "key_code" : "l",
+            "repeat" : false
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_held_down" : [ {
+            "key_code" : "r",
+            "modifiers" : [ "left_command", "left_shift" ],
+            "repeat" : false
+          } ],
+          "parameters" : {
+            "basic.to_if_held_down_threshold_milliseconds" : 400
+          },
+          "from" : {
+            "key_code" : "r"
+          },
+          "to" : [ {
+            "key_code" : "r",
+            "repeat" : false
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_held_down" : [ {
+            "key_code" : "i",
+            "modifiers" : [ "left_command", "left_option" ],
+            "repeat" : false
+          } ],
+          "parameters" : {
+            "basic.to_if_held_down_threshold_milliseconds" : 300
+          },
+          "from" : {
+            "key_code" : "i"
+          },
+          "to" : [ {
+            "key_code" : "i",
+            "repeat" : false
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_if",
+            "bundle_identifiers" : [ "^com\\.google\\.Chrome$" ]
+          } ],
+          "type" : "basic"
         } ]
       }, {
         "description" : "apple keyboards",
