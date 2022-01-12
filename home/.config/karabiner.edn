@@ -73,7 +73,26 @@
   ;;        <from>    <to>      <conditions>         <other options>
 
   :main [
-    ; https://github.com/yqrashawn/yqdotfiles/blob/3a7523183adca37c6f37e7810c8555ea1785fa51/.config/karabiner.edn#L553-L567
+
+    {:des "disable cmd+q"
+      :rules [
+        [:!Cq :vk_none]
+        [:!Qq :vk_none]
+        [:q {:key :q :repeat false} nil {:held {:key :!Cq :repeat false} :params {:held 1000}}]
+    ]}
+
+    ; At least temporarily I want to disable these because I keep going back
+    ; to them.
+    {:des "disable cmd+{c,x,v}"
+      :rules [
+        [:!Cc :vk_none]
+        [:!Qc :vk_none]
+        [:!Cx :vk_none]
+        [:!Qx :vk_none]
+        [:!Cv :vk_none]
+        [:!Qv :vk_none]
+    ]}
+
     {:des "mouse keys mode"
       :rules [
         [:##j {:mkey {:vwheel 120}} [:mouse_mode_scroll :mouse_mode]]
@@ -275,13 +294,6 @@
         [:##semicolon :f12]
         [:##a :!SC4] ; activates screen-shot mode
         [:##s :!SC5] ; activates screen-recording mode
-    ]}
-
-    {:des "disable cmd+q"
-      :rules [
-        [:!Cq :vk_none]
-        [:!Qq :vk_none]
-        [:q {:key :q :repeat false} nil {:held {:key :!Cq :repeat false} :params {:held 1000}}]
     ]}
 
     {:des "when on the browser"

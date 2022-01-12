@@ -857,6 +857,117 @@
         "basic.to_if_held_down_threshold_milliseconds" : 210
       },
       "rules" : [ {
+        "description" : "disable cmd+q",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "left_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_held_down" : [ {
+            "key_code" : "q",
+            "modifiers" : [ "left_command" ],
+            "repeat" : false
+          } ],
+          "parameters" : {
+            "basic.to_if_held_down_threshold_milliseconds" : 1000
+          },
+          "from" : {
+            "key_code" : "q"
+          },
+          "to" : [ {
+            "key_code" : "q",
+            "repeat" : false
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
+        "description" : "disable cmd+{c,x,v}",
+        "manipulators" : [ {
+          "from" : {
+            "key_code" : "c",
+            "modifiers" : {
+              "mandatory" : [ "left_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "c",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "x",
+            "modifiers" : {
+              "mandatory" : [ "left_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "x",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "v",
+            "modifiers" : {
+              "mandatory" : [ "left_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "v",
+            "modifiers" : {
+              "mandatory" : [ "right_command" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "vk_none"
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
         "description" : "mouse keys mode",
         "manipulators" : [ {
           "from" : {
@@ -5066,48 +5177,6 @@
               } ]
             }
           }
-        } ]
-      }, {
-        "description" : "disable cmd+q",
-        "manipulators" : [ {
-          "from" : {
-            "key_code" : "q",
-            "modifiers" : {
-              "mandatory" : [ "left_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "vk_none"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "key_code" : "q",
-            "modifiers" : {
-              "mandatory" : [ "right_command" ]
-            }
-          },
-          "to" : [ {
-            "key_code" : "vk_none"
-          } ],
-          "type" : "basic"
-        }, {
-          "to_if_held_down" : [ {
-            "key_code" : "q",
-            "modifiers" : [ "left_command" ],
-            "repeat" : false
-          } ],
-          "parameters" : {
-            "basic.to_if_held_down_threshold_milliseconds" : 1000
-          },
-          "from" : {
-            "key_code" : "q"
-          },
-          "to" : [ {
-            "key_code" : "q",
-            "repeat" : false
-          } ],
-          "type" : "basic"
         } ]
       }, {
         "description" : "when on the browser",
