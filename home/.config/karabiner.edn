@@ -23,9 +23,9 @@
   :profiles  {
     :Goku {
       :default true
-      :sim 160    ; Keys need to be pressed within this threshold to be considered simultaneous
-      :delay 210  ; Time after which the key press is delayed
-      :held 210   ; Delay to register held key
+      :sim 120    ; Keys need to be pressed within this threshold to be considered simultaneous
+      :delay 140  ; Time after which the key press is delayed
+      :held 140   ; Delay to register held key
       :alone 210  ; Hold for .. ms to register single tap
     }
   }
@@ -54,13 +54,13 @@
   :simlayer-threshold 210
   :simlayers {
     :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
-  }
-
-  :layers {
     :fn_mode {:key :slash}
     :media_mode {:key :period}
     :open_mode {:key :comma}
   }
+
+  ; :layers {
+  ; }
 
   ;; each manipulator has a description and multiple rules
 
@@ -94,6 +94,7 @@
         [:##f {:mkey {:speed 0.5}}]
     ]}
 
+
     {:des "fn mode"
       :rules [:fn_mode
         [:##q :f1]
@@ -108,52 +109,8 @@
         [:##p :f10]
         [:##a :f11]
         [:##s :f12]
-        [:d :!SC4] ; activates screen-shot mode
-        [:f :!SC5] ; activates screen-recording mode
     ]}
 
-    {:des "media mode"
-      :rules [:media_mode
-        [:q :display_brightness_decrement]
-        [:w :display_brightness_increment]
-        [:e [:external_display_brightness_decrement]]
-        [:r [:external_display_brightness_increment]]
-        ; [:e :illumination_decrement]
-        ; [:r :illumination_increment]
-        [:a :mission_control]
-        [:s :rewind]
-        [:d :play_or_pause]
-        [:f :fastforward]
-        [:x :mute]
-        [:c :volume_decrement]
-        [:v :volume_increment]
-    ]}
-
-    {:des "open mode"
-      :rules [:open_mode
-        [:a [:hsl "Spotify"]]
-        [:b [:hsl "Google Chrome"]]
-        [:c [:hsl "Workplace Chat"]]
-        [:e [:hsl "VS Code @ FB"]]
-        [:f [:hsl "Finder"]]
-        [:m [:hsl "Microsoft Outlook"]]
-        [:t [:hsl "Alacritty"]]
-        [:n [:hsl "Notion"]]
-    ]}
-
-    {:des "numbers mode"
-      :rules [:numbers_mode
-        [:##q :1]
-        [:##w :2]
-        [:##e :3]
-        [:##r :4]
-        [:##t :5]
-        [:##y :6]
-        [:##u :7]
-        [:##i :8]
-        [:##o :9]
-        [:##p :0]
-    ]}
 
     {:des "symbols mode, fluid typing protection"
       :rules [
@@ -199,10 +156,10 @@
         [:##t :!S5]                      ; %
         [:##d :hyphen]                   ; -
         [:##f :!Shyphen]                 ; _
-        [:##g :!S7]                      ; &
+        [:##g :!Sgrave_accent_and_tilde] ; ~
         [:##c :backslash]                ; \
         [:##v :!Sbackslash]              ; |
-        [:##b :!Sgrave_accent_and_tilde] ; ~
+        [:##b :!S7]                      ; &
         [:##y :!Squote]                  ; "
         [:##h :quote]                    ; '
         [:##n :grave_accent_and_tilde]   ; `
@@ -220,6 +177,7 @@
         [:##slash :!S4]                  ; $
         [:##quote :!S5]                  ; %
     ]}
+
 
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
@@ -322,6 +280,7 @@
         [:##m :!Cw]
     ]}
 
+
     {:des "space-numbers mode, fluid typing protection"
       :rules [
         [{:sim [:spacebar :q] :simo {:dorder :strict}} [:spacebar :q]]
@@ -361,6 +320,53 @@
       :rules [
         [:spacebar ["numbers_mode" 1] nil {:alone :spacebar :afterup ["numbers_mode" 0]}]
     ]}
+    {:des "numbers mode"
+      :rules [:numbers_mode
+        [:##q :1]
+        [:##w :2]
+        [:##e :3]
+        [:##r :4]
+        [:##t :5]
+        [:##y :6]
+        [:##u :7]
+        [:##i :8]
+        [:##o :9]
+        [:##p :0]
+    ]}
+
+
+    {:des "media mode"
+      :rules [:media_mode
+        [:q :display_brightness_decrement]
+        [:w :display_brightness_increment]
+        [:e [:external_display_brightness_decrement]]
+        [:r [:external_display_brightness_increment]]
+        ; [:e :illumination_decrement]
+        ; [:r :illumination_increment]
+        [:a :mission_control]
+        [:s :rewind]
+        [:d :play_or_pause]
+        [:f :fastforward]
+        [:x :mute]
+        [:c :volume_decrement]
+        [:v :volume_increment]
+        [:j :!SC4] ; activates screen-shot mode
+        [:k :!SC5] ; activates screen-recording mode
+    ]}
+
+
+    {:des "open mode"
+      :rules [:open_mode
+        [:a [:hsl "Spotify"]]
+        [:b [:hsl "Google Chrome"]]
+        [:c [:hsl "Workplace Chat"]]
+        [:e [:hsl "VS Code @ FB"]]
+        [:f [:hsl "Finder"]]
+        [:m [:hsl "Microsoft Outlook"]]
+        [:t [:hsl "Alacritty"]]
+        [:n [:hsl "Notion"]]
+    ]}
+
 
     {:des "when on the browser"
       :rules [:browser
@@ -423,9 +429,10 @@
 
         ; "delete_forward: alone -> escape, hold -> left_shift"
         [:##delete_forward :left_shift nil {:alone :escape}]
-        ; "left_command alone -> tab, hold -> left_command"
-        [:##left_command :left_command nil {:alone :tab}]
-        [:##right_command :right_option]
+        ; "left_command alone -> shift+tab, hold -> left_command"
+        [:##left_command :left_command nil {:alone :!Stab}]
+        ; "left_command alone -> tab, hold -> right_option"
+        [:##right_command :right_option nil {:alone :tab}]
         ; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
     ]}
@@ -441,6 +448,5 @@
         ; Triggers cmd+q by holding q for 1 second.
         [:q {:key :q :repeat false} nil {:held {:key :!Cq :repeat false} :params {:held 1000}}]
     ]}
-
   ]
 }
