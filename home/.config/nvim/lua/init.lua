@@ -230,40 +230,12 @@ local function onNeovimVSCode(use)
   use('moll/vim-node')
   use('hhvm/vim-hack')
   use('jparise/vim-graphql')
+  use('christoomey/vim-tmux-navigator')
 
   use('editorconfig/editorconfig-vim')
   use('ojroques/vim-oscyank')
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
-
-  -- These are the default, but I wanted them to be explicitly defined here
-  -- so I can change them in the future if needed.
-  use('christoomey/vim-tmux-navigator')
-  vim.g.tmux_navigator_no_mappings = 1
-  set_keymap(
-    'n',
-    '<C-h>',
-    ':TmuxNavigateLeft<CR>',
-    { silent = true, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<C-j>',
-    ':TmuxNavigateDown<CR>',
-    { silent = true, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<C-k>',
-    ':TmuxNavigateUp<CR>',
-    { silent = true, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<C-l>',
-    ':TmuxNavigateRight<CR>',
-    { silent = true, noremap = true }
-  )
 
   use('tpope/vim-projectionist')
   set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
@@ -279,6 +251,21 @@ local function onNeovimVSCode(use)
       },
     },
   }
+
+  use('kwkarlwang/bufjump.nvim')
+  require('bufjump').setup()
+  set_keymap(
+    'n',
+    '<C-p>',
+    ':lua require("bufjump").backward()<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<C-n>',
+    ':lua require("bufjump").forward()<CR>',
+    { silent = true, noremap = true }
+  )
 end
 
 local function onPureNeovim(use)
@@ -338,21 +325,6 @@ local function onPureNeovim(use)
   )
 
   use('tversteeg/registers.nvim')
-
-  use('kwkarlwang/bufjump.nvim')
-  require('bufjump').setup()
-  set_keymap(
-    'n',
-    '<C-p>',
-    ':lua require("bufjump").backward()<CR>',
-    { silent = true, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<C-n>',
-    ':lua require("bufjump").forward()<CR>',
-    { silent = true, noremap = true }
-  )
 
   use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
   use('windwp/nvim-ts-autotag')
@@ -653,6 +625,7 @@ local function onPureNeovim(use)
   })
 
   use('nvim-lua/popup.nvim')
+  use('nvim-telescope/telescope-fzy-native.nvim')
   use({
     'nvim-telescope/telescope.nvim',
     requires = {
@@ -740,7 +713,7 @@ local function onPureNeovim(use)
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
 
-  _G.fabs_test_close_last_term_window = function()
+  _G.fabs_test_kill_last_term_window = function()
     -- get buffer name from last windows
     local last_window_index = vim.fn.winnr('$')
     local last_buffer_name = vim.fn.bufname(vim.fn.winbufnr(last_window_index))
@@ -751,10 +724,10 @@ local function onPureNeovim(use)
   end
   set_keymap(
     'n',
-    '<LEADER>tc',
+    '<LEADER>tk',
     -- Closes the last term window according to vim's order, so either the
     -- bottom-most or if there is none on the bottom, the last to the right.
-    'v:lua.fabs_test_close_last_term_window()',
+    'v:lua.fabs_test_kill_last_term_window()',
     { silent = true, noremap = false, expr = true }
   )
   set_keymap(

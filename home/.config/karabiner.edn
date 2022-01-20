@@ -92,8 +92,10 @@
         [:##b {:pkey :button2}]
         [:##s ["mouse_mode_scroll" 1] nil {:afterup ["mouse_mode_scroll" 0]}]
         [:##f {:mkey {:speed 0.5}}]
+        ; mappings that require my right hand to be on the pointer device
+        [:##w :!SC4] ; activates screen-shot mode
+        [:##e :!SC5] ; activates screen-recording mode
     ]}
-
 
     {:des "fn mode"
       :rules [:fn_mode
@@ -350,8 +352,6 @@
         [:x :mute]
         [:c :volume_decrement]
         [:v :volume_increment]
-        [:j :!SC4] ; activates screen-shot mode
-        [:k :!SC5] ; activates screen-recording mode
     ]}
 
 
