@@ -434,6 +434,12 @@
         [:##backslash :vk_none]
         [:##quote :vk_none]
 
+        ; Disable the shift symbols that were moved to the symbols layer
+        [:!Scomma :vk_none]
+        [:!Rcomma :vk_none]
+        [:!Speriod :vk_none]
+        [:!Rperiod :vk_none]
+
         ; "delete_forward: alone -> escape, hold -> left_shift"
         [:##delete_forward :right_shift nil {:alone :escape}]
         ; "left_command alone -> escape, hold -> left_command"
