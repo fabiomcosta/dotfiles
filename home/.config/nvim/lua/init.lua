@@ -369,8 +369,6 @@ local function onPureNeovim(use)
       },
     },
   })
-  local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-  parser_config.tsx.used_by = 'javascript'
 
   use('onsails/lspkind-nvim')
   use('hrsh7th/vim-vsnip')
@@ -443,13 +441,26 @@ local function onPureNeovim(use)
       vim.cmd([[
         augroup Format
           autocmd! * <buffer>
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1600)
         augroup END
       ]])
     end
   end
 
   local nvim_lsp = require('lspconfig')
+
+  vim.api.nvim_set_keymap(
+    'n',
+    '[d',
+    '<cmd>lua vim.diagnostic.goto_prev()<CR>',
+    { silent = true, noremap = true }
+  )
+  vim.api.nvim_set_keymap(
+    'n',
+    ']d',
+    '<cmd>lua vim.diagnostic.goto_next()<CR>',
+    { silent = true, noremap = true }
+  )
 
   local on_attach = function(client, bufnr)
     auto_format_on_save(client)
@@ -632,7 +643,34 @@ local function onPureNeovim(use)
       { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim' },
     },
   })
-  require('telescope').setup({})
+  require('telescope').setup({
+    defaults = {
+      vimgrep_arguments = {
+        'rg',
+        '--color=never',
+        '--no-heading',
+        '--with-filename',
+        '--line-number',
+        '--column',
+        '--smart-case',
+        '--trim', -- add this value
+      },
+    },
+    pickers = {
+      find_files = {
+        find_command = {
+          'fd',
+          '--type',
+          'f',
+          '--strip-cwd-prefix',
+          '--exclude',
+          'custom_modules',
+          '--exclude',
+          'submodules',
+        },
+      },
+    },
+  })
   require('telescope').load_extension('fzy_native')
 
   set_keymap(
@@ -672,6 +710,7 @@ local function onPureNeovim(use)
     disable_insert_on_commit = false,
   })
 
+  use('nvim-lua/lsp-status.nvim')
   use({
     'hoob3rt/lualine.nvim',
     requires = { { 'kyazdani42/nvim-web-devicons' } },
@@ -682,7 +721,7 @@ local function onPureNeovim(use)
       -- theme = 'tokyonight',
     },
     sections = {
-      lualine_c = { { 'filename', path = 1 } },
+      lualine_c = { { 'filename', path = 1 }, "require'lsp-status'.status()" },
     },
     inactive_sections = {
       lualine_c = { { 'filename', path = 1 } },
@@ -733,25 +772,25 @@ local function onPureNeovim(use)
   set_keymap(
     'n',
     '<LEADER>tn',
-    '<LEADER>tc:TestNearest --watch<CR><C-w>p',
+    '<LEADER>tk:TestNearest --watch<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tf',
-    '<LEADER>tc:TestFile<CR><C-w>p',
+    '<LEADER>tk:TestFile<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>ts',
-    '<LEADER>tc:TestSuite<CR><C-w>p',
+    '<LEADER>tk:TestSuite<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
     'n',
     '<LEADER>tl',
-    '<LEADER>tc:TestLast<CR><C-w>p',
+    '<LEADER>tk:TestLast<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
@@ -768,7 +807,7 @@ local function onPureNeovim(use)
 
   -- starts terminal mode on insert mode
   -- disables line numbers on a newly opened terminal window (not really working)
-  -- autocmd TermOpen term://* startinsert | setlocal nonumber
+  vim.cmd([[autocmd TermOpen term://* setlocal nonumber]])
   -- close terminal buffer without showing the exit status of the shell
   -- autocmd TermClose term://* call feedkeys("\<cr>")
   -- tnoremap <Esc> <C-\><C-n>
@@ -806,6 +845,35 @@ local function onPureNeovim(use)
   vim.cmd(
     [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
   )
+
+  use({
+    'folke/trouble.nvim',
+    requires = { { 'kyazdani42/nvim-web-devicons' } },
+  })
+
+  require('trouble').setup({
+    height = 20,
+    padding = false,
+    auto_preview = false,
+  })
+
+  set_keymap(
+    'n',
+    '<LEADER>xw',
+    '<CMD>Trouble workspace_diagnostics<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<LEADER>xd',
+    '<CMD>Trouble document_diagnostics<CR>',
+    { silent = true, noremap = true }
+  )
+
+  use('danilamihailov/beacon.nvim')
+  vim.g.beacon_show_jumps = 0
+  vim.g.beacon_shrink = 0
+  vim.g.beacon_size = 12
 
   local function sourceIfExists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then

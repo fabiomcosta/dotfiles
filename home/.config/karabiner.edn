@@ -43,7 +43,7 @@
   }
 
   :templates {
-    :hsl "/usr/local/bin/hs -A -n -q -t 0.1 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
+    :hsl "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
     ;; https://github.com/kfix/ddcctl
     ;; -i 16 is display-port 2
     ;; -d 1 is display 1
@@ -54,8 +54,7 @@
   :simlayer-threshold 210
   :simlayers {
     :mouse_mode {:key :a :afterup {:set ["mouse_mode_scroll" 0]}}
-    :fn_mode {:key :slash}
-    :media_mode {:key :period}
+    :media_fn_mode {:key :slash}
     :open_mode {:key :comma}
   }
 
@@ -83,84 +82,33 @@
         [:##k {:mkey {:vwheel -120}} [:mouse_mode_scroll :mouse_mode]]
         [:##l {:mkey {:hwheel -120}} [:mouse_mode_scroll :mouse_mode]]
         :mouse_mode
-        [:##j {:mkey {:y 3072}}]
-        [:##k {:mkey {:y -3072}}]
-        [:##h {:mkey {:x -3072}}]
-        [:##l {:mkey {:x 3072}}]
+        [:##j {:mkey {:y 5000}}]
+        [:##k {:mkey {:y -5000}}]
+        [:##h {:mkey {:x -5000}}]
+        [:##l {:mkey {:x 5000}}]
         [:##c {:pkey :button1}]
-        [:##v {:pkey :button3}]
-        [:##b {:pkey :button2}]
+        [:##v {:pkey :button2}]
+        [:##b {:pkey :button3}]
         [:##s ["mouse_mode_scroll" 1] nil {:afterup ["mouse_mode_scroll" 0]}]
-        [:##f {:mkey {:speed 0.5}}]
+        [:##f {:mkey {:speed 0.2}}]
         ; mappings that require my right hand to be on the pointer device
         [:##w :!SC4] ; activates screen-shot mode
         [:##e :!SC5] ; activates screen-recording mode
     ]}
 
-    {:des "fn mode"
-      :rules [:fn_mode
-        [:##q :f1]
-        [:##w :f2]
-        [:##e :f3]
-        [:##r :f4]
-        [:##t :f5]
-        [:##y :f6]
-        [:##u :f7]
-        [:##i :f8]
-        [:##o :f9]
-        [:##p :f10]
-        [:##a :f11]
-        [:##s :f12]
-    ]}
 
-
-    {:des "symbols mode, fluid typing protection"
-      :rules [
-        [{:sim [:s :q] :simo {:dorder :strict}} [:s :q]]
-        [{:sim [:s :e] :simo {:dorder :strict}} [:s :e]]
-        [{:sim [:s :r] :simo {:dorder :strict}} [:s :r]]
-        [{:sim [:s :t] :simo {:dorder :strict}} [:s :t]]
-        [{:sim [:s :a] :simo {:dorder :strict}} [:s :a]]
-        [{:sim [:s :d] :simo {:dorder :strict}} [:s :d]]
-        [{:sim [:s :f] :simo {:dorder :strict}} [:s :f]]
-        [{:sim [:s :g] :simo {:dorder :strict}} [:s :g]]
-        [{:sim [:s :z] :simo {:dorder :strict}} [:s :z]]
-        [{:sim [:s :c] :simo {:dorder :strict}} [:s :c]]
-        [{:sim [:s :v] :simo {:dorder :strict}} [:s :v]]
-        [{:sim [:s :b] :simo {:dorder :strict}} [:s :b]]
-        [{:sim [:s :y] :simo {:dorder :strict}} [:s :y]]
-        [{:sim [:s :u] :simo {:dorder :strict}} [:s :u]]
-        [{:sim [:s :i] :simo {:dorder :strict}} [:s :i]]
-        [{:sim [:s :o] :simo {:dorder :strict}} [:s :o]]
-        [{:sim [:s :p] :simo {:dorder :strict}} [:s :p]]
-        [{:sim [:s :h] :simo {:dorder :strict}} [:s :h]]
-        [{:sim [:s :j] :simo {:dorder :strict}} [:s :j]]
-        [{:sim [:s :k] :simo {:dorder :strict}} [:s :k]]
-        [{:sim [:s :l] :simo {:dorder :strict}} [:s :l]]
-        [{:sim [:s :n] :simo {:dorder :strict}} [:s :n]]
-        [{:sim [:s :m] :simo {:dorder :strict}} [:s :m]]
-        [{:sim [:s :comma] :simo {:dorder :strict}} [:s :comma]]
-        [{:sim [:s :slash] :simo {:dorder :strict}} [:s :slash]]
-        [{:sim [:s :period] :simo {:dorder :strict}} [:s :period]]
-        [{:sim [:s :spacebar] :simo {:dorder :strict}} [:s :spacebar]]
-        [{:sim [:s :semicolon] :simo {:dorder :strict}} [:s :semicolon]]
-        [{:sim [:s :return_or_enter] :simo {:dorder :strict}} [:s :return_or_enter]]
-        [{:sim [:s :delete_or_backspace] :simo {:dorder :strict}} [:s :delete_or_backspace]]
-    ]}
-    {:des "toggle symbols mode"
-      :rules [
-        [:s ["symbols_mode" 1] nil {:alone :s :afterup ["symbols_mode" 0]}]
-    ]}
     {:des "symbols mode"
       :rules [:symbols_mode
-        [:##e :equal_sign]               ; =
-        [:##r :!Sequal_sign]             ; +
+        [:##e :!Scomma]                  ; <
+        [:##r :!Speriod]                 ; >
         [:##t :!S5]                      ; %
-        [:##d :hyphen]                   ; -
-        [:##f :!Shyphen]                 ; _
+        [:##a :backslash]                ; \
+        [:##s :!Sbackslash]              ; |
+        [:##d :open_bracket]             ; [
+        [:##f :close_bracket]            ; ]
         [:##g :!Sgrave_accent_and_tilde] ; ~
-        [:##c :backslash]                ; \
-        [:##v :!Sbackslash]              ; |
+        [:##c :equal_sign]               ; =
+        [:##v :!Sequal_sign]             ; +
         [:##b :!S7]                      ; &
         [:##y :!Squote]                  ; "
         [:##h :quote]                    ; '
@@ -169,8 +117,8 @@
         [:##i :!Sclose_bracket]          ; }
         [:##j :!S9]                      ; (
         [:##k :!S0]                      ; )
-        [:##m :open_bracket]             ; [
-        [:##comma :close_bracket]        ; ]
+        [:##m :hyphen]                   ; -
+        [:##comma :!Shyphen]             ; _
         [:##o :!S1]                      ; !
         [:##p :!S2]                      ; @
         [:##l :!S3]                      ; #
@@ -179,7 +127,6 @@
         [:##slash :!S4]                  ; $
         [:##quote :!S5]                  ; %
     ]}
-
 
     ;; Navigation Mode, based on (S)uper (D)uper mode
     ;; idea from https://github.com/jasonrudolph/keyboard
@@ -228,9 +175,11 @@
         [{:sim [:d :delete_or_backspace] :simo {:dorder :strict}} [:d :delete_or_backspace]]
         ; These keys are also for the same finger as the "a" finger, so they
         ; are unlikely to be pressed at the same time. Minor nit.
-        ; [{:sim [:d :e] :simo {:dorder :strict}} [:d :e]]
-        ; [{:sim [:d :d] :simo {:dorder :strict}} [:d :d]]
-        ; [{:sim [:d :c] :simo {:dorder :strict}} [:d :c]]
+        ; This only applies for columnar keyboards though... so I'm
+        ; activating it for those keys on stagered keyboards.
+        :macbook_internal
+        [{:sim [:d :e] :simo {:dorder :strict}} [:d :e]]
+        [{:sim [:d :c] :simo {:dorder :strict}} [:d :c]]
 
         ; When intending to activate navigation mode, j and k are frequently the
         ; first keys I'll press along with that, so there are higher changes
@@ -270,60 +219,97 @@
         [:##k :up_arrow]
         [:##h :left_arrow {:held :!Oleft_arrow}]
         [:##l :right_arrow {:held :!Oright_arrow}]
-        [:##f :left_shift]
-        [:##s :left_option]
-        [:##a :left_command]
+        ; [:##f :left_shift]
+        ; [:##s :left_option]
+        ; [:##a :left_command]
         ; tab navigation mostly on browsers
         [:##i :!CSopen_bracket]
         [:##o :!CSclose_bracket]
         ; new tab
-        [:##u :!Ct]
+        ; [:##u :!Ct]
         ; close tab
-        [:##m :!Cw]
+        ; [:##m :!Cw]
     ]}
 
 
-    {:des "space-numbers mode, fluid typing protection"
+    {:des "home-row-mod fluid typing protection"
       :rules [
-        [{:sim [:spacebar :q] :simo {:dorder :strict}} [:spacebar :q]]
-        [{:sim [:spacebar :w] :simo {:dorder :strict}} [:spacebar :w]]
-        [{:sim [:spacebar :e] :simo {:dorder :strict}} [:spacebar :e]]
-        [{:sim [:spacebar :r] :simo {:dorder :strict}} [:spacebar :r]]
-        [{:sim [:spacebar :t] :simo {:dorder :strict}} [:spacebar :t]]
-        [{:sim [:spacebar :a] :simo {:dorder :strict}} [:spacebar :a]]
-        [{:sim [:spacebar :s] :simo {:dorder :strict}} [:spacebar :s]]
-        [{:sim [:spacebar :d] :simo {:dorder :strict}} [:spacebar :d]]
-        [{:sim [:spacebar :f] :simo {:dorder :strict}} [:spacebar :f]]
-        [{:sim [:spacebar :g] :simo {:dorder :strict}} [:spacebar :g]]
-        [{:sim [:spacebar :z] :simo {:dorder :strict}} [:spacebar :z]]
-        [{:sim [:spacebar :x] :simo {:dorder :strict}} [:spacebar :x]]
-        [{:sim [:spacebar :c] :simo {:dorder :strict}} [:spacebar :c]]
-        [{:sim [:spacebar :v] :simo {:dorder :strict}} [:spacebar :v]]
-        [{:sim [:spacebar :b] :simo {:dorder :strict}} [:spacebar :b]]
-        [{:sim [:spacebar :y] :simo {:dorder :strict}} [:spacebar :y]]
-        [{:sim [:spacebar :u] :simo {:dorder :strict}} [:spacebar :u]]
-        [{:sim [:spacebar :i] :simo {:dorder :strict}} [:spacebar :i]]
-        [{:sim [:spacebar :o] :simo {:dorder :strict}} [:spacebar :o]]
-        [{:sim [:spacebar :p] :simo {:dorder :strict}} [:spacebar :p]]
-        [{:sim [:spacebar :h] :simo {:dorder :strict}} [:spacebar :h]]
-        [{:sim [:spacebar :j] :simo {:dorder :strict}} [:spacebar :j]]
-        [{:sim [:spacebar :k] :simo {:dorder :strict}} [:spacebar :k]]
-        [{:sim [:spacebar :l] :simo {:dorder :strict}} [:spacebar :l]]
-        [{:sim [:spacebar :n] :simo {:dorder :strict}} [:spacebar :n]]
-        [{:sim [:spacebar :m] :simo {:dorder :strict}} [:spacebar :m]]
-        [{:sim [:spacebar :comma] :simo {:dorder :strict}} [:spacebar :comma]]
-        [{:sim [:spacebar :slash] :simo {:dorder :strict}} [:spacebar :slash]]
-        [{:sim [:spacebar :period] :simo {:dorder :strict}} [:spacebar :period]]
-        [{:sim [:spacebar :semicolon] :simo {:dorder :strict}} [:spacebar :semicolon]]
-        [{:sim [:spacebar :return_or_enter] :simo {:dorder :strict}} [:spacebar :return_or_enter]]
-        [{:sim [:spacebar :delete_or_backspace] :simo {:dorder :strict}} [:spacebar :delete_or_backspace]]
+        [{:sim [:f :q] :simo {:dorder :strict}} [:f :q]]
+        [{:sim [:f :e] :simo {:dorder :strict}} [:f :e]]
+        [{:sim [:f :r] :simo {:dorder :strict}} [:f :r]]
+        [{:sim [:f :t] :simo {:dorder :strict}} [:f :t]]
+        [{:sim [:f :a] :simo {:dorder :strict}} [:f :a]]
+        [{:sim [:f :s] :simo {:dorder :strict}} [:f :s]]
+        [{:sim [:f :d] :simo {:dorder :strict}} [:f :d]]
+        [{:sim [:f :g] :simo {:dorder :strict}} [:f :g]]
+        [{:sim [:f :z] :simo {:dorder :strict}} [:f :z]]
+        [{:sim [:f :c] :simo {:dorder :strict}} [:f :c]]
+        [{:sim [:f :v] :simo {:dorder :strict}} [:f :v]]
+        [{:sim [:f :b] :simo {:dorder :strict}} [:f :b]]
+        [{:sim [:f :y] :simo {:dorder :strict}} [:f :y]]
+        [{:sim [:f :u] :simo {:dorder :strict}} [:f :u]]
+        [{:sim [:f :i] :simo {:dorder :strict}} [:f :i]]
+        [{:sim [:f :o] :simo {:dorder :strict}} [:f :o]]
+        [{:sim [:f :p] :simo {:dorder :strict}} [:f :p]]
+        [{:sim [:f :h] :simo {:dorder :strict}} [:f :h]]
+        [{:sim [:f :j] :simo {:dorder :strict}} [:f :j]]
+        [{:sim [:f :k] :simo {:dorder :strict}} [:f :k]]
+        [{:sim [:f :l] :simo {:dorder :strict}} [:f :l]]
+        [{:sim [:f :n] :simo {:dorder :strict}} [:f :n]]
+        [{:sim [:f :m] :simo {:dorder :strict}} [:f :m]]
+        [{:sim [:f :comma] :simo {:dorder :strict}} [:f :comma]]
+        [{:sim [:f :slash] :simo {:dorder :strict}} [:f :slash]]
+        [{:sim [:f :period] :simo {:dorder :strict}} [:f :period]]
+        [{:sim [:f :spacebar] :simo {:dorder :strict}} [:f :spacebar]]
+        [{:sim [:f :semicolon] :simo {:dorder :strict}} [:f :semicolon]]
+        [{:sim [:f :return_or_enter] :simo {:dorder :strict}} [:f :return_or_enter]]
+        [{:sim [:f :delete_or_backspace] :simo {:dorder :strict}} [:f :delete_or_backspace]]
+
+        [{:sim [:j :q] :simo {:dorder :strict}} [:j :q]]
+        [{:sim [:j :e] :simo {:dorder :strict}} [:j :e]]
+        [{:sim [:j :r] :simo {:dorder :strict}} [:j :r]]
+        [{:sim [:j :t] :simo {:dorder :strict}} [:j :t]]
+        [{:sim [:j :a] :simo {:dorder :strict}} [:j :a]]
+        [{:sim [:j :s] :simo {:dorder :strict}} [:j :s]]
+        [{:sim [:j :d] :simo {:dorder :strict}} [:j :d]]
+        [{:sim [:j :f] :simo {:dorder :strict}} [:j :f]]
+        [{:sim [:j :g] :simo {:dorder :strict}} [:j :g]]
+        [{:sim [:j :z] :simo {:dorder :strict}} [:j :z]]
+        [{:sim [:j :c] :simo {:dorder :strict}} [:j :c]]
+        [{:sim [:j :v] :simo {:dorder :strict}} [:j :v]]
+        [{:sim [:j :b] :simo {:dorder :strict}} [:j :b]]
+        [{:sim [:j :y] :simo {:dorder :strict}} [:j :y]]
+        [{:sim [:j :u] :simo {:dorder :strict}} [:j :u]]
+        [{:sim [:j :i] :simo {:dorder :strict}} [:j :i]]
+        [{:sim [:j :o] :simo {:dorder :strict}} [:j :o]]
+        [{:sim [:j :p] :simo {:dorder :strict}} [:j :p]]
+        [{:sim [:j :h] :simo {:dorder :strict}} [:j :h]]
+        [{:sim [:j :k] :simo {:dorder :strict}} [:j :k]]
+        [{:sim [:j :l] :simo {:dorder :strict}} [:j :l]]
+        [{:sim [:j :n] :simo {:dorder :strict}} [:j :n]]
+        [{:sim [:j :m] :simo {:dorder :strict}} [:j :m]]
+        [{:sim [:j :comma] :simo {:dorder :strict}} [:j :comma]]
+        [{:sim [:j :slash] :simo {:dorder :strict}} [:j :slash]]
+        [{:sim [:j :period] :simo {:dorder :strict}} [:j :period]]
+        [{:sim [:j :spacebar] :simo {:dorder :strict}} [:j :spacebar]]
+        [{:sim [:j :semicolon] :simo {:dorder :strict}} [:j :semicolon]]
+        [{:sim [:j :return_or_enter] :simo {:dorder :strict}} [:j :return_or_enter]]
+        [{:sim [:j :delete_or_backspace] :simo {:dorder :strict}} [:j :delete_or_backspace]]
     ]}
-    {:des "toggle space-numbers"
+    {:des "toggle option home-row-mod"
       :rules [
-        [:spacebar ["numbers_mode" 1] nil {:alone :spacebar :afterup ["numbers_mode" 0]}]
+        [:f :left_option nil {:alone :f}]
+        [:j :right_option nil {:alone :j}]
+    ]}
+
+
+    {:des "toggle numbers"
+      :rules [:symbols_mode
+        [:delete_or_backspace [["numbers_mode" 1], ["symbols_mode" 0]] nil {:alone :delete_or_backspace :afterup ["numbers_mode" 0]}]
     ]}
     {:des "numbers mode"
       :rules [:numbers_mode
+        ; numbers row
         [:##q :1]
         [:##w :2]
         [:##e :3]
@@ -334,28 +320,48 @@
         [:##i :8]
         [:##o :9]
         [:##p :0]
+        ; numbers pad-like style, trying to see if this sticks.
+        [:##m :1]
+        [:##comma :2]
+        [:##period :3]
+        [:##j :4]
+        [:##k :5]
+        [:##l :6]
+        [:##h :0]
     ]}
 
 
-    {:des "media mode"
-      :rules [:media_mode
+    {:des "media+fn mode"
+      :rules [:media_fn_mode
         [:q :display_brightness_decrement]
         [:w :display_brightness_increment]
         [:e [:external_display_brightness_decrement]]
         [:r [:external_display_brightness_increment]]
         ; [:e :illumination_decrement]
         ; [:r :illumination_increment]
-        [:a :mission_control]
+        ; [:a :mission_control]
         [:s :rewind]
         [:d :play_or_pause]
         [:f :fastforward]
         [:x :mute]
         [:c :volume_decrement]
         [:v :volume_increment]
+        [:##y :f1]
+        [:##u :f2]
+        [:##i :f3]
+        [:##o :f4]
+        [:##h :f5]
+        [:##j :f6]
+        [:##k :f7]
+        [:##l :f8]
+        [:##n :f9]
+        [:##m :f10]
+        [:##comma :f11]
+        [:##period :f12]
     ]}
 
 
-    {:des "open mode"
+    {:des "launch mode"
       :rules [:open_mode
         [:a [:hsl "Spotify"]]
         [:b [:hsl "Google Chrome"]]
@@ -372,6 +378,7 @@
       :rules [:browser
         [:l {:key :l :repeat false} nil {:held {:key :!Cl :repeat false} :params {:held 400}}]
         [:r {:key :r :repeat false} nil {:held {:key :!CSr :repeat false} :params {:held 400}}]
+        [:t {:key :t :repeat false} nil {:held {:key :!Ct :repeat false} :params {:held 400}}]
         ; The keyup on the "i" has to happen "quickly" for the devtools to open
         ; so I decreased the held time from the others.
         [:i {:key :i :repeat false} nil {:held {:key :!COi :repeat false} :params {:held 300}}]
@@ -428,11 +435,11 @@
         [:##quote :vk_none]
 
         ; "delete_forward: alone -> escape, hold -> left_shift"
-        [:##delete_forward :left_shift nil {:alone :escape}]
-        ; "left_command alone -> shift+tab, hold -> left_command"
-        [:##left_command :left_command nil {:alone :!Stab}]
-        ; "left_command alone -> tab, hold -> right_option"
-        [:##right_command :right_option nil {:alone :tab}]
+        [:##delete_forward :right_shift nil {:alone :escape}]
+        ; "left_command alone -> escape, hold -> left_command"
+        ; [:##left_command :left_command nil {:alone :escape}]
+        ; "left_command alone -> tab, hold -> symbols_mode"
+        [:##right_command ["symbols_mode" 1] nil {:alone :tab :afterup ["symbols_mode" 0]}]
         ; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter :right_control nil {:alone :return_or_enter}]
     ]}
