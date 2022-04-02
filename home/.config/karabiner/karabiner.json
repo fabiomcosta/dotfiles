@@ -3654,26 +3654,6 @@
         }, {
           "from" : {
             "simultaneous" : [ {
-              "key_code" : "f"
-            }, {
-              "key_code" : "delete_or_backspace"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "f"
-          }, {
-            "key_code" : "delete_or_backspace"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
               "key_code" : "j"
             }, {
               "key_code" : "q"
@@ -4251,26 +4231,6 @@
             "key_code" : "return_or_enter"
           } ],
           "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "j"
-            }, {
-              "key_code" : "delete_or_backspace"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "j"
-          }, {
-            "key_code" : "delete_or_backspace"
-          } ],
-          "type" : "basic"
         } ]
       }, {
         "description" : "toggle option home-row-mod",
@@ -4279,7 +4239,10 @@
             "key_code" : "f"
           } ],
           "from" : {
-            "key_code" : "f"
+            "key_code" : "f",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
           },
           "to" : [ {
             "key_code" : "left_option"
@@ -4290,10 +4253,17 @@
             "key_code" : "j"
           } ],
           "from" : {
-            "key_code" : "j"
+            "key_code" : "j",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
           },
           "to" : [ {
             "key_code" : "right_option"
+          } ],
+          "conditions" : [ {
+            "type" : "frontmost_application_unless",
+            "bundle_identifiers" : [ "^io\\.alacritty$" ]
           } ],
           "type" : "basic"
         } ]
@@ -4301,7 +4271,7 @@
         "description" : "toggle numbers",
         "manipulators" : [ {
           "to_if_alone" : [ {
-            "key_code" : "delete_or_backspace"
+            "key_code" : "delete_forward"
           } ],
           "to_after_key_up" : [ {
             "set_variable" : {
@@ -4310,7 +4280,7 @@
             }
           } ],
           "from" : {
-            "key_code" : "delete_or_backspace"
+            "key_code" : "delete_forward"
           },
           "to" : [ {
             "set_variable" : {
@@ -4337,6 +4307,38 @@
             "key_code" : "q",
             "modifiers" : {
               "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "1"
+          } ],
+          "conditions" : [ {
+            "name" : "numbers_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "left_shift" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "1"
+          } ],
+          "conditions" : [ {
+            "name" : "numbers_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "from" : {
+            "key_code" : "q",
+            "modifiers" : {
+              "mandatory" : [ "right_shift" ]
             }
           },
           "to" : [ {
@@ -5996,6 +5998,51 @@
               } ]
             }
           }
+        }, {
+          "from" : {
+            "key_code" : "v"
+          },
+          "to" : [ {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+          } ],
+          "conditions" : [ {
+            "name" : "open_mode",
+            "value" : 1,
+            "type" : "variable_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "type" : "basic",
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 210
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "open_mode",
+              "value" : 1
+            }
+          }, {
+            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+          } ],
+          "from" : {
+            "simultaneous" : [ {
+              "key_code" : "comma"
+            }, {
+              "key_code" : "v"
+            } ],
+            "simultaneous_options" : {
+              "detect_key_down_uninterruptedly" : true,
+              "key_down_order" : "strict",
+              "key_up_order" : "strict_inverse",
+              "key_up_when" : "any",
+              "to_after_key_up" : [ {
+                "set_variable" : {
+                  "name" : "open_mode",
+                  "value" : 0
+                }
+              } ]
+            }
+          }
         } ]
       }, {
         "description" : "when on the browser",
@@ -6841,7 +6888,7 @@
             }
           },
           "to" : [ {
-            "key_code" : "right_shift"
+            "key_code" : "left_shift"
           } ],
           "conditions" : [ {
             "identifiers" : [ {
@@ -6855,12 +6902,6 @@
           "to_if_alone" : [ {
             "key_code" : "tab"
           } ],
-          "to_after_key_up" : [ {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 0
-            }
-          } ],
           "from" : {
             "key_code" : "right_command",
             "modifiers" : {
@@ -6868,10 +6909,7 @@
             }
           },
           "to" : [ {
-            "set_variable" : {
-              "name" : "symbols_mode",
-              "value" : 1
-            }
+            "key_code" : "right_control"
           } ],
           "conditions" : [ {
             "identifiers" : [ {
@@ -6885,6 +6923,12 @@
           "to_if_alone" : [ {
             "key_code" : "return_or_enter"
           } ],
+          "to_after_key_up" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 0
+            }
+          } ],
           "from" : {
             "key_code" : "return_or_enter",
             "modifiers" : {
@@ -6892,7 +6936,10 @@
             }
           },
           "to" : [ {
-            "key_code" : "right_control"
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
           } ],
           "conditions" : [ {
             "identifiers" : [ {

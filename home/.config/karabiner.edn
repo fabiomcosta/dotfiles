@@ -263,7 +263,7 @@
         [{:sim [:f :spacebar] :simo {:dorder :strict}} [:f :spacebar]]
         [{:sim [:f :semicolon] :simo {:dorder :strict}} [:f :semicolon]]
         [{:sim [:f :return_or_enter] :simo {:dorder :strict}} [:f :return_or_enter]]
-        [{:sim [:f :delete_or_backspace] :simo {:dorder :strict}} [:f :delete_or_backspace]]
+        ; [{:sim [:f :delete_or_backspace] :simo {:dorder :strict}} [:f :delete_or_backspace]]
 
         [{:sim [:j :q] :simo {:dorder :strict}} [:j :q]]
         [{:sim [:j :e] :simo {:dorder :strict}} [:j :e]]
@@ -294,23 +294,30 @@
         [{:sim [:j :spacebar] :simo {:dorder :strict}} [:j :spacebar]]
         [{:sim [:j :semicolon] :simo {:dorder :strict}} [:j :semicolon]]
         [{:sim [:j :return_or_enter] :simo {:dorder :strict}} [:j :return_or_enter]]
-        [{:sim [:j :delete_or_backspace] :simo {:dorder :strict}} [:j :delete_or_backspace]]
+        ; [{:sim [:j :delete_or_backspace] :simo {:dorder :strict}} [:j :delete_or_backspace]]
     ]}
     {:des "toggle option home-row-mod"
       :rules [
-        [:f :left_option nil {:alone :f}]
-        [:j :right_option nil {:alone :j}]
+        [:##f :left_option nil {:alone :f}]
+        ; disable j as right_option on terminals because I use that quite
+        ; extensively on vim.
+        [:##j :right_option :!terminal {:alone :j}]
     ]}
 
 
     {:des "toggle numbers"
-      :rules [:symbols_mode
-        [:delete_or_backspace [["numbers_mode" 1], ["symbols_mode" 0]] nil {:alone :delete_or_backspace :afterup ["numbers_mode" 0]}]
+      :rules [
+        [:delete_forward [["numbers_mode" 1], ["symbols_mode" 0]] :symbols_mode {:alone :delete_forward :afterup ["numbers_mode" 0]}]
+        ; [{:sim [:delete_forward :return_or_enter] :simo {:dorder :strict}} ["numbers_mode" 1] nil {:afterup {:set ["numbers_mode" 0]} :params {:sim 5000}}]
+
     ]}
     {:des "numbers mode"
       :rules [:numbers_mode
         ; numbers row
         [:##q :1]
+        [:!Sq :1]
+        [:!Rq :1]
+
         [:##w :2]
         [:##e :3]
         [:##r :4]
@@ -328,6 +335,7 @@
         [:##k :5]
         [:##l :6]
         [:##h :0]
+
     ]}
 
 
@@ -371,6 +379,7 @@
         [:m [:hsl "Microsoft Outlook"]]
         [:t [:hsl "Alacritty"]]
         [:n [:hsl "Notion"]]
+        [:v [:hsl "zoom.us"]]
     ]}
 
 
@@ -441,13 +450,13 @@
         [:!Rperiod :vk_none]
 
         ; "delete_forward: alone -> escape, hold -> left_shift"
-        [:##delete_forward :right_shift nil {:alone :escape}]
+        [:##delete_forward :left_shift nil {:alone :escape}]
         ; "left_command alone -> escape, hold -> left_command"
         ; [:##left_command :left_command nil {:alone :escape}]
         ; "left_command alone -> tab, hold -> symbols_mode"
-        [:##right_command ["symbols_mode" 1] nil {:alone :tab :afterup ["symbols_mode" 0]}]
+        [:##right_command :right_control nil {:alone :tab}]
         ; "enter: alone -> return_or_enter, hold -> right_control"
-        [:##return_or_enter :right_control nil {:alone :return_or_enter}]
+        [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
     ]}
 
     ; {:des "any device"
