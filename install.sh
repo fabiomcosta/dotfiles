@@ -12,6 +12,20 @@ if ! command_exists node; then
   exit 1
 fi
 
+# TBH this is more like a reminder to run these, because they probably
+# won't work anyway.
+
+if command_exists ttls_forward_proxy_server; then
+  if command_exists npm; then
+    npm config set proxy http://fwdproxy:8080
+    npm config set https-proxy http://fwdproxy:8080
+  fi
+  if command_exists yarn; then
+    yarn config set proxy http://fwdproxy:8080
+    yarn config set https-proxy http://fwdproxy:8080
+  fi
+fi
+
 pushd $DIR &> /dev/null
   npm install .
   ./install.mjs
