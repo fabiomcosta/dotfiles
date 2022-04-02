@@ -63,6 +63,7 @@ if (IS_MACOS && !IS_REMOTE_SSH) {
   }
 
   await createHomeSymlink('.config/karabiner');
+  await createHomeSymlink('.config/karabiner.edn');
   await createHomeSymlink('.config/alacritty/alacritty.yml');
 }
 
@@ -74,7 +75,6 @@ await createHomeSymlink('.tmux.conf');
 await createHomeSymlink('.tmux/tmux.remote.conf');
 await createHomeSymlink('.config/fish/config.fish');
 await createHomeSymlink('.config/nvim/lua');
-await createHomeSymlink('.config/karabiner.edn');
 await createHomeSymlink('.config/stylua.toml');
 await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 

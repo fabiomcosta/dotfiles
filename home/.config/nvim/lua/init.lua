@@ -329,6 +329,7 @@ local function onPureNeovim(use)
   use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
   use('windwp/nvim-ts-autotag')
   use('nvim-treesitter/nvim-treesitter-refactor')
+  require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
       'javascript',
@@ -855,6 +856,7 @@ local function onPureNeovim(use)
     height = 20,
     padding = false,
     auto_preview = false,
+    auto_close = true,
   })
 
   set_keymap(
