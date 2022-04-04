@@ -877,6 +877,20 @@ local function onPureNeovim(use)
   vim.g.beacon_shrink = 0
   vim.g.beacon_size = 12
 
+  use({
+    'chipsenkbeil/distant.nvim',
+    config = function()
+      require('distant').setup({
+        -- Applies Chip's personal settings to every machine you connect to
+        --
+        -- 1. Ensures that distant servers terminate with no connections
+        -- 2. Provides navigation bindings for remote directories
+        -- 3. Provides keybinding to jump into a remote file's parent directory
+        ['*'] = require('distant.settings').chip_default(),
+      })
+    end,
+  })
+
   local function sourceIfExists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)
