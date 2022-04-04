@@ -108,4 +108,6 @@ set -x USE_CCACHE 1
 eval (starship init fish)
 
 # fnm
-fnm env --use-on-cd | source
+if command_exists fnm
+  fnm env --use-on-cd | source
+end
