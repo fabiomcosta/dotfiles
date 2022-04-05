@@ -172,11 +172,11 @@ set_keymap('v', ';', ':', { noremap = true })
 set_keymap('c', '<C-v>', '<C-r>"', { noremap = true })
 set_keymap('s', '<C-v>', '<C-r>"', { noremap = true })
 
-local currentFilePath = debug.getinfo(1).source:sub(2)
+local initLuaFilePath = debug.getinfo(1).source:sub(2)
 set_keymap(
   'n',
   '<LEADER>ev',
-  ':e ' .. currentFilePath .. '<CR>',
+  ':e ' .. initLuaFilePath .. '<CR>',
   { noremap = true }
 )
 set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', { noremap = true })
@@ -218,7 +218,7 @@ vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
 
-local function onNeovimVSCode(use)
+local function onNeovimVSCodeSetup(use)
   use('wbthomason/packer.nvim')
   use('jordwalke/VimAutoMakeDirectory')
   use('tpope/vim-surround')
@@ -238,6 +238,78 @@ local function onNeovimVSCode(use)
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
 
   use('tpope/vim-projectionist')
+  use('kwkarlwang/bufjump.nvim')
+end
+
+local function onPureNeovimSetup(use)
+  use({ 'dracula/vim', as = 'dracula' })
+  -- use 'folke/tokyonight.nvim'
+  -- use '~/gdrive/code/dracula-pro/themes/vim'
+  -- vim.g.dracula_colorterm = 0
+  use('ntpeters/vim-better-whitespace')
+  use('sheerun/vim-polyglot')
+  use('othree/eregex.vim')
+  use('haya14busa/incsearch.vim')
+  use('rhysd/git-messenger.vim')
+  use('tpope/vim-vinegar')
+
+  use('tversteeg/registers.nvim')
+
+  use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
+  use('windwp/nvim-ts-autotag')
+  use('nvim-treesitter/nvim-treesitter-refactor')
+
+  use('onsails/lspkind-nvim')
+  use('hrsh7th/vim-vsnip')
+  use('rafamadriz/friendly-snippets')
+
+  use('hrsh7th/nvim-cmp')
+  use('hrsh7th/cmp-nvim-lsp')
+  use('hrsh7th/cmp-buffer')
+  use('hrsh7th/cmp-path')
+  use('hrsh7th/cmp-cmdline')
+  use('hrsh7th/cmp-vsnip')
+
+  use('neovim/nvim-lspconfig')
+  use('williamboman/nvim-lsp-installer')
+  use('JoosepAlviste/nvim-ts-context-commentstring')
+  use({
+    'jose-elias-alvarez/null-ls.nvim',
+    requires = { { 'nvim-lua/plenary.nvim' } },
+  })
+
+  use('tami5/lspsaga.nvim')
+
+  use('nvim-lua/popup.nvim')
+  use('nvim-telescope/telescope-fzy-native.nvim')
+  use({
+    'nvim-telescope/telescope.nvim',
+    requires = {
+      { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim' },
+    },
+  })
+
+  use('TimUntersberger/neogit')
+  use('nvim-lua/lsp-status.nvim')
+  use({
+    'hoob3rt/lualine.nvim',
+    requires = { { 'kyazdani42/nvim-web-devicons' } },
+  })
+  use('thaerkh/vim-workspace')
+  use({
+    'vim-test/vim-test',
+    requires = { { 'voldikss/vim-floaterm' } },
+  })
+  use('mattboehm/vim-accordion')
+  use({
+    'folke/trouble.nvim',
+    requires = { { 'kyazdani42/nvim-web-devicons' } },
+  })
+  use('danilamihailov/beacon.nvim')
+  use('chipsenkbeil/distant.nvim')
+end
+
+local function onNeovimVSCodeConfig()
   set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
   vim.g.projectionist_heuristics = {
     ['jest.config.js|jest.config.ts'] = {
@@ -252,7 +324,6 @@ local function onNeovimVSCode(use)
     },
   }
 
-  use('kwkarlwang/bufjump.nvim')
   require('bufjump').setup()
   set_keymap(
     'n',
@@ -268,13 +339,7 @@ local function onNeovimVSCode(use)
   )
 end
 
-local function onPureNeovim(use)
-  use({ 'dracula/vim', as = 'dracula' })
-  -- use 'folke/tokyonight.nvim'
-  -- use '~/gdrive/code/dracula-pro/themes/vim'
-  -- vim.g.dracula_colorterm = 0
-
-  use('ntpeters/vim-better-whitespace')
+local function onPureNeovimConfig()
   set_keymap(
     'n',
     '<LEADER>W',
@@ -282,13 +347,10 @@ local function onPureNeovim(use)
     { silent = true, noremap = true }
   )
 
-  use('sheerun/vim-polyglot')
   vim.g.javascript_plugin_flow = 1
 
-  use('othree/eregex.vim')
   vim.g.eregex_default_enable = 0
 
-  use('haya14busa/incsearch.vim')
   vim.opt.hlsearch = true
   vim.g['incsearch#auto_nohlsearch'] = 1
   set_keymap('', '/', '<Plug>(incsearch-forward)', { noremap = false })
@@ -305,7 +367,6 @@ local function onPureNeovim(use)
     { noremap = false }
   )
 
-  use('rhysd/git-messenger.vim')
   vim.g.git_messenger_floating_win_opts = { border = 'single' }
   vim.g.git_messenger_popup_content_margins = false
   set_keymap(
@@ -315,7 +376,6 @@ local function onPureNeovim(use)
     { silent = true, noremap = false }
   )
 
-  use('tpope/vim-vinegar')
   vim.g.netrw_liststyle = 3
   set_keymap(
     'n',
@@ -324,11 +384,6 @@ local function onPureNeovim(use)
     { silent = true, noremap = true }
   )
 
-  use('tversteeg/registers.nvim')
-
-  use({ 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' })
-  use('windwp/nvim-ts-autotag')
-  use('nvim-treesitter/nvim-treesitter-refactor')
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
     ensure_installed = {
@@ -370,17 +425,6 @@ local function onPureNeovim(use)
       },
     },
   })
-
-  use('onsails/lspkind-nvim')
-  use('hrsh7th/vim-vsnip')
-  use('rafamadriz/friendly-snippets')
-
-  use('hrsh7th/nvim-cmp')
-  use('hrsh7th/cmp-nvim-lsp')
-  use('hrsh7th/cmp-buffer')
-  use('hrsh7th/cmp-path')
-  use('hrsh7th/cmp-cmdline')
-  use('hrsh7th/cmp-vsnip')
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
@@ -427,14 +471,6 @@ local function onPureNeovim(use)
       { name = 'vsnip' },
       { name = 'buffer' },
     },
-  })
-
-  use('neovim/nvim-lspconfig')
-  use('williamboman/nvim-lsp-installer')
-  use('JoosepAlviste/nvim-ts-context-commentstring')
-  use({
-    'jose-elias-alvarez/null-ls.nvim',
-    requires = { { 'nvim-lua/plenary.nvim' } },
   })
 
   local auto_format_on_save = function(client)
@@ -627,21 +663,11 @@ local function onPureNeovim(use)
     server:setup(opts)
   end)
 
-  use('tami5/lspsaga.nvim')
   require('lspsaga').init_lsp_saga({
     code_action_prompt = {
       -- This was making the "lamp" icon show on the cursor's line all the time
       -- for some projects.
       enable = false,
-    },
-  })
-
-  use('nvim-lua/popup.nvim')
-  use('nvim-telescope/telescope-fzy-native.nvim')
-  use({
-    'nvim-telescope/telescope.nvim',
-    requires = {
-      { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim' },
     },
   })
 
@@ -677,7 +703,6 @@ local function onPureNeovim(use)
     }
   end
   require('telescope').setup(telescope_setup)
-
   require('telescope').load_extension('fzy_native')
 
   set_keymap(
@@ -711,17 +736,11 @@ local function onPureNeovim(use)
     { silent = false, noremap = true }
   )
 
-  use('TimUntersberger/neogit')
   require('neogit').setup({
     disable_commit_confirmation = true,
     disable_insert_on_commit = false,
   })
 
-  use('nvim-lua/lsp-status.nvim')
-  use({
-    'hoob3rt/lualine.nvim',
-    requires = { { 'kyazdani42/nvim-web-devicons' } },
-  })
   require('lualine').setup({
     options = {
       theme = 'dracula',
@@ -735,7 +754,6 @@ local function onPureNeovim(use)
     },
   })
 
-  use('thaerkh/vim-workspace')
   vim.g.workspace_autocreate = 1
   vim.g.workspace_session_disable_on_args = 1
   vim.g.workspace_autosave = 0
@@ -751,10 +769,6 @@ local function onPureNeovim(use)
     '~/.local/share/nvim/sessions/.undodir'
   )
 
-  use({
-    'vim-test/vim-test',
-    requires = { { 'voldikss/vim-floaterm' } },
-  })
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
@@ -844,7 +858,6 @@ local function onPureNeovim(use)
     { noremap = true }
   )
 
-  use('mattboehm/vim-accordion')
   -- This makes sure that accordion won't change the height of horizontal
   -- windows/buffers when it calls "wincmd =", and the same for us.
   vim.cmd([[autocmd WinNew * set winfixheight]])
@@ -852,11 +865,6 @@ local function onPureNeovim(use)
   vim.cmd(
     [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
   )
-
-  use({
-    'folke/trouble.nvim',
-    requires = { { 'kyazdani42/nvim-web-devicons' } },
-  })
 
   require('trouble').setup({
     height = 20,
@@ -878,23 +886,17 @@ local function onPureNeovim(use)
     { silent = true, noremap = true }
   )
 
-  use('danilamihailov/beacon.nvim')
   vim.g.beacon_show_jumps = 0
   vim.g.beacon_shrink = 0
   vim.g.beacon_size = 12
 
-  use({
-    'chipsenkbeil/distant.nvim',
-    config = function()
-      require('distant').setup({
-        -- Applies Chip's personal settings to every machine you connect to
-        --
-        -- 1. Ensures that distant servers terminate with no connections
-        -- 2. Provides navigation bindings for remote directories
-        -- 3. Provides keybinding to jump into a remote file's parent directory
-        ['*'] = require('distant.settings').chip_default(),
-      })
-    end,
+  require('distant').setup({
+    -- Applies Chip's personal settings to every machine you connect to
+    --
+    -- 1. Ensures that distant servers terminate with no connections
+    -- 2. Provides navigation bindings for remote directories
+    -- 3. Provides keybinding to jump into a remote file's parent directory
+    ['*'] = require('distant.settings').chip_default(),
   })
 
   local function sourceIfExists(file)
@@ -906,11 +908,10 @@ local function onPureNeovim(use)
   sourceIfExists(vim.env.HOME .. '/.fb-vimrc')
 end
 
-local packer_bootstrap = nil
 local install_path = vim.fn.stdpath('data')
   .. '/site/pack/packer/start/packer.nvim'
 if vim.fn.isdirectory(install_path) == 0 then
-  packer_bootstrap = vim.fn.system({
+  vim.fn.system({
     'git',
     'clone',
     '--depth',
@@ -920,17 +921,42 @@ if vim.fn.isdirectory(install_path) == 0 then
   })
 end
 
-return require('packer').startup({
-  function(use)
-    if vim.g.vscode == nil then
-      onPureNeovim(use)
-    end
-    onNeovimVSCode(use)
+local packerStatus, packer = pcall(require, 'packer')
+if not packerStatus then
+  -- it would be nice to show a message before closing.
+  vim.cmd('quitall')
+end
 
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
-    if packer_bootstrap then
-      require('packer').sync()
+local function setup(use)
+  onNeovimVSCodeSetup(use)
+  if vim.g.vscode == nil then
+    onPureNeovimSetup(use)
+  end
+end
+
+local function config()
+  onNeovimVSCodeConfig()
+  if vim.g.vscode == nil then
+    onPureNeovimConfig()
+  end
+end
+
+return packer.startup({
+  function(use)
+    setup(use)
+
+    -- Calls PackerSync if we get any module not found error on the
+    -- config step.
+    local configStatus, configError = pcall(config)
+    if not configStatus then
+      local isModuleNotFoundError = string.find(
+        configError,
+        [[module ['"][%w_-]+['"] not found:]]
+      ) ~= nil
+      if isModuleNotFoundError then
+        vim.cmd([[autocmd User PackerComplete quitall]])
+        packer.sync()
+      end
     end
 
     vim.cmd([[filetype plugin indent on]])
