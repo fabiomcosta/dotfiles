@@ -1,6 +1,5 @@
 import { question } from 'zx';
 import path from 'path';
-import { constants } from 'fs';
 import * as fs from 'fs/promises';
 import { OK, WARN, ERROR, hl } from './log.mjs';
 import { dir, home, DIR, HOME } from './path.mjs';
@@ -50,17 +49,23 @@ export async function lstatOrNull(_path) {
 
 export async function isDirectory(_path) {
   const stat = await statOrNull(_path);
-  return Boolean(stat?.isDirectory());
+  if(stat == null) {
+    return false;
+  }
+  return Boolean(stat.isDirectory());
 }
 
 export async function isSymlink(_path) {
   const stat = await lstatOrNull(_path);
-  return Boolean(stat?.isSymbolicLink());
+  if(stat == null) {
+    return false;
+  }
+  return Boolean(stat.isSymbolicLink());
 }
 
 export async function createSymlinkFor(origPath, destPath) {
   let stat = await lstatOrNull(origPath);
-  if (stat?.isSymbolicLink()) {
+  if (stat != null && stat.isSymbolicLink()) {
     const origLinkPath = await fs.readlink(origPath);
     if (origLinkPath === destPath) {
       return OK`Symlink for ${hl(origPath)} was already created.`;
@@ -73,12 +78,12 @@ export async function createSymlinkFor(origPath, destPath) {
     await fs.unlink(origPath);
     stat = null;
   }
-  if (stat?.isFile()) {
+  if (stat != null && stat.isFile()) {
     return WARN`There is already a ${hl(
       origPath
     )} file inside your home directory.`;
   }
-  if (stat?.isDirectory()) {
+  if (stat != null && stat.isDirectory()) {
     return WARN`There is already a ${hl(
       origPath
     )} directory inside your home directory.`;
