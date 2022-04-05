@@ -644,20 +644,10 @@ local function onPureNeovim(use)
       { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-fzy-native.nvim' },
     },
   })
-  require('telescope').setup({
-    defaults = {
-      vimgrep_arguments = {
-        'rg',
-        '--color=never',
-        '--no-heading',
-        '--with-filename',
-        '--line-number',
-        '--column',
-        '--smart-case',
-        '--trim', -- add this value
-      },
-    },
-    pickers = {
+
+  local telescope_setup = {}
+  if vim.fn.executable('fd') == 1 then
+    telescope_setup.pickers = {
       find_files = {
         find_command = {
           'fd',
@@ -670,8 +660,24 @@ local function onPureNeovim(use)
           'submodules',
         },
       },
-    },
-  })
+    }
+  end
+  if vim.fn.executable('rg') == 1 then
+    telescope_setup.defaults = {
+      vimgrep_arguments = {
+        'rg',
+        '--color=never',
+        '--no-heading',
+        '--with-filename',
+        '--line-number',
+        '--column',
+        '--smart-case',
+        '--trim', -- add this value
+      },
+    }
+  end
+  require('telescope').setup(telescope_setup)
+
   require('telescope').load_extension('fzy_native')
 
   set_keymap(
