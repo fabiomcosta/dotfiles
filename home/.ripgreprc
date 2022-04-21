@@ -1,5 +1,10 @@
---glob=!.git/*
---glob=!custom_modules/*
---glob=!submodules/*
 --hidden
 --follow
+--max-filesize=200K
+
+--glob=!.git/*
+--glob=!.yarn-cache/*
+--glob=!custom_modules/*
+--glob=!submodules/*
+
+--glob=!*.{gif,png,jpg,jpeg,webp}

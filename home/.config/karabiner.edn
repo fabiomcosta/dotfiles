@@ -33,6 +33,7 @@
   :devices {
     :macbook_internal [{:vendor_id 1452  :product_id 832}]
     :kadv2            [{:vendor_id 10730 :product_id 258}]
+    :draculad         [{:vendor_id 1 :product_id 2}]
   }
 
   :applications {
@@ -459,9 +460,17 @@
         [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
     ]}
 
-    ; {:des "any device"
-    ;   :rules [
-    ; ]}
+    {:des "draculad"
+      :rules [:draculad
+        ; "delete_forward: alone -> escape, hold -> left_shift"
+        [:##delete_forward :left_shift nil {:alone :escape}]
+        ; "left_command alone -> escape, hold -> left_command"
+        ; [:##left_command :left_command nil {:alone :escape}]
+        ; "left_command alone -> tab, hold -> symbols_mode"
+        [:##right_command :right_control nil {:alone :tab}]
+        ; "enter: alone -> return_or_enter, hold -> right_control"
+        [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
+    ]}
 
     {:des "disable cmd+q"
       :rules [

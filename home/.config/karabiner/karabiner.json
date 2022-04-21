@@ -6951,6 +6951,81 @@
           "type" : "basic"
         } ]
       }, {
+        "description" : "draculad",
+        "manipulators" : [ {
+          "to_if_alone" : [ {
+            "key_code" : "escape"
+          } ],
+          "from" : {
+            "key_code" : "delete_forward",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "left_shift"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 1,
+              "product_id" : 2
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_alone" : [ {
+            "key_code" : "tab"
+          } ],
+          "from" : {
+            "key_code" : "right_command",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "key_code" : "right_control"
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 1,
+              "product_id" : 2
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        }, {
+          "to_if_alone" : [ {
+            "key_code" : "return_or_enter"
+          } ],
+          "to_after_key_up" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 0
+            }
+          } ],
+          "from" : {
+            "key_code" : "return_or_enter",
+            "modifiers" : {
+              "optional" : [ "any" ]
+            }
+          },
+          "to" : [ {
+            "set_variable" : {
+              "name" : "symbols_mode",
+              "value" : 1
+            }
+          } ],
+          "conditions" : [ {
+            "identifiers" : [ {
+              "vendor_id" : 1,
+              "product_id" : 2
+            } ],
+            "type" : "device_if"
+          } ],
+          "type" : "basic"
+        } ]
+      }, {
         "description" : "disable cmd+q",
         "manipulators" : [ {
           "from" : {
@@ -7002,6 +7077,18 @@
         "is_pointing_device" : false,
         "product_id" : 832,
         "vendor_id" : 1452
+      },
+      "ignore" : false,
+      "manipulate_caps_lock_led" : true,
+      "simple_modifications" : [ ]
+    }, {
+      "disable_built_in_keyboard_if_exists" : false,
+      "fn_function_keys" : [ ],
+      "identifiers" : {
+        "is_keyboard" : true,
+        "is_pointing_device" : false,
+        "product_id" : 0,
+        "vendor_id" : 0
       },
       "ignore" : false,
       "manipulate_caps_lock_led" : true,

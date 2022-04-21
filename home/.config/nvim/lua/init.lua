@@ -119,6 +119,7 @@ vim.opt.wildignore = {
   '*/.svn/*',
   '*/tmp/*',
   '*/.sass-cache/*',
+  '*/.yarn-cache/*',
   '*/submodules/*',
   '*/custom_modules/*',
   'tags',
@@ -151,6 +152,8 @@ vim.opt.foldenable = false
 vim.opt.jumpoptions:append({ 'stack' })
 
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+-- global statusline
+vim.opt.laststatus = 3
 
 -- turn on syntax highlighting
 vim.cmd([[syntax on]])
@@ -221,6 +224,7 @@ vim.g.python_recommended_style = 0
 local function onNeovimVSCodeSetup(use)
   use('wbthomason/packer.nvim')
   use('jordwalke/VimAutoMakeDirectory')
+  use('tpope/vim-git')
   use('tpope/vim-surround')
   use('tpope/vim-repeat')
   use('tpope/vim-sleuth')
@@ -463,9 +467,9 @@ local function onPureNeovimConfig()
         fallback()
       end, { 'i', 's' }),
     },
-    documentation = {
-      border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-    },
+    -- documentation = {
+    --   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
+    -- },
     sources = {
       { name = 'nvim_lsp' },
       { name = 'vsnip' },
@@ -713,6 +717,12 @@ local function onPureNeovimConfig()
   )
   set_keymap(
     'n',
+    '<LEADER>fh',
+    '<cmd>Telescope find_files hidden=true<CR>',
+    { silent = false, noremap = true }
+  )
+  set_keymap(
+    'n',
     '<LEADER>fg',
     '<cmd>Telescope live_grep<CR>',
     { silent = false, noremap = true }
@@ -744,6 +754,7 @@ local function onPureNeovimConfig()
   require('lualine').setup({
     options = {
       theme = 'dracula',
+      globalstatus = true,
       -- theme = 'tokyonight',
     },
     sections = {
