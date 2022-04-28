@@ -12,6 +12,14 @@ local function starts_with(str, start)
   return str:sub(1, #start) == start
 end
 
+local function ends_with(str, ending)
+   return ending == "" or str:sub(-#ending) == ending
+end
+
+local function trim(str)
+   return str:match'^%s*(.*%S)' or ''
+end
+
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
 -- version of the font you like
@@ -598,9 +606,27 @@ local function onPureNeovimConfig()
     vim.lsp.protocol.make_client_capabilities()
   )
 
+  local hostname = trim(vim.fn.system({'hostname'}));
+  local is_meta_server = ends_with(hostname, '.fbinfra.net') or ends_with(hostname, '.facebook.com')
+
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
-  local servers = { 'flow' }
+  local servers = {}
+
+  if is_meta_server then
+    table.insert(servers, 'hhvm')
+    nvim_lsp.flow.setup({
+      cmd = { 'flow', 'lsp' },
+      capabilities = capabilities,
+      on_attach = on_attach,
+      flags = {
+        debounce_text_changes = 150,
+      }
+    })
+  else
+    table.insert(servers, 'flow')
+  end
+
   for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup({
       capabilities = capabilities,
@@ -610,13 +636,7 @@ local function onPureNeovimConfig()
       },
     })
   end
-  -- nvim_lsp.flow.setup {
-  --   cmd = { 'npx', '--no-install', '--package', 'flow-bin', 'flow', 'lsp', '>', '||', 'flow', 'lsp' },
-  --   on_attach = on_attach,
-  --   flags = {
-  --     debounce_text_changes = 150,
-  --   }
-  -- }
+
 
   local null_ls = require('null-ls')
   null_ls.setup({
@@ -967,6 +987,8 @@ return packer.startup({
       if isModuleNotFoundError then
         vim.cmd([[autocmd User PackerComplete quitall]])
         packer.sync()
+      else
+        error(configError)
       end
     end
 
