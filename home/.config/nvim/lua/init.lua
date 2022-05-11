@@ -414,6 +414,8 @@ local function onPureNeovimConfig()
       'erlang',
       'graphql',
       'vim',
+      'php',
+      'hack',
     },
     highlight = {
       enable = true,
