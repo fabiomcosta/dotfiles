@@ -31,7 +31,11 @@
   }
 
   :devices {
-    :macbook_internal [{:vendor_id 1452  :product_id 832}]
+    :macbook_internal [
+      {:vendor_id 1452  :product_id 832} ; MBP keyboard
+      {:vendor_id 1452 :product_id 615}  ; Magic keyboard USB
+      {:vendor_id 76 :product_id 615}    ; Magic keyboard Bluetooth
+    ]
     :kadv2            [{:vendor_id 10730 :product_id 258}]
     :draculad         [{:vendor_id 1 :product_id 2}]
   }
