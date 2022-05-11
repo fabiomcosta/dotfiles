@@ -932,6 +932,10 @@ local function onPureNeovimConfig()
     ['*'] = require('distant.settings').chip_default(),
   })
 
+  vim.cmd([[
+    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+  ]])
+
   local function sourceIfExists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)
