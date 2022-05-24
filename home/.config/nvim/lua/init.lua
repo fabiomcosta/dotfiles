@@ -212,7 +212,7 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 set_keymap(
   'n',
   'cp',
-  ':let @+ = resolve(fnamemodify(expand("%"), ":~:."))<CR>',
+  ':let @+ = resolve(fnamemodify(expand("%"), ":~:.")) | :OSCYankReg +<CR>',
   { noremap = true }
 )
 
@@ -414,7 +414,6 @@ local function onPureNeovimConfig()
       'erlang',
       'graphql',
       'vim',
-      'php',
       'hack',
     },
     highlight = {
@@ -492,7 +491,7 @@ local function onPureNeovimConfig()
       vim.cmd([[
         augroup Format
           autocmd! * <buffer>
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 1600)
+          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)
         augroup END
       ]])
     end
