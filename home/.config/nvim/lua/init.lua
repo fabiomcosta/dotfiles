@@ -788,7 +788,6 @@ local function onPureNeovimConfig()
 
   vim.g.workspace_autocreate = 1
   vim.g.workspace_session_disable_on_args = 1
-  vim.g.workspace_autosave = 0
   -- This plugin functionality makes no sense, it's completely unrelated from its
   -- core functionality :|
   vim.g.workspace_autosave_untrailspaces = 0
