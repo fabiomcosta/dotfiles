@@ -2,6 +2,10 @@ local function tableGetFromEnd(tableInstance, index)
   return tableInstance[#tableInstance + 1 - index]
 end
 
+local function trim(str)
+  return str:match'^%s*(.*%S)' or ''
+end
+
 local function split(inputstr, sep)
   if sep == nil then
     sep = '%s'
@@ -11,6 +15,18 @@ local function split(inputstr, sep)
     table.insert(t, str)
   end
   return t
+end
+
+local function isMacos()
+  local uname = trim(vim.fn.system('uname'))
+  if vim.v.shell_error == 1 then
+    return false
+  end
+  return uname == "Darwin"
+end
+
+local function isRemoteSession()
+  return (vim.env.SSH_CLIENT or vim.env.SSH_TTY) ~= nil
 end
 
 local BASE_URL = 'https://www.internalfb.com/code/'
@@ -61,8 +77,7 @@ local function getURL(mode)
   if metaCmdsStatus and metaUtilStatus then
     if metaUtil.hg.get_root_path() ~= nil then
       if mode == 'n' then
-        local url = metaCmds.get_codehub_link()
-        return url
+        return metaCmds.get_codehub_link()
       else
         return metaCmds.get_codehub_link(2, vim.fn.line("'<"), vim.fn.line("'>"))
       end
@@ -71,16 +86,23 @@ local function getURL(mode)
   return getURLForGitRepo(mode)
 end
 
+local function copyToRegister(url)
+  vim.fn.setreg('+', url)
+  vim.cmd([[silent OSCYankReg +]])
+  print('copied ' .. url)
+end
+
 return {
   copyURL = function(mode)
     local url = getURL(mode)
-    vim.fn.setreg('+', url)
-    vim.cmd([[OSCYankReg +]])
-    print('copied ' .. url)
-    return url
+    copyToRegister(url)
   end,
   openURL = function(mode)
     local url = getURL(mode)
-    vim.cmd("silent !open '" .. url .. "'")
+    if not isMacos() and not isRemoteSession() then
+      vim.cmd("silent !open '" .. url .. "'")
+    else
+      copyToRegister(url)
+    end
   end,
 }

@@ -13,11 +13,11 @@ local function starts_with(str, start)
 end
 
 local function ends_with(str, ending)
-   return ending == "" or str:sub(-#ending) == ending
+  return ending == "" or str:sub(-#ending) == ending
 end
 
 local function trim(str)
-   return str:match'^%s*(.*%S)' or ''
+  return str:match'^%s*(.*%S)' or ''
 end
 
 -- fonts and other gui stuff
