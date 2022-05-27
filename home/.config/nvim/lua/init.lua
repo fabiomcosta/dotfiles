@@ -606,9 +606,18 @@ local function onPureNeovimConfig()
   local capabilities = require('cmp_nvim_lsp').update_capabilities(
     vim.lsp.protocol.make_client_capabilities()
   )
-
-  local hostname = trim(vim.fn.system({'hostname'}));
+  local hostname = vim.loop.os_gethostname()
   local is_meta_server = ends_with(hostname, '.fbinfra.net') or ends_with(hostname, '.facebook.com')
+
+  local function with_lsp_default_config(config)
+    return vim.tbl_deep_extend("keep", config or {}, {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      flags = {
+        debounce_text_changes = 150,
+      },
+    })
+  end
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
@@ -616,26 +625,17 @@ local function onPureNeovimConfig()
 
   if is_meta_server then
     table.insert(servers, 'hhvm')
-    nvim_lsp.flow.setup({
+    nvim_lsp['eslint@meta'].setup(with_lsp_default_config())
+    nvim_lsp['prettier@meta'].setup(with_lsp_default_config())
+    nvim_lsp.flow.setup(with_lsp_default_config({
       cmd = { 'flow', 'lsp' },
-      capabilities = capabilities,
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      }
-    })
+    }))
   else
     table.insert(servers, 'flow')
   end
 
   for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      },
-    })
+    nvim_lsp[lsp].setup(with_lsp_default_config())
   end
 
 
@@ -650,13 +650,7 @@ local function onPureNeovimConfig()
 
   local lsp_installer = require('nvim-lsp-installer')
   lsp_installer.on_server_ready(function(server)
-    local opts = {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      flags = {
-        debounce_text_changes = 150,
-      },
-    }
+    local opts = with_lsp_default_config()
     if server.name == 'eslint' then
       opts.on_attach = function(client, bufnr)
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
