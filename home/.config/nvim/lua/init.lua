@@ -13,11 +13,11 @@ local function starts_with(str, start)
 end
 
 local function ends_with(str, ending)
-  return ending == "" or str:sub(-#ending) == ending
+  return ending == '' or str:sub(- #ending) == ending
 end
 
 local function trim(str)
-  return str:match'^%s*(.*%S)' or ''
+  return str:match('^%s*(.*%S)') or ''
 end
 
 -- fonts and other gui stuff
@@ -451,39 +451,23 @@ local function onPureNeovimConfig()
     formatting = {
       format = lspkind.cmp_format(),
     },
-    mapping = {
-      ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
-      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
-      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
-      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
-      ['<C-e>'] = cmp.mapping({
-        i = cmp.mapping.abort(),
-        c = cmp.mapping.close(),
-      }),
+    mapping = cmp.mapping.preset.insert({
+      ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-f>'] = cmp.mapping.scroll_docs(4),
+      ['<C-e>'] = cmp.mapping.abort(),
       -- Accept currently selected item. If none selected, `select` first item.
       -- Set `select` to `false` to only confirm explicitly selected items.
       ['<CR>'] = cmp.mapping.confirm({ select = true }),
-      ['<Tab>'] = cmp.mapping(function(fallback)
-        if vim.fn['vsnip#available'](1) == 1 then
-          return feedkey('<Plug>(vsnip-expand-or-jump)', '')
-        end
-        fallback()
-      end, { 'i', 's' }),
-      ['<S-Tab>'] = cmp.mapping(function(fallback)
-        if vim.fn['vsnip#jumpable'](-1) == 1 then
-          return feedkey('<Plug>(vsnip-jump-prev)', '')
-        end
-        fallback()
-      end, { 'i', 's' }),
+    }),
+    window = {
+      documentation = cmp.config.window.bordered(),
     },
-    -- documentation = {
-    --   border = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-    -- },
-    sources = {
+    sources = cmp.config.sources({
       { name = 'nvim_lsp' },
       { name = 'vsnip' },
+    }, {
       { name = 'buffer' },
-    },
+    }),
   })
 
   local auto_format_on_save = function(client)
@@ -535,6 +519,7 @@ local function onPureNeovimConfig()
     local function buf_set_keymap(...)
       vim.api.nvim_buf_set_keymap(bufnr, ...)
     end
+
     -- Mappings.
     local opts = { noremap = true, silent = true }
 
@@ -607,7 +592,8 @@ local function onPureNeovimConfig()
     vim.lsp.protocol.make_client_capabilities()
   )
   local hostname = vim.loop.os_gethostname()
-  local is_meta_server = ends_with(hostname, '.fbinfra.net') or ends_with(hostname, '.facebook.com')
+  local is_meta_server = ends_with(hostname, '.fbinfra.net')
+      or ends_with(hostname, '.facebook.com')
 
   local function with_lsp_default_config(config)
     return vim.tbl_deep_extend("keep", config or {}, {
@@ -637,16 +623,6 @@ local function onPureNeovimConfig()
   for _, lsp in ipairs(servers) do
     nvim_lsp[lsp].setup(with_lsp_default_config())
   end
-
-
-  local null_ls = require('null-ls')
-  null_ls.setup({
-    on_attach = auto_format_on_save,
-    sources = {
-      null_ls.builtins.formatting.stylua,
-      -- null_ls.builtins.formatting.prettier,
-    },
-  })
 
   local lsp_installer = require('nvim-lsp-installer')
   lsp_installer.on_server_ready(function(server)
@@ -788,10 +764,10 @@ local function onPureNeovimConfig()
   vim.g.workspace_autosave_untrailtabs = 0
 
   vim.g.workspace_session_directory = vim.fn.expand(
-    '~/.local/share/nvim/sessions'
+  '~/.local/share/nvim/sessions'
   )
   vim.g.workspace_undodir = vim.fn.expand(
-    '~/.local/share/nvim/sessions/.undodir'
+  '~/.local/share/nvim/sessions/.undodir'
   )
 
   vim.g['test#strategy'] = 'neovim'
@@ -888,7 +864,7 @@ local function onPureNeovimConfig()
   vim.cmd([[autocmd WinNew * set winfixheight]])
   -- TODO when autocmd is supported on lua we can try to move this to lua properly
   vim.cmd(
-    [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
+  [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
   )
 
   require('trouble').setup({
@@ -938,7 +914,7 @@ local function onPureNeovimConfig()
 end
 
 local install_path = vim.fn.stdpath('data')
-  .. '/site/pack/packer/start/packer.nvim'
+    .. '/site/pack/packer/start/packer.nvim'
 if vim.fn.isdirectory(install_path) == 0 then
   vim.fn.system({
     'git',
