@@ -160,8 +160,6 @@ vim.opt.foldenable = false
 vim.opt.jumpoptions:append({ 'stack' })
 
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
--- global statusline
-vim.opt.laststatus = 3
 
 -- turn on syntax highlighting
 vim.cmd([[syntax on]])
@@ -302,7 +300,6 @@ local function onPureNeovimSetup(use)
   })
 
   use('TimUntersberger/neogit')
-  use('nvim-lua/lsp-status.nvim')
   use({
     'hoob3rt/lualine.nvim',
     requires = { { 'kyazdani42/nvim-web-devicons' } },
@@ -745,14 +742,18 @@ local function onPureNeovimConfig()
   require('lualine').setup({
     options = {
       theme = 'dracula',
-      globalstatus = true,
-      -- theme = 'tokyonight',
     },
     sections = {
-      lualine_c = { { 'filename', path = 1 }, "require'lsp-status'.status()" },
+      lualine_a = { 'branch' },
+      lualine_b = {},
+      lualine_c = { { 'filename', path = 1 } },
+      lualine_x = { 'diagnostics' },
+      lualine_y = { 'filetype' },
+      lualine_z = {}
     },
     inactive_sections = {
       lualine_c = { { 'filename', path = 1 } },
+      lualine_x = {},
     },
   })
 
