@@ -48,6 +48,9 @@ vim.opt.termguicolors = true
 -- vim.opt.t_Co = '256'
 -- vim.opt.t_ut = nil
 
+-- only show file name on tabs
+vim.opt.tabline = '%t'
+
 -- for the dark version
 vim.opt.background = 'dark'
 
@@ -161,6 +164,9 @@ vim.opt.jumpoptions:append({ 'stack' })
 
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
+-- so vim won't force pep8 on all python files
+vim.g.python_recommended_style = 0
+
 -- turn on syntax highlighting
 vim.cmd([[syntax on]])
 
@@ -223,9 +229,6 @@ set_keymap('x', '>', '>gv', { noremap = true })
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
 vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
 vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
-
--- so vim won't force pep8 on all python files
-vim.g.python_recommended_style = 0
 
 local function onNeovimVSCodeSetup(use)
   use('wbthomason/packer.nvim')
@@ -757,6 +760,7 @@ local function onPureNeovimConfig()
     },
   })
 
+  vim.g.workspace_autosave = 0
   vim.g.workspace_autocreate = 1
   vim.g.workspace_session_disable_on_args = 1
   -- This plugin functionality makes no sense, it's completely unrelated from its
