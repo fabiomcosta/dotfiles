@@ -232,6 +232,7 @@ vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 
 local function onNeovimVSCodeSetup(use)
   use('wbthomason/packer.nvim')
+  use('antoinemadec/FixCursorHold.nvim')
   use('jordwalke/VimAutoMakeDirectory')
   use('tpope/vim-git')
   use('tpope/vim-surround')
