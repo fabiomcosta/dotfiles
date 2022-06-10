@@ -611,8 +611,8 @@ local function onPureNeovimConfig()
 
   if is_meta_server then
     table.insert(servers, 'hhvm')
-    nvim_lsp['eslint@meta'].setup(with_lsp_default_config())
-    nvim_lsp['prettier@meta'].setup(with_lsp_default_config())
+    table.insert(servers, 'eslint@meta')
+    table.insert(servers, 'prettier@meta')
     nvim_lsp.flow.setup(with_lsp_default_config({
       cmd = { 'flow', 'lsp' },
     }))
