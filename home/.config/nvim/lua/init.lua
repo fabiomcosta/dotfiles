@@ -606,6 +606,8 @@ local function onPureNeovimConfig()
     })
   end
 
+  require('nvim-lsp-installer').setup({})
+
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
   local servers = {}
@@ -619,27 +621,19 @@ local function onPureNeovimConfig()
     }))
   else
     table.insert(servers, 'flow')
-  end
-
-  for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup(with_lsp_default_config())
-  end
-
-  local lsp_installer = require('nvim-lsp-installer')
-  lsp_installer.on_server_ready(function(server)
-    local opts = with_lsp_default_config()
-    if server.name == 'eslint' then
-      opts.on_attach = function(client, bufnr)
+    nvim_lsp.eslint.setup(with_lsp_default_config({
+      on_attach = function(client, bufnr)
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
         -- the resolved capabilities of the eslint server ourselves!
         client.resolved_capabilities.document_formatting = true
         on_attach(client, bufnr)
-      end
-      opts.settings = {
+      end,
+      settings = {
         format = { enable = true }, -- this will enable formatting
-      }
-    elseif server.name == 'sumneko_lua' then
-      opts.settings = {
+      },
+    }))
+    nvim_lsp.sumneko_lua.setup(with_lsp_default_config({
+      settings = {
         Lua = {
           diagnostics = {
             -- Get the language server to recognize the `vim` global
@@ -655,9 +649,12 @@ local function onPureNeovimConfig()
           },
         },
       }
-    end
-    server:setup(opts)
-  end)
+    }))
+  end
+
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup(with_lsp_default_config())
+  end
 
   require('lspsaga').init_lsp_saga({
     code_action_prompt = {
