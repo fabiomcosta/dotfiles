@@ -618,6 +618,7 @@ local function onPureNeovimConfig()
   local servers = {}
 
   if IS_META_SERVER then
+    require('meta')
     table.insert(servers, 'hhvm')
     table.insert(servers, 'eslint@meta')
     table.insert(servers, 'prettier@meta')
