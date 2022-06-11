@@ -20,6 +20,10 @@ local function trim(str)
   return str:match('^%s*(.*%S)') or ''
 end
 
+local hostname = vim.loop.os_gethostname()
+local IS_META_SERVER = ends_with(hostname, '.fbinfra.net')
+    or ends_with(hostname, '.facebook.com')
+
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
 -- version of the font you like
@@ -320,6 +324,10 @@ local function onPureNeovimSetup(use)
   })
   use('danilamihailov/beacon.nvim')
   use('chipsenkbeil/distant.nvim')
+
+  if IS_META_SERVER then
+    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
+  end
 end
 
 local function onNeovimVSCodeConfig()
@@ -592,9 +600,6 @@ local function onPureNeovimConfig()
   local capabilities = require('cmp_nvim_lsp').update_capabilities(
     vim.lsp.protocol.make_client_capabilities()
   )
-  local hostname = vim.loop.os_gethostname()
-  local is_meta_server = ends_with(hostname, '.fbinfra.net')
-      or ends_with(hostname, '.facebook.com')
 
   local function with_lsp_default_config(config)
     return vim.tbl_deep_extend("keep", config or {}, {
@@ -612,7 +617,7 @@ local function onPureNeovimConfig()
   -- map buffer local keybindings when the language server attaches
   local servers = {}
 
-  if is_meta_server then
+  if IS_META_SERVER then
     table.insert(servers, 'hhvm')
     table.insert(servers, 'eslint@meta')
     table.insert(servers, 'prettier@meta')
