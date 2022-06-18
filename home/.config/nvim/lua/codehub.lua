@@ -25,6 +25,19 @@ local function isRemoteSession()
   return (vim.env.SSH_CLIENT or vim.env.SSH_TTY) ~= nil
 end
 
+local function possiblyHasOpenerSocketFile()
+  -- The location of this file depends on some configuration,
+  -- but this is the default value and should work in most cases.
+  return vim.fn.filereadable(vim.fn.expand('~/.opener.sock')) > 0
+end
+
+local function canUseOpen()
+  if possiblyHasOpenerSocketFile() then
+    return true
+  end
+  return not isMacos() and not isRemoteSession()
+end
+
 local BASE_URL = 'https://www.internalfb.com/code/'
 
 local function getLineRange(mode)
@@ -57,12 +70,12 @@ local function getURLForGitRepo(mode)
     vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
   )
   local url = BASE_URL
-    .. repo
-    .. '/'
-    .. gitPathPrefix
-    .. localPath
-    .. '?lines='
-    .. lineRange
+      .. repo
+      .. '/'
+      .. gitPathPrefix
+      .. localPath
+      .. '?lines='
+      .. lineRange
   return url
 end
 
@@ -95,7 +108,7 @@ return {
   end,
   openURL = function(mode)
     local url = getURL(mode)
-    if not isMacos() and not isRemoteSession() then
+    if canUseOpen() then
       vim.cmd("silent !open '" .. url .. "'")
     else
       copyToRegister(url)
