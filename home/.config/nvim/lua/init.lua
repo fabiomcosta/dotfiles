@@ -1,11 +1,12 @@
 local set_keymap = vim.api.nvim_set_keymap
 
 local function replace_termcodes(str)
-  return vim.api.nvim_replace_termcodes(str, true, true, true)
+  return vim.api.nvim_replace_termcodes(str, true, false, true)
 end
 
-local function feedkey(key, mode)
-  vim.api.nvim_feedkeys(replace_termcodes(key), mode, true)
+local function feedkeys(key, mode)
+  mode = mode or 'x'
+  vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
 end
 
 local function starts_with(str, start)
@@ -619,6 +620,7 @@ local function onPureNeovimConfig()
 
   if IS_META_SERVER then
     require('meta')
+    require('meta.lsp')
     table.insert(servers, 'hhvm')
     table.insert(servers, 'eslint@meta')
     table.insert(servers, 'prettier@meta')
@@ -913,13 +915,64 @@ local function onPureNeovimConfig()
     autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
   ]])
 
-  local function sourceIfExists(file)
+  local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)
     end
   end
 
-  sourceIfExists(vim.env.HOME .. '/.fb-vimrc')
+  source_if_exists(vim.env.HOME .. '/.fb-vimrc')
+
+  if IS_META_SERVER then
+
+    local function checkout_diff(diff_id)
+      local checkout_output = vim.fn.system({
+        'hg',
+        'checkout',
+        diff_id
+      })
+      if vim.v.shell_error ~= 0 then
+        return error(checkout_output)
+      end
+    end
+
+    local function open_diff_files(diff_id)
+      local diff_file_list = vim.fn.systemlist({
+        'hg',
+        'status',
+        '--no-status',
+        '--color=never',
+        '--added',
+        '--modified',
+        '--change',
+        diff_id,
+      })
+      for _, file_path in ipairs(diff_file_list) do
+        vim.cmd('vsplit')
+        feedkeys('<C-w>l')
+        vim.cmd('e ' .. file_path)
+      end
+    end
+
+    vim.api.nvim_create_user_command(
+      'MetaDiffWork',
+      function(opts)
+        local diff_id = opts.args
+        checkout_diff(diff_id)
+        open_diff_files(diff_id)
+      end,
+      { nargs = 1 }
+    )
+    vim.api.nvim_create_user_command(
+      'MetaDiffOpenFiles',
+      function(opts)
+        local diff_id = opts.args
+        open_diff_files(diff_id)
+      end,
+      { nargs = 1 }
+    )
+  end
+
 end
 
 local install_path = vim.fn.stdpath('data')

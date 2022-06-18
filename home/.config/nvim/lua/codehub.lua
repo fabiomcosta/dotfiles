@@ -2,10 +2,6 @@ local function tableGetFromEnd(tableInstance, index)
   return tableInstance[#tableInstance + 1 - index]
 end
 
-local function trim(str)
-  return str:match'^%s*(.*%S)' or ''
-end
-
 local function split(inputstr, sep)
   if sep == nil then
     sep = '%s'
@@ -18,7 +14,7 @@ local function split(inputstr, sep)
 end
 
 local function isMacos()
-  local uname = trim(vim.fn.system('uname'))
+  local uname = vim.fn.trim(vim.fn.system('uname'))
   if vim.v.shell_error == 1 then
     return false
   end
