@@ -775,10 +775,10 @@ local function onPureNeovimConfig()
   vim.g.workspace_autosave_untrailtabs = 0
 
   vim.g.workspace_session_directory = vim.fn.expand(
-  '~/.local/share/nvim/sessions'
+    '~/.local/share/nvim/sessions'
   )
   vim.g.workspace_undodir = vim.fn.expand(
-  '~/.local/share/nvim/sessions/.undodir'
+    '~/.local/share/nvim/sessions/.undodir'
   )
 
   vim.g['test#strategy'] = 'neovim'
@@ -875,7 +875,7 @@ local function onPureNeovimConfig()
   vim.cmd([[autocmd WinNew * set winfixheight]])
   -- TODO when autocmd is supported on lua we can try to move this to lua properly
   vim.cmd(
-  [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
+    [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
   )
 
   require('trouble').setup({
