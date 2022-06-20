@@ -245,10 +245,11 @@ local function onNeovimVSCodeSetup(use)
   use('tpope/vim-sleuth')
   use('tpope/vim-fugitive')
   use('tpope/vim-commentary')
+  use('tpope/vim-projectionist')
   use({ 'styled-components/vim-styled-components', branch = 'main' })
   use('moll/vim-node')
-  use('hhvm/vim-hack')
-  use('jparise/vim-graphql')
+  -- use('hhvm/vim-hack')
+  -- use('jparise/vim-graphql')
   use('christoomey/vim-tmux-navigator')
 
   use('editorconfig/editorconfig-vim')
@@ -256,15 +257,11 @@ local function onNeovimVSCodeSetup(use)
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
 
-  use('tpope/vim-projectionist')
   use('kwkarlwang/bufjump.nvim')
 end
 
 local function onPureNeovimSetup(use)
   use({ 'dracula/vim', as = 'dracula' })
-  -- use 'folke/tokyonight.nvim'
-  -- use '~/gdrive/code/dracula-pro/themes/vim'
-  -- vim.g.dracula_colorterm = 0
   use('ntpeters/vim-better-whitespace')
   use('sheerun/vim-polyglot')
   use('othree/eregex.vim')
@@ -333,17 +330,28 @@ end
 
 local function onNeovimVSCodeConfig()
   set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
+  local jest_alternate = {
+    ['**/__tests__/*.test.js'] = {
+      alternate = '{}.js',
+      type = 'test',
+    },
+    ['*.js'] = {
+      alternate = '{dirname}/__tests__/{basename}.test.js',
+      type = 'source',
+    },
+  }
   vim.g.projectionist_heuristics = {
-    ['jest.config.js|jest.config.ts'] = {
-      ['**/__tests__/*.test.js'] = {
-        alternate = '{}.js',
+    ['jest.config.js|jest.config.ts'] = jest_alternate,
+    ['.arcconfig'] = vim.tbl_deep_extend("keep", {
+      ['**/__tests__/*Test.php'] = {
+        alternate = '{}.php',
         type = 'test',
       },
-      ['*.js'] = {
-        alternate = '{dirname}/__tests__/{basename}.test.js',
+      ['*.php'] = {
+        alternate = '{dirname}/__tests__/{basename}Test.php',
         type = 'source',
       },
-    },
+    }, jest_alternate)
   }
 
   require('bufjump').setup()
@@ -423,7 +431,7 @@ local function onPureNeovimConfig()
       'bash',
       'erlang',
       'graphql',
-      'vim',
+      -- 'vim',
       'hack',
     },
     highlight = {
@@ -784,6 +792,7 @@ local function onPureNeovimConfig()
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
+  vim.g['test#custom_runners'] = {PHP = {'Arc'}, JavaScript = {'Arc'}}
 
   _G.fabs_test_kill_last_term_window = function()
     -- get buffer name from last windows
