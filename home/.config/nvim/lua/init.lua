@@ -327,7 +327,7 @@ local function onPureNeovimSetup(use)
   use('chipsenkbeil/distant.nvim')
 
   if IS_META_SERVER then
-    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
+    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim", run = ':SyncMetaLS' }
   end
 end
 
