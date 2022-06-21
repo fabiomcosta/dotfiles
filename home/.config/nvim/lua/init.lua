@@ -814,7 +814,7 @@ local function onPureNeovimConfig()
   set_keymap(
     'n',
     '<LEADER>tn',
-    '<LEADER>tk:TestNearest --watch<CR><C-w>p',
+    '<LEADER>tk:TestNearest<CR><C-w>p',
     { silent = true, noremap = false }
   )
   set_keymap(
