@@ -1,21 +1,6 @@
-function! test#javascript#arc#test_file(file) abort
-  if a:file =~# g:test#javascript#jest#file_pattern
-    return filereadable('.arcconfig')
-  endif
-endfunction
 
-function! test#javascript#arc#build_position(type, position) abort
-  if a:type ==# 'nearest'
-    let name = s:nearest_test(a:position)
-    if !empty(name)
-      let name = '-t '.shellescape(name, 1)
-    endif
-    return [name, a:position['file']]
-  elseif a:type ==# 'file'
-    return [a:position['file']]
-  else
-    return []
-  endif
+function! test#javascript#arc#test_file(file) abort
+  return a:file =~# g:test#javascript#jest#file_pattern && filereadable('.arcconfig')
 endfunction
 
 function! test#javascript#arc#build_args(args, color) abort
@@ -31,4 +16,18 @@ function! s:nearest_test(position) abort
   return (len(name['namespace']) ? '^' : '') .
        \ test#base#escape_regex(join(name['namespace'] + name['test'])) .
        \ (len(name['test']) ? '$' : '')
+endfunction
+
+function! test#javascript#arc#build_position(type, position) abort
+  if a:type ==# 'nearest'
+    let name = s:nearest_test(a:position)
+    if !empty(name)
+      let name = '-t '.shellescape(name, 1)
+    endif
+    return [name, a:position['file']]
+  elseif a:type ==# 'file'
+    return [a:position['file']]
+  else
+    return []
+  endif
 endfunction

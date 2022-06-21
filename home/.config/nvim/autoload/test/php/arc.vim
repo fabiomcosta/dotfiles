@@ -1,3 +1,16 @@
+
+function! test#php#arc#test_file(file) abort
+  return test#php#phpunit#test_file(a:file) && filereadable('.arcconfig')
+endfunction
+
+function! test#php#arc#build_args(args, color) abort
+  return a:args
+endfunction
+
+function! test#php#arc#executable() abort
+  return 't'
+endfunction
+
 let g:test#php#arc#test_patterns = {
   \ 'test': [
     \ '\v^\s*public async function (test\w+)\(',
@@ -8,8 +21,9 @@ let g:test#php#arc#test_patterns = {
   \ 'namespace': [],
 \}
 
-function! test#php#arc#test_file(file) abort
-  return test#php#phpunit#test_file(a:file) && filereadable('.arcconfig')
+function! s:nearest_test(position) abort
+  let name = test#base#nearest_test(a:position, g:test#php#arc#test_patterns)
+  return join(name['test'])
 endfunction
 
 " From https://github.com/vim-test/vim-test/blob/ee81a7a50c684298b0eb12bcbdef8cfe3eb1f515/autoload/test/php/phpunit.vim#L24-L37
@@ -25,17 +39,4 @@ function! test#php#arc#build_position(type, position) abort
   else
     return []
   endif
-endfunction
-
-function! test#php#arc#build_args(args, color) abort
-  return a:args
-endfunction
-
-function! test#php#arc#executable() abort
-  return 't'
-endfunction
-
-function! s:nearest_test(position) abort
-  let name = test#base#nearest_test(a:position, g:test#php#arc#test_patterns)
-  return join(name['test'])
 endfunction
