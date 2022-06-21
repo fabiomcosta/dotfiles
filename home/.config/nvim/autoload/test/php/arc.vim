@@ -9,7 +9,7 @@ let g:test#php#arc#test_patterns = {
 \}
 
 function! test#php#arc#test_file(file) abort
-  return test#php#phpunit#test_file(a:file)
+  return test#php#phpunit#test_file(a:file) && filereadable('.arcconfig')
 endfunction
 
 " From https://github.com/vim-test/vim-test/blob/ee81a7a50c684298b0eb12bcbdef8cfe3eb1f515/autoload/test/php/phpunit.vim#L24-L37

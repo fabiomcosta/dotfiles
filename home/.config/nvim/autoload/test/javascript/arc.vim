@@ -1,7 +1,7 @@
 function! test#javascript#arc#test_file(file) abort
   if a:file =~# g:test#javascript#jest#file_pattern
     return filereadable('.arcconfig')
-  return
+  endif
 endfunction
 
 function! test#javascript#arc#build_position(type, position) abort
