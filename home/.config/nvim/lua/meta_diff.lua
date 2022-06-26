@@ -4,6 +4,8 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local themes = require("telescope.themes")
+local previewers = require("telescope.previewers")
+local utils = require("telescope.utils")
 
 local function map(tbl, f)
   local t = {}
@@ -29,21 +31,7 @@ local function split(inputstr, pattern)
   return t
 end
 
-local function memoize_once(fn)
-  local called = false
-  local cached_result = nil
-  return function(...)
-    local arg = { ... }
-    if called then
-      return cached_result
-    end
-    called = true
-    cached_result = fn(unpack(arg))
-    return cached_result
-  end
-end
-
-local NIL = '$$_NIL_$$'
+local NIL = {}
 local function memoize(fn, cache_key_gen)
   cache_key_gen = cache_key_gen or function(a1)
     return a1
@@ -71,34 +59,44 @@ local function memoize(fn, cache_key_gen)
   end
 end
 
-local function system(cmd)
-  local output = vim.fn.system(cmd)
-  if vim.v.shell_error ~= 0 then
-    return error(output)
+local function system(cmd, cwd)
+  cwd = cwd or vim.loop.cwd()
+  local stdout, exit_code, stderr = utils.get_os_command_output(cmd, cwd)
+  if exit_code ~= 0 then
+    return error('stderr: ' .. stderr .. '\nstdout: ' .. stdout)
   end
-  return vim.trim(output)
+  return vim.trim(stdout)
 end
 
-local function is_system_success(cmd)
-  vim.fn.system(cmd)
-  return vim.v.shell_error == 0
+local function is_system_success(cmd, cwd)
+  cwd = cwd or vim.loop.cwd()
+  local _, exit_code = utils.get_os_command_output(cmd, cwd)
+  return exit_code == 0
 end
 
-local is_hg_repo = memoize_once(function()
-  return is_system_success({ 'hg', 'root' })
+local is_hg_repo_in_cwd = memoize(function(cwd)
+  return is_system_success({ 'hg', 'root' }, cwd)
 end)
 
-local function git_get_repo_root()
-  return system({ 'git', 'rev-parse', '--show-toplevel' })
+local function is_hg_repo()
+  return is_hg_repo_in_cwd(vim.loop.cwd())
 end
 
-local function hg_get_repo_root()
-  return system({ 'hg', 'root' })
+local function git_get_repo_root_in_cwd(cwd)
+  return system({ 'git', 'rev-parse', '--show-toplevel' }, cwd)
 end
 
-local get_repo_root = memoize_once(function()
-  return is_hg_repo() and hg_get_repo_root() or git_get_repo_root()
+local function hg_get_repo_root_in_cwd(cwd)
+  return system({ 'hg', 'root' }, cwd)
+end
+
+local get_repo_root_in_cwd = memoize(function(cwd)
+  return is_hg_repo_in_cwd(cwd) and hg_get_repo_root_in_cwd(cwd) or git_get_repo_root_in_cwd(cwd)
 end)
+
+local function get_repo_root()
+  return get_repo_root_in_cwd(vim.loop.cwd())
+end
 
 local function get_project_id()
   local project = vim.split(system({ 'arc', 'get-config', 'project_id' }), ':')
@@ -106,7 +104,10 @@ local function get_project_id()
 end
 
 local function git_get_commit_hash_from_diff_id(diff_id)
-  return system({ 'git', 'log', '-1', '--format=%H', '--grep', diff_id })
+  -- Looking only till last month so we dont keep looking for too long.
+  -- 1 month should be enough??
+  return system({ 'git', 'log', '--all', '--since="1 month ago"', '-1', '--format=%H', '--fixed-strings', '--grep',
+    diff_id })
 end
 
 local function git_get_branch_name_from_commit_hash(commit_hash)
@@ -206,8 +207,6 @@ local function parse_diff_entry(diff_entry)
 end
 
 local function get_own_diffs_finder(opts)
-  -- Same as:
-  -- jf list --status NEEDS_REVIEW ACCEPTED CHANGES_PLANNED NEEDS_REVISION | tail -n +2
   opts.entry_maker = opts.entry_maker or function(entry)
     local diff_entry = vim.trim(entry)
     local diff = parse_diff_entry(diff_entry)
@@ -227,11 +226,29 @@ local function get_own_diffs_finder(opts)
   return finders.new_oneshot_job({ 'jf', 'list' }, opts)
 end
 
+local function get_file_diff_previewer(opts)
+  if is_hg_repo() then
+    return previewers.new_termopen_previewer({
+      get_command = function(entry)
+        return { 'hg', 'log', '--page=never', '--template', '" "', '-p', '-r', opts.diff.id, entry.path }
+      end
+    })
+  else
+    return previewers.new_termopen_previewer({
+      get_command = function(entry)
+        local commit_hash = git_get_commit_hash_from_diff_id(opts.diff.id)
+        return { 'git', '--no-pager', 'show', '-p', '--format=', commit_hash, '--', entry.path }
+      end
+    })
+  end
+end
+
 local function diff_file_picker(opts)
   pickers.new(opts, {
     prompt_title = "Changed files on [" .. opts.diff.id .. "] " .. opts.diff.title,
     finder = get_diff_files_finder(opts),
     sorter = conf.generic_sorter(opts),
+    previewer = get_file_diff_previewer(opts),
   }):find()
 end
 
@@ -248,7 +265,6 @@ local function diff_picker(opts)
         if opts.checkout then
           checkout_diff(selection.diff.id)
         end
-        print(vim.inspect(selection))
         diff_file_picker(selection)
       end)
       return true

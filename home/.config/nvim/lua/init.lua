@@ -927,7 +927,7 @@ local function onPureNeovimConfig()
   vim.api.nvim_create_user_command(
     'MetaDiffWork',
     function()
-      require('diff_picker').diff_picker({ checkout = true })
+      require('meta_diff').diff_picker({ checkout = true })
     end,
     {}
   )
@@ -935,7 +935,7 @@ local function onPureNeovimConfig()
   vim.api.nvim_create_user_command(
     'MetaDiffOpenFiles',
     function()
-      require('diff_picker').diff_picker({})
+      require('meta_diff').diff_picker({})
     end,
     {}
   )
