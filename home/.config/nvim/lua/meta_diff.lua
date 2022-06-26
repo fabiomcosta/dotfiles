@@ -5,7 +5,7 @@ local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local themes = require("telescope.themes")
 local previewers = require("telescope.previewers")
-local utils = require("telescope.utils")
+local Job = require("plenary.job")
 
 local function map(tbl, f)
   local t = {}
@@ -59,22 +59,36 @@ local function memoize(fn, cache_key_gen)
   end
 end
 
-local function system(cmd, cwd)
-  local stdout, exit_code, stderr = utils.get_os_command_output(cmd, cwd)
+function get_os_command_output(cmd, opts)
+  opts = opts or {}
+  local command = table.remove(cmd, 1)
+  local stderr = {}
+  local stdout, ret = Job:new({
+    command = command,
+    args = cmd,
+    cwd = opts.cwd,
+    on_stderr = function(_, data)
+      table.insert(stderr, data)
+    end,
+  }):sync(opts.timeout)
+  return stdout, ret, stderr
+end
+
+local function system(cmd, opts)
+  local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
   if exit_code ~= 0 then
     return error('stderr: ' .. stderr .. '\nstdout: ' .. stdout)
   end
   return vim.trim(stdout[1] or '')
 end
 
-local function is_system_success(cmd, cwd)
-  cwd = cwd or vim.loop.cwd()
-  local _, exit_code = utils.get_os_command_output(cmd, cwd)
+local function is_system_success(cmd, opts)
+  local _, exit_code = get_os_command_output(cmd, opts)
   return exit_code == 0
 end
 
 local is_hg_repo_in_cwd = memoize(function(cwd)
-  return is_system_success({ 'hg', 'root' }, cwd)
+  return is_system_success({ 'hg', 'root' }, { cwd = cwd })
 end)
 
 local function is_hg_repo()
@@ -82,11 +96,11 @@ local function is_hg_repo()
 end
 
 local function git_get_repo_root_in_cwd(cwd)
-  return system({ 'git', 'rev-parse', '--show-toplevel' }, cwd)
+  return system({ 'git', 'rev-parse', '--show-toplevel' }, { cwd = cwd })
 end
 
 local function hg_get_repo_root_in_cwd(cwd)
-  return system({ 'hg', 'root' }, cwd)
+  return system({ 'hg', 'root' }, { cwd = cwd })
 end
 
 local get_repo_root_in_cwd = memoize(function(cwd)
@@ -103,9 +117,9 @@ local function get_project_id()
 end
 
 local function git_get_commit_hash_from_diff_id(diff_id)
-  -- Looking only till last month so we dont keep looking for too long.
-  -- 1 month should be enough??
-  return system({ 'git', 'log', '--all', '--since="1 month ago"', '-1', '--format=%H', '--fixed-strings', '--grep',
+  -- Looking only till 3 months so we dont keep looking for too long.
+  -- 3 months should be enough??
+  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--fixed-strings', '--grep',
     diff_id })
 end
 
@@ -177,11 +191,11 @@ end
 local function git_checkout_diff(diff_id)
   local commit_hash = git_get_commit_hash_from_diff_id(diff_id)
   local branch_name = git_get_branch_name_from_commit_hash(commit_hash)
-  system({ 'git', 'checkout', branch_name })
+  system({ 'git', 'checkout', branch_name }, { timeout = 20000 })
 end
 
 local function hg_checkout_diff(diff_id)
-  system({ 'hg', 'checkout', diff_id })
+  system({ 'hg', 'checkout', diff_id }, { timeout = 20000 })
 end
 
 local function checkout_diff(diff_id)
