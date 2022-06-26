@@ -64,7 +64,7 @@ local function system(cmd, cwd)
   if exit_code ~= 0 then
     return error('stderr: ' .. stderr .. '\nstdout: ' .. stdout)
   end
-  return vim.trim(stdout[1])
+  return vim.trim(stdout[1] or '')
 end
 
 local function is_system_success(cmd, cwd)
@@ -111,7 +111,7 @@ end
 
 local function git_get_branch_name_from_commit_hash(commit_hash)
   return vim.split(
-    system({ 'git', 'name-rev', '--name-only', commit_hash })
+    system({ 'git', 'name-rev', '--name-only', commit_hash }),
     '~'
   )[1]
 end
@@ -186,9 +186,9 @@ end
 
 local function checkout_diff(diff_id)
   if is_hg_repo() then
-    return hg_checkout_diff(diff_id)
+    hg_checkout_diff(diff_id)
   else
-    return git_checkout_diff(diff_id)
+    git_checkout_diff(diff_id)
   end
 end
 
@@ -244,7 +244,7 @@ end
 
 local function diff_file_picker(opts)
   pickers.new(opts, {
-    prompt_title = "Changed files on [" .. opts.diff.id .. "] " .. opts.diff.title,
+    prompt_title = "Files on [" .. opts.diff.id .. "] " .. opts.diff.title,
     finder = get_diff_files_finder(opts),
     sorter = conf.generic_sorter(opts),
     previewer = get_file_diff_previewer(opts),

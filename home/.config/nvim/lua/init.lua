@@ -792,7 +792,7 @@ local function onPureNeovimConfig()
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
-  vim.g['test#custom_runners'] = {PHP = {'Arc'}, JavaScript = {'Arc'}}
+  vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' } }
 
   _G.fabs_test_kill_last_term_window = function()
     -- get buffer name from last windows
@@ -925,19 +925,31 @@ local function onPureNeovimConfig()
   ]])
 
   vim.api.nvim_create_user_command(
-    'MetaDiffWork',
+    'MetaDiffCheckout',
     function()
       require('meta_diff').diff_picker({ checkout = true })
     end,
     {}
   )
-
   vim.api.nvim_create_user_command(
     'MetaDiffOpenFiles',
     function()
       require('meta_diff').diff_picker({})
     end,
     {}
+  )
+
+  set_keymap(
+    'n',
+    '<LEADER>mc',
+    '<CMD>MetaDiffCheckout<CR>',
+    { silent = true, noremap = true }
+  )
+  set_keymap(
+    'n',
+    '<LEADER>mf',
+    '<CMD>MetaDiffOpenFiles<CR>',
+    { silent = true, noremap = true }
   )
 
   local function source_if_exists(file)
