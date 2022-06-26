@@ -924,6 +924,22 @@ local function onPureNeovimConfig()
     autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
   ]])
 
+  vim.api.nvim_create_user_command(
+    'MetaDiffWork',
+    function()
+      require('diff_picker').diff_picker({ checkout = true })
+    end,
+    {}
+  )
+
+  vim.api.nvim_create_user_command(
+    'MetaDiffOpenFiles',
+    function()
+      require('diff_picker').diff_picker({})
+    end,
+    {}
+  )
+
   local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)
@@ -931,56 +947,6 @@ local function onPureNeovimConfig()
   end
 
   source_if_exists(vim.env.HOME .. '/.fb-vimrc')
-
-  if IS_META_SERVER then
-
-    local function checkout_diff(diff_id)
-      local checkout_output = vim.fn.system({
-        'hg',
-        'checkout',
-        diff_id
-      })
-      if vim.v.shell_error ~= 0 then
-        return error(checkout_output)
-      end
-    end
-
-    local function open_diff_files(diff_id)
-      local diff_file_list = vim.fn.systemlist({
-        'hg',
-        'status',
-        '--no-status',
-        '--color=never',
-        '--added',
-        '--modified',
-        '--change',
-        diff_id,
-      })
-      for _, file_path in ipairs(diff_file_list) do
-        vim.cmd('vsplit')
-        feedkeys('<C-w>l')
-        vim.cmd('e ' .. file_path)
-      end
-    end
-
-    vim.api.nvim_create_user_command(
-      'MetaDiffWork',
-      function(opts)
-        local diff_id = opts.args
-        checkout_diff(diff_id)
-        open_diff_files(diff_id)
-      end,
-      { nargs = 1 }
-    )
-    vim.api.nvim_create_user_command(
-      'MetaDiffOpenFiles',
-      function(opts)
-        local diff_id = opts.args
-        open_diff_files(diff_id)
-      end,
-      { nargs = 1 }
-    )
-  end
 
 end
 
