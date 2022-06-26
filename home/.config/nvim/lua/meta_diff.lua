@@ -1,3 +1,32 @@
+-- Example configuration:
+--
+-- vim.api.nvim_create_user_command(
+--   'MetaDiffCheckout',
+--   function()
+--     require('meta_diff').diff_picker({ checkout = true })
+--   end,
+--   {}
+-- )
+-- vim.api.nvim_create_user_command(
+--   'MetaDiffOpenFiles',
+--   function()
+--     require('meta_diff').diff_picker({})
+--   end,
+--   {}
+-- )
+-- set_keymap(
+--   'n',
+--   '<LEADER>mc',
+--   '<CMD>MetaDiffCheckout<CR>',
+--   { silent = true, noremap = true }
+-- )
+-- set_keymap(
+--   'n',
+--   '<LEADER>mf',
+--   '<CMD>MetaDiffOpenFiles<CR>',
+--   { silent = true, noremap = true }
+-- )
+
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
@@ -119,8 +148,8 @@ end
 local function git_get_commit_hash_from_diff_id(diff_id)
   -- Looking only till 3 months so we dont keep looking for too long.
   -- 3 months should be enough??
-  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--fixed-strings', '--grep',
-    diff_id })
+  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--E', '--grep',
+    '^Differential Revision:.*?' .. diff_id .. '$' })
 end
 
 local function git_get_branch_name_from_commit_hash(commit_hash)
