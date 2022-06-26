@@ -59,7 +59,7 @@ local function memoize(fn, cache_key_gen)
   end
 end
 
-function get_os_command_output(cmd, opts)
+local function get_os_command_output(cmd, opts)
   opts = opts or {}
   local command = table.remove(cmd, 1)
   local stderr = {}
