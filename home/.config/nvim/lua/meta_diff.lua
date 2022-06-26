@@ -60,12 +60,11 @@ local function memoize(fn, cache_key_gen)
 end
 
 local function system(cmd, cwd)
-  cwd = cwd or vim.loop.cwd()
   local stdout, exit_code, stderr = utils.get_os_command_output(cmd, cwd)
   if exit_code ~= 0 then
     return error('stderr: ' .. stderr .. '\nstdout: ' .. stdout)
   end
-  return vim.trim(stdout)
+  return vim.trim(stdout[1])
 end
 
 local function is_system_success(cmd, cwd)
