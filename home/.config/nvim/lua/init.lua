@@ -17,10 +17,6 @@ local function ends_with(str, ending)
   return ending == '' or str:sub(- #ending) == ending
 end
 
-local function trim(str)
-  return str:match('^%s*(.*%S)') or ''
-end
-
 local hostname = vim.loop.os_gethostname()
 local IS_META_SERVER = ends_with(hostname, '.fbinfra.net')
     or ends_with(hostname, '.facebook.com')
@@ -113,35 +109,35 @@ vim.opt.wildmenu = true
 vim.opt.wildmode = { 'longest', 'full' }
 -- ignored files while searching files and stuff
 vim.opt.wildignore = {
+  '*~',
+  '*.i',
+  '*.d',
   '*.so',
-  '*.dll',
-  '*.exe',
+  '*.gz',
   '*.zip',
   '*.tar',
-  '*.gz',
+  '*.exe',
+  '*.dll',
   '*.swf',
   '*.swp',
   '*.swo',
-  '*~',
   '*.pyc',
   '*.psd',
+  '*.pdf',
   '*.png',
   '*.gif',
-  '*.jpeg',
   '*.jpg',
-  '*.pdf',
-  '*/.git/*',
-  '*/.hq/*',
-  '*/.svn/*',
+  '*.jpeg',
+  '*.sql3',
   '*/tmp/*',
+  '*/.hq/*',
+  '*/.git/*',
+  '*/.svn/*',
   '*/.sass-cache/*',
   '*/.yarn-cache/*',
   '*/submodules/*',
   '*/custom_modules/*',
   'tags',
-  '*.i',
-  '*.d',
-  '*.sql3', -- other exotic extensions
 }
 
 -- ignores case
@@ -321,7 +317,6 @@ local function onPureNeovimSetup(use)
     requires = { { 'kyazdani42/nvim-web-devicons' } },
   })
   use('danilamihailov/beacon.nvim')
-  use('chipsenkbeil/distant.nvim')
 
   if IS_META_SERVER then
     use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim", run = ':SyncMetaLS' }
@@ -431,7 +426,6 @@ local function onPureNeovimConfig()
       'bash',
       'erlang',
       'graphql',
-      -- 'vim',
       'hack',
     },
     highlight = {
@@ -525,6 +519,8 @@ local function onPureNeovimConfig()
         '<cmd>Telescope lsp_references<CR>',
         { silent = false, noremap = true }
       )
+      -- else if IS_META_SERVER then
+      -- Use Telescope biggrep with the current selectin
     else
       set_keymap(
         'n',
@@ -707,7 +703,7 @@ local function onPureNeovimConfig()
         '--line-number',
         '--column',
         '--smart-case',
-        '--trim', -- add this value
+        '--trim',
       },
     }
   end
@@ -798,7 +794,11 @@ local function onPureNeovimConfig()
     -- get buffer name from last windows
     local last_window_index = vim.fn.winnr('$')
     local last_buffer_name = vim.fn.bufname(vim.fn.winbufnr(last_window_index))
+
     if starts_with(last_buffer_name, 'term://') then
+      local window_height = vim.fn.winheight(last_window_index)
+      -- Sticky size/position
+      vim.g['test#neovim#term_position'] = 'botright ' .. window_height
       return replace_termcodes('<C-w>' .. last_window_index .. 'c')
     end
     return ''
@@ -910,15 +910,6 @@ local function onPureNeovimConfig()
   vim.g.beacon_show_jumps = 0
   vim.g.beacon_shrink = 0
   vim.g.beacon_size = 12
-
-  require('distant').setup({
-    -- Applies Chip's personal settings to every machine you connect to
-    --
-    -- 1. Ensures that distant servers terminate with no connections
-    -- 2. Provides navigation bindings for remote directories
-    -- 3. Provides keybinding to jump into a remote file's parent directory
-    ['*'] = require('distant.settings').chip_default(),
-  })
 
   vim.cmd([[
     autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
