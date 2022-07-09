@@ -788,6 +788,7 @@ local function onPureNeovimConfig()
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
   vim.g['test#neovim#start_normal'] = 1
+  vim.g['test#javascript#jest#options'] = '--verbose=false'
   vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' } }
 
   _G.fabs_test_kill_last_term_window = function()

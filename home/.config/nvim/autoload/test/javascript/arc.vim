@@ -4,7 +4,7 @@ function! test#javascript#arc#test_file(file) abort
 endfunction
 
 function! test#javascript#arc#build_args(args, color) abort
-  return a:args
+  return ['--verbose=false'] + a:args
 endfunction
 
 function! test#javascript#arc#executable() abort
