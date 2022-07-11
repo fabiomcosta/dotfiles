@@ -31,20 +31,31 @@ function M.memoize(fn, cache_key_gen)
   end
 end
 
-function M.jump_to_item(win, precmd, item)
+function M.jump_to_item(win, item)
+  if not item then
+    return
+  end
+  if item.is_top_level == true or item.fileName == nil then
+    return
+  end
+
   -- requiring here, as otherwise we run into a circular dependency
   local View = require('slog.view')
 
-  View.switch_to(win)
-  if precmd then
-    vim.cmd(precmd)
+  -- if vim.api.nvim_buf_get_option(item.bufnr, "buflisted") == false then
+  --   vim.cmd("edit #" .. item.bufnr)
+  -- else
+  --   vim.cmd("buffer " .. item.bufnr)
+  -- end
+  -- vim.api.nvim_win_set_cursor(win, { item.start.line + 1, item.start.character })
+
+  if vim.fn.filereadable(item.fileName) > 1 then
+    View.switch_to(win)
+    -- local current_win = vim.api.nvim_get_current_win()
+    -- self:switch_to_parent()
+    vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
+    -- self:switch_to(current_win)
   end
-  if vim.api.nvim_buf_get_option(item.bufnr, "buflisted") == false then
-    vim.cmd("edit #" .. item.bufnr)
-  else
-    vim.cmd("buffer " .. item.bufnr)
-  end
-  vim.api.nvim_win_set_cursor(win, { item.start.line + 1, item.start.character })
 end
 
 function M.fix_mode(opts)

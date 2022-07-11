@@ -432,7 +432,7 @@ function View:jump(opts)
     folds.toggle(item.key)
     self:update()
   else
-    util.jump_to_item(opts.win or self.parent, opts.precmd, item)
+    util.jump_to_item(opts.win or self.parent, item)
   end
 end
 
