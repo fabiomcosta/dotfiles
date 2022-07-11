@@ -16,8 +16,8 @@ import https from 'https';
 // using LSP maybe?
 //
 // TODO
-// * Collapse logs when multiple equal logs are seen
-// * Show special base64json elementsas previously described
+// * [done] Collapse logs when multiple equal logs are seen
+// * [done] Show special base64json elements as previously described
 // * Allow opening individual files from the trace
 // * Allow jumping to definition on some of the special base64json elements
 // * FUTURE: filters????

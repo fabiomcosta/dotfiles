@@ -2,6 +2,7 @@ local config = require('slog.config')
 
 local M = {}
 
+-- TODO allow cache to be cleared.
 local NIL = {}
 function M.memoize(fn, cache_key_gen)
   cache_key_gen = cache_key_gen or function(a1)
