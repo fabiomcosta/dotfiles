@@ -49,12 +49,9 @@ function M.jump_to_item(win, item)
   -- end
   -- vim.api.nvim_win_set_cursor(win, { item.start.line + 1, item.start.character })
 
-  if vim.fn.filereadable(item.fileName) > 1 then
+  if vim.fn.filereadable(item.fileName) > 0 then
     View.switch_to(win)
-    -- local current_win = vim.api.nvim_get_current_win()
-    -- self:switch_to_parent()
     vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-    -- self:switch_to(current_win)
   end
 end
 

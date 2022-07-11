@@ -459,11 +459,22 @@ function View:_preview()
   -- each trace line will possibly have its own buffer (file), so we
   -- have to adapt the code for that.
 
-  if vim.fn.filereadable(item.fileName) > 1 then
+  local bufnr = vim.api.nvim_win_get_buf(self.parent)
+  local filename = vim.api.nvim_buf_get_name(bufnr)
+
+  if filename == item.fileName then
+    local cursor = vim.api.nvim_win_get_cursor(self.parent)
+    if cursor[1] == item.fileLine + 1 then
+      -- we are already in the right place
+      return
+    end
+  end
+
+  if vim.fn.filereadable(item.fileName) > 0 then
     local current_win = vim.api.nvim_get_current_win()
     self:switch_to_parent()
     vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-    self:switch_to(current_win)
+    View.switch_to(current_win)
   end
 
   -- vim.api.nvim_win_set_buf(self.parent, item.bufnr)
@@ -493,8 +504,8 @@ function View:_preview()
   -- end
 end
 
--- View.preview = View._preview
+View.preview = View._preview
 
-View.preview = util.throttle(50, View._preview)
+-- View.preview = util.throttle(50, View._preview)
 
 return View
