@@ -5,31 +5,25 @@ local folds = require('slog.folds')
 local b64 = require('slog.b64')
 local util = require('slog.util')
 
----@class Renderer
 local renderer = {}
-
 local logs = {}
-local tailer_job = nil
-
-local signs = {}
-local function update_signs()
-  signs = config.options.signs
-  if config.options.use_diagnostic_signs then
-    local lsp_signs = require('slog.providers.diagnostic').get_signs()
-    signs = vim.tbl_deep_extend('force', {}, signs, lsp_signs)
-  end
-end
+local tailer_job
 
 local function get_sign_for_level(level)
   if level == 'info' then
-    return signs.information, 'Information'
-  elseif level == 'mustfix' or level == 'fatal' or level == 'error' then
-    return signs.error, 'Error'
+    return config.options.signs.info, 'Information'
+  elseif level == 'mustfix' then
+    return config.options.signs.mustfix, 'Error'
+  elseif level == 'fatal' then
+    return config.options.signs.fatal, 'Error'
   elseif level == 'warning' then
-    return signs.warning, 'Warning'
+    return config.options.signs.warning, 'Warning'
+  elseif level == 'slog' then
+    return config.options.signs.slog, 'Hint'
+  elseif level == 'count' then
+    return config.options.signs.count, 'Hint'
   end
-  -- known so far: none, count
-  return signs.hint, 'Hint'
+  return config.options.signs.other, 'Hint'
 end
 
 local print_function_name = util.memoize(function(function_name)
@@ -79,8 +73,8 @@ function renderer.start(view, opts)
     return
   end
 
-  update_signs()
-  tailer_job = providers.get({ tier = '34833.od' }, function(log)
+  local tier = opts.tier or config.options.tier
+  tailer_job = providers.get({ tier = tier }, function(log)
     local last_log = logs[#logs]
     if last_log ~= nil and log.title == last_log.title then
       last_log.count = last_log.count + 1
@@ -118,7 +112,8 @@ function renderer.render_log(view, text, log)
   text:render(sign .. ' ', 'TroubleSign' .. type, { exact = true })
 
   if log.count > 1 then
-    text:render(log.count .. 'x', 'Count', ' ')
+    local count = log.count > 9 and '9+' or log.count .. 'x'
+    text:render(count, 'Count', ' ')
   else
     text:render('   ')
   end

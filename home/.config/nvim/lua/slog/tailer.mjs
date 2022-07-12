@@ -18,7 +18,7 @@ import https from 'https';
 // TODO
 // * [done] Collapse logs when multiple equal logs are seen
 // * [done] Show special base64json elements as previously described
-// * Allow opening individual files from the trace
+// * [done] Allow opening individual files from the trace
 // * Allow jumping to definition on some of the special base64json elements
 // * FUTURE: filters????
 
@@ -34,20 +34,16 @@ import https from 'https';
     metadata?: {[string]: string}
   }]
 }
-
-Template closed:
-{right-arrow} {count} {icon} {title}
-
-Template open:
-{down-arrow} {count} {icon} {title}
-{functionName} ({fileName}:{fileLine}) with Metadata <{metadata[n].k}:{metadata[n].v}>
 */
 
 // meh
 process.emitWarning = () => {}
-process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
-const LOG_FILE = '/var/facebook/logs/users/svcscm/error_log_svcscm';
+const {USER} = process.env;
+
+const OD_LOG_FILE = '/var/facebook/logs/users/svcscm/error_log_svcscm';
+const DV_LOG_FILE = `/home/${USER}/logs/error_log_${USER}`;
 const LENGTH = 2097152;
 const TIMEOUT = 30;
 
@@ -83,6 +79,21 @@ function match(str, regex) {
     throw new ErrorWithMetadata(`Regex didn't match.`).set({ regex, str });
   }
   return parts;
+}
+
+function httpGet(tailerUrl, options = {}) {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    https.get(tailerUrl, options, (res) => {
+      res
+        .on('data', dataBuffer => data += String(dataBuffer))
+        .on('close', () => resolve(data));
+    }).on('error', reject);
+  });
+}
+
+function parseJSON(rawLog) {
+  return JSON.parse(rawLog.replace(/^for\s\(;;\);/, ''));
 }
 
 const NAMED_ATTRIBUTES_REGEX = /<(.*?):(.*?)>/;
@@ -153,28 +164,9 @@ function parseTrace(trace) {
     .filter(Boolean);
 }
 
-function parseJSON(rawLog) {
-  return JSON.parse(rawLog.replace(/^for\s\(;;\);/, ''));
-}
-
-// let c = 0;
 function parseLogEntry(logEntry) {
-  // c++
-  // return {
-  //   title: 'First log title' + c,
-  //   trace: [
-  //     { functionName: 'Hello::world', fileName: 'hello_world.php', fileLine: 12 },
-  //     { functionName: 'Hello::worldz', fileName: 'hello_worldz.php', fileLine: 34 }
-  //   ]
-  // };
-
-  // { title: 'Second log title', trace: {
-  //   { functionName: 'Hello::world', fileName: 'hello_world.php', fileLine: 12 },
-  //   { functionName: 'Hello::worldz', fileName: 'hello_worldz.php', fileLine: 34, metadata: { a: 'b' } }
-  //   } },
 
   const entryLines = logEntry.split('\\n');
-
   const {properties, firstIndex, lastIndex} = getProperties(entryLines);
 
   if (firstIndex == null || lastIndex == null) {
@@ -213,44 +205,31 @@ function parseLogs(logObject) {
     .filter(Boolean);
 }
 
-// async function timeout(timeoutMs) {
-//   return new Promise((res) => {
-//     setTimeout(res, timeoutMs);
-//   });
-// }
-
-function httpGet(tailerUrl, options = {}) {
-  return new Promise((resolve, reject) => {
-    let data = '';
-    https.get(tailerUrl, options, (res) => {
-      res
-        .on('data', dataBuffer => data += String(dataBuffer))
-        .on('close', () => resolve(data));
-    }).on('error', reject);
-  });
-}
-
 async function fetchSlogs(tailerUrl) {
-  // const ORIGIN_HEADER = 'origin: https://www.internalfb.com';
-  // let {stdout} = await $`curl -H ${ORIGIN_HEADER} ${tailerUrl}`;
-  const slogsResponse = await httpGet(tailerUrl, {headers: {origin: 'https://www.internalfb.com'}})
+  const slogsResponse = await httpGet(
+    tailerUrl,
+    {headers: {origin: 'https://www.internalfb.com'}}
+  );
   return parseJSON(slogsResponse);
-  // await timeout(5000);
-  // return {data: 'a'};
 }
 
 async function main([tier]) {
   if (!tier) {
-    throw new Error('No tier argument provided. ex: 12345.od');
+    throw new Error('No tier argument provided. ex: 12345.od, devvm8579.prn0');
   }
 
+  // od: 12445.od
+  // dv: devvm8579.prn0
+  const isOd = tier.endsWith('.od');
+  const file = isOd ? OD_LOG_FILE : DV_LOG_FILE;
   const origin = `https://not-www.${tier}.internalfb.com/`;
   const path = `intern/itools/slog_tailer.php`;
   const tailerUrl = new URL(path, origin);
   tailerUrl.searchParams.set('op', 'tail');
-  tailerUrl.searchParams.set('file', LOG_FILE);
+  tailerUrl.searchParams.set('file', file);
   tailerUrl.searchParams.set('len', LENGTH);
   tailerUrl.searchParams.set('timeout', TIMEOUT);
+
 
   let pos = -LENGTH;
   while (true) {

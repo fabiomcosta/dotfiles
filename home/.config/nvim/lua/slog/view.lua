@@ -8,7 +8,6 @@ local highlight = vim.api.nvim_buf_add_highlight
 ---@class TroubleView
 ---@field buf number
 ---@field win number
----@field group boolean
 ---@field items Item[]
 ---@field folded table<string, boolean>
 ---@field parent number
@@ -58,19 +57,11 @@ end
 function View:new(opts)
   opts = opts or {}
 
-  local group
-  if opts.group ~= nil then
-    group = opts.group
-  else
-    group = config.options.group
-  end
-
   local this = {
     buf = vim.api.nvim_get_current_buf(),
     win = opts.win or vim.api.nvim_get_current_win(),
     parent = opts.parent,
     items = {},
-    group = group,
   }
   setmetatable(this, self)
   return this
@@ -477,35 +468,10 @@ function View:_preview()
     View.switch_to(current_win)
   end
 
-  -- vim.api.nvim_win_set_buf(self.parent, item.bufnr)
-  -- vim.api.nvim_win_set_cursor(self.parent, { item.fileLine + 1, 0 })
-
-  -- vim.api.nvim_buf_call(item.bufnr, function()
-  --   -- Center preview line on screen and open enough folds to show it
-  --   vim.cmd('norm! zz zv')
-  --   if vim.api.nvim_buf_get_option(item.bufnr, 'filetype') == '' then
-  --     vim.cmd('do BufRead')
-  --   end
-  -- end)
-
-
-  -- clear_hl(item.bufnr)
-  -- hl_bufs[item.bufnr] = true
-  -- for row = item.start.line, item.finish.line, 1 do
-  --   local col_start = 0
-  --   local col_end = -1
-  --   if row == item.start.line then
-  --     col_start = item.start.character
-  --   end
-  --   if row == item.finish.line then
-  --     col_end = item.finish.character
-  --   end
-  --   highlight(item.bufnr, config.namespace, "TroublePreview", row, col_start, col_end)
-  -- end
 end
 
-View.preview = View._preview
+-- View.preview = View._preview
 
--- View.preview = util.throttle(50, View._preview)
+View.preview = util.throttle(50, View._preview)
 
 return View

@@ -3,8 +3,6 @@ local config = require("slog.config")
 local colors = require("slog.colors")
 local util = require("slog.util")
 
-colors.setup()
-
 local Trouble = {}
 
 local view
@@ -15,7 +13,6 @@ end
 
 function Trouble.setup(options)
   config.setup(options)
-  util.fix_mode(config.options)
   colors.setup()
 end
 
@@ -46,19 +43,12 @@ local function get_opts(...)
     end
   end
   opts = opts or {}
-  util.fix_mode(opts)
-  config.options.cmd_options = opts
   return opts
 end
 
 function Trouble.open(...)
   local opts = get_opts(...)
-
-  if opts.mode and (opts.mode ~= config.options.mode) then
-    config.options.mode = opts.mode
-  end
   opts.focus = true
-
   if is_open() then
     Trouble.refresh(opts)
   else
@@ -67,14 +57,6 @@ function Trouble.open(...)
 end
 
 function Trouble.toggle(...)
-  local opts = get_opts(...)
-
-  if opts.mode and (opts.mode ~= config.options.mode) then
-    config.options.mode = opts.mode
-    Trouble.open(...)
-    return
-  end
-
   if is_open() then
     Trouble.close()
   else
@@ -82,37 +64,11 @@ function Trouble.toggle(...)
   end
 end
 
-local updater = util.debounce(100, function()
-  util.debug("refresh: auto")
-  view:update({ auto = true })
-end)
-
 function Trouble.refresh(opts)
   opts = opts or {}
-
-  -- dont do an update if this is an automated refresh from a different provider
-  if opts.auto then
-    if opts.provider == "diagnostics" and config.options.mode == "document_diagnostics" then
-      opts.provider = "document_diagnostics"
-    elseif opts.provider == "diagnostics" and config.options.mode == "workspace_diagnostics" then
-      opts.provider = "workspace_diagnostics"
-    elseif opts.provider == "qf" and config.options.mode == "quickfix" then
-      opts.provider = "quickfix"
-    elseif opts.provider == "qf" and config.options.mode == "loclist" then
-      opts.provider = "loclist"
-    end
-    if opts.provider ~= config.options.mode then
-      return
-    end
-  end
-
   if is_open() then
-    if opts.auto then
-      updater()
-    else
-      util.debug("refresh")
-      view:update(opts)
-    end
+    util.debug("refresh")
+    view:update(opts)
   end
 end
 
@@ -188,14 +144,12 @@ function Trouble.action(action)
 end
 
 function Trouble.next(opts)
-  util.fix_mode(opts)
   if view then
     view:next_item(opts)
   end
 end
 
 function Trouble.previous(opts)
-  util.fix_mode(opts)
   if view then
     view:previous_item(opts)
   end

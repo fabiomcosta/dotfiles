@@ -22,7 +22,7 @@ end
 
 function M.get(opts, callback)
   local filename = debug.getinfo(1).source:sub(2)
-  local parent_directory_path = parentdir(parentdir(filename))
+  local parent_directory_path = parentdir(filename)
   local tailer_path = parent_directory_path .. '/tailer.mjs'
 
   return create_async_job(

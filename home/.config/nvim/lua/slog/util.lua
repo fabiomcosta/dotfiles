@@ -42,36 +42,9 @@ function M.jump_to_item(win, item)
   -- requiring here, as otherwise we run into a circular dependency
   local View = require('slog.view')
 
-  -- if vim.api.nvim_buf_get_option(item.bufnr, "buflisted") == false then
-  --   vim.cmd("edit #" .. item.bufnr)
-  -- else
-  --   vim.cmd("buffer " .. item.bufnr)
-  -- end
-  -- vim.api.nvim_win_set_cursor(win, { item.start.line + 1, item.start.character })
-
   if vim.fn.filereadable(item.fileName) > 0 then
     View.switch_to(win)
     vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-  end
-end
-
-function M.fix_mode(opts)
-  if opts.use_lsp_diagnostic_signs then
-    opts.use_diagnostic_signs = opts.use_lsp_diagnostic_signs
-    M.warn("The Trouble option use_lsp_diagnostic_signs has been renamed to use_diagnostic_signs")
-  end
-  local replace = {
-    lsp_workspace_diagnostics = "workspace_diagnostics",
-    lsp_document_diagnostics = "document_diagnostics",
-    workspace = "workspace_diagnostics",
-    document = "document_diagnostics",
-  }
-
-  for old, new in pairs(replace) do
-    if opts.mode == old then
-      opts.mode = new
-      M.warn("Using " .. old .. " for Trouble is deprecated. Please use " .. new .. " instead.")
-    end
   end
 end
 
@@ -148,119 +121,6 @@ function M.get_severity_label(severity, type)
   end
 
   return prefix .. label
-end
-
--- based on the Telescope diagnostics code
--- see https://github.com/nvim-telescope/telescope.nvim/blob/0d6cd47990781ea760dd3db578015c140c7b9fa7/lua/telescope/utils.lua#L85
-
-function M.process_item(item, bufnr)
-  bufnr = bufnr or item.bufnr
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-  local uri = vim.uri_from_bufnr(bufnr)
-  local range = item.range
-      or item.targetSelectionRange
-      or {
-        ["start"] = {
-          character = item.col,
-          line = item.lnum,
-        },
-        ["end"] = {
-          character = item.end_col,
-          line = item.end_lnum,
-        },
-      }
-  local start = range["start"]
-  local finish = range["end"]
-
-  if start.character == nil or start.line == nil then
-    M.error("Found an item for Trouble without start range " .. vim.inspect(start))
-  end
-  if finish.character == nil or finish.line == nil then
-    M.error("Found an item for Trouble without finish range " .. vim.inspect(finish))
-  end
-  local row = start.line
-  local col = start.character
-
-  if not item.message then
-    local line
-    if vim.lsp.util.get_line then
-      line = vim.lsp.util.get_line(uri, row)
-    else
-      -- load the buffer when needed
-      vim.fn.bufload(bufnr)
-      line = (vim.api.nvim_buf_get_lines(bufnr, row, row + 1, false) or { "" })[1]
-    end
-
-    item.message = item.message or line or ""
-  end
-
-  ---@class Item
-  ---@field is_file boolean
-  ---@field fixed boolean
-  local ret
-  ret = {
-    bufnr = bufnr,
-    filename = filename,
-    lnum = row + 1,
-    col = col + 1,
-    start = start,
-    finish = finish,
-    sign = item.sign,
-    sign_hl = item.sign_hl,
-    -- remove line break to avoid display issues
-    text = vim.trim(item.message:gsub("[\n]", "")):sub(0, vim.o.columns),
-    full_text = vim.trim(item.message),
-    type = M.severity[item.severity] or M.severity[0],
-    code = item.code or (item.user_data and item.user_data.lsp and item.user_data.lsp.code),
-    source = item.source,
-    severity = item.severity or 0,
-  }
-  return ret
-end
-
--- takes either a table indexed by bufnr, or an lsp result with uri
----@return Item[]
-function M.locations_to_items(results, default_severity)
-  default_severity = default_severity or 0
-  local ret = {}
-  for bufnr, locs in pairs(results or {}) do
-    for _, loc in pairs(locs.result or locs) do
-      if not vim.tbl_isempty(loc) then
-        local uri = loc.uri or loc.targetUri
-        local buf = uri and vim.uri_to_bufnr(uri) or bufnr
-        loc.severity = loc.severity or default_severity
-        table.insert(ret, M.process_item(loc, buf))
-      end
-    end
-  end
-  return ret
-end
-
--- @private
-local function make_position_param(win, buf)
-  local row, col = unpack(vim.api.nvim_win_get_cursor(win))
-  row = row - 1
-  local line = vim.api.nvim_buf_get_lines(buf, row, row + 1, true)[1]
-  if not line then
-    return { line = 0, character = 0 }
-  end
-  col = vim.str_utfindex(line, col)
-  return { line = row, character = col }
-end
-
-function M.make_text_document_params(buf)
-  return { uri = vim.uri_from_bufnr(buf) }
-end
-
---- Creates a `TextDocumentPositionParams` object for the current buffer and cursor position.
----
--- @returns `TextDocumentPositionParams` object
--- @see https://microsoft.github.io/language-server-protocol/specifications/specification-current/#textDocumentPositionParams
-function M.make_position_params(win, buf)
-  return {
-    textDocument = M.make_text_document_params(buf),
-    position = make_position_param(win, buf),
-  }
 end
 
 return M

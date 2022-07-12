@@ -1,4 +1,4 @@
-local util = require("slog.util")
+local util = require('slog.util')
 
 local M = {}
 
@@ -24,11 +24,12 @@ function M.setup()
   for k, v in pairs(links) do
     vim.api.nvim_command("hi def link Trouble" .. k .. " " .. v)
   end
-
   for _, severity in pairs(util.severity) do
     vim.api.nvim_command("hi def link Trouble" .. severity .. " " .. util.get_severity_label(severity))
     vim.api.nvim_command("hi def link TroubleSign" .. severity .. " " .. util.get_severity_label(severity, "Sign"))
   end
 end
+
+M.setup()
 
 return M
