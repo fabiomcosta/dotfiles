@@ -9,6 +9,16 @@ local defaults = {
   width = 50, -- width of the list when position is left or right
   fold_open = "", -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
+  auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+  signs = {
+    mustfix = "",
+    fatal = "",
+    warning = "",
+    info = "",
+    slog = "﫠",
+    count = "",
+    other = "",
+  },
   action_keys = { -- key mappings for actions in the trouble list
     close = "q", -- close the list
     cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
@@ -27,16 +37,6 @@ local defaults = {
     toggle_fold = { "zA", "za" }, -- toggle fold of current file
     previous = "k", -- preview item
     next = "j", -- next item
-  },
-  auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
-  signs = {
-    mustfix = "",
-    fatal = "",
-    warning = "",
-    info = "",
-    slog = "﫠",
-    count = "",
-    other = "",
   },
 }
 
