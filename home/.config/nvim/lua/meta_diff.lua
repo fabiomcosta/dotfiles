@@ -243,6 +243,7 @@ local function parse_diff_entry(diff_entry)
   local diff_data = map(split(diff_entry, 'D%d+'), vim.trim)
   return {
     id = diff_id,
+    short_id = diff_id,
     status = string.lower(diff_data[1]),
     title = diff_data[2],
   }
@@ -252,21 +253,31 @@ local function hg_get_own_diffs_finder(opts)
   opts.entry_maker = opts.entry_maker or function(entry)
     local diff_entry = vim.trim(entry)
     local commit_parts = vim.fn.split(diff_entry, ',')
+
     local commit_hash = table.remove(commit_parts, 1)
+    local diff_id = table.remove(commit_parts, 1)
+    local diff_status = table.remove(commit_parts, 1)
+
+    -- this can be "" on local only diffs (diffs that haven't been submited to phabricator yet)
+    -- Setting diff_id to the commit hash might bite us in the future :)
+    local diff_short_id = diff_id
+    if diff_id == '' then
+      diff_id = commit_hash
+      -- we want this to have the same size as a diff id so it looks nice on the
+      -- UI list.
+      -- Real recent diff id: D36107299
+      diff_short_id = string.sub(commit_hash, 1, 9)
+      diff_status = 'Local Only'
+    end
+
     local diff = {
-      -- this can be "" on local only diffs (diffs that haven't been submited to phabricator yet)
-      id = table.remove(commit_parts, 1),
-      -- this can be "" on local diffs
-      status = table.remove(commit_parts, 1),
+      id = diff_id,
+      short_id = diff_short_id,
+      status = diff_status,
       title = vim.fn.join(commit_parts, ','),
     }
-    if diff.id == '' then
-      diff.id = commit_hash -- ok... this might bite me in the future
-    end
-    if diff.status == '' then
-      diff.status = 'Local Only'
-    end
-    local value = diff.id .. '\t' .. diff.status .. '\t' .. diff.title
+
+    local value = diff.short_id .. '\t' .. diff.status .. '\t' .. diff.title
     return {
       value = value,
       display = value,
@@ -280,7 +291,7 @@ local function hg_get_own_diffs_finder(opts)
     '--rev',
     'sort(smartlog() & draft(), -date)',
     '--template',
-    '{node|short},{phabdiff},{phabstatus},{desc|firstline}\n'
+    '{node},{phabdiff},{phabstatus},{desc|firstline}\n'
   }, opts)
 end
 
@@ -331,7 +342,7 @@ end
 
 local function diff_file_picker(opts)
   pickers.new(opts, {
-    prompt_title = "Files on [" .. opts.diff.id .. "] " .. opts.diff.title,
+    prompt_title = "Files on [" .. opts.diff.short_id .. "] " .. opts.diff.title,
     finder = get_diff_files_finder(opts),
     sorter = conf.generic_sorter(opts),
     previewer = get_file_diff_previewer(opts),
