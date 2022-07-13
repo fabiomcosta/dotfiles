@@ -248,7 +248,43 @@ local function parse_diff_entry(diff_entry)
   }
 end
 
-local function get_own_diffs_finder(opts)
+local function hg_get_own_diffs_finder(opts)
+  opts.entry_maker = opts.entry_maker or function(entry)
+    local diff_entry = vim.trim(entry)
+    local commit_parts = vim.fn.split(diff_entry, ',')
+    local commit_hash = table.remove(commit_parts, 1)
+    local diff = {
+      -- this can be "" on local only diffs (diffs that haven't been submited to phabricator yet)
+      id = table.remove(commit_parts, 1),
+      -- this can be "" on local diffs
+      status = table.remove(commit_parts, 1),
+      title = vim.fn.join(commit_parts, ','),
+    }
+    if diff.id == '' then
+      diff.id = commit_hash -- ok... this might bite me in the future
+    end
+    if diff.status == '' then
+      diff.status = 'Local Only'
+    end
+    local value = diff.id .. '\t' .. diff.status .. '\t' .. diff.title
+    return {
+      value = value,
+      display = value,
+      ordinal = value,
+      diff = diff,
+    }
+  end
+  return finders.new_oneshot_job({
+    'hg',
+    'log',
+    '--rev',
+    'sort(smartlog() & draft(), -date)',
+    '--template',
+    '{node|short},{phabdiff},{phabstatus},{desc|firstline}\n'
+  }, opts)
+end
+
+local function git_get_own_diffs_finder(opts)
   opts.entry_maker = opts.entry_maker or function(entry)
     local diff_entry = vim.trim(entry)
     local diff = parse_diff_entry(diff_entry)
@@ -266,6 +302,14 @@ local function get_own_diffs_finder(opts)
     }
   end
   return finders.new_oneshot_job({ 'jf', 'list' }, opts)
+end
+
+local function get_own_diffs_finder(opts)
+  if is_hg_repo() then
+    return hg_get_own_diffs_finder(opts)
+  else
+    return git_get_own_diffs_finder(opts)
+  end
 end
 
 local function get_file_diff_previewer(opts)
