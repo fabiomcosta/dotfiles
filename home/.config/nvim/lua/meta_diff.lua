@@ -190,13 +190,20 @@ end
 
 local function get_diff_files_finder(opts)
   local repo_root = get_repo_root()
-  opts.entry_maker = opts.entry_maker or function(entry)
-    return {
-      value = entry,
-      display = entry,
-      ordinal = entry,
-      path = repo_root .. '/' .. entry
+  local filter = opts.filter or function(entry)
+    return string.find(entry.path, '/__generated__/') == nil
+  end
+  opts.entry_maker = opts.entry_maker or function(value)
+    local entry = {
+      value = value,
+      display = value,
+      ordinal = value,
+      path = repo_root .. '/' .. value
     }
+    if not filter(entry) then
+      return nil
+    end
+    return entry
   end
   if is_hg_repo() then
     return hg_get_diff_files_finder(opts)
