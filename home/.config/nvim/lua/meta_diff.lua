@@ -106,7 +106,7 @@ end
 local function system(cmd, opts)
   local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
   if exit_code ~= 0 then
-    return error('stderr: ' .. stderr .. '\nstdout: ' .. stdout)
+    return error('stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout))
   end
   return vim.trim(stdout[1] or '')
 end
@@ -148,7 +148,7 @@ end
 local function git_get_commit_hash_from_diff_id(diff_id)
   -- Looking only till 3 months so we dont keep looking for too long.
   -- 3 months should be enough??
-  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--E', '--grep',
+  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--extended-regexp', '--grep',
     '^Differential Revision:.*?' .. diff_id .. '$' })
 end
 
@@ -159,20 +159,8 @@ local function git_get_branch_name_from_commit_hash(commit_hash)
   )[1]
 end
 
-local function git_is_diff_from_current_repo(diff_id)
-  return git_get_commit_hash_from_diff_id(diff_id) ~= ''
-end
-
-local function hg_is_diff_from_current_repo(diff_id)
-  return is_system_success({ 'hg', 'log', '-T', '" "', '-r', diff_id })
-end
-
 local is_diff_from_current_repo = memoize(function(diff_id)
-  if is_hg_repo() then
-    return hg_is_diff_from_current_repo(diff_id)
-  else
-    return git_is_diff_from_current_repo(diff_id)
-  end
+  return git_get_commit_hash_from_diff_id(diff_id) ~= ''
 end)
 
 local function git_get_diff_files_finder(opts)
@@ -342,7 +330,7 @@ end
 
 local function diff_file_picker(opts)
   pickers.new(opts, {
-    prompt_title = "Files on [" .. opts.diff.short_id .. "] " .. opts.diff.title,
+    prompt_title = 'Files on ' .. opts.diff.short_id .. ' ' .. opts.diff.title,
     finder = get_diff_files_finder(opts),
     sorter = conf.generic_sorter(opts),
     previewer = get_file_diff_previewer(opts),
