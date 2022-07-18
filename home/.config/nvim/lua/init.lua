@@ -290,7 +290,7 @@ local function onPureNeovimSetup(use)
     requires = { { 'nvim-lua/plenary.nvim' } },
   })
 
-  use('tami5/lspsaga.nvim')
+  use('glepnir/lspsaga.nvim')
 
   use('nvim-lua/popup.nvim')
   use('nvim-telescope/telescope-fzy-native.nvim')
@@ -668,13 +668,7 @@ local function onPureNeovimConfig()
     nvim_lsp[lsp].setup(with_lsp_default_config())
   end
 
-  require('lspsaga').init_lsp_saga({
-    code_action_prompt = {
-      -- This was making the "lamp" icon show on the cursor's line all the time
-      -- for some projects.
-      enable = false,
-    },
-  })
+  require('lspsaga').init_lsp_saga({})
 
   local telescope_setup = {}
   if vim.fn.executable('fd') == 1 then
