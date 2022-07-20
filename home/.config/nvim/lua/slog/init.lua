@@ -22,32 +22,8 @@ function Trouble.close()
   end
 end
 
-local function get_opts(...)
-  local args = { ... }
-  if vim.tbl_islist(args) and #args == 1 and type(args[1]) == "table" then
-    args = args[1]
-  end
-  local opts = {}
-  for key, value in pairs(args) do
-    if type(key) == "number" then
-      local k, v = value:match("^(.*)=(.*)$")
-      if k then
-        opts[k] = v
-      elseif opts.mode then
-        util.error("unknown option " .. value)
-      else
-        opts.mode = value
-      end
-    else
-      opts[key] = value
-    end
-  end
+function Trouble.open(opts)
   opts = opts or {}
-  return opts
-end
-
-function Trouble.open(...)
-  local opts = get_opts(...)
   opts.focus = true
   if is_open() then
     Trouble.refresh(opts)
@@ -56,11 +32,11 @@ function Trouble.open(...)
   end
 end
 
-function Trouble.toggle(...)
+function Trouble.toggle(opts)
   if is_open() then
     Trouble.close()
   else
-    Trouble.open(...)
+    Trouble.open(opts)
   end
 end
 
@@ -158,9 +134,8 @@ end
 function Trouble.get_items()
   if view ~= nil then
     return view.items
-  else
-    return {}
   end
+  return {}
 end
 
 return Trouble
