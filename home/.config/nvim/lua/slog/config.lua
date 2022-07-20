@@ -9,7 +9,7 @@ local defaults = {
   width = 50, -- width of the list when position is left or right
   fold_open = "", -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
-  auto_preview = true, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+  auto_preview = false, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
   signs = {
     mustfix = "",
     fatal = "",
@@ -28,14 +28,13 @@ local defaults = {
     open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
     open_tab = { "<c-t>" }, -- open buffer in new tab
     jump_close = { "o" }, -- jump to the diagnostic and close the list
-    toggle_mode = "m", -- toggle between "workspace" and "document" mode
     toggle_preview = "P", -- toggle auto_preview
     hover = "K", -- opens a small popup with the full multiline message
     preview = "p", -- preview the diagnostic location
     close_folds = { "zM", "zm" }, -- close all folds
     open_folds = { "zR", "zr" }, -- open all folds
     toggle_fold = { "zA", "za" }, -- toggle fold of current file
-    previous = "k", -- preview item
+    previous = "k", -- previous item
     next = "j", -- next item
   },
 }

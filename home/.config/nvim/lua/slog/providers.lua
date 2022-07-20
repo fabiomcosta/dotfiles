@@ -30,15 +30,16 @@ function M.get(opts, callback)
     function(error, result)
       vim.schedule(function()
         if error ~= nil then
-          util.error(error)
-        elseif result ~= nil then
-          local jsonParsedSuccessfully, jsonOrError = pcall(vim.json.decode, result)
-          if jsonParsedSuccessfully then
-            callback(jsonOrError)
-          else
-            util.error(jsonOrError)
-          end
+          return util.error(error)
         end
+        if result == nil then
+          return
+        end
+        local jsonParsedSuccessfully, jsonOrError = pcall(vim.json.decode, result)
+        if not jsonParsedSuccessfully then
+          return util.error(jsonOrError)
+        end
+        callback(jsonOrError)
       end)
     end
   )

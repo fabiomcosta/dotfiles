@@ -97,6 +97,13 @@ end
 function renderer.render_log(view, text, log)
   if log.error ~= nil then
     -- TODO render asking to report the issue back
+    view.items[text.lineNr + 1] = {}
+    text:render(
+      'TAILER ERROR: ' ..
+      log.error.message ..
+      ' Please report this back to https://fb.workplace.com/groups/1300890600405446'
+    )
+    text:nl()
     return
   end
 
