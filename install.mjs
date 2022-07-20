@@ -83,6 +83,7 @@ async function main() {
   await createHomeSymlink('.config/fish/config.fish');
   await createHomeSymlink('.config/nvim/lua');
   await createHomeSymlink('.config/nvim/autoload');
+  await createHomeSymlink('.config/nvim/ftdetect');
   await createHomeSymlink('.config/stylua.toml');
   await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 
