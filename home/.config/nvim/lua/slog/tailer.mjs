@@ -54,12 +54,21 @@ class ErrorWithMetadata extends Error {
   }
 
   toJSON() {
-    return { error: { name: this.name, message: this.message, stack: this.stack, metadata: this.metadata } };
+    return {
+      error: {
+        name: this.name,
+        message: this.message,
+        stack: this.stack,
+        metadata: this.metadata
+      }
+    };
   }
 }
 
 function stringifyError(error) {
-  const serializableError = (typeof error.toJSON === 'function') ? error : { error: { name: error.name, message: error.message, stack: error.stack } };
+  const serializableError = (typeof error.toJSON === 'function') ? error : {
+    error: { name: error.name, message: error.message, stack: error.stack }
+  };
   return JSON.stringify(serializableError);
 }
 
@@ -182,8 +191,8 @@ function parseLogEntry(logEntry) {
   const positionalAttrs = getPositionalAttributes(rawTitle) ?? {};
   const namedAttrs = getNamedAttributes(rawTitle) ?? {};
 
-  if (Object.keys(positionalAttrs).length === 0 || Object.keys(namedAttrs).length === 0) {
-    throw new ErrorWithMetadata(`No positional nor named attributes.`).set({ entryLines });
+  if (Object.keys(positionalAttrs).length === 0) {
+    throw new ErrorWithMetadata(`No positional attributes.`).set({ rawTitle });
   }
 
   const attributes = {...positionalAttrs, ...namedAttrs};
