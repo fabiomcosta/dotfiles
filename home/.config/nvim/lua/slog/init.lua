@@ -11,8 +11,8 @@ local function is_open()
   return view and view:is_valid()
 end
 
-function Trouble.setup(options)
-  config.setup(options)
+function Trouble.setup(opts)
+  config.setup(opts)
   colors.setup()
 end
 
@@ -67,7 +67,7 @@ function Trouble.previous(opts)
 end
 
 function Trouble.get_items()
-  if view ~= nil then
+  if view then
     return view.items
   end
   return {}

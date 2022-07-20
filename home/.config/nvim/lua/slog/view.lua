@@ -121,9 +121,11 @@ function View:setup(opts)
   opts = opts or {}
   vim.cmd("setlocal nonu")
   vim.cmd("setlocal nornu")
-  if not pcall(vim.api.nvim_buf_set_name, self.buf, "slog") then
+  local tier = config.options.tier
+  local buf_name = tier and 'slog for ' .. tier or 'slog'
+  if not pcall(vim.api.nvim_buf_set_name, self.buf, buf_name) then
     wipe_rogue_buffer()
-    vim.api.nvim_buf_set_name(self.buf, "slog")
+    vim.api.nvim_buf_set_name(self.buf, buf_name)
   end
   self:set_option("bufhidden", "wipe")
   self:set_option("buftype", "nofile")
