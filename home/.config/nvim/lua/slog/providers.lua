@@ -20,7 +20,7 @@ local function parentdir(path)
   return vim.fn.fnamemodify(path, ':h')
 end
 
-function M.get(opts, callback)
+function M.tail_logs(opts, callback)
   local filename = debug.getinfo(1).source:sub(2)
   local parent_directory_path = parentdir(filename)
   local tailer_path = parent_directory_path .. '/tailer.mjs'
@@ -43,10 +43,6 @@ function M.get(opts, callback)
       end)
     end
   )
-end
-
-function M.group(items)
-  return items
 end
 
 return M

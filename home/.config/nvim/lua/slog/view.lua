@@ -87,7 +87,7 @@ function View:render(text)
 end
 
 function View:clear()
-  return vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, {})
+  renderer.clear(self)
 end
 
 function View:unlock()

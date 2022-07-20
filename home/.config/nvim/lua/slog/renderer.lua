@@ -74,7 +74,7 @@ function renderer.start(view, opts)
   end
 
   local tier = opts.tier or config.options.tier
-  tailer_job = providers.get({ tier = tier }, function(log)
+  tailer_job = providers.tail_logs({ tier = tier }, function(log)
     local last_log = logs[#logs]
     if last_log ~= nil and log.title == last_log.title then
       last_log.count = last_log.count + 1
@@ -84,6 +84,12 @@ function renderer.start(view, opts)
     end
     render(view)
   end)
+end
+
+function renderer.clear(view)
+  logs = {}
+  view.items = {}
+  render(view)
 end
 
 function renderer.close()

@@ -22,6 +22,12 @@ function Trouble.close()
   end
 end
 
+function Trouble.clear()
+  if is_open() then
+    view:clear()
+  end
+end
+
 function Trouble.open(opts)
   opts = opts or {}
   opts.focus = true
@@ -46,6 +52,25 @@ function Trouble.refresh(opts)
     util.debug("refresh")
     view:update(opts)
   end
+end
+
+function Trouble.next(opts)
+  if view then
+    view:next_item(opts)
+  end
+end
+
+function Trouble.previous(opts)
+  if view then
+    view:previous_item(opts)
+  end
+end
+
+function Trouble.get_items()
+  if view ~= nil then
+    return view.items
+  end
+  return {}
 end
 
 function Trouble.action(action)
@@ -117,25 +142,6 @@ function Trouble.action(action)
     Trouble[action]()
   end
   return Trouble
-end
-
-function Trouble.next(opts)
-  if view then
-    view:next_item(opts)
-  end
-end
-
-function Trouble.previous(opts)
-  if view then
-    view:previous_item(opts)
-  end
-end
-
-function Trouble.get_items()
-  if view ~= nil then
-    return view.items
-  end
-  return {}
 end
 
 return Trouble
