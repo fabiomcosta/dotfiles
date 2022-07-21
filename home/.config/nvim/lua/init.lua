@@ -519,7 +519,7 @@ local function onPureNeovimConfig()
       set_keymap(
         'n',
         '<LEADER>fr',
-        '<cmd>Telescope biggrep s <C-r><C-w><CR>',
+        "viw:'<,'>Bgs<CR>",
         { silent = false, noremap = true }
       )
     else
