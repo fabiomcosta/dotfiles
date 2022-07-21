@@ -9,17 +9,9 @@ local function feedkeys(key, mode)
   vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
 end
 
-local function starts_with(str, start)
-  return str:sub(1, #start) == start
-end
-
-local function ends_with(str, ending)
-  return ending == '' or str:sub(- #ending) == ending
-end
-
 local hostname = vim.loop.os_gethostname()
-local IS_META_SERVER = ends_with(hostname, '.fbinfra.net')
-    or ends_with(hostname, '.facebook.com')
+local IS_META_SERVER = vim.endswith(hostname, '.fbinfra.net')
+    or vim.endswith(hostname, '.facebook.com')
 -- would be nice to make this async, lazy and memoized
 local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({'arc', 'get-config', 'project_id'}) ~= ''
 
@@ -815,7 +807,7 @@ local function onPureNeovimConfig()
     local last_window_index = vim.fn.winnr('$')
     local last_buffer_name = vim.fn.bufname(vim.fn.winbufnr(last_window_index))
 
-    if starts_with(last_buffer_name, 'term://') then
+    if vim.startswith(last_buffer_name, 'term://') then
       local window_height = vim.fn.winheight(last_window_index)
       -- Sticky size/position
       vim.g['test#neovim#term_position'] = 'botright ' .. window_height
