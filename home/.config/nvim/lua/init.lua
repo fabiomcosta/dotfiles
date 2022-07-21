@@ -20,6 +20,8 @@ end
 local hostname = vim.loop.os_gethostname()
 local IS_META_SERVER = ends_with(hostname, '.fbinfra.net')
     or ends_with(hostname, '.facebook.com')
+-- would be nice to make this async, lazy and memoized
+local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({'arc', 'get-config', 'project_id'}) ~= ''
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -519,8 +521,15 @@ local function onPureNeovimConfig()
         '<cmd>Telescope lsp_references<CR>',
         { silent = false, noremap = true }
       )
-      -- else if IS_META_SERVER then
-      -- Use Telescope biggrep with the current selectin
+    -- The ideal check here is to check for biggrep support somehow
+    elseif IS_BIGGREP_ROOT then
+      -- Use Telescope biggrep with the current selection
+      set_keymap(
+        'n',
+        '<LEADER>fr',
+        '<cmd>Telescope biggrep s <C-r><C-w><CR>',
+        { silent = false, noremap = true }
+      )
     else
       set_keymap(
         'n',
@@ -704,22 +713,38 @@ local function onPureNeovimConfig()
   require('telescope').setup(telescope_setup)
   require('telescope').load_extension('fzy_native')
 
-  set_keymap(
-    'n',
-    '<LEADER>ff',
-    '<cmd>Telescope find_files<CR>',
-    { silent = false, noremap = true }
-  )
+  if IS_BIGGREP_ROOT then
+    set_keymap(
+      'n',
+      '<LEADER>ff',
+      '<cmd>Telescope myles<CR>',
+      { silent = false, noremap = true }
+    )
+    set_keymap(
+      'n',
+      '<LEADER>fg',
+      '<cmd>Telescope biggrep s<CR>',
+      { silent = false, noremap = true }
+    )
+  else
+    set_keymap(
+      'n',
+      '<LEADER>ff',
+      '<cmd>Telescope find_files<CR>',
+      { silent = false, noremap = true }
+    )
+    set_keymap(
+      'n',
+      '<LEADER>fg',
+      '<cmd>Telescope live_grep<CR>',
+      { silent = false, noremap = true }
+    )
+  end
+
   set_keymap(
     'n',
     '<LEADER>fh',
     '<cmd>Telescope find_files hidden=true<CR>',
-    { silent = false, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<LEADER>fg',
-    '<cmd>Telescope live_grep<CR>',
     { silent = false, noremap = true }
   )
   set_keymap(
