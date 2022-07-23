@@ -204,6 +204,12 @@ function parseLogEntry(logEntry) {
 
   const attributes = {...positionalAttrs, ...namedAttrs};
 
+  if (attributes.level == null) {
+    // slog and none levels are not explicitly set on the log entry.
+    // We set them based on if the log has properties or not.
+    attributes.level = Object.keys(properties).length ? 'slog' : 'none';
+  }
+
   const trace = hasTrace ? parseTrace(entryLines.slice(lastIndex + 1)) : [];
 
   return {
