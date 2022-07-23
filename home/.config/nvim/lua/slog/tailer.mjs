@@ -85,7 +85,8 @@ function guardAndLog(fn) {
 function match(str, regex) {
   const parts = str.match(regex);
   if (parts == null) {
-    throw new ErrorWithMetadata(`Regex didn't match.`).set({ regex, str });
+    throw new ErrorWithMetadata(`Regex didn't match.`)
+      .set({ regex: regex.source, str });
   }
   return parts;
 }
@@ -176,14 +177,17 @@ function parseTrace(trace) {
 function parseLogEntry(logEntry) {
 
   const entryLines = logEntry.split('\\n');
-  const {properties, firstIndex, lastIndex} = getProperties(entryLines);
+  let {properties, firstIndex, lastIndex} = getProperties(entryLines);
 
+  let hasTrace = true;
   if (firstIndex == null || lastIndex == null) {
-    return null;
+    hasTrace = false;
+    firstIndex = entryLines.length;
   }
 
   const rawTitle = getRawTitle(entryLines, firstIndex);
   const title = getTitle(rawTitle);
+
   if (title == null) {
     return null;
   }
@@ -192,12 +196,15 @@ function parseLogEntry(logEntry) {
   const namedAttrs = getNamedAttributes(rawTitle) ?? {};
 
   if (Object.keys(positionalAttrs).length === 0) {
-    throw new ErrorWithMetadata(`No positional attributes.`).set({ rawTitle });
+    // If there are no positional attributes, changes are it's a junk log
+    // that we can't parse and should ignore.
+    // throw new ErrorWithMetadata(`No positional attributes.`).set({ rawTitle });
+    return null;
   }
 
   const attributes = {...positionalAttrs, ...namedAttrs};
 
-  const trace = parseTrace(entryLines.slice(lastIndex + 1));
+  const trace = hasTrace ? parseTrace(entryLines.slice(lastIndex + 1)) : [];
 
   return {
     title,

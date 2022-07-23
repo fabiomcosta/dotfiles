@@ -1,9 +1,19 @@
+-- TODO
+-- * Improve colors to better match web slog
+-- * Filter functionality/command
+-- * Improve re-renders with better UI caching
+-- * Improve perf when jumping to file
+-- * online/offline checks? (might need the tailer to signal that)
+-- * Replace all Trouble references with Slog
+-- * Optimize tailer to output buffer when it gets a complete log json entry,
+--   instead of waiting for the end of the response to output.
+
 local View = require("slog.view")
 local config = require("slog.config")
 local colors = require("slog.colors")
 local util = require("slog.util")
 
-local Trouble = {}
+local Slog = {}
 
 local view
 
@@ -11,42 +21,42 @@ local function is_open()
   return view and view:is_valid()
 end
 
-function Trouble.setup(opts)
+function Slog.setup(opts)
   config.setup(opts)
   colors.setup()
 end
 
-function Trouble.close()
+function Slog.close()
   if is_open() then
     view:close()
   end
 end
 
-function Trouble.clear()
+function Slog.clear()
   if is_open() then
     view:clear()
   end
 end
 
-function Trouble.open(opts)
+function Slog.open(opts)
   opts = opts or {}
   opts.focus = true
   if is_open() then
-    Trouble.refresh(opts)
+    Slog.refresh(opts)
   else
     view = View.create(opts)
   end
 end
 
-function Trouble.toggle(opts)
+function Slog.toggle(opts)
   if is_open() then
-    Trouble.close()
+    Slog.close()
   else
-    Trouble.open(opts)
+    Slog.open(opts)
   end
 end
 
-function Trouble.refresh(opts)
+function Slog.refresh(opts)
   opts = opts or {}
   if is_open() then
     util.debug("refresh")
@@ -54,31 +64,31 @@ function Trouble.refresh(opts)
   end
 end
 
-function Trouble.next(opts)
+function Slog.next(opts)
   if view then
     view:next_item(opts)
   end
 end
 
-function Trouble.previous(opts)
+function Slog.previous(opts)
   if view then
     view:previous_item(opts)
   end
 end
 
-function Trouble.get_items()
+function Slog.get_items()
   if view then
     return view.items
   end
   return {}
 end
 
-function Trouble.action(action)
+function Slog.action(action)
   if view and action == "on_win_enter" then
     view:on_win_enter()
   end
   if not is_open() then
-    return Trouble
+    return Slog
   end
   if action == "hover" then
     view:hover()
@@ -94,13 +104,13 @@ function Trouble.action(action)
   end
   if action == "jump_close" then
     view:jump()
-    Trouble.close()
+    Slog.close()
   end
   if action == "open_folds" then
-    Trouble.refresh({ open_folds = true })
+    Slog.refresh({ open_folds = true })
   end
   if action == "close_folds" then
-    Trouble.refresh({ close_folds = true })
+    Slog.refresh({ close_folds = true })
   end
   if action == "toggle_fold" then
     view:toggle_fold()
@@ -116,11 +126,11 @@ function Trouble.action(action)
   end
   if action == "next" then
     view:next_item()
-    return Trouble
+    return Slog
   end
   if action == "previous" then
     view:previous_item()
-    return Trouble
+    return Slog
   end
 
   if action == "toggle_preview" then
@@ -138,10 +148,10 @@ function Trouble.action(action)
     view:preview()
   end
 
-  if Trouble[action] then
-    Trouble[action]()
+  if Slog[action] then
+    Slog[action]()
   end
-  return Trouble
+  return Slog
 end
 
-return Trouble
+return Slog

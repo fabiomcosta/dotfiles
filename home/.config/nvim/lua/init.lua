@@ -955,6 +955,18 @@ local function onPureNeovimConfig()
     { silent = true, noremap = true }
   )
 
+  vim.api.nvim_create_user_command(
+    'SlogToggle',
+    function() require('slog').toggle() end,
+    {}
+  )
+  set_keymap(
+    'n',
+    '<LEADER>st',
+    '<CMD>SlogToggle<CR>',
+    { silent = true, noremap = true }
+  )
+
   local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)

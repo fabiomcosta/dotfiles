@@ -1,4 +1,5 @@
 local config = require('slog.config')
+local Job = require('plenary.job')
 
 local M = {}
 
@@ -28,7 +29,6 @@ function M.memoize(fn, cache_key_gen)
     return result
   end
 end
-
 
 function M.jump_to_item(win, item)
   if not item then
@@ -120,6 +120,23 @@ function M.get_severity_label(severity, type)
   end
 
   return prefix .. label
+end
+
+function M.create_async_job(cmd, callback)
+  local command = table.remove(cmd, 1)
+  local args = cmd
+  local job = Job:new({
+    command = command,
+    args = args,
+    on_stderr = callback,
+    on_stdout = callback,
+  })
+  job:start()
+  return job
+end
+
+function M.parentdir(path)
+  return vim.fn.fnamemodify(path, ':h')
 end
 
 return M

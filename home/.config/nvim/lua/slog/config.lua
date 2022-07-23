@@ -46,11 +46,12 @@ local function is_fb_hostname(hostname)
 end
 
 local function get_tier()
-  local hostname = vim.loop.os_gethostname()
-  if not is_fb_hostname(hostname) then
-    return nil
-  end
-  return string.match(hostname, '^%w+[.]%w+')
+  return '55552.od'
+  -- local hostname = vim.loop.os_gethostname()
+  -- if not is_fb_hostname(hostname) then
+  --   return nil
+  -- end
+  -- return string.match(hostname, '^%w+[.]%w+')
 end
 
 function M.setup(options)

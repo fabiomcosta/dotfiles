@@ -3,10 +3,10 @@ local util = require('slog.util')
 local M = {}
 
 local links = {
-  TextError = "TroubleText",
-  TextWarning = "TroubleText",
-  TextInformation = "TroubleText",
-  TextHint = "TroubleText",
+  TextError = "SlogText",
+  TextWarning = "SlogText",
+  TextInformation = "SlogText",
+  TextHint = "SlogText",
   Text = "Normal",
   File = "Directory",
   Source = "Comment",
@@ -17,16 +17,16 @@ local links = {
   Count = "TabLineSel",
   Preview = "Search",
   Indent = "LineNr",
-  SignOther = "TroubleSignInformation",
+  SignOther = "SlogSignInformation",
 }
 
 function M.setup()
   for k, v in pairs(links) do
-    vim.api.nvim_command("hi def link Trouble" .. k .. " " .. v)
+    vim.api.nvim_command("hi def link Slog" .. k .. " " .. v)
   end
   for _, severity in pairs(util.severity) do
-    vim.api.nvim_command("hi def link Trouble" .. severity .. " " .. util.get_severity_label(severity))
-    vim.api.nvim_command("hi def link TroubleSign" .. severity .. " " .. util.get_severity_label(severity, "Sign"))
+    vim.api.nvim_command("hi def link Slog" .. severity .. " " .. util.get_severity_label(severity))
+    vim.api.nvim_command("hi def link SlogSign" .. severity .. " " .. util.get_severity_label(severity, "Sign"))
   end
 end
 

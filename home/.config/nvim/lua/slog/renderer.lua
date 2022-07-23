@@ -124,7 +124,7 @@ function renderer.render_log(view, text, log)
   text:render(fold_icon, 'FoldIcon', ' ')
 
   local sign, type = get_sign_for_level(log.attributes.level)
-  text:render(sign .. ' ', 'TroubleSign' .. type, { exact = true })
+  text:render(sign .. ' ', 'SlogSign' .. type, { exact = true })
 
   if log.count > 1 then
     local count = log.count > 9 and '9+' or log.count .. 'x'
