@@ -18,9 +18,6 @@ local links = {
   SignOther = "SlogSignInformation",
 }
 
--- Sign, Count, Date, Text
--- Text, Location, Metadata
-
 local ui_parts = {
   sign = {
     name = 'Sign'
