@@ -11,19 +11,19 @@ local tailer_job
 
 local function get_sign_for_level(level)
   if level == 'info' then
-    return config.options.signs.info, 'Information'
+    return config.options.signs.info, 'Info'
   elseif level == 'mustfix' then
-    return config.options.signs.mustfix, 'Error'
+    return config.options.signs.mustfix, 'Mustfix'
   elseif level == 'fatal' then
-    return config.options.signs.fatal, 'Error'
+    return config.options.signs.fatal, 'Fatal'
   elseif level == 'warning' then
-    return config.options.signs.warning, 'Warning'
+    return config.options.signs.warning, 'Warn'
   elseif level == 'slog' then
-    return config.options.signs.slog, 'Hint'
+    return config.options.signs.slog, 'Slog'
   elseif level == 'count' then
-    return config.options.signs.count, 'Hint'
+    return config.options.signs.count, 'Count'
   end
-  return config.options.signs.other, 'Hint'
+  return config.options.signs.none, 'None'
 end
 
 local print_function_name = util.memoize(function(function_name)
@@ -106,11 +106,9 @@ function renderer.render_log(view, text, log)
   if log.error ~= nil then
     -- TODO render asking to report the issue back
     view.items[text.lineNr + 1] = {}
-    text:render(
-      'TAILER ERROR: ' ..
-      log.error.message ..
-      ' Please report this back to https://fb.workplace.com/groups/1300890600405446'
-    )
+    local report_back_msg = log.error.metadata.isLikelySlogBug and
+        ' Please report this back to https://fb.workplace.com/groups/1300890600405446' or ''
+    text:render('TAILER ERROR: ' .. log.error.message .. report_back_msg)
     text:nl()
     return
   end
@@ -123,21 +121,24 @@ function renderer.render_log(view, text, log)
   local fold_icon = folds.is_folded(key) and config.options.fold_closed or config.options.fold_open
   text:render(fold_icon, 'FoldIcon', ' ')
 
-  local sign, type = get_sign_for_level(log.attributes.level)
-  text:render(sign .. ' ', 'SlogSign' .. type, { exact = true })
+  local sign, level = get_sign_for_level(log.attributes.level)
+
+  text:render(os.date('%X %a %b', log.attributes.date), level .. 'Date')
+  text:render(' ', level)
+
+  text:render(sign .. ' ', level .. 'Sign')
 
   if log.count > 1 then
     local count = log.count > 9 and '9+' or log.count .. 'x'
-    text:render(count, 'Count', ' ')
+    text:render(count, level .. 'Count')
+    text:render(' ', level)
   else
-    text:render('   ')
+    text:render('   ', level)
   end
 
-  text:render(os.date('%X %a %b', log.attributes.date), 'Date', ' ')
 
-  -- TODO: Change to SlogTitle or something...
   local title_lines = vim.fn.split(log.title, '\n')
-  text:render(title_lines[1], 'File', ' ')
+  text:render(title_lines[1], level .. 'Title', ' ')
 
   text:nl()
 

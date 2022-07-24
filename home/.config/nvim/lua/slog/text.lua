@@ -27,12 +27,10 @@ function Text:render(str, group, opts)
 
   if group then
     if opts.exact ~= true then
-      group = "Trouble" .. group
+      group = "Slog" .. group
     end
     local from = string.len(self.current)
-    ---@class Highlight
-    local hl
-    hl = {
+    local hl = {
       line = self.lineNr,
       from = from,
       to = from + string.len(str),

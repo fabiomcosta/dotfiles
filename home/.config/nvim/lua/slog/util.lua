@@ -97,31 +97,6 @@ function M.throttle(ms, fn)
   end
 end
 
-M.severity = {
-  [0] = "Other",
-  [1] = "Error",
-  [2] = "Warning",
-  [3] = "Information",
-  [4] = "Hint",
-}
-
--- returns a hl or sign label for the givin severity and type
--- correctly handles new names introduced in vim.diagnostic
-function M.get_severity_label(severity, type)
-  local label = severity
-  local prefix = "LspDiagnostics" .. (type or "Default")
-
-  if vim.diagnostic then
-    prefix = type and ("Diagnostic" .. type) or "Diagnostic"
-    label = ({
-      Warning = "Warn",
-      Information = "Info",
-    })[severity] or severity
-  end
-
-  return prefix .. label
-end
-
 function M.create_async_job(cmd, callback)
   local command = table.remove(cmd, 1)
   local args = cmd

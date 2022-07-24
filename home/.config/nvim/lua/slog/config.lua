@@ -15,9 +15,9 @@ local defaults = {
     fatal = "",
     warning = "",
     info = "",
-    slog = "﫠",
-    count = "",
-    other = "",
+    slog = " ",
+    count = " ",
+    none = " ",
   },
   action_keys = { -- key mappings for actions in the trouble list
     close = "q", -- close the list
@@ -46,7 +46,7 @@ local function is_fb_hostname(hostname)
 end
 
 local function get_tier()
-  return '55552.od'
+  return '62791.od'
   -- local hostname = vim.loop.os_gethostname()
   -- if not is_fb_hostname(hostname) then
   --   return nil

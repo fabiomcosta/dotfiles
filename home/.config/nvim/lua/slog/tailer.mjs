@@ -59,25 +59,39 @@ class ErrorWithMetadata extends Error {
         name: this.name,
         message: this.message,
         stack: this.stack,
-        metadata: this.metadata
+        metadata: this.metadata ?? {}
       }
     };
   }
 }
 
+class ErrorUnrecoverable extends ErrorWithMetadata {}
+
 function stringifyError(error) {
   const serializableError = (typeof error.toJSON === 'function') ? error : {
-    error: { name: error.name, message: error.message, stack: error.stack }
+    error: { name: error.name, message: error.message, stack: error.stack, metadata: error.metadata ?? {} }
   };
   return JSON.stringify(serializableError);
+}
+
+function isThenable(obj) {
+  return obj != null && typeof obj.then === 'function';
+}
+
+function reportError(error) {
+  console.log(stringifyError(error));
+  if (error instanceof ErrorUnrecoverable) {
+    return process.exit(1);
+  }
 }
 
 function guardAndLog(fn) {
   return function (...args) {
     try {
-      return fn.apply(this, args);
+      const result = fn.apply(this, args);
+      return isThenable(result) ? result.catch(reportError) : result;
     } catch (error) {
-      console.log(stringifyError(error));
+      reportError(error);
     }
   };
 }
@@ -103,7 +117,7 @@ function httpGet(tailerUrl, options = {}) {
 }
 
 function parseJSON(rawLog) {
-  return JSON.parse(rawLog.replace(/^for\s\(;;\);/, ''));
+  return JSON.parse(rawLog.replace(/^for\s*\(;;\);/, ''));
 }
 
 const NAMED_ATTRIBUTES_REGEX = /<(.*?):(.*?)>/;
@@ -129,10 +143,16 @@ function getRawTitle(entryLines, firstPropertyIndex) {
   return entryLines.slice(0, firstPropertyIndex).join('\n');
 }
 
+const SLOG_COLOR_REGEX = /^"__SLOG_COLOR_\w+__", /i;
 function getTitle(rawTitle) {
   return rawTitle
     .replace(POSITIONAL_ATTRIBUTES_REGEX, '')
-    .replace(new RegExp(NAMED_ATTRIBUTES_REGEX, 'g'), '').trim() || null;
+    .replace(new RegExp(NAMED_ATTRIBUTES_REGEX, 'g'), '')
+    .trim()
+    // We are simply ignoring the forced slog colors for now
+    // But could definitely support it in the future.
+    .replace(SLOG_COLOR_REGEX, '')
+    .trim() || null;
 }
 
 const PROPERTIES_REGEX = /^\(([\w\s]+): (.*?)\)$/;
@@ -175,8 +195,8 @@ function parseTrace(trace) {
 }
 
 function parseLogEntry(logEntry) {
-
   const entryLines = logEntry.split('\\n');
+
   let {properties, firstIndex, lastIndex} = getProperties(entryLines);
 
   let hasTrace = true;
@@ -205,9 +225,12 @@ function parseLogEntry(logEntry) {
   const attributes = {...positionalAttrs, ...namedAttrs};
 
   if (attributes.level == null) {
+    // SLOG adds some special values that can change the behavior of the
+    // slog client (change color, for example).
+    const isSlog0 = title.startsWith('"__SLOG0__"');
     // slog and none levels are not explicitly set on the log entry.
     // We set them based on if the log has properties or not.
-    attributes.level = Object.keys(properties).length ? 'slog' : 'none';
+    attributes.level = isSlog0 || Object.keys(properties).length ? 'slog' : 'none';
   }
 
   const trace = hasTrace ? parseTrace(entryLines.slice(lastIndex + 1)) : [];
@@ -232,6 +255,11 @@ async function fetchSlogs(tailerUrl) {
     tailerUrl,
     {headers: {origin: 'https://www.internalfb.com'}}
   );
+  if (slogsResponse === '') {
+    throw new ErrorUnrecoverable(
+      'Slog endpoint response was empty. Make sure you are running Slog from an OD or devvm, or that you are connected to lighthouse or the VPN.'
+    ).set({ isLikelySlogBug: false });
+  }
   return parseJSON(slogsResponse);
 }
 
@@ -251,7 +279,6 @@ async function main([tier]) {
   tailerUrl.searchParams.set('file', file);
   tailerUrl.searchParams.set('len', LENGTH);
   tailerUrl.searchParams.set('timeout', TIMEOUT);
-
 
   let pos = -LENGTH;
   while (true) {

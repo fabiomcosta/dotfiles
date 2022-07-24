@@ -13,7 +13,7 @@ local hostname = vim.loop.os_gethostname()
 local IS_META_SERVER = vim.endswith(hostname, '.fbinfra.net')
     or vim.endswith(hostname, '.facebook.com')
 -- would be nice to make this async, lazy and memoized
-local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({'arc', 'get-config', 'project_id'}) ~= ''
+local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -426,7 +426,7 @@ local function onPureNeovimConfig()
       enable = true,
     },
     indent = {
-      enable = false,
+      enable = true,
     },
     autotag = {
       enable = true,
@@ -513,7 +513,7 @@ local function onPureNeovimConfig()
         '<cmd>Telescope lsp_references<CR>',
         { silent = false, noremap = true }
       )
-    -- The ideal check here is to check for biggrep support somehow
+      -- The ideal check here is to check for biggrep support somehow
     elseif IS_BIGGREP_ROOT then
       -- Use Telescope biggrep with the current selection
       set_keymap(

@@ -25,18 +25,15 @@ local function clear_hl(bufnr)
   end
 end
 
----Find a rogue Trouble buffer that might have been spawned by i.e. a session.
 local function find_rogue_buffer()
   for _, v in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.fn.bufname(v) == "slog" then
+    if vim.startswith(vim.fn.bufname(v), "slog for ") then
       return v
     end
   end
   return nil
 end
 
----Find pre-existing Trouble buffer, delete its windows then wipe it.
----@private
 local function wipe_rogue_buffer()
   local bn = find_rogue_buffer()
   if bn then
@@ -67,12 +64,12 @@ function View:new(opts)
   return this
 end
 
-function View:set_option(name, value, win)
-  if win then
-    return vim.api.nvim_win_set_option(self.win, name, value)
-  else
-    return vim.api.nvim_buf_set_option(self.buf, name, value)
-  end
+function View:set_option(name, value)
+  return vim.api.nvim_buf_set_option(self.buf, name, value)
+end
+
+function View:set_win_option(name, value)
+  return vim.api.nvim_win_set_option(self.win, name, value)
 end
 
 ---@param text Text
@@ -131,18 +128,18 @@ function View:setup(opts)
   self:set_option("buftype", "nofile")
   self:set_option("swapfile", false)
   self:set_option("buflisted", false)
-  self:set_option("winfixwidth", true, true)
-  self:set_option("wrap", false, true)
-  self:set_option("spell", false, true)
-  self:set_option("list", false, true)
-  self:set_option("winfixheight", true, true)
-  self:set_option("signcolumn", "no", true)
-  self:set_option("foldmethod", "manual", true)
-  self:set_option("foldcolumn", "0", true)
-  self:set_option("foldlevel", 3, true)
-  self:set_option("foldenable", false, true)
-  self:set_option("winhighlight", "Normal:TroubleNormal,EndOfBuffer:TroubleNormal,SignColumn:TroubleNormal", true)
-  self:set_option("fcs", "eob: ", true)
+  self:set_win_option("winfixwidth", true)
+  self:set_win_option("wrap", true)
+  self:set_win_option("spell", false)
+  self:set_win_option("list", false)
+  self:set_win_option("winfixheight", true)
+  self:set_win_option("signcolumn", "no")
+  self:set_win_option("foldmethod", "manual")
+  self:set_win_option("foldcolumn", "0")
+  self:set_win_option("foldlevel", 3)
+  self:set_win_option("foldenable", false)
+  self:set_win_option("winhighlight", "Normal:SlogNormal,EndOfBuffer:SlogNormal,SignColumn:SlogNormal")
+  self:set_win_option("fcs", "eob: ")
   self:set_option("filetype", "slog")
 
   for action, keys in pairs(config.options.action_keys) do
@@ -167,7 +164,7 @@ function View:setup(opts)
 
   vim.api.nvim_exec(
     [[
-      augroup TroubleHighlights
+      augroup SlogHighlights
         autocmd! * <buffer>
         autocmd BufEnter <buffer> lua require("slog").action("on_enter")
         autocmd CursorMoved <buffer> lua require("slog").action("auto_preview")
