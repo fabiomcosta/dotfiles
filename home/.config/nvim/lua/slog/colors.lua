@@ -30,7 +30,6 @@ local ui_parts = {
   },
   title = {
     name = 'Title',
-    fg = '#FFFFFF'
   },
   location = {
     name = 'Location',

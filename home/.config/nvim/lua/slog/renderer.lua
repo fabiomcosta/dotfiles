@@ -63,12 +63,12 @@ local function render(view)
   view:render(text)
 end
 
-function renderer.render(view, opts)
-  renderer.start(view, opts)
+function renderer.render(view)
+  renderer.start(view)
   render(view)
 end
 
-function renderer.start(view, opts)
+function renderer.start(view)
   if tailer_job ~= nil then
     return
   end
@@ -113,8 +113,12 @@ function renderer.render_log(view, text, log)
     return
   end
 
+  if config.options.filters.level and config.options.filters.level ~= log.attributes.level then
+    return
+  end
+
   local key = log.attributes.date .. log.attributes.id
-  view.items[text.lineNr + 1] = { key = key, is_top_level = true }
+  view.items[text.lineNr + 1] = { key = key, level = log.attributes.level, is_top_level = true }
 
   text:render(' ')
 
@@ -135,7 +139,6 @@ function renderer.render_log(view, text, log)
   else
     text:render('   ', level)
   end
-
 
   local title_lines = vim.fn.split(log.title, '\n')
   text:render(title_lines[1], level .. 'Title', ' ')

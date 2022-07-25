@@ -58,6 +58,7 @@ function View:new(opts)
     buf = vim.api.nvim_get_current_buf(),
     win = opts.win or vim.api.nvim_get_current_win(),
     parent = opts.parent,
+    filters = opts.filters,
     items = {},
   }
   setmetatable(this, self)
@@ -108,9 +109,8 @@ function View:is_valid()
   return vim.api.nvim_buf_is_valid(self.buf) and vim.api.nvim_buf_is_loaded(self.buf)
 end
 
-function View:update(opts)
-  util.debug("update")
-  renderer.render(self, opts)
+function View:update()
+  renderer.render(self)
 end
 
 function View:setup(opts)
@@ -429,6 +429,19 @@ end
 function View:toggle_fold()
   folds.toggle(self:current_item().key)
   self:update()
+end
+
+function View:toggle_filter()
+  local item = self:current_item()
+  if item.is_top_level then
+    local options = config.options
+    if not options.filters.level and item.level then
+      options.filters.level = item.level
+    else
+      options.filters.level = nil
+    end
+    self:update()
+  end
 end
 
 function View:_preview()

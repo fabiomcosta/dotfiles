@@ -1,10 +1,14 @@
 -- TODO
--- * Improve colors to better match web slog
+-- * [done] Replace all Trouble references with Slog
+-- * [done] Improve colors to better match web slog
+-- * [done] Quick filter functionality
 -- * Filter functionality/command
--- * Improve re-renders with better UI caching
+-- * When there are filters applied, show number of hidden messages (maybe on buffer title)
 -- * Improve perf when jumping to file
+-- * Improve re-renders with better UI caching
+-- * Highlight line when previewing file
+-- * inform if process stops working
 -- * online/offline checks? (might need the tailer to signal that)
--- * Replace all Trouble references with Slog
 -- * Optimize tailer to output buffer when it gets a complete log json entry,
 --   instead of waiting for the end of the response to output.
 
@@ -106,9 +110,6 @@ function Slog.action(action)
     view:jump()
     Slog.close()
   end
-  if action == "open_folds" then
-    Slog.refresh({ open_folds = true })
-  end
   if action == "close_folds" then
     Slog.refresh({ close_folds = true })
   end
@@ -132,20 +133,11 @@ function Slog.action(action)
     view:previous_item()
     return Slog
   end
-
-  if action == "toggle_preview" then
-    config.options.auto_preview = not config.options.auto_preview
-    if not config.options.auto_preview then
-      view:close_preview()
-    else
-      action = "preview"
-    end
-  end
-  if action == "auto_preview" and config.options.auto_preview then
-    action = "preview"
-  end
   if action == "preview" then
     view:preview()
+  end
+  if action == "toggle_filter" then
+    view:toggle_filter()
   end
 
   if Slog[action] then

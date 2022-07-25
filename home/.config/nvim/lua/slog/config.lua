@@ -10,6 +10,7 @@ local defaults = {
   fold_open = "", -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
   auto_preview = false, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
+  filters = {}, -- define log message filters
   signs = {
     mustfix = "",
     fatal = "",
@@ -23,17 +24,15 @@ local defaults = {
     close = "q", -- close the list
     cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
     refresh = "r", -- manually refresh
-    jump = { "<cr>", "<tab>" }, -- jump to the diagnostic or open / close folds
+    jump = { "<cr>", "<tab>" }, -- toggle fold or jump to the file
     open_split = { "<c-x>" }, -- open buffer in new split
     open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
     open_tab = { "<c-t>" }, -- open buffer in new tab
-    jump_close = { "o" }, -- jump to the diagnostic and close the list
-    toggle_preview = "P", -- toggle auto_preview
+    jump_close = { "o" }, -- jump to the file and close the list
     hover = "K", -- opens a small popup with the full multiline message
-    preview = "p", -- preview the diagnostic location
+    preview = "p", -- preview the file's location
+    toggle_filter = "f", -- filter messages by the level of the log under the cursor
     close_folds = { "zM", "zm" }, -- close all folds
-    open_folds = { "zR", "zr" }, -- open all folds
-    toggle_fold = { "zA", "za" }, -- toggle fold of current file
     previous = "k", -- previous item
     next = "j", -- next item
   },
@@ -46,11 +45,12 @@ local function is_fb_hostname(hostname)
 end
 
 local function get_tier()
-  local hostname = vim.loop.os_gethostname()
-  if not is_fb_hostname(hostname) then
-    return nil
-  end
-  return string.match(hostname, '^%w+[.]%w+')
+  return '62791.od'
+  -- local hostname = vim.loop.os_gethostname()
+  -- if not is_fb_hostname(hostname) then
+  --   return nil
+  -- end
+  -- return string.match(hostname, '^%w+[.]%w+')
 end
 
 function M.setup(options)
