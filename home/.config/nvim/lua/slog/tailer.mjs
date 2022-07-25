@@ -2,41 +2,7 @@
 
 import https from 'https';
 
-// NOTES
-//
-// There are values on the function name that the web UI compress
-// into these base64 blogs, my guess is that they end up making the
-// log smaller this way because these can contain big blobs of json data that
-// would be double quoted on a json object, creating a big mess.
-// replaceAll(/base64json::<(.*?)>/g, (_, base64Str) => atob(base64Str))
-//
-// Some of the objects have some special keys, ex:
-// {"_special_text_key_DONT_USE":"object authorization_Identity"}
-// This shows as a string, but we could also allow going to that object
-// using LSP maybe?
-//
-// TODO
-// * [done] Collapse logs when multiple equal logs are seen
-// * [done] Show special base64json elements as previously described
-// * [done] Allow opening individual files from the trace
-// * Allow jumping to definition on some of the special base64json elements
-// * FUTURE: filters????
-
-/*
-{
-  title: string,
-  attributes: {[string]: string},
-  properties: {[string]: string} ,
-  trace: [{
-    functionName: string,
-    fileName: string,
-    fileLine: number,
-    metadata?: {[string]: string}
-  }]
-}
-*/
-
-// meh
+// Ignoring and swallowing SSL errors
 process.emitWarning = () => {}
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
@@ -244,6 +210,9 @@ function parseLogEntry(logEntry) {
 }
 
 function parseLogs(logObject) {
+  if (logObject.data === '') {
+    return [{ heartbeat: true }];
+  }
   return logObject.data
     .split(/\n/)
     .map(guardAndLog(parseLogEntry))

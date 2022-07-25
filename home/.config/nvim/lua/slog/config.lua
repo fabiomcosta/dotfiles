@@ -9,7 +9,6 @@ local defaults = {
   width = 50, -- width of the list when position is left or right
   fold_open = "", -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
-  auto_preview = false, -- automatically preview the location of the diagnostic. <esc> to close preview and go back to last window
   filters = {}, -- define log message filters
   signs = {
     mustfix = "",
@@ -45,12 +44,11 @@ local function is_fb_hostname(hostname)
 end
 
 local function get_tier()
-  return '62791.od'
-  -- local hostname = vim.loop.os_gethostname()
-  -- if not is_fb_hostname(hostname) then
-  --   return nil
-  -- end
-  -- return string.match(hostname, '^%w+[.]%w+')
+  local hostname = vim.loop.os_gethostname()
+  if not is_fb_hostname(hostname) then
+    return nil
+  end
+  return string.match(hostname, '^%w+[.]%w+')
 end
 
 function M.setup(options)

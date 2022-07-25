@@ -3,12 +3,14 @@
 -- * [done] Improve colors to better match web slog
 -- * [done] Quick filter functionality
 -- * Filter functionality/command
--- * When there are filters applied, show number of hidden messages (maybe on buffer title)
--- * Improve perf when jumping to file
+-- * online/offline checks? (might need the tailer to signal that)
+-- * inform if process stops working
 -- * Improve re-renders with better UI caching
 -- * Highlight line when previewing file
--- * inform if process stops working
--- * online/offline checks? (might need the tailer to signal that)
+-- * fix open vsplit, tab etc on jump
+-- * When there are filters applied, show number of hidden messages (maybe on buffer title)
+-- * Allow jumping to definition on some of the special base64json elements
+-- * Improve perf when jumping to file
 -- * Optimize tailer to output buffer when it gets a complete log json entry,
 --   instead of waiting for the end of the response to output.
 
