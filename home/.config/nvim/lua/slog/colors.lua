@@ -74,7 +74,7 @@ local log_levels = {
 }
 
 function M.setup()
-  vim.fn.sign_define('SlogPreviewHighlightSign', { text = '=>' })
+  vim.fn.sign_define('SlogPreviewHighlightSign', { linehl = 'CursorLine', text = '=>' })
   for k, v in pairs(links) do
     vim.api.nvim_command("hi def link Slog" .. k .. " " .. v)
   end

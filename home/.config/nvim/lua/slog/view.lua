@@ -422,6 +422,8 @@ function View:jump(opts)
     folds.toggle(item.key)
     self:update()
   else
+    -- no reason on keeping any highlight sign once we jump to the file
+    vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
     util.jump_to_item(opts.win or self.parent, item)
   end
 end
@@ -476,9 +478,10 @@ function View:_preview()
   if vim.fn.filereadable(item.fileName) > 0 then
     local current_win = vim.api.nvim_get_current_win()
     self:switch_to_parent()
-    vim.fn.sign_unplace('', { id = 'SlogPreviewHighlightSignId' })
+    vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
     vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-    vim.fn.sign_place('SlogPreviewHighlightSignId', '', 'SlogPreviewHighlightSign', self.buf, { lnum = item.fileLine })
+    vim.fn.sign_place(0, 'SlogPreviewHighlightSignGroup', 'SlogPreviewHighlightSign', vim.fn.bufname(self.parent),
+      { lnum = item.fileLine })
     View.switch_to(current_win)
   end
 

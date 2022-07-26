@@ -48,7 +48,7 @@ end)
 local function render(view)
   local text = Text:new()
   view.items = {}
-  vim.fn.sign_unplace('*')
+  vim.fn.sign_unplace('*', { buffer = view.buf })
 
   -- reverse iteration over logs.
   -- This works great when you are just reading the logs, but the scroll

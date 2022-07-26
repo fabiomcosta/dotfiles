@@ -2,7 +2,7 @@
 -- * [done] Replace all Trouble references with Slog
 -- * [done] Improve colors to better match web slog
 -- * [done] Quick filter functionality
--- * use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
+-- * [done] use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
 --   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
 -- * Filter functionality/command
 -- * online/offline checks? (might need the tailer to signal that)
