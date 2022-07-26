@@ -79,7 +79,9 @@ function M.setup()
   end
   for _, log_level in pairs(log_levels) do
     local slog_hi_name = "Slog" .. log_level.name
-    vim.api.nvim_command("hi " .. slog_hi_name .. " guifg=" .. log_level.fg .. " guibg=" .. log_level.bg)
+    vim.api.nvim_command("hi " .. slog_hi_name .. " guifg=" .. log_level.fg)
+    vim.api.nvim_command("hi " .. slog_hi_name .. "Bg guibg=" .. log_level.bg)
+    vim.fn.sign_define(slog_hi_name .. 'Sign', { linehl = slog_hi_name .. 'Bg' })
     for _, part in pairs(ui_parts) do
       if part.fg or part.bg then
         local fg = part.fg or log_level.fg

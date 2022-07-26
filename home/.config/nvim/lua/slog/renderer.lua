@@ -48,6 +48,7 @@ end)
 local function render(view)
   local text = Text:new()
   view.items = {}
+  vim.fn.sign_unplace('*')
 
   -- reverse iteration over logs.
   -- This works great when you are just reading the logs, but the scroll
@@ -103,13 +104,20 @@ function renderer.close()
 end
 
 function renderer.render_log(view, text, log)
+
+  local line = text.lineNr + 1
+
   if log.error ~= nil then
     -- TODO render asking to report the issue back
-    view.items[text.lineNr + 1] = {}
+    view.items[line] = {}
     local report_back_msg = log.error.metadata.isLikelySlogBug and
         ' Please report this back to https://fb.workplace.com/groups/1300890600405446' or ''
     text:render('TAILER ERROR: ' .. log.error.message .. report_back_msg)
     text:nl()
+    return
+  end
+
+  if log.heartbeat == true then
     return
   end
 
@@ -118,7 +126,7 @@ function renderer.render_log(view, text, log)
   end
 
   local key = log.attributes.date .. log.attributes.id
-  view.items[text.lineNr + 1] = { key = key, level = log.attributes.level, is_top_level = true }
+  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true }
 
   text:render(' ')
 
@@ -143,6 +151,7 @@ function renderer.render_log(view, text, log)
   local title_lines = vim.fn.split(log.title, '\n')
   text:render(title_lines[1], level .. 'Title', ' ')
 
+  vim.fn.sign_place(line, '', 'Slog' .. level .. 'Sign', view.buf, { lnum = line })
   text:nl()
 
   if not folds.is_folded(key) then
