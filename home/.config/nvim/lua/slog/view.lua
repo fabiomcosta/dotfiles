@@ -476,7 +476,9 @@ function View:_preview()
   if vim.fn.filereadable(item.fileName) > 0 then
     local current_win = vim.api.nvim_get_current_win()
     self:switch_to_parent()
+    vim.fn.sign_unplace('', { id = 'SlogPreviewHighlightSignId' })
     vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
+    vim.fn.sign_place('SlogPreviewHighlightSignId', '', 'SlogPreviewHighlightSign', self.buf, { lnum = item.fileLine })
     View.switch_to(current_win)
   end
 

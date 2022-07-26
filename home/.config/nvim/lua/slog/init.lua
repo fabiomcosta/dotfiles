@@ -2,13 +2,13 @@
 -- * [done] Replace all Trouble references with Slog
 -- * [done] Improve colors to better match web slog
 -- * [done] Quick filter functionality
+-- * use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
+--   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
 -- * Filter functionality/command
 -- * online/offline checks? (might need the tailer to signal that)
 -- * inform if process stops working
 -- * Improve re-renders with better UI caching
 -- * fix open vsplit, tab etc on jump
--- * use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
---   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
 -- * When there are filters applied, show number of hidden messages (maybe on buffer title)
 -- * Allow jumping to definition on some of the special base64json elements
 -- * Improve perf when jumping to file
