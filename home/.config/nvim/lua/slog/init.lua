@@ -32,27 +32,44 @@ end
 function Slog.setup(opts)
   config.setup(opts)
   colors.setup()
+
+  vim.api.nvim_create_user_command(
+    'SlogOpen',
+    Slog.open,
+    {}
+  )
+
+  vim.api.nvim_create_user_command(
+    'SlogClose',
+    Slog.close,
+    {}
+  )
+
+  vim.api.nvim_create_user_command(
+    'SlogToggle',
+    Slog.toggle,
+    {}
+  )
+
+  vim.api.nvim_create_user_command(
+    'SlogClean',
+    Slog.clean,
+    {}
+  )
+end
+
+function Slog.open(opts)
+  opts = opts or {}
+  if is_open() then
+    view:update(opts)
+  else
+    view = View.create(opts)
+  end
 end
 
 function Slog.close()
   if is_open() then
     view:close()
-  end
-end
-
-function Slog.clear()
-  if is_open() then
-    view:clear()
-  end
-end
-
-function Slog.open(opts)
-  opts = opts or {}
-  opts.focus = true
-  if is_open() then
-    Slog.refresh(opts)
-  else
-    view = View.create(opts)
   end
 end
 
@@ -64,31 +81,10 @@ function Slog.toggle(opts)
   end
 end
 
-function Slog.refresh(opts)
-  opts = opts or {}
+function Slog.clean()
   if is_open() then
-    util.debug("refresh")
-    view:update(opts)
+    view:clean()
   end
-end
-
-function Slog.next(opts)
-  if view then
-    view:next_item(opts)
-  end
-end
-
-function Slog.previous(opts)
-  if view then
-    view:previous_item(opts)
-  end
-end
-
-function Slog.get_items()
-  if view then
-    return view.items
-  end
-  return {}
 end
 
 function Slog.action(action)
@@ -98,9 +94,7 @@ function Slog.action(action)
   if not is_open() then
     return Slog
   end
-  if action == "hover" then
-    view:hover()
-  end
+
   if action == "jump" then
     view:jump()
   elseif action == "open_split" then
@@ -109,44 +103,31 @@ function Slog.action(action)
     view:jump({ precmd = "vsplit" })
   elseif action == "open_tab" then
     view:jump({ precmd = "tabe" })
-  end
-  if action == "jump_close" then
+  elseif action == "jump_close" then
     view:jump()
     Slog.close()
-  end
-  if action == "close_folds" then
-    Slog.refresh({ close_folds = true })
-  end
-  if action == "toggle_fold" then
-    view:toggle_fold()
-  end
-  if action == "on_enter" then
+  elseif action == "on_enter" then
     view:on_enter()
-  end
-  if action == "on_leave" then
+  elseif action == "on_leave" then
     view:on_leave()
-  end
-  if action == "cancel" then
+  elseif action == "close" then
+    Slog.close()
+  elseif action == "cancel" then
     view:switch_to_parent()
-  end
-  if action == "next" then
+  elseif action == "next" then
     view:next_item()
-    return Slog
-  end
-  if action == "previous" then
+  elseif action == "previous" then
     view:previous_item()
-    return Slog
-  end
-  if action == "preview" then
+  elseif action == "preview" then
     view:preview()
-  end
-  if action == "toggle_filter" then
+  elseif action == "toggle_filter" then
     view:toggle_filter()
+  elseif action == "refresh" then
+    view:update()
+  else
+    util.error("Action '".. action .. "' doesn't exist.")
   end
 
-  if Slog[action] then
-    Slog[action]()
-  end
   return Slog
 end
 

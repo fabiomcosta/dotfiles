@@ -28,10 +28,8 @@ local defaults = {
     open_vsplit = { "<c-v>" }, -- open buffer in new vsplit
     open_tab = { "<c-t>" }, -- open buffer in new tab
     jump_close = { "o" }, -- jump to the file and close the list
-    hover = "K", -- opens a small popup with the full multiline message
     preview = "p", -- preview the file's location
     toggle_filter = "f", -- filter messages by the level of the log under the cursor
-    close_folds = { "zM", "zm" }, -- close all folds
     previous = "k", -- previous item
     next = "j", -- next item
   },
@@ -55,7 +53,5 @@ function M.setup(options)
   M.options = vim.tbl_deep_extend("force", {}, defaults, options or {})
   M.options.tier = M.options.tier or get_tier()
 end
-
-M.setup()
 
 return M

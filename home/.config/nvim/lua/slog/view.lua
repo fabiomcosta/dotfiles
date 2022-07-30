@@ -84,8 +84,8 @@ function View:render(text)
   end
 end
 
-function View:clear()
-  renderer.clear(self)
+function View:clean()
+  renderer.clean(self)
 end
 
 function View:unlock()
@@ -396,21 +396,6 @@ function View:previous_item(opts)
   end
 end
 
-function View:hover(opts)
-  opts = opts or {}
-  local item = opts.item or self:current_item()
-  if not (item and item.full_text) then
-    return
-  end
-
-  local lines = {}
-  for line in item.full_text:gmatch("([^\n]*)\n?") do
-    table.insert(lines, line)
-  end
-
-  vim.lsp.util.open_floating_preview(lines, "plaintext", { border = "single" })
-end
-
 function View:jump(opts)
   opts = opts or {}
   local item = opts.item or self:current_item()
@@ -490,16 +475,17 @@ function View:_preview()
     end
   end
 
-  if vim.fn.filereadable(item.fileName) > 0 then
-    local current_win = vim.api.nvim_get_current_win()
-    self:switch_to_parent()
-    vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
-    vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-    vim.fn.sign_place(0, 'SlogPreviewHighlightSignGroup', 'SlogPreviewHighlightSign', vim.fn.bufname(self.parent),
-      { lnum = item.fileLine })
-    View.switch_to(current_win)
+  if vim.fn.filereadable(item.fileName) == 0 then
+    return
   end
 
+  local current_win = vim.api.nvim_get_current_win()
+  self:switch_to_parent()
+  vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
+  vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
+  vim.fn.sign_place(0, 'SlogPreviewHighlightSignGroup', 'SlogPreviewHighlightSign', vim.fn.bufname(self.parent),
+    { lnum = item.fileLine })
+  View.switch_to(current_win)
 end
 
 -- View.preview = View._preview

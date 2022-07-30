@@ -89,7 +89,7 @@ function renderer.start(view)
   )
 end
 
-function renderer.clear(view)
+function renderer.clean(view)
   logs = {}
   view.items = {}
   render(view)

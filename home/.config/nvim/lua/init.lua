@@ -955,11 +955,8 @@ local function onPureNeovimConfig()
     { silent = true, noremap = true }
   )
 
-  vim.api.nvim_create_user_command(
-    'SlogToggle',
-    function() require('slog').toggle() end,
-    {}
-  )
+  require('slog').setup()
+
   set_keymap(
     'n',
     '<LEADER>st',
