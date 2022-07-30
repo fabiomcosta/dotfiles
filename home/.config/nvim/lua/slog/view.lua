@@ -5,7 +5,7 @@ local util = require('slog.util')
 
 local highlight = vim.api.nvim_buf_add_highlight
 
----@class TroubleView
+---@class SlogView
 ---@field buf number
 ---@field win number
 ---@field items Item[]

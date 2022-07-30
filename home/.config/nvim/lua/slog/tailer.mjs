@@ -141,15 +141,23 @@ function getProperties(entryLines) {
   return { properties: Object.fromEntries(propEntryLines), firstIndex, lastIndex };
 }
 
-const TRACE_REGEXP = /^\s+#\d+ (.*?) called at \[(.*?):(\d+)\](?: with metadata (.*))?$/;
+const TRACE_REGEXP = /^(?:\s*#\d+ )?(.*?) called at \[(.*?):(\d+)\](?: with metadata (.*))?$/;
 function parseTrace(trace) {
   if (!trace[0].startsWith('trace starts at ')) {
     throw new ErrorWithMetadata(`Invalid trace format.`).set({ trace });
   }
   return trace.slice(1)
     .map(traceLine => {
-      const [, functionName, fileName, fileLine, metadata] =
-        match(traceLine, TRACE_REGEXP);
+      const parts = traceLine.match(TRACE_REGEXP);
+      // There are some buggy traces where the function name may contain the
+      // parameters and the parameters might have newline characters
+      // In those cses the regex won't match, and we should just show them as-is.
+      if (parts == null) {
+        return {
+          functionName: traceLine,
+        };
+      }
+      const [, functionName, fileName, fileLine, metadata] = parts;
       return {
         functionName,
         fileName,

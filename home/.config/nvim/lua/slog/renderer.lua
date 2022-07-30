@@ -180,7 +180,9 @@ function renderer.render_log_details(view, text, log)
 
     text:render(print_function_name(trace_item.functionName), 'Text', ' ')
 
-    text:render(trace_item.fileName .. ':' .. trace_item.fileLine, 'Location', ' ')
+    if trace_item.fileName ~= nil and trace_item.fileLine ~= nil then
+      text:render(trace_item.fileName .. ':' .. trace_item.fileLine, 'Location', ' ')
+    end
 
     if trace_item.metadata ~= nil then
       local metadata_serialized = ''
