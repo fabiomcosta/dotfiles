@@ -51,6 +51,11 @@ local function wipe_rogue_buffer()
   end
 end
 
+local function is_float(win)
+  local opts = vim.api.nvim_win_get_config(win)
+  return opts and opts.relative and opts.relative ~= ""
+end
+
 function View:new(opts)
   opts = opts or {}
 
@@ -167,7 +172,6 @@ function View:setup(opts)
       augroup SlogHighlights
         autocmd! * <buffer>
         autocmd BufEnter <buffer> lua require("slog").action("on_enter")
-        autocmd CursorMoved <buffer> lua require("slog").action("auto_preview")
         autocmd BufLeave <buffer> lua require("slog").action("on_leave")
       augroup END
     ]],
@@ -230,17 +234,12 @@ function View:close_preview()
   self.parent_state = nil
 end
 
-function View:is_float(win)
-  local opts = vim.api.nvim_win_get_config(win)
-  return opts and opts.relative and opts.relative ~= ""
-end
-
 function View:is_valid_parent(win)
   if not vim.api.nvim_win_is_valid(win) then
     return false
   end
   -- dont do anything for floating windows
-  if View:is_float(win) then
+  if is_float(win) then
     return false
   end
   local buf = vim.api.nvim_win_get_buf(win)
@@ -250,60 +249,6 @@ function View:is_valid_parent(win)
   end
 
   return true
-end
-
-function View:on_win_enter()
-  util.debug("on_win_enter")
-
-  local current_win = vim.api.nvim_get_current_win()
-
-  if vim.fn.winnr("$") == 1 and current_win == self.win then
-    vim.cmd([[q]])
-    return
-  end
-
-  if not self:is_valid_parent(current_win) then
-    return
-  end
-
-  local current_buf = vim.api.nvim_get_current_buf()
-
-  -- update parent when needed
-  if current_win ~= self.parent and current_win ~= self.win then
-    self.parent = current_win
-    -- update diagnostics to match the window we are viewing
-    if self:is_valid() then
-      vim.defer_fn(function()
-        util.debug("update_on_win_enter")
-        self:update()
-      end, 100)
-    end
-  end
-
-  -- check if another buffer took over our window
-  local parent = self.parent
-  if current_win == self.win and current_buf ~= self.buf then
-    -- open the buffer in the parent
-    vim.api.nvim_win_set_buf(parent, current_buf)
-    -- HACK: some window local settings need to be reset
-    vim.api.nvim_win_set_option(parent, "winhl", "")
-    -- close the current trouble window
-    vim.api.nvim_win_close(self.win, false)
-    -- open a new trouble window
-    require("slog").open()
-    -- switch back to the opened window / buffer
-    View.switch_to(parent, current_buf)
-    -- util.warn("win_enter pro")
-  end
-end
-
-function View:focus()
-  View.switch_to(self.win, self.buf)
-  local line = self:get_line()
-  if line == 1 then
-    self:next_item()
-    self:next_item()
-  end
 end
 
 function View.switch_to(win, buf)
@@ -364,8 +309,7 @@ end
 
 function View:current_item()
   local line = self:get_line()
-  local item = self.items[line]
-  return item
+  return self.items[line]
 end
 
 function View:next_item(opts)
@@ -426,11 +370,6 @@ function View:jump(opts)
     vim.cmd(precmd)
   end
   vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-end
-
-function View:toggle_fold()
-  folds.toggle(self:current_item().key)
-  self:update()
 end
 
 function View:toggle_filter()

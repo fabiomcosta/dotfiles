@@ -88,21 +88,18 @@ function Slog.clean()
 end
 
 function Slog.action(action)
-  if view and action == "on_win_enter" then
-    view:on_win_enter()
-  end
   if not is_open() then
     return Slog
   end
 
-  if action == "jump" then
-    view:jump()
-  elseif action == "open_split" then
+  if action == "open_split" then
     view:jump({ precmd = "split" })
   elseif action == "open_vsplit" then
     view:jump({ precmd = "vsplit" })
   elseif action == "open_tab" then
     view:jump({ precmd = "tabe" })
+  elseif action == "jump" then
+    view:jump()
   elseif action == "jump_close" then
     view:jump()
     Slog.close()
@@ -122,8 +119,6 @@ function Slog.action(action)
     view:preview()
   elseif action == "toggle_filter" then
     view:toggle_filter()
-  elseif action == "refresh" then
-    view:update()
   else
     util.error("Action '".. action .. "' doesn't exist.")
   end
