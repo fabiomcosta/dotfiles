@@ -89,6 +89,8 @@ function Slog.action(action)
     return Slog
   end
 
+  util.debug(action)
+
   if action == "open_split" then
     view:jump({ precmd = "split" })
   elseif action == "open_vsplit" then
@@ -100,10 +102,6 @@ function Slog.action(action)
   elseif action == "jump_close" then
     view:jump()
     Slog.close()
-  elseif action == "on_enter" then
-    view:on_enter()
-  elseif action == "on_leave" then
-    view:on_leave()
   elseif action == "close" then
     Slog.close()
   elseif action == "cancel" then

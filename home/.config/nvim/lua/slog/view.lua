@@ -166,16 +166,34 @@ function View:setup(opts)
     vim.api.nvim_win_set_width(self.win, config.options.width)
   end
 
-  vim.api.nvim_exec(
-    [[
-      augroup SlogHighlights
-        autocmd! * <buffer>
-        autocmd BufEnter <buffer> lua require("slog").action("on_enter")
-        autocmd BufLeave <buffer> lua require("slog").action("on_leave")
-      augroup END
-    ]],
-    false
-  )
+  local augroup = vim.api.nvim_create_augroup('SlogHighlights', { clear = true })
+
+  vim.api.nvim_create_autocmd('BufEnter', {
+    group = augroup,
+    buffer = self.buf,
+    callback = function()
+      util.debug('on_enter')
+      self:on_enter()
+    end
+  })
+
+  vim.api.nvim_create_autocmd('BufLeave', {
+    group = augroup,
+    buffer = self.buf,
+    callback = function()
+      util.debug('on_leave')
+      self:on_leave()
+    end
+  })
+
+  vim.api.nvim_create_autocmd({'BufUnload', 'BufHidden'}, {
+    group = augroup,
+    buffer = self.buf,
+    callback = function()
+      util.debug('unload, hidden')
+      renderer.close()
+    end
+  })
 
   if not opts.parent then
     self:on_enter()
@@ -185,8 +203,6 @@ function View:setup(opts)
 end
 
 function View:on_enter()
-  util.debug("on_enter")
-
   self.parent = self.parent or vim.fn.win_getid(vim.fn.winnr("#"))
 
   if (not self:is_valid_parent(self.parent)) or self.parent == self.win then
@@ -210,7 +226,6 @@ function View:on_enter()
 end
 
 function View:on_leave()
-  util.debug("on_leave")
   self:close_preview()
 end
 
@@ -265,7 +280,6 @@ function View:switch_to_parent()
 end
 
 function View:close()
-  util.debug("close")
   if vim.api.nvim_win_is_valid(self.win) then
     vim.api.nvim_win_close(self.win, {})
   end
@@ -393,7 +407,6 @@ function View:_preview()
   if item.is_top_level == true or item.fileName == nil then
     return
   end
-  util.debug('preview')
 
   -- self.parent doesnt make much sense for our case...
   -- each trace line will possibly have its own buffer (file), so we
