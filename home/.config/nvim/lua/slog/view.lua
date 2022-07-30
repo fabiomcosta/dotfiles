@@ -58,7 +58,6 @@ end
 
 function View:new(opts)
   opts = opts or {}
-
   local this = {
     buf = vim.api.nvim_get_current_buf(),
     win = opts.win or vim.api.nvim_get_current_win(),
@@ -288,10 +287,7 @@ function View.create(opts)
   end
   local buffer = View:new(opts)
   buffer:setup(opts)
-
-  if opts and opts.auto then
-    buffer:switch_to_parent()
-  end
+  buffer:switch_to_parent()
   return buffer
 end
 
