@@ -1,18 +1,19 @@
 -- TODO
--- * [done] Replace all Trouble references with Slog
--- * [done] Improve colors to better match web slog
--- * [done] Quick filter functionality
+-- * [done] replace all Trouble references with Slog
+-- * [done] improve colors to better match web slog
+-- * [done] quick filter functionality
 -- * [done] use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
 --   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
--- * Filter functionality/command
+-- * [done] fix open vsplit, tab etc on jump
+-- * filter functionality/command
+-- * when there are filters applied, show number of hidden messages (maybe on buffer title)
 -- * online/offline checks? (might need the tailer to signal that)
 -- * inform if process stops working
--- * Improve re-renders with better UI caching
--- * fix open vsplit, tab etc on jump
--- * When there are filters applied, show number of hidden messages (maybe on buffer title)
--- * Allow jumping to definition on some of the special base64json elements
--- * Improve perf when jumping to file
--- * Optimize tailer to output buffer when it gets a complete log json entry,
+-- * allow jumping to definition on some of the special base64json elements
+-- PERF
+-- * improve re-renders with better UI caching
+-- * improve perf when jumping to file
+-- * optimize tailer to output buffer when it gets a complete log json entry,
 --   instead of waiting for the end of the response to output.
 
 local View = require("slog.view")

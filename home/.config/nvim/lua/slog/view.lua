@@ -27,7 +27,7 @@ end
 
 local function find_rogue_buffer()
   for _, v in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.startswith(vim.fn.bufname(v), "slog for ") then
+    if vim.fn.bufname(v) == "slog for " .. config.options.tier then
       return v
     end
   end
@@ -421,11 +421,26 @@ function View:jump(opts)
   if item.is_top_level == true then
     folds.toggle(item.key)
     self:update()
-  else
-    -- no reason on keeping any highlight sign once we jump to the file
-    vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
-    util.jump_to_item(opts.win or self.parent, item)
+    return
   end
+
+  if item.fileName == nil then
+    return
+  end
+
+  if vim.fn.filereadable(item.fileName) == 0 then
+    return
+  end
+
+  local win = opts.win or self.parent
+  local precmd = opts.precmd
+  -- no reason on keeping any highlight sign once we jump to the file
+  vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
+  View.switch_to(win)
+  if precmd then
+    vim.cmd(precmd)
+  end
+  vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
 end
 
 function View:toggle_fold()

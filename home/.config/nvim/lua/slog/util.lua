@@ -30,23 +30,6 @@ function M.memoize(fn, cache_key_gen)
   end
 end
 
-function M.jump_to_item(win, item)
-  if not item then
-    return
-  end
-  if item.is_top_level == true or item.fileName == nil then
-    return
-  end
-
-  -- requiring here, as otherwise we run into a circular dependency
-  local View = require('slog.view')
-
-  if vim.fn.filereadable(item.fileName) > 0 then
-    View.switch_to(win)
-    vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-  end
-end
-
 function M.count(tab)
   local count = 0
   for _ in pairs(tab) do
