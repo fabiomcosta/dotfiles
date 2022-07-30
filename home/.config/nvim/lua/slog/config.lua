@@ -29,8 +29,6 @@ local defaults = {
     jump_close = "o", -- jump to the file and close the list
     preview = "p", -- preview the file's location
     toggle_filter = "f", -- filter messages by the level of the log under the cursor
-    previous = "k", -- previous item
-    next = "j", -- next item
   },
 }
 

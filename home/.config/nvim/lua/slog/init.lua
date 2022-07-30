@@ -106,10 +106,6 @@ function Slog.action(action)
     Slog.close()
   elseif action == "cancel" then
     view:switch_to_parent()
-  elseif action == "next" then
-    view:next_item()
-  elseif action == "previous" then
-    view:previous_item()
   elseif action == "preview" then
     view:preview()
   elseif action == "toggle_filter" then

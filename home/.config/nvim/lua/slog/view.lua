@@ -57,6 +57,23 @@ local function is_float(win)
   return opts and opts.relative and opts.relative ~= ""
 end
 
+function is_valid_parent_window(win)
+  if not vim.api.nvim_win_is_valid(win) then
+    return false
+  end
+  -- dont do anything for floating windows
+  if is_float(win) then
+    return false
+  end
+  local buf = vim.api.nvim_win_get_buf(win)
+  -- Skip special buffers
+  if vim.api.nvim_buf_get_option(buf, "buftype") ~= "" then
+    return false
+  end
+  return true
+end
+
+
 function View:new(opts)
   opts = opts or {}
   local this = {
@@ -206,10 +223,10 @@ end
 function View:on_enter()
   self.parent = self.parent or vim.fn.win_getid(vim.fn.winnr("#"))
 
-  if (not self:is_valid_parent(self.parent)) or self.parent == self.win then
+  if (not is_valid_parent_window(self.parent)) or self.parent == self.win then
     util.debug("not valid parent")
     for _, win in pairs(vim.api.nvim_list_wins()) do
-      if self:is_valid_parent(win) and win ~= self.win then
+      if is_valid_parent_window(win) and win ~= self.win then
         self.parent = win
         break
       end
@@ -247,23 +264,6 @@ function View:close_preview()
   end
 
   self.parent_state = nil
-end
-
-function View:is_valid_parent(win)
-  if not vim.api.nvim_win_is_valid(win) then
-    return false
-  end
-  -- dont do anything for floating windows
-  if is_float(win) then
-    return false
-  end
-  local buf = vim.api.nvim_win_get_buf(win)
-  -- Skip special buffers
-  if vim.api.nvim_buf_get_option(buf, "buftype") ~= "" then
-    return false
-  end
-
-  return true
 end
 
 function View.switch_to(win, buf)
@@ -314,73 +314,9 @@ function View:get_line()
   return self:get_cursor()[1]
 end
 
-function View:get_col()
-  return self:get_cursor()[2]
-end
-
 function View:current_item()
   local line = self:get_line()
   return self.items[line]
-end
-
-function View:next_item(opts)
-  opts = opts or { skip_groups = false }
-  local line = self:get_line()
-  for i = line + 1, vim.api.nvim_buf_line_count(self.buf), 1 do
-    if self.items[i] and not (opts.skip_groups and self.items[i].is_top_level) then
-      vim.api.nvim_win_set_cursor(self.win, { i, self:get_col() })
-      if opts.jump then
-        self:jump()
-      end
-      return
-    end
-  end
-end
-
-function View:previous_item(opts)
-  opts = opts or { skip_groups = false }
-  local line = self:get_line()
-  for i = line - 1, 0, -1 do
-    if self.items[i] and not (opts.skip_groups and self.items[i].is_top_level) then
-      vim.api.nvim_win_set_cursor(self.win, { i, self:get_col() })
-      if opts.jump then
-        self:jump()
-      end
-      return
-    end
-  end
-end
-
-function View:jump(opts)
-  opts = opts or {}
-  local item = opts.item or self:current_item()
-  if not item then
-    return
-  end
-
-  if item.is_top_level == true then
-    folds.toggle(item.key)
-    self:update()
-    return
-  end
-
-  if item.fileName == nil then
-    return
-  end
-
-  if vim.fn.filereadable(item.fileName) == 0 then
-    return
-  end
-
-  local win = opts.win or self.parent
-  local precmd = opts.precmd
-  -- no reason on keeping any highlight sign once we jump to the file
-  preview_sign.unplace_all()
-  View.switch_to(win)
-  if precmd then
-    vim.cmd(precmd)
-  end
-  vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
 end
 
 function View:toggle_filter()
@@ -396,12 +332,10 @@ function View:toggle_filter()
   end
 end
 
-function View:place_preview_sign_at_line(lnum)
-  preview_sign.place({ buf = self.parent, lnum = lnum })
-end
+function View:jump(opts)
+  opts = opts or {}
 
-function View:_preview()
-  if not vim.api.nvim_win_is_valid(self.parent) then
+  if not is_valid_parent_window(self.parent) then
     return
   end
 
@@ -409,35 +343,54 @@ function View:_preview()
   if not item then
     return
   end
-  if item.is_top_level == true or item.fileName == nil then
+
+  if item.is_top_level == true then
+    folds.toggle(item.key)
+    self:update()
     return
   end
 
-  -- self.parent doesnt make much sense for our case...
-  -- each trace line will possibly have its own buffer (file), so we
-  -- have to adapt the code for that.
-
-  local bufnr = vim.api.nvim_win_get_buf(self.parent)
-  local filename = vim.api.nvim_buf_get_name(bufnr)
-
-  if filename == item.fileName then
-    local cursor = vim.api.nvim_win_get_cursor(self.parent)
-    if cursor[1] == item.fileLine + 1 then
-      -- we are already in the right place
-      return
-    end
-  end
-
-  if vim.fn.filereadable(item.fileName) == 0 then
+  if item.fileName == nil or vim.fn.filereadable(item.fileName) == 0 then
     return
   end
 
-  local current_win = vim.api.nvim_get_current_win()
+  -- no reason on keeping any highlight sign once we jump to the file
   self:switch_to_parent()
   preview_sign.unplace_all()
+
+  local precmd = opts.precmd
+  if precmd then
+    vim.cmd(precmd)
+  end
+
+  vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
+end
+
+function View:place_preview_sign_at_line(lnum)
+  preview_sign.place({ buf = self.parent, lnum = lnum })
+end
+
+function View:_preview()
+
+  if not is_valid_parent_window(self.parent) then
+    return
+  end
+
+  local item = self:current_item()
+  if not item then
+    return
+  end
+
+  if item.is_top_level == true or item.fileName == nil or vim.fn.filereadable(item.fileName) == 0 then
+    return
+  end
+
+  self:switch_to_parent()
+  preview_sign.unplace_all()
+
   vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
   self:place_preview_sign_at_line(item.fileLine)
-  View.switch_to(current_win)
+  View.switch_to(self.win)
 end
 
 -- View.preview = View._preview
