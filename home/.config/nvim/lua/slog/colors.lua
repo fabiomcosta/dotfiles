@@ -1,3 +1,5 @@
+local preview_sign = require('slog.preview_sign')
+
 local M = {}
 
 local links = {
@@ -69,12 +71,16 @@ local log_levels = {
     name = 'None',
     fg = '#FFFFFF',
     bg = '#292D33',
+  },
+  count = {
+    name = 'None',
+    fg = '#FFFFFF',
+    bg = '#292D33',
   }
-  -- 'count',
 }
 
 function M.setup()
-  vim.fn.sign_define('SlogPreviewHighlightSign', { linehl = 'CursorLine', text = '=>' })
+  preview_sign.define()
   for k, v in pairs(links) do
     vim.api.nvim_command("hi def link Slog" .. k .. " " .. v)
   end
@@ -84,13 +90,7 @@ function M.setup()
     vim.api.nvim_command("hi " .. slog_hi_name .. "Bg guibg=" .. log_level.bg)
     vim.fn.sign_define(slog_hi_name .. 'Sign', { linehl = slog_hi_name .. 'Bg' })
     for _, part in pairs(ui_parts) do
-      if part.fg or part.bg then
-        local fg = part.fg or log_level.fg
-        local bg = part.bg or log_level.bg
-        vim.api.nvim_command("hi " .. slog_hi_name .. part.name .. " guifg=" .. fg .. " guibg=" .. bg)
-      else
-        vim.api.nvim_command("hi def link " .. slog_hi_name .. part.name .. " " .. slog_hi_name)
-      end
+      vim.api.nvim_command("hi def link " .. slog_hi_name .. part.name .. " " .. slog_hi_name)
     end
   end
 end

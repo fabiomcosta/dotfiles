@@ -2,6 +2,7 @@ local renderer = require('slog.renderer')
 local config = require('slog.config')
 local folds = require('slog.folds')
 local util = require('slog.util')
+local preview_sign = require('slog.preview_sign')
 
 local highlight = vim.api.nvim_buf_add_highlight
 
@@ -374,7 +375,7 @@ function View:jump(opts)
   local win = opts.win or self.parent
   local precmd = opts.precmd
   -- no reason on keeping any highlight sign once we jump to the file
-  vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
+  preview_sign.unplace_all()
   View.switch_to(win)
   if precmd then
     vim.cmd(precmd)
@@ -393,6 +394,10 @@ function View:toggle_filter()
     end
     self:update()
   end
+end
+
+function View:place_preview_sign_at_line(lnum)
+  preview_sign.place({ buf = self.parent, lnum = lnum })
 end
 
 function View:_preview()
@@ -429,10 +434,9 @@ function View:_preview()
 
   local current_win = vim.api.nvim_get_current_win()
   self:switch_to_parent()
-  vim.fn.sign_unplace('SlogPreviewHighlightSignGroup')
+  preview_sign.unplace_all()
   vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
-  vim.fn.sign_place(0, 'SlogPreviewHighlightSignGroup', 'SlogPreviewHighlightSign', vim.fn.bufname(self.parent),
-    { lnum = item.fileLine })
+  self:place_preview_sign_at_line(item.fileLine)
   View.switch_to(current_win)
 end
 
