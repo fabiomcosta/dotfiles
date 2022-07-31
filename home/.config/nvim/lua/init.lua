@@ -275,14 +275,14 @@ local function onPureNeovimSetup(use)
   use('hrsh7th/cmp-vsnip')
 
   use('neovim/nvim-lspconfig')
-  use('williamboman/nvim-lsp-installer')
+  use('williamboman/mason.nvim')
   use('JoosepAlviste/nvim-ts-context-commentstring')
   use({
     'jose-elias-alvarez/null-ls.nvim',
     requires = { { 'nvim-lua/plenary.nvim' } },
   })
 
-  use('glepnir/lspsaga.nvim')
+  use('kkharji/lspsaga.nvim')
 
   use('nvim-lua/popup.nvim')
   use('nvim-telescope/telescope-fzy-native.nvim')
@@ -615,7 +615,7 @@ local function onPureNeovimConfig()
     })
   end
 
-  require('nvim-lsp-installer').setup({})
+  require('mason').setup()
 
   -- Use a loop to conveniently call 'setup' on multiple servers and
   -- map buffer local keybindings when the language server attaches
