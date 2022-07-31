@@ -801,14 +801,24 @@ local function onPureNeovimConfig()
   vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' } }
 
   _G.fabs_test_kill_last_term_window = function()
-    -- get buffer name from last windows
-    local last_window_index = vim.fn.winnr('$')
-    local last_buffer_name = vim.fn.bufname(vim.fn.winbufnr(last_window_index))
+    local max_width = vim.o.columns
+    local max_height = vim.o.lines - 1
 
-    if vim.startswith(last_buffer_name, 'term://') then
-      local window_height = vim.fn.winheight(last_window_index)
-      -- Sticky size/position
-      vim.g['test#neovim#term_position'] = 'botright ' .. window_height
+    -- get winnr from last windows
+    local last_window_nr = vim.fn.winnr('$')
+    local window_width = vim.fn.winwidth(last_window_nr)
+    local window_height = vim.fn.winheight(last_window_nr)
+
+    local is_full_width = window_width == max_width
+    local is_partial_height = window_height < max_height
+
+    if is_full_width and is_partial_height then
+      local last_window_id = vim.fn.win_getid(last_window_nr)
+      local win_info = vim.fn.getwininfo(last_window_id)[0]
+      if win_info.terminal == 1 then
+        -- Sticky size/position
+        vim.g['test#neovim#term_position'] = 'botright ' .. window_height
+      end
       return replace_termcodes('<C-w>' .. last_window_index .. 'c')
     end
     return ''
