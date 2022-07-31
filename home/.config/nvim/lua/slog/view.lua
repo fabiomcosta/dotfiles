@@ -6,13 +6,6 @@ local preview_sign = require('slog.preview_sign')
 
 local highlight = vim.api.nvim_buf_add_highlight
 
----@class SlogView
----@field buf number
----@field win number
----@field items Item[]
----@field folded table<string, boolean>
----@field parent number
----@field float number
 local View = {}
 View.__index = View
 
@@ -87,52 +80,20 @@ function View:new(opts)
   return this
 end
 
-function View:set_option(name, value)
-  return vim.api.nvim_buf_set_option(self.buf, name, value)
-end
-
-function View:set_win_option(name, value)
-  return vim.api.nvim_win_set_option(self.win, name, value)
-end
-
----@param text Text
-function View:render(text)
-  self:unlock()
-  self:set_lines(text.lines)
-  self:lock()
-  clear_hl(self.buf)
-  for _, data in ipairs(text.hl) do
-    highlight(self.buf, config.namespace, data.group, data.line, data.from, data.to)
+function View.create(opts)
+  opts = opts or {}
+  if opts.win then
+    View.switch_to(opts.win)
+    vim.cmd("enew")
+  else
+    vim.cmd("below new")
+    local pos = { bottom = "J", top = "K", left = "H", right = "L" }
+    vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
   end
-end
-
-function View:clean()
-  renderer.clean(self)
-end
-
-function View:unlock()
-  self:set_option("modifiable", true)
-  self:set_option("readonly", false)
-end
-
-function View:lock()
-  self:set_option("readonly", true)
-  self:set_option("modifiable", false)
-end
-
-function View:set_lines(lines, first, last, strict)
-  first = first or 0
-  last = last or -1
-  strict = strict or false
-  return vim.api.nvim_buf_set_lines(self.buf, first, last, strict, lines)
-end
-
-function View:is_valid()
-  return vim.api.nvim_buf_is_valid(self.buf) and vim.api.nvim_buf_is_loaded(self.buf)
-end
-
-function View:update()
-  renderer.render(self)
+  local buffer = View:new(opts)
+  buffer:setup(opts)
+  buffer:switch_to_parent()
+  return buffer
 end
 
 function View:setup(opts)
@@ -220,6 +181,54 @@ function View:setup(opts)
   self:update(opts)
 end
 
+function View:set_option(name, value)
+  return vim.api.nvim_buf_set_option(self.buf, name, value)
+end
+
+function View:set_win_option(name, value)
+  return vim.api.nvim_win_set_option(self.win, name, value)
+end
+
+---@param text Text
+function View:render(text)
+  self:unlock()
+  self:set_lines(text.lines)
+  self:lock()
+  clear_hl(self.buf)
+  for _, data in ipairs(text.hl) do
+    highlight(self.buf, config.namespace, data.group, data.line, data.from, data.to)
+  end
+end
+
+function View:unlock()
+  self:set_option("modifiable", true)
+  self:set_option("readonly", false)
+end
+
+function View:lock()
+  self:set_option("readonly", true)
+  self:set_option("modifiable", false)
+end
+
+function View:set_lines(lines, first, last, strict)
+  first = first or 0
+  last = last or -1
+  strict = strict or false
+  vim.api.nvim_buf_set_lines(self.buf, first, last, strict, lines)
+end
+
+function View:is_valid()
+  return vim.api.nvim_buf_is_valid(self.buf) and vim.api.nvim_buf_is_loaded(self.buf)
+end
+
+function View:update()
+  renderer.render(self)
+end
+
+function View:clean()
+  renderer.clean(self)
+end
+
 function View:on_enter()
   self.parent = self.parent or vim.fn.win_getid(vim.fn.winnr("#"))
 
@@ -244,10 +253,6 @@ function View:on_enter()
 end
 
 function View:on_leave()
-  self:close_preview()
-end
-
-function View:close_preview()
   -- Clear preview highlights
   for buf, _ in pairs(hl_bufs) do
     clear_hl(buf)
@@ -288,22 +293,6 @@ function View:close()
     vim.api.nvim_buf_delete(self.buf, {})
   end
   renderer.close()
-end
-
-function View.create(opts)
-  opts = opts or {}
-  if opts.win then
-    View.switch_to(opts.win)
-    vim.cmd("enew")
-  else
-    vim.cmd("below new")
-    local pos = { bottom = "J", top = "K", left = "H", right = "L" }
-    vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
-  end
-  local buffer = View:new(opts)
-  buffer:setup(opts)
-  buffer:switch_to_parent()
-  return buffer
 end
 
 function View:get_cursor()
@@ -370,7 +359,7 @@ function View:place_preview_sign_at_line(lnum)
   preview_sign.place({ buf = self.parent, lnum = lnum })
 end
 
-function View:_preview()
+function View:preview()
 
   if not is_valid_parent_window(self.parent) then
     return
@@ -392,9 +381,5 @@ function View:_preview()
   self:place_preview_sign_at_line(item.fileLine)
   View.switch_to(self.win)
 end
-
--- View.preview = View._preview
-
-View.preview = util.throttle(50, View._preview)
 
 return View
