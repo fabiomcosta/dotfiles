@@ -1,13 +1,12 @@
-local providers = require('slog.providers')
 local config = require('slog.config')
 local Text = require('slog.text')
 local folds = require('slog.folds')
 local b64 = require('slog.b64')
 local util = require('slog.util')
+local tailer = require('slog.tailer')
 
 local renderer = {}
 local logs = {}
-local tailer_job
 
 local function get_sign_for_level(level)
   if level == 'info' then
@@ -70,11 +69,7 @@ function renderer.render(view)
 end
 
 function renderer.start(view)
-  if tailer_job ~= nil then
-    return
-  end
-
-  tailer_job = providers.tail_logs(
+  tailer.start(
     { tier = config.options.tier },
     function(log)
       local last_log = logs[#logs]
@@ -97,10 +92,7 @@ end
 
 function renderer.close()
   logs = {}
-  if tailer_job ~= nil then
-    tailer_job:shutdown()
-    tailer_job = nil
-  end
+  tailer.shutdown()
 end
 
 function renderer.render_log(view, text, log)

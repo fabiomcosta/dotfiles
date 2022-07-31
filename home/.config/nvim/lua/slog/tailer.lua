@@ -2,6 +2,8 @@ local util = require('slog.util')
 
 local M = {}
 
+local tailer_job = nil
+
 -- local function set_timeout(timeout, callback)
 --   local timer = vim.loop.new_timer()
 --   timer:start(timeout, 0, vim.schedule_wrap(function()
@@ -19,13 +21,17 @@ local M = {}
 --   end
 -- end
 
-function M.tail_logs(opts, callback)
+function M.start(opts, callback)
+  if tailer_job ~= nil then
+    return
+  end
+
   local filename = debug.getinfo(1).source:sub(2)
   local parent_directory_path = util.parentdir(filename)
   local tailer_path = parent_directory_path .. '/tailer.mjs'
   -- local timer = nil
 
-  return util.create_async_job(
+  tailer_job = util.create_async_job(
     { 'node', tailer_path, opts.tier },
     function(error, result)
       vim.schedule(function()
@@ -47,6 +53,13 @@ function M.tail_logs(opts, callback)
       end)
     end
   )
+end
+
+function M.shutdown(opts, callback)
+  if tailer_job ~= nil then
+    tailer_job:shutdown()
+    tailer_job = nil
+  end
 end
 
 return M
