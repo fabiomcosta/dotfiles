@@ -61,6 +61,11 @@ local function render(view)
   end
 
   view:render(text)
+
+  -- float with server name and connection status
+  -- vim.api.nvim_open_win(0, false, {relative='win', anchor='NW', win=, row=0, col=vim.fn.winwidth(), focusable=false, style='minimal' })
+  --
+
 end
 
 function renderer.render(view)
