@@ -667,7 +667,13 @@ local function onPureNeovimConfig()
     nvim_lsp[lsp].setup(with_lsp_default_config())
   end
 
-  require('lspsaga').init_lsp_saga({})
+  require('lspsaga').init_lsp_saga({
+    code_action_prompt = {
+      -- This was making the "lamp" icon show on the cursor's line all the time
+      -- for some projects.
+      enable = false,
+    },
+  })
 
   local telescope_setup = {}
   if vim.fn.executable('fd') == 1 then
@@ -814,12 +820,12 @@ local function onPureNeovimConfig()
 
     if is_full_width and is_partial_height then
       local last_window_id = vim.fn.win_getid(last_window_nr)
-      local win_info = vim.fn.getwininfo(last_window_id)[0]
+      local win_info = vim.fn.getwininfo(last_window_id)[1]
       if win_info.terminal == 1 then
         -- Sticky size/position
         vim.g['test#neovim#term_position'] = 'botright ' .. window_height
       end
-      return replace_termcodes('<C-w>' .. last_window_index .. 'c')
+      return replace_termcodes('<C-w>' .. last_window_nr .. 'c')
     end
     return ''
   end
