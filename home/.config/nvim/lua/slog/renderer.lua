@@ -63,9 +63,9 @@ local function render(view)
   view:render(text)
 
   -- float with server name and connection status
-  -- vim.api.nvim_open_win(0, false, {relative='win', anchor='NW', win=, row=0, col=vim.fn.winwidth(), focusable=false, style='minimal' })
-  --
-
+  -- local win_id = vim.api.nvim_open_win(0, false, {relative='win', anchor='NW', win=, row=0, col=vim.fn.winwidth(), focusable=false, style='minimal' })
+  -- vim.api.nvim_win_set_option(win_id, "winfixwidth", true)
+  -- vim.api.nvim_win_set_option(win_id, "winfixeight", true)
 end
 
 function renderer.render(view)
@@ -105,7 +105,6 @@ function renderer.render_log(view, text, log)
   local line = text.lineNr + 1
 
   if log.error ~= nil then
-    -- TODO render asking to report the issue back
     view.items[line] = {}
     local report_back_msg = log.error.metadata.isLikelySlogBug and
         ' Please report this back to https://fb.workplace.com/groups/1300890600405446' or ''
@@ -123,7 +122,7 @@ function renderer.render_log(view, text, log)
   end
 
   local key = log.attributes.date .. log.attributes.id
-  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true }
+  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true, text = log.title }
 
   text:render(' ')
 
@@ -163,11 +162,13 @@ function renderer.render_log_details(view, text, log)
   local title_lines = vim.fn.split(log.title, '\n')
   if #title_lines > 1 then
     for _, title_line in ipairs(title_lines) do
-      view.items[text.lineNr + 1] = { title = log.title, is_extended_title = true }
+      view.items[text.lineNr + 1] = { title = log.title, is_extended_title = true, text = log.title }
       text:render(indent, 'Indent')
       text:render(title_line, 'Text')
       text:nl()
     end
+    text:render(indent, 'Indent')
+    text:nl()
   end
 
   for _, trace_item in ipairs(log.trace) do
@@ -175,19 +176,26 @@ function renderer.render_log_details(view, text, log)
 
     text:render(indent, 'Indent')
 
-    text:render(print_function_name(trace_item.functionName), 'Text', ' ')
+    local function_name = print_function_name(trace_item.functionName)
+    text:render(function_name, 'Text', ' ')
 
+    local file_location = nil
     if trace_item.fileName ~= nil and trace_item.fileLine ~= nil then
-      text:render(trace_item.fileName .. ':' .. trace_item.fileLine, 'Location', ' ')
+      file_location = trace_item.fileName .. ':' .. trace_item.fileLine
+      text:render(file_location, 'Location', ' ')
     end
 
+    local metadata = nil
     if trace_item.metadata ~= nil then
       local metadata_serialized = ''
       for mk, mv in pairs(trace_item.metadata) do
         metadata_serialized = metadata_serialized .. ' <' .. mk .. ':' .. mv .. '>'
       end
-      text:render('with metadata' .. metadata_serialized, 'Metadata')
+      metadata = 'with metadata' .. metadata_serialized
+      text:render(metadata, 'Metadata')
     end
+
+    trace_item.text = vim.fn.join({ function_name, file_location, metadata }, ' ')
 
     text:nl()
   end

@@ -5,6 +5,7 @@
 -- * [done] use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
 --   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
 -- * [done] fix open vsplit, tab etc on jump
+-- * [done] hover functionality to show full text
 -- * filter functionality/command
 -- * when there are filters applied, show number of hidden messages (maybe on buffer title)
 -- * online/offline checks? (might need the tailer to signal that)
@@ -53,6 +54,8 @@ function Slog.setup(opts)
     Slog.clean,
     {}
   )
+
+  return Slog
 end
 
 function Slog.open(opts)
@@ -110,8 +113,10 @@ function Slog.action(action)
     view:preview()
   elseif action == "toggle_filter" then
     view:toggle_filter()
+  elseif action == "hover" then
+    view:hover()
   else
-    util.error("Action '".. action .. "' doesn't exist.")
+    util.error("Action '" .. action .. "' doesn't exist.")
   end
 
   return Slog

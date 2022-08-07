@@ -50,7 +50,7 @@ local function is_float(win)
   return opts and opts.relative and opts.relative ~= ""
 end
 
-function is_valid_parent_window(win)
+local function is_valid_parent_window(win)
   if not vim.api.nvim_win_is_valid(win) then
     return false
   end
@@ -65,7 +65,6 @@ function is_valid_parent_window(win)
   end
   return true
 end
-
 
 function View:new(opts)
   opts = opts or {}
@@ -111,10 +110,10 @@ function View:setup(opts)
   self:set_option("buftype", "nofile")
   self:set_option("swapfile", false)
   self:set_option("buflisted", false)
-  self:set_win_option("winfixwidth", true)
-  self:set_win_option("wrap", true)
+  self:set_win_option("wrap", false)
   self:set_win_option("spell", false)
   self:set_win_option("list", false)
+  self:set_win_option("winfixwidth", true)
   self:set_win_option("winfixheight", true)
   self:set_win_option("signcolumn", "no")
   self:set_win_option("foldmethod", "manual")
@@ -130,7 +129,7 @@ function View:setup(opts)
       keys = { keys }
     end
     for _, key in pairs(keys) do
-      vim.api.nvim_buf_set_keymap(self.buf, "n", key, [[<cmd>lua require("slog").action("]] .. action .. [[")<cr>]],
+      vim.api.nvim_buf_set_keymap(self.buf, "n", key, [[<CMD>lua require("slog").action("]] .. action .. [[")<CR>]],
         {
           silent = true,
           noremap = true,
@@ -165,7 +164,7 @@ function View:setup(opts)
     end
   })
 
-  vim.api.nvim_create_autocmd({'BufUnload', 'BufHidden'}, {
+  vim.api.nvim_create_autocmd({ 'BufUnload', 'BufHidden' }, {
     group = augroup,
     buffer = self.buf,
     callback = function()
@@ -178,7 +177,7 @@ function View:setup(opts)
     self:on_enter()
   end
   self:lock()
-  self:update(opts)
+  self:update()
 end
 
 function View:set_option(name, value)
@@ -310,15 +309,30 @@ end
 
 function View:toggle_filter()
   local item = self:current_item()
-  if item.is_top_level then
-    local options = config.options
-    if not options.filters.level and item.level then
-      options.filters.level = item.level
-    else
-      options.filters.level = nil
-    end
-    self:update()
+  if not item.is_top_level then
+    return
   end
+
+  local options = config.options
+  if not options.filters.level and item.level then
+    options.filters.level = item.level
+  else
+    options.filters.level = nil
+  end
+  self:update()
+end
+
+function View:hover()
+  local item = self:current_item()
+  if not (item and item.text) then
+    return
+  end
+
+  local lines = {}
+  for line in item.text:gmatch("([^\n]*)\n?") do
+    table.insert(lines, line)
+  end
+  vim.lsp.util.open_floating_preview(lines, "plaintext", { border = "single" })
 end
 
 function View:jump(opts)
