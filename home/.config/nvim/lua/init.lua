@@ -311,7 +311,7 @@ local function onPureNeovimSetup(use)
   use('danilamihailov/beacon.nvim')
 
   if IS_META_SERVER then
-    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim", run = ':SyncMetaLS' }
+    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
   end
 end
 
@@ -1018,6 +1018,20 @@ local function config()
   onNeovimVSCodeConfig()
   if vim.g.vscode == nil then
     onPureNeovimConfig()
+  end
+
+  if IS_META_SERVER then
+    local meta_extensions = require('meta.lsp.extensions')
+    local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
+    ext["nuclide.cpp"] = nil
+    ext["nuclide.rusty"] = nil
+    ext["nuclide.pyls"] = nil
+    ext["nuclide.wasabi"] = nil
+    ext["nuclide.buck"] = nil
+    ext["nuclide.erlang"] = nil
+    -- ["nuclide.eslint"] = true,
+    -- ["nuclide.prettier"] = true,
+    vim.cmd('SyncMetaLS')
   end
 end
 
