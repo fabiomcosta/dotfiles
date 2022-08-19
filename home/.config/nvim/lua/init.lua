@@ -1031,7 +1031,7 @@ return packer.startup({
     if not configStatus then
       local isModuleNotFoundError = string.find(
         configError,
-        [[module ['"][%w_-]+['"] not found:]]
+        [[module ['"][%w._-]+['"] not found:]]
       ) ~= nil
       if isModuleNotFoundError then
         vim.cmd([[autocmd User PackerComplete quitall]])

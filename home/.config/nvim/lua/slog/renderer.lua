@@ -66,6 +66,23 @@ local function render(view)
   -- local win_id = vim.api.nvim_open_win(0, false, {relative='win', anchor='NW', win=, row=0, col=vim.fn.winwidth(), focusable=false, style='minimal' })
   -- vim.api.nvim_win_set_option(win_id, "winfixwidth", true)
   -- vim.api.nvim_win_set_option(win_id, "winfixeight", true)
+  -- vim.api.nvim_open_win(0, false, {relative='win', anchor='NW', win=, row=0, col=vim.fn.winwidth(), focusable=false, style='minimal' })
+  --
+
+  -- local wnr = view.win -- vim.fn.winnr('#')
+  -- local buf = vim.api.nvim_create_buf(false, true)
+  -- local focusable = false
+  -- local win = vim.api.nvim_open_win(buf, focusable, {
+  --   relative='win',
+  --   row=0,
+  --   col=vim.fn.winwidth(wnr),
+  --   width=10,
+  --   height=1,
+  --   anchor='NW',
+  --   style='minimal'
+  -- })
+  -- vim.api.nvim_win_set_option(win, 'winfixwidth', true)
+  -- vim.api.nvim_win_set_option(win, 'winfixheight', true)
 end
 
 function renderer.render(view)
