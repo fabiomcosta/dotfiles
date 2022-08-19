@@ -259,7 +259,10 @@ local function onPureNeovimSetup(use)
 
   use('tversteeg/registers.nvim')
 
-  use('nvim-treesitter/nvim-treesitter')
+  use({
+    'nvim-treesitter/nvim-treesitter',
+    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  })
   use('nvim-treesitter/nvim-treesitter-refactor')
   use('windwp/nvim-ts-autotag')
 
@@ -403,6 +406,8 @@ local function onPureNeovimConfig()
 
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
+    -- auto_install = true,
+    sync_install = true,
     ensure_installed = {
       'javascript',
       'typescript',
@@ -1007,19 +1012,7 @@ if not packerStatus then
   vim.cmd('quitall')
 end
 
-local function setup(use)
-  onNeovimVSCodeSetup(use)
-  if vim.g.vscode == nil then
-    onPureNeovimSetup(use)
-  end
-end
-
-local function config()
-  onNeovimVSCodeConfig()
-  if vim.g.vscode == nil then
-    onPureNeovimConfig()
-  end
-
+local function install_meta_lsp_clients()
   if IS_META_SERVER then
     local meta_extensions = require('meta.lsp.extensions')
     local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
@@ -1032,6 +1025,20 @@ local function config()
     -- ["nuclide.eslint"] = true,
     -- ["nuclide.prettier"] = true,
     vim.cmd('SyncMetaLS')
+  end
+end
+
+local function setup(use)
+  onNeovimVSCodeSetup(use)
+  if vim.g.vscode == nil then
+    onPureNeovimSetup(use)
+  end
+end
+
+local function config()
+  onNeovimVSCodeConfig()
+  if vim.g.vscode == nil then
+    onPureNeovimConfig()
   end
 end
 
@@ -1048,7 +1055,12 @@ return packer.startup({
         [[module ['"][%w._-]+['"] not found:]]
       ) ~= nil
       if isModuleNotFoundError then
-        vim.cmd([[autocmd User PackerComplete quitall]])
+        vim.api.nvim_create_autocmd('User PackerComplete', {
+          callback = function()
+            install_meta_lsp_clients()
+            vim.cmd('quitall')
+          end
+        })
         packer.sync()
       else
         error(configError)
