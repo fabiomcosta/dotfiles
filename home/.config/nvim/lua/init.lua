@@ -259,10 +259,7 @@ local function onPureNeovimSetup(use)
 
   use('tversteeg/registers.nvim')
 
-  use({
-    'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  })
+  use('nvim-treesitter/nvim-treesitter')
   use('nvim-treesitter/nvim-treesitter-refactor')
   use('windwp/nvim-ts-autotag')
 
@@ -344,19 +341,11 @@ local function onNeovimVSCodeConfig()
     }, jest_alternate)
   }
 
-  require('bufjump').setup()
-  set_keymap(
-    'n',
-    '<C-p>',
-    ':lua require("bufjump").backward()<CR>',
-    { silent = true, noremap = true }
-  )
-  set_keymap(
-    'n',
-    '<C-n>',
-    ':lua require("bufjump").forward()<CR>',
-    { silent = true, noremap = true }
-  )
+  require('bufjump').setup({
+    backward = '<C-b>',
+    forward = '<C-n>',
+  })
+  set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
 end
 
 local function onPureNeovimConfig()
@@ -1012,22 +1001,6 @@ if not packerStatus then
   vim.cmd('quitall')
 end
 
-local function install_meta_lsp_clients()
-  if IS_META_SERVER then
-    local meta_extensions = require('meta.lsp.extensions')
-    local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
-    ext["nuclide.cpp"] = nil
-    ext["nuclide.rusty"] = nil
-    ext["nuclide.pyls"] = nil
-    ext["nuclide.wasabi"] = nil
-    ext["nuclide.buck"] = nil
-    ext["nuclide.erlang"] = nil
-    -- ["nuclide.eslint"] = true,
-    -- ["nuclide.prettier"] = true,
-    vim.cmd('SyncMetaLS')
-  end
-end
-
 local function setup(use)
   onNeovimVSCodeSetup(use)
   if vim.g.vscode == nil then
@@ -1041,6 +1014,34 @@ local function config()
     onPureNeovimConfig()
   end
 end
+
+local function install_meta_lsp_clients()
+  if IS_META_SERVER then
+    local meta_extensions = require('meta.lsp.extensions')
+    local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
+    ext["nuclide.cpp"] = nil
+    ext["nuclide.rusty"] = nil
+    ext["nuclide.pyls"] = nil
+    ext["nuclide.wasabi"] = nil
+    ext["nuclide.buck"] = nil
+    ext["nuclide.erlang"] = nil
+    -- ["nuclide.eslint"] = true,
+    -- ["nuclide.prettier"] = true,
+    vim.cmd('SyncMetaLS')
+    require('nvim-treesitter').setup()
+    require('nvim-treesitter.install').prefer_git = true
+    vim.cmd('TSUpdateSync')
+  end
+end
+
+vim.api.nvim_create_user_command(
+  'SetupAndQuit',
+  function()
+    install_meta_lsp_clients()
+    vim.cmd('quitall')
+  end,
+  {}
+)
 
 return packer.startup({
   function(use)
