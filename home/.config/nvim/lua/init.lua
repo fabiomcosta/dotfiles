@@ -309,6 +309,11 @@ local function onPureNeovimSetup(use)
     requires = { { 'kyazdani42/nvim-web-devicons' } },
   })
   use('danilamihailov/beacon.nvim')
+  use('folke/zen-mode.nvim')
+
+  use('mfussenegger/nvim-dap')
+  use('rcarriga/nvim-dap-ui')
+  use('theHamsta/nvim-dap-virtual-text')
 
   if IS_META_SERVER then
     use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
@@ -395,8 +400,6 @@ local function onPureNeovimConfig()
 
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
-    -- auto_install = true,
-    sync_install = true,
     ensure_installed = {
       'javascript',
       'typescript',
@@ -414,9 +417,9 @@ local function onPureNeovimConfig()
       'graphql',
       'hack',
     },
-    highlight = {
-      enable = true,
-    },
+    -- highlight = {
+    --   enable = true,
+    -- },
     indent = {
       enable = true,
     },
@@ -620,6 +623,32 @@ local function onPureNeovimConfig()
     require('meta.lsp')
     table.insert(servers, 'hhvm')
     table.insert(servers, 'eslint@meta')
+    -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
+    --   settings = {
+    --     editor = {
+    --       codeActionsOnSave = {
+    --         source = { fixAll = { eslint = true } }
+    --       },
+    --     },
+    --     eslint = {
+    --       autofixOnSave = {
+    --         ruleAllowlist = {
+    --           "fb-www/order-requires",
+    --           "lint/sort-requires",
+    --           "@fb-tools/sort-requires"
+    --         }
+    --       }
+    --     }
+    --     ['editor.codeActionsOnSave'] = {
+    --       ['source.fixAll.eslint'] = true
+    --     },
+    --     ['eslint.autofixOnSave.ruleAllowlist'] = {
+    --       "fb-www/order-requires",
+    --       "lint/sort-requires",
+    --       "@fb-tools/sort-requires"
+    --     }
+    --   }
+    -- }))
     table.insert(servers, 'prettier@meta')
     nvim_lsp.flow.setup(with_lsp_default_config({
       cmd = { 'flow', 'lsp' },
@@ -972,6 +1001,57 @@ local function onPureNeovimConfig()
     { silent = true, noremap = true }
   )
 
+  local dap = require('dap')
+  local meta_util = require('meta.util')
+  local meta_lsp = require('meta.lsp')
+  local binary_folder = meta_util.get_first_matching_dir(
+    meta_lsp.VSCODE_EXTS_INSTALL_DIR .. "/nuclide.hhvm*"
+  )
+  dap.adapters.hhvm = {
+    type = 'executable',
+    command = meta_lsp.NODE_BINARY,
+    args = { binary_folder .. '/src/hhvmWrapper.js' }
+  }
+  dap.configurations.hack = {
+    {
+      type = 'hhvm',
+      name = 'Attach to hhvm process',
+      request = 'attach',
+      action = 'attach',
+      debugPort = 8999,
+      -- not sure how this is used yet... but I know
+      -- it's supposed to be either a nuclide:// or file:// uri.
+      -- The core attach debugger functionality works just
+      -- fine with it being an empty string.
+      targetUri = '',
+    },
+  }
+  dap.configurations.php = dap.configurations.hack
+
+  require('dapui').setup()
+  require('nvim-dap-virtual-text').setup()
+
+  vim.keymap.set('n', '<LEADER>dmc', function()
+    vim.cmd('tabnew %')
+    require('dapui').toggle()
+    dap.continue()
+  end)
+  vim.keymap.set('n', '<LEADER>dmx', function()
+    dap.terminate()
+    dap.clear_breakpoints()
+    require('dapui').toggle()
+    vim.cmd('tabclose')
+  end)
+  vim.keymap.set('n', '<LEADER>dc', dap.continue)
+  vim.keymap.set('n', '<LEADER>dn', dap.step_over)
+  vim.keymap.set('n', '<LEADER>di', dap.step_into)
+  vim.keymap.set('n', '<LEADER>do', dap.step_out)
+  vim.keymap.set('n', '<LEADER>dbt', dap.toggle_breakpoint)
+  vim.keymap.set('n', '<LEADER>dbc', dap.clear_breakpoints)
+  vim.keymap.set('n', '<LEADER>dbl', dap.list_breakpoints)
+  vim.keymap.set('n', '<LEADER>dh', function() require('dapui').eval() end)
+  vim.keymap.set('n', '<LEADER>du', function() require('dapui').toggle() end)
+
   local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
       vim.cmd('source ' .. file)
@@ -1019,14 +1099,18 @@ local function install_meta_lsp_clients()
   if IS_META_SERVER then
     local meta_extensions = require('meta.lsp.extensions')
     local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
+    -- remove these
     ext["nuclide.cpp"] = nil
     ext["nuclide.rusty"] = nil
     ext["nuclide.pyls"] = nil
     ext["nuclide.wasabi"] = nil
     ext["nuclide.buck"] = nil
     ext["nuclide.erlang"] = nil
+    -- add these
+    ext["nuclide.hhvm"] = true
     -- ["nuclide.eslint"] = true,
     -- ["nuclide.prettier"] = true,
+
     vim.cmd('SyncMetaLS')
     require('nvim-treesitter').setup()
     require('nvim-treesitter.install').prefer_git = true
