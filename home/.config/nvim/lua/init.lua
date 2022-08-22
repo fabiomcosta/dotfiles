@@ -309,7 +309,6 @@ local function onPureNeovimSetup(use)
     requires = { { 'kyazdani42/nvim-web-devicons' } },
   })
   use('danilamihailov/beacon.nvim')
-  use('folke/zen-mode.nvim')
 
   use('mfussenegger/nvim-dap')
   use('rcarriga/nvim-dap-ui')
