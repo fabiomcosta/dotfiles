@@ -1139,13 +1139,17 @@ return packer.startup({
         [[module ['"][%w._-]+['"] not found:]]
       ) ~= nil
       if isModuleNotFoundError then
-        -- vim.api.nvim_create_autocmd('User PackerComplete', {
-        --   callback = function()
-        --     install_meta_lsp_clients()
-        --     vim.cmd('quitall')
-        --   end
-        -- })
-        -- packer.sync()
+        -- I already setup everything on start on the meta server
+        -- so only execute this otherwise
+        if not IS_META_SERVER then
+          vim.api.nvim_create_autocmd('User PackerComplete', {
+            callback = function()
+              install_meta_lsp_clients()
+              vim.cmd('quitall')
+            end
+          })
+          packer.sync()
+        end
       else
         error(configError)
       end
