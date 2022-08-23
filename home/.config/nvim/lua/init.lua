@@ -1139,13 +1139,13 @@ return packer.startup({
         [[module ['"][%w._-]+['"] not found:]]
       ) ~= nil
       if isModuleNotFoundError then
-        vim.api.nvim_create_autocmd('User PackerComplete', {
-          callback = function()
-            install_meta_lsp_clients()
-            vim.cmd('quitall')
-          end
-        })
-        packer.sync()
+        -- vim.api.nvim_create_autocmd('User PackerComplete', {
+        --   callback = function()
+        --     install_meta_lsp_clients()
+        --     vim.cmd('quitall')
+        --   end
+        -- })
+        -- packer.sync()
       else
         error(configError)
       end
