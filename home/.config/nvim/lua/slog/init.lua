@@ -50,20 +50,19 @@ function Slog.setup(opts)
     {}
   )
   vim.api.nvim_create_user_command(
-    'SlogClean',
-    Slog.clean,
+    'SlogClear',
+    Slog.clear,
     {}
   )
 
   return Slog
 end
 
-function Slog.open(opts)
-  opts = opts or {}
+function Slog.open()
   if is_open() then
-    view:update(opts)
+    view:update()
   else
-    view = View.create(opts)
+    view = View.create()
   end
 end
 
@@ -73,17 +72,17 @@ function Slog.close()
   end
 end
 
-function Slog.toggle(opts)
+function Slog.toggle()
   if is_open() then
     Slog.close()
   else
-    Slog.open(opts)
+    Slog.open()
   end
 end
 
-function Slog.clean()
+function Slog.clear()
   if is_open() then
-    view:clean()
+    view:clear()
   end
 end
 
@@ -115,6 +114,8 @@ function Slog.action(action)
     view:toggle_filter()
   elseif action == "hover" then
     view:hover()
+  elseif action == "clear" then
+    Slog.clear()
   else
     util.error("Action '" .. action .. "' doesn't exist.")
   end

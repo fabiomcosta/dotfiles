@@ -11,7 +11,7 @@ const {USER} = process.env;
 const OD_LOG_FILE = '/var/facebook/logs/users/svcscm/error_log_svcscm';
 const DV_LOG_FILE = `/home/${USER}/logs/error_log_${USER}`;
 const LENGTH = 2097152;
-const TIMEOUT = 30;
+const TIMEOUT = 10;
 
 class ErrorWithMetadata extends Error {
   set(metadata) {
@@ -28,6 +28,13 @@ class ErrorWithMetadata extends Error {
         metadata: this.metadata ?? {}
       }
     };
+  }
+}
+
+class ErrorTimeout extends ErrorWithMetadata {
+  constructor(...args) {
+    super(...args);
+    this.set({ timeout: true });
   }
 }
 
@@ -62,6 +69,12 @@ function guardAndLog(fn) {
   };
 }
 
+function timeout(timeoutMs = 0) {
+  return new Promise((resolve)=>{
+    setTimeout(resolve, timeoutMs);
+  });
+}
+
 function match(str, regex) {
   const parts = str.match(regex);
   if (parts == null) {
@@ -74,11 +87,15 @@ function match(str, regex) {
 function httpGet(tailerUrl, options = {}) {
   return new Promise((resolve, reject) => {
     let data = '';
-    https.get(tailerUrl, options, (res) => {
+    const req = https.get(tailerUrl, options, (res) => {
       res
         .on('data', dataBuffer => data += String(dataBuffer))
-        .on('close', () => resolve(data));
-    }).on('error', reject);
+        .on('end', () => resolve(data));
+    })
+      .on('timeout', () => {
+        req.destroy(new ErrorTimeout(`Request timed out.`));
+      })
+      .on('error', (error) => reject(error));
   });
 }
 
@@ -221,6 +238,9 @@ function parseLogs(logObject) {
   if (logObject.data === '') {
     return [{ heartbeat: true }];
   }
+  if (logObject.data === 'TIMEOUT') {
+    return [{ timeout: true }];
+  }
   return logObject.data
     .split(/\n/)
     .map(guardAndLog(parseLogEntry))
@@ -228,14 +248,23 @@ function parseLogs(logObject) {
 }
 
 async function fetchSlogs(tailerUrl) {
-  const slogsResponse = await httpGet(
-    tailerUrl,
-    {headers: {origin: 'https://www.internalfb.com'}}
-  );
+  let slogsResponse;
+  try {
+    slogsResponse = await httpGet(tailerUrl, {
+      headers: {origin: 'https://www.internalfb.com'},
+      timeout: (TIMEOUT + 2) * 1000
+    });
+  } catch (error) {
+    if (error instanceof ErrorTimeout) {
+      return { data: 'TIMEOUT' };
+    }
+    throw error;
+  }
   if (slogsResponse === '') {
-    throw new ErrorUnrecoverable(
-      'Slog endpoint response was empty. Make sure you are running Slog from an OD or devvm, or that you are connected to lighthouse or the VPN.'
-    ).set({ isLikelySlogBug: false });
+    // throw new ErrorUnrecoverable(
+    //   'Slog endpoint response was empty. Make sure you are running Slog from an OD or devvm, or that you are connected to lighthouse or the VPN.'
+    // ).set({ isLikelySlogBug: false });
+    return timeout(TIMEOUT * 1000).then(() => ({ data: 'TIMEOUT' }));
   }
   return parseJSON(slogsResponse);
 }
@@ -262,7 +291,9 @@ async function main([tier]) {
     await guardAndLog(async () => {
       tailerUrl.searchParams.set('pos', pos);
       const logObject = await fetchSlogs(tailerUrl);
-      pos = logObject.pos;
+      if (Number.isFinite(logObject.pos)) {
+        pos = logObject.pos;
+      }
       parseLogs(logObject)
         .map(log => JSON.stringify(log))
         .forEach(log => console.log(log));

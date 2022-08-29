@@ -60,7 +60,7 @@ function M.start(opts, callback)
   )
 end
 
-function M.shutdown(opts, callback)
+function M.shutdown()
   if tailer_job ~= nil then
     tailer_job:shutdown()
     tailer_job = nil

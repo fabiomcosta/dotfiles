@@ -3,6 +3,7 @@ local config = require('slog.config')
 local folds = require('slog.folds')
 local util = require('slog.util')
 local preview_sign = require('slog.preview_sign')
+local Text = require('slog.text')
 
 local highlight = vim.api.nvim_buf_add_highlight
 
@@ -66,38 +67,28 @@ local function is_valid_parent_window(win)
   return true
 end
 
-function View:new(opts)
-  opts = opts or {}
+function View:new()
   local this = {
     buf = vim.api.nvim_get_current_buf(),
-    win = opts.win or vim.api.nvim_get_current_win(),
-    parent = opts.parent,
-    filters = opts.filters,
+    win = vim.api.nvim_get_current_win(),
     items = {},
   }
   setmetatable(this, self)
   return this
 end
 
-function View.create(opts)
-  opts = opts or {}
-  if opts.win then
-    View.switch_to(opts.win)
-    vim.cmd("enew")
-  else
-    vim.cmd("below new")
-    local pos = { bottom = "J", top = "K", left = "H", right = "L" }
-    vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
-  end
-  local buffer = View:new(opts)
-  buffer:setup(opts)
-  buffer:switch_to_parent()
-  return buffer
+function View.create()
+  vim.cmd("below new")
+  local pos = { bottom = "J", top = "K", left = "H", right = "L" }
+  vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
+  local view = View:new()
+  view:setup()
+  view:switch_to_parent()
+  return view
 end
 
-function View:setup(opts)
+function View:setup()
   util.debug("setup")
-  opts = opts or {}
   vim.cmd("setlocal nonu")
   vim.cmd("setlocal nornu")
   local tier = config.options.tier
@@ -106,22 +97,20 @@ function View:setup(opts)
     wipe_rogue_buffer()
     vim.api.nvim_buf_set_name(self.buf, buf_name)
   end
-  self:set_option("bufhidden", "wipe")
-  self:set_option("buftype", "nofile")
-  self:set_option("swapfile", false)
-  self:set_option("buflisted", false)
   self:set_win_option("wrap", false)
   self:set_win_option("spell", false)
   self:set_win_option("list", false)
-  self:set_win_option("winfixwidth", true)
-  self:set_win_option("winfixheight", true)
   self:set_win_option("signcolumn", "no")
   self:set_win_option("foldmethod", "manual")
   self:set_win_option("foldcolumn", "0")
   self:set_win_option("foldlevel", 3)
   self:set_win_option("foldenable", false)
-  self:set_win_option("winhighlight", "Normal:SlogNormal,EndOfBuffer:SlogNormal,SignColumn:SlogNormal")
+  self:set_win_option("winhighlight", "Normal:SlogNormal")
   self:set_win_option("fcs", "eob: ")
+  self:set_option("bufhidden", "wipe")
+  self:set_option("buftype", "nofile")
+  self:set_option("swapfile", false)
+  self:set_option("buflisted", false)
   self:set_option("filetype", "slog")
 
   for action, keys in pairs(config.options.action_keys) do
@@ -144,7 +133,36 @@ function View:setup(opts)
     vim.api.nvim_win_set_width(self.win, config.options.width)
   end
 
-  local augroup = vim.api.nvim_create_augroup('SlogHighlights', { clear = true })
+  -- float with server name and connection status
+  local buf = vim.api.nvim_create_buf(false, true)
+
+  local text = Text:new()
+  text:render(' ')
+  text:render('直connected', 'ConnectionSuccess')
+  text:render(' ')
+  -- ideally blinking (seriously)
+  -- text:render('睊disconnected', 'ConnectionError')
+  text:nl()
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, text.lines)
+  clear_hl(buf)
+  for _, hl in ipairs(text.hl) do
+    highlight(buf, config.namespace, hl.group, hl.line, hl.from, hl.to)
+  end
+
+  local win_id = vim.api.nvim_open_win(buf, false, {
+    relative = 'win',
+    anchor = 'NW',
+    row = 0,
+    col = 10000000, -- far right,max possible -- vim.fn.winwidth(self.win),
+    width = 13,
+    height = 1,
+    focusable = false,
+    style = 'minimal'
+  })
+  vim.api.nvim_win_set_option(win_id, "winfixwidth", true)
+  vim.api.nvim_win_set_option(win_id, "winfixheight", true)
+
+  local augroup = vim.api.nvim_create_augroup('SlogBufAugroup', { clear = true })
 
   vim.api.nvim_create_autocmd('BufEnter', {
     group = augroup,
@@ -173,9 +191,7 @@ function View:setup(opts)
     end
   })
 
-  if not opts.parent then
-    self:on_enter()
-  end
+  self:on_enter()
   self:lock()
   self:update()
 end
@@ -209,11 +225,8 @@ function View:lock()
   self:set_option("modifiable", false)
 end
 
-function View:set_lines(lines, first, last, strict)
-  first = first or 0
-  last = last or -1
-  strict = strict or false
-  vim.api.nvim_buf_set_lines(self.buf, first, last, strict, lines)
+function View:set_lines(lines)
+  vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, lines)
 end
 
 function View:is_valid()
@@ -224,8 +237,8 @@ function View:update()
   renderer.render(self)
 end
 
-function View:clean()
-  renderer.clean(self)
+function View:clear()
+  renderer.clear(self)
 end
 
 function View:on_enter()

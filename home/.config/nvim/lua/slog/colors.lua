@@ -20,7 +20,7 @@ local links = {
   SignOther = "SlogSignInformation",
 }
 
-local ui_parts = {
+local log_ui = {
   sign = {
     name = 'Sign'
   },
@@ -38,6 +38,17 @@ local ui_parts = {
   },
   metadata = {
     name = 'Metadata',
+  },
+}
+
+local support_panel_ui = {
+  connection_success = {
+    name = 'ConnectionSuccess',
+    fg = '#3EBD5F',
+  },
+  connection_error = {
+    name = 'ConnectionError',
+    fg = '#f8a5a5',
   }
 }
 
@@ -89,9 +100,12 @@ function M.setup()
     vim.api.nvim_command("hi " .. slog_hi_name .. " guifg=" .. log_level.fg)
     vim.api.nvim_command("hi " .. slog_hi_name .. "Bg guibg=" .. log_level.bg)
     vim.fn.sign_define(slog_hi_name .. 'Sign', { linehl = slog_hi_name .. 'Bg' })
-    for _, part in pairs(ui_parts) do
-      vim.api.nvim_command("hi def link " .. slog_hi_name .. part.name .. " " .. slog_hi_name)
+    for _, ui_part in pairs(log_ui) do
+      vim.api.nvim_command("hi def link " .. slog_hi_name .. ui_part.name .. " " .. slog_hi_name)
     end
+  end
+  for _, ui_part in pairs(support_panel_ui) do
+    vim.api.nvim_command("hi Slog" .. ui_part.name .. " guifg=" .. ui_part.fg)
   end
 end
 
