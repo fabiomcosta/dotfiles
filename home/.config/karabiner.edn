@@ -310,11 +310,50 @@
     ; ]}
 
 
-    {:des "toggle numbers"
-      :rules [
-        [:delete_forward [["numbers_mode" 1], ["symbols_mode" 0]] :symbols_mode {:alone :delete_forward :afterup ["numbers_mode" 0]}]
-        ; [{:sim [:delete_forward :return_or_enter] :simo {:dorder :strict}} ["numbers_mode" 1] nil {:afterup {:set ["numbers_mode" 0]} :params {:sim 5000}}]
+    ; {:des "toggle numbers"
+    ;   :rules [
+    ;     [:delete_forward [["numbers_mode" 1], ["symbols_mode" 0]] :symbols_mode {:alone :delete_forward :afterup ["numbers_mode" 0]}]
+    ;     ; [{:sim [:delete_forward :return_or_enter] :simo {:dorder :strict}} ["numbers_mode" 1] nil {:afterup {:set ["numbers_mode" 0]} :params {:sim 5000}}]
 
+    ; ]}
+    {:des "numbers mode, fluid typing protection"
+      :rules [
+        [{:sim [:spacebar :q] :simo {:dorder :strict}} [:spacebar :q]]
+        [{:sim [:spacebar :w] :simo {:dorder :strict}} [:spacebar :w]]
+        [{:sim [:spacebar :e] :simo {:dorder :strict}} [:spacebar :e]]
+        [{:sim [:spacebar :r] :simo {:dorder :strict}} [:spacebar :r]]
+        [{:sim [:spacebar :t] :simo {:dorder :strict}} [:spacebar :t]]
+        [{:sim [:spacebar :a] :simo {:dorder :strict}} [:spacebar :a]]
+        [{:sim [:spacebar :s] :simo {:dorder :strict}} [:spacebar :s]]
+        [{:sim [:spacebar :d] :simo {:dorder :strict}} [:spacebar :d]]
+        [{:sim [:spacebar :f] :simo {:dorder :strict}} [:spacebar :f]]
+        [{:sim [:spacebar :g] :simo {:dorder :strict}} [:spacebar :g]]
+        [{:sim [:spacebar :z] :simo {:dorder :strict}} [:spacebar :z]]
+        [{:sim [:spacebar :x] :simo {:dorder :strict}} [:spacebar :x]]
+        [{:sim [:spacebar :c] :simo {:dorder :strict}} [:spacebar :c]]
+        [{:sim [:spacebar :v] :simo {:dorder :strict}} [:spacebar :v]]
+        [{:sim [:spacebar :b] :simo {:dorder :strict}} [:spacebar :b]]
+        [{:sim [:spacebar :y] :simo {:dorder :strict}} [:spacebar :y]]
+        [{:sim [:spacebar :u] :simo {:dorder :strict}} [:spacebar :u]]
+        [{:sim [:spacebar :i] :simo {:dorder :strict}} [:spacebar :i]]
+        [{:sim [:spacebar :o] :simo {:dorder :strict}} [:spacebar :o]]
+        [{:sim [:spacebar :p] :simo {:dorder :strict}} [:spacebar :p]]
+        [{:sim [:spacebar :h] :simo {:dorder :strict}} [:spacebar :h]]
+        [{:sim [:spacebar :j] :simo {:dorder :strict}} [:spacebar :j]]
+        [{:sim [:spacebar :k] :simo {:dorder :strict}} [:spacebar :k]]
+        [{:sim [:spacebar :l] :simo {:dorder :strict}} [:spacebar :l]]
+        [{:sim [:spacebar :semicolon] :simo {:dorder :strict}} [:spacebar :semicolon]]
+        [{:sim [:spacebar :n] :simo {:dorder :strict}} [:spacebar :n]]
+        [{:sim [:spacebar :m] :simo {:dorder :strict}} [:spacebar :m]]
+        [{:sim [:spacebar :comma] :simo {:dorder :strict}} [:spacebar :comma]]
+        [{:sim [:spacebar :period] :simo {:dorder :strict}} [:spacebar :period]]
+        [{:sim [:spacebar :slash] :simo {:dorder :strict}} [:spacebar :slash]]
+        [{:sim [:spacebar :return_or_enter] :simo {:dorder :strict}} [:spacebar :return_or_enter]]
+        [{:sim [:spacebar :delete_or_backspace] :simo {:dorder :strict}} [:spacebar :delete_or_backspace]]
+        [{:sim [:spacebar :left_command] :simo {:dorder :strict}} [:spacebar :left_command]]
+        [{:sim [:spacebar :right_control] :simo {:dorder :strict}} [:spacebar :right_control]]
+        [{:sim [:spacebar :left_shift] :simo {:dorder :strict}} [:spacebar :left_shift]]
+        [{:sim [:spacebar :tab] :simo {:dorder :strict}} [:spacebar :tab]]
     ]}
     {:des "numbers mode"
       :rules [:numbers_mode
@@ -340,7 +379,6 @@
         [:##k :5]
         [:##l :6]
         [:##h :0]
-
     ]}
 
 
@@ -462,6 +500,7 @@
         [:##right_command :right_control nil {:alone :tab}]
         ; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
+        [:##spacebar ["numbers_mode" 1] nil {:alone :spacebar :afterup ["numbers_mode" 0]}]
     ]}
 
     {:des "draculad"
