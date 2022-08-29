@@ -416,9 +416,9 @@ local function onPureNeovimConfig()
       'graphql',
       'hack',
     },
-    -- highlight = {
-    --   enable = true,
-    -- },
+    highlight = {
+      enable = true,
+    },
     indent = {
       enable = true,
     },
@@ -1031,7 +1031,9 @@ local function onPureNeovimConfig()
   require('nvim-dap-virtual-text').setup()
 
   vim.keymap.set('n', '<LEADER>dmc', function()
+    dap.toggle_breakpoint()
     vim.cmd('tabnew %')
+    vim.cmd([[execute "normal! \<c-o>"]])
     require('dapui').toggle()
     dap.continue()
   end)
