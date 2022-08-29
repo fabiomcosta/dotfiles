@@ -1,3 +1,13 @@
+
+local IS_META_SERVER = (function()
+  local hostname = vim.loop.os_gethostname()
+  return vim.endswith(hostname, '.fbinfra.net') or vim.endswith(hostname, '.facebook.com')
+end)()
+-- would be nice to make this async, lazy and memoized
+local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+
+local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
+
 local set_keymap = vim.api.nvim_set_keymap
 
 local function replace_termcodes(str)
@@ -8,12 +18,6 @@ local function feedkeys(key, mode)
   mode = mode or 'x'
   vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
 end
-
-local hostname = vim.loop.os_gethostname()
-local IS_META_SERVER = vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
--- would be nice to make this async, lazy and memoized
-local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -399,6 +403,7 @@ local function onPureNeovimConfig()
 
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
+    parser_install_dir = TS_PARSER_INSTALL_PATH,
     ensure_installed = {
       'javascript',
       'typescript',
@@ -438,6 +443,8 @@ local function onPureNeovimConfig()
       },
     },
   })
+  vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
+
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
@@ -1113,9 +1120,15 @@ local function install_meta_lsp_clients()
     -- ["nuclide.prettier"] = true,
 
     vim.cmd('SyncMetaLS')
+
     require('nvim-treesitter').setup()
     require('nvim-treesitter.install').prefer_git = true
+    require('nvim-treesitter.configs').setup({
+      parser_install_dir = TS_PARSER_INSTALL_PATH,
+    })
+    vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
     vim.cmd('TSUpdateSync')
+
   end
 end
 
