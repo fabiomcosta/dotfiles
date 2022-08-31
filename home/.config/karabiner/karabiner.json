@@ -3084,7 +3084,13 @@
       }, {
         "description" : "numbers mode, fluid typing protection",
         "manipulators" : [ {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3104,7 +3110,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3124,7 +3136,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3144,7 +3162,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3164,7 +3188,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3184,7 +3214,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3204,7 +3240,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3224,7 +3266,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3244,7 +3292,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3264,7 +3318,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3284,7 +3344,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3304,7 +3370,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3324,7 +3396,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3344,6 +3422,9 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
             "simultaneous" : [ {
               "key_code" : "spacebar"
@@ -3364,7 +3445,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3384,7 +3471,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3404,7 +3497,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3424,7 +3523,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3444,7 +3549,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3464,7 +3575,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3484,7 +3601,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3504,7 +3627,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3524,7 +3653,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3544,7 +3679,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3564,7 +3705,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3584,7 +3731,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3604,7 +3757,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3624,7 +3783,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3644,7 +3809,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3664,7 +3835,13 @@
           } ],
           "type" : "basic"
         }, {
+          "parameters" : {
+            "basic.simultaneous_threshold_milliseconds" : 200
+          },
           "from" : {
+            "modifiers" : {
+              "mandatory" : [ "any" ]
+            },
             "simultaneous" : [ {
               "key_code" : "spacebar"
             }, {
@@ -3681,126 +3858,6 @@
             "key_code" : "spacebar"
           }, {
             "key_code" : "slash"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "return_or_enter"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "return_or_enter"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "delete_or_backspace"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "delete_or_backspace"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "left_command"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "left_command"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "right_control"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "right_control"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "left_shift"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "left_shift"
-          } ],
-          "type" : "basic"
-        }, {
-          "from" : {
-            "simultaneous" : [ {
-              "key_code" : "spacebar"
-            }, {
-              "key_code" : "tab"
-            } ],
-            "simultaneous_options" : {
-              "detect_key_down_uninterruptedly" : false,
-              "key_down_order" : "strict",
-              "key_up_order" : "insensitive",
-              "key_up_when" : "any"
-            }
-          },
-          "to" : [ {
-            "key_code" : "spacebar"
-          }, {
-            "key_code" : "tab"
           } ],
           "type" : "basic"
         } ]
@@ -6494,10 +6551,7 @@
             }
           } ],
           "from" : {
-            "key_code" : "spacebar",
-            "modifiers" : {
-              "optional" : [ "any" ]
-            }
+            "key_code" : "spacebar"
           },
           "to" : [ {
             "set_variable" : {
