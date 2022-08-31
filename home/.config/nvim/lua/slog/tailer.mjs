@@ -38,6 +38,8 @@ class ErrorTimeout extends ErrorWithMetadata {
   }
 }
 
+class ErrorRedirect extends ErrorWithMetadata {}
+
 class ErrorUnrecoverable extends ErrorWithMetadata {}
 
 function stringifyError(error) {
@@ -86,11 +88,19 @@ function match(str, regex) {
 
 function httpGet(tailerUrl, options = {}) {
   return new Promise((resolve, reject) => {
-    let data = '';
     const req = https.get(tailerUrl, options, (res) => {
-      res
-        .on('data', dataBuffer => data += String(dataBuffer))
-        .on('end', () => resolve(data));
+      if (res.statusCode === 200) {
+        let data = '';
+        res
+          .on('data', dataBuffer => data += String(dataBuffer))
+          .on('end', () => resolve(data));
+      } else if (res.statusCode === 302) {
+        // The user is likely not on the VPN and we can't access the log
+        // endpoint, so we get a redirect.
+        reject(new ErrorRedirect(`Request redirected.`));
+      } else {
+        reject(new Error(`Unknown Network error statusCode:${res.statusCode}`));
+      }
     })
       .on('timeout', () => {
         req.destroy(new ErrorTimeout(`Request timed out.`));
@@ -238,7 +248,7 @@ function parseLogs(logObject) {
   if (logObject.data === '') {
     return [{ heartbeat: true }];
   }
-  if (logObject.data === 'TIMEOUT') {
+  if (logObject.data === 'TIMEOUT' || logObject.data === 'IMMEDIATE_TIMEOUT') {
     return [{ timeout: true }];
   }
   return logObject.data
@@ -258,13 +268,10 @@ async function fetchSlogs(tailerUrl) {
     if (error instanceof ErrorTimeout) {
       return { data: 'TIMEOUT' };
     }
+    if (error instanceof ErrorRedirect) {
+      return { data: 'IMMEDIATE_TIMEOUT' };
+    }
     throw error;
-  }
-  if (slogsResponse === '') {
-    // throw new ErrorUnrecoverable(
-    //   'Slog endpoint response was empty. Make sure you are running Slog from an OD or devvm, or that you are connected to lighthouse or the VPN.'
-    // ).set({ isLikelySlogBug: false });
-    return timeout(TIMEOUT * 1000).then(() => ({ data: 'TIMEOUT' }));
   }
   return parseJSON(slogsResponse);
 }
@@ -291,12 +298,17 @@ async function main([tier]) {
     await guardAndLog(async () => {
       tailerUrl.searchParams.set('pos', pos);
       const logObject = await fetchSlogs(tailerUrl);
-      if (Number.isFinite(logObject.pos)) {
-        pos = logObject.pos;
-      }
       parseLogs(logObject)
         .map(log => JSON.stringify(log))
         .forEach(log => console.log(log));
+      if (Number.isFinite(logObject.pos)) {
+        pos = logObject.pos;
+      }
+      // Let's create an artificial timeout in this case so we don't
+      // create an infinite loop of hundreds of requests.
+      if (logObject.data === 'IMMEDIATE_TIMEOUT') {
+        await timeout(TIMEOUT * 1000);
+      }
     })();
   }
 }
