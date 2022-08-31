@@ -109,7 +109,7 @@ function httpGet(tailerUrl, options = {}) {
         // dns error, user is likely disconnected from the internet or the
         // connection is flaky
         if (error.code === 'ENOTFOUND') {
-          reject(new ErrorKnownNetworkError(`Request redirected.`));
+          reject(new ErrorKnownNetworkError(error.message));
         } else {
           reject(error)
         }
