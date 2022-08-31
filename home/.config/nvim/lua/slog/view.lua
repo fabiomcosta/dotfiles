@@ -72,6 +72,9 @@ function View:new()
     buf = vim.api.nvim_get_current_buf(),
     win = vim.api.nvim_get_current_win(),
     items = {},
+    status = {
+      buf = vim.api.nvim_create_buf(false, true)
+    }
   }
   setmetatable(this, self)
   return this
@@ -134,33 +137,18 @@ function View:setup()
   end
 
   -- float with server name and connection status
-  local buf = vim.api.nvim_create_buf(false, true)
-
-  local text = Text:new()
-  text:render(' ')
-  text:render('直connected', 'ConnectionSuccess')
-  text:render(' ')
-  -- ideally blinking (seriously)
-  -- text:render('睊disconnected', 'ConnectionError')
-  text:nl()
-  vim.api.nvim_buf_set_lines(buf, 0, -1, false, text.lines)
-  clear_hl(buf)
-  for _, hl in ipairs(text.hl) do
-    highlight(buf, config.namespace, hl.group, hl.line, hl.from, hl.to)
-  end
-
-  local win_id = vim.api.nvim_open_win(buf, false, {
+  local status_win_id = vim.api.nvim_open_win(self.status.buf, false, {
     relative = 'win',
     anchor = 'NW',
     row = 0,
     col = 10000000, -- far right,max possible -- vim.fn.winwidth(self.win),
-    width = 13,
+    width = 6,
     height = 1,
     focusable = false,
     style = 'minimal'
   })
-  vim.api.nvim_win_set_option(win_id, "winfixwidth", true)
-  vim.api.nvim_win_set_option(win_id, "winfixheight", true)
+  vim.api.nvim_win_set_option(status_win_id, "winfixwidth", true)
+  vim.api.nvim_win_set_option(status_win_id, "winfixheight", true)
 
   local augroup = vim.api.nvim_create_augroup('SlogBufAugroup', { clear = true })
 
@@ -194,6 +182,26 @@ function View:setup()
   self:on_enter()
   self:lock()
   self:update()
+end
+
+function View:set_is_likely_connected(is_connected)
+  local text = Text:new()
+  text:render(' ')
+
+  if is_connected then
+    text:render('直on', 'ConnectionSuccess')
+  else
+    -- ideally blinking (seriously)
+    text:render('睊off', 'ConnectionError')
+  end
+  text:render(' ')
+  text:nl()
+
+  vim.api.nvim_buf_set_lines(self.status.buf, 0, -1, false, text.lines)
+  clear_hl(self.status.buf)
+  for _, hl in ipairs(text.hl) do
+    highlight(self.status.buf, config.namespace, hl.group, hl.line, hl.from, hl.to)
+  end
 end
 
 function View:set_option(name, value)

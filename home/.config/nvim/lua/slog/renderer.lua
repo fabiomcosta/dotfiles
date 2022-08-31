@@ -72,9 +72,23 @@ function renderer.start(view)
   tailer.start(
     { tier = config.options.tier },
     function(log)
+      if log.timeout == true then
+        util.debug('timeout')
+        view:set_is_likely_connected(false)
+        return
+      end
+
+      view:set_is_likely_connected(true)
+
+      if log.heartbeat == true then
+        util.debug('heartbeat')
+        return
+      end
+
       local last_log = logs[#logs]
       if last_log ~= nil and log.title == last_log.title then
-        last_log.count = last_log.count + 1
+        log.count = last_log.count + 1
+        logs[#logs] = log
       else
         log.count = 1
         table.insert(logs, log)
@@ -105,11 +119,6 @@ function renderer.render_log(view, text, log)
         ' Please report this back to https://fb.workplace.com/groups/1300890600405446' or ''
     text:render('TAILER ERROR: ' .. log.error.message .. report_back_msg)
     text:nl()
-    return
-  end
-
-  if log.heartbeat == true then
-    util.debug('heartbeat')
     return
   end
 

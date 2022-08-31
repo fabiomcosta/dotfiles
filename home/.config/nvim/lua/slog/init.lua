@@ -8,12 +8,12 @@
 -- * [done] hover functionality to show full text
 -- * filter functionality/command
 -- * when there are filters applied, show number of hidden messages (maybe on buffer title)
--- * online/offline checks? (might need the tailer to signal that)
+-- * [done] online/offline checks? (might need the tailer to signal that)
 -- * inform if process stops working
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
+-- * [done] improve perf when jumping to file
 -- * improve re-renders with better UI caching
--- * improve perf when jumping to file
 -- * optimize tailer to output buffer when it gets a complete log json entry,
 --   instead of waiting for the end of the response to output.
 

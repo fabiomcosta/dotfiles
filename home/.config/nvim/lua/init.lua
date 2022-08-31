@@ -14,10 +14,10 @@ local function replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, false, true)
 end
 
-local function feedkeys(key, mode)
-  mode = mode or 'x'
-  vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
-end
+-- local function feedkeys(key, mode)
+--   mode = mode or 'x'
+--   vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
+-- end
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -1148,7 +1148,7 @@ return packer.startup({
     -- Calls PackerSync if we get any module not found error on the
     -- config step.
     local configStatus, configError = pcall(config)
-    if not configStatus then
+    if not configStatus and configError ~= nil then
       local isModuleNotFoundError = string.find(
         configError,
         [[module ['"][%w._-]+['"] not found:]]
