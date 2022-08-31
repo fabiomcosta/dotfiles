@@ -38,7 +38,7 @@ class ErrorTimeout extends ErrorWithMetadata {
   }
 }
 
-class ErrorRedirect extends ErrorWithMetadata {}
+class ErrorKnownNetworkError extends ErrorWithMetadata {}
 
 class ErrorUnrecoverable extends ErrorWithMetadata {}
 
@@ -97,7 +97,7 @@ function httpGet(tailerUrl, options = {}) {
       } else if (res.statusCode === 302) {
         // The user is likely not on the VPN and we can't access the log
         // endpoint, so we get a redirect.
-        reject(new ErrorRedirect(`Request redirected.`));
+        reject(new ErrorKnownNetworkError(`Request redirected.`));
       } else {
         reject(new Error(`Unknown Network error statusCode:${res.statusCode}`));
       }
@@ -105,7 +105,15 @@ function httpGet(tailerUrl, options = {}) {
       .on('timeout', () => {
         req.destroy(new ErrorTimeout(`Request timed out.`));
       })
-      .on('error', (error) => reject(error));
+      .on('error', (error) => {
+        // dns error, user is likely disconnected from the internet or the
+        // connection is flaky
+        if (error.code === 'ENOTFOUND') {
+          reject(new ErrorKnownNetworkError(`Request redirected.`));
+        } else {
+          reject(error)
+        }
+      });
   });
 }
 
@@ -248,7 +256,7 @@ function parseLogs(logObject) {
   if (logObject.data === '') {
     return [{ heartbeat: true }];
   }
-  if (logObject.data === 'TIMEOUT' || logObject.data === 'IMMEDIATE_TIMEOUT') {
+  if (logObject.data === 'TIMEOUT') {
     return [{ timeout: true }];
   }
   return logObject.data
@@ -268,8 +276,8 @@ async function fetchSlogs(tailerUrl) {
     if (error instanceof ErrorTimeout) {
       return { data: 'TIMEOUT' };
     }
-    if (error instanceof ErrorRedirect) {
-      return { data: 'IMMEDIATE_TIMEOUT' };
+    if (error instanceof ErrorKnownNetworkError) {
+      return { data: 'TIMEOUT', delay: true };
     }
     throw error;
   }
@@ -306,7 +314,7 @@ async function main([tier]) {
       }
       // Let's create an artificial timeout in this case so we don't
       // create an infinite loop of hundreds of requests.
-      if (logObject.data === 'IMMEDIATE_TIMEOUT') {
+      if (logObject.delay) {
         await timeout(TIMEOUT * 1000);
       }
     })();
