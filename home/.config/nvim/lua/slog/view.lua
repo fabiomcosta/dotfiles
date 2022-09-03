@@ -3,9 +3,7 @@ local config = require('slog.config')
 local folds = require('slog.folds')
 local util = require('slog.util')
 local preview_sign = require('slog.preview_sign')
-local Text = require('slog.text')
-
-local highlight = vim.api.nvim_buf_add_highlight
+local StatusPanel = require('slog.status_panel')
 
 local View = {}
 View.__index = View
@@ -67,17 +65,8 @@ local function is_valid_parent_window(win)
   return true
 end
 
-function View:new()
-  local this = {
-    buf = vim.api.nvim_get_current_buf(),
-    win = vim.api.nvim_get_current_win(),
-    items = {},
-    status = {
-      buf = vim.api.nvim_create_buf(false, true)
-    }
-  }
-  setmetatable(this, self)
-  return this
+local function switch_to_win(win)
+  vim.api.nvim_set_current_win(win)
 end
 
 function View.create()
@@ -88,6 +77,16 @@ function View.create()
   view:setup()
   view:switch_to_parent()
   return view
+end
+
+function View:new()
+  local this = {
+    buf = vim.api.nvim_get_current_buf(),
+    win = vim.api.nvim_get_current_win(),
+    items = {},
+  }
+  setmetatable(this, self)
+  return this
 end
 
 function View:setup()
@@ -136,19 +135,7 @@ function View:setup()
     vim.api.nvim_win_set_width(self.win, config.options.width)
   end
 
-  -- float with server name and connection status
-  local status_win_id = vim.api.nvim_open_win(self.status.buf, false, {
-    relative = 'win',
-    anchor = 'NW',
-    row = 0,
-    col = 10000000, -- far right,max possible -- vim.fn.winwidth(self.win),
-    width = 6,
-    height = 1,
-    focusable = false,
-    style = 'minimal'
-  })
-  vim.api.nvim_win_set_option(status_win_id, "winfixwidth", true)
-  vim.api.nvim_win_set_option(status_win_id, "winfixheight", true)
+  self.status_panel = StatusPanel:new({ relative_win = self.win })
 
   local augroup = vim.api.nvim_create_augroup('SlogBufAugroup', { clear = true })
 
@@ -185,23 +172,7 @@ function View:setup()
 end
 
 function View:set_is_likely_connected(is_connected)
-  local text = Text:new()
-  text:render(' ')
-
-  if is_connected then
-    text:render('直on', 'ConnectionSuccess')
-  else
-    -- ideally blinking (seriously)
-    text:render('睊off', 'ConnectionError')
-  end
-  text:render(' ')
-  text:nl()
-
-  vim.api.nvim_buf_set_lines(self.status.buf, 0, -1, false, text.lines)
-  clear_hl(self.status.buf)
-  for _, hl in ipairs(text.hl) do
-    highlight(self.status.buf, config.namespace, hl.group, hl.line, hl.from, hl.to)
-  end
+  self.status_panel:set_is_likely_connected(is_connected)
 end
 
 function View:set_option(name, value)
@@ -219,7 +190,7 @@ function View:render(text)
   self:lock()
   clear_hl(self.buf)
   for _, data in ipairs(text.hl) do
-    highlight(self.buf, config.namespace, data.group, data.line, data.from, data.to)
+    vim.api.nvim_buf_add_highlight(self.buf, config.namespace, data.group, data.line, data.from, data.to)
   end
 end
 
@@ -291,23 +262,14 @@ function View:on_leave()
   self.parent_state = nil
 end
 
-function View.switch_to(win, buf)
-  if win then
-    vim.api.nvim_set_current_win(win)
-    if buf then
-      vim.api.nvim_win_set_buf(win, buf)
-    end
-  end
-end
-
 function View:switch_to_parent()
   -- vim.cmd("wincmd p")
-  View.switch_to(self.parent)
+  switch_to_win(self.parent)
 end
 
 function View:close()
   if vim.api.nvim_win_is_valid(self.win) then
-    vim.api.nvim_win_close(self.win, {})
+    vim.api.nvim_win_close(self.win, true)
   end
   if vim.api.nvim_buf_is_valid(self.buf) then
     vim.api.nvim_buf_delete(self.buf, {})
@@ -414,7 +376,7 @@ function View:preview()
 
   vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
   self:place_preview_sign_at_line(item.fileLine)
-  View.switch_to(self.win)
+  switch_to_win(self.win)
 end
 
 return View
