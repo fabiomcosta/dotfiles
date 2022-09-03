@@ -6,9 +6,10 @@
 --   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
 -- * [done] fix open vsplit, tab etc on jump
 -- * [done] hover functionality to show full text
+-- * [done] online/offline checks? (might need the tailer to signal that)
 -- * filter functionality/command
 -- * when there are filters applied, show number of hidden messages (maybe on buffer title)
--- * [done] online/offline checks? (might need the tailer to signal that)
+-- * add possibility to create paste from current log functionality
 -- * inform if process stops working
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
