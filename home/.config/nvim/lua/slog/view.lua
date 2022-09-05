@@ -5,6 +5,7 @@ local util = require('slog.util')
 local preview_sign = require('slog.preview_sign')
 local stringify = require('slog.stringify')
 local StatusPanel = require('slog.status_panel')
+local FloatWin = require('slog.float_win')
 
 local View = {}
 View.__index = View
@@ -137,6 +138,10 @@ function View:setup()
   end
 
   self.status_panel = StatusPanel:new({ relative_win = self.win })
+  self.filter_panel = FloatWin:new({
+    relative_win = self.win,
+    position = 'bottomright'
+  })
 
   local augroup = vim.api.nvim_create_augroup('SlogBufAugroup', { clear = true })
 
@@ -397,7 +402,7 @@ function View:paste()
 
   -- pastry
   local pastry_job = util.create_async_job({
-    cmd = {'pastry', '--json'},
+    cmd = { 'pastry', '--json' },
     writer = stringify.log(item.log),
     callback = function(error, result)
       if error ~= nil then

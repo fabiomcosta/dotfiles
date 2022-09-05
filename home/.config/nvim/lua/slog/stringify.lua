@@ -3,7 +3,7 @@ local util = require('slog.util')
 
 local stringify = {}
 
-function tbl_remove_key(tbl, key)
+local function tbl_remove_key(tbl, key)
   local value = tbl[key]
   tbl[key] = nil
   return value
@@ -50,14 +50,14 @@ end
 function stringify.log(log)
   local str = ''
 
-  local attributes = vim.tbl_deep_extend("force", {}, log.attributes)
+  local attributes = vim.tbl_deep_extend('force', {}, log.attributes)
 
   local date = tbl_remove_key(attributes, 'date')
-  str = str .. '['..os.date('%a %b %d %X %Y', date)..']'
+  str = str .. '[' .. os.date('%a %b %d %X %Y', date) .. ']'
   str = str .. ' '
-  str = str .. '['..tbl_remove_key(attributes, 'service')..']'
+  str = str .. '[' .. tbl_remove_key(attributes, 'service') .. ']'
   str = str .. ' '
-  str = str .. '['..tbl_remove_key(attributes, 'id')..']'
+  str = str .. '[' .. tbl_remove_key(attributes, 'id') .. ']'
 
   for mk, mv in pairs(attributes) do
     str = str .. ' '
@@ -79,7 +79,7 @@ function stringify.log(log)
 
   for index, trace_item in ipairs(log.trace) do
     str = str .. '    '
-    str = str .. '#'..(index-1)
+    str = str .. '#' .. (index - 1)
 
     str = str .. ' '
     str = str .. stringify.function_name(trace_item.functionName)
@@ -87,7 +87,7 @@ function stringify.log(log)
     local file = stringify.file(trace_item)
     if file ~= nil then
       str = str .. ' '
-      str = str .. '['..file..']'
+      str = str .. '[' .. file .. ']'
     end
 
     local metadata = stringify.metadata(trace_item)

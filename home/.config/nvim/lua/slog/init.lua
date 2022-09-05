@@ -8,8 +8,8 @@
 -- * [done] hover functionality to show full text
 -- * [done] online/offline checks? (might need the tailer to signal that)
 -- * [done] add possibility to create paste from current log functionality
--- * filter functionality/command
--- * when there are filters applied, show number of hidden messages (maybe on buffer title)
+-- * [done] when there are filters applied, show number of hidden messages (maybe on buffer title)
+-- * advanced filter functionality/command
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
 -- * [done] improve perf when jumping to file
@@ -17,10 +17,10 @@
 -- * optimize tailer to output buffer when it gets a complete log json entry,
 --   instead of waiting for the end of the response to output.
 
-local View = require("slog.view")
-local config = require("slog.config")
-local colors = require("slog.colors")
-local util = require("slog.util")
+local View = require('slog.view')
+local config = require('slog.config')
+local colors = require('slog.colors')
+local util = require('slog.util')
 
 local Slog = {}
 

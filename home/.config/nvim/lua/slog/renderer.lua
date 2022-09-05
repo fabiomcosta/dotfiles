@@ -3,6 +3,7 @@ local Text = require('slog.text')
 local folds = require('slog.folds')
 local util = require('slog.util')
 local tailer = require('slog.tailer')
+local stringify = require('slog.stringify')
 
 local renderer = {}
 local logs = {}
@@ -25,22 +26,23 @@ local function get_sign_for_level(level)
 end
 
 local function render(view)
-  local text = Text:new()
   view.items = {}
   vim.fn.sign_unplace('*', { buffer = view.buf })
 
-  -- reverse iteration over logs.
-  -- This works great when you are just reading the logs, but the scroll
-  -- behavior becomes of annoying especially when you are actively going
-  -- through the log entries.
-  -- for i = #logs, 1, -1 do
-  --   renderer.render_log(view, text, logs[i])
-  -- end
+  local text = Text:new()
   for _, log in ipairs(logs) do
     renderer.render_log(view, text, log)
   end
-
   view:render(text)
+
+  view.filter_panel:close()
+  if config.options.filters.level ~= nil then
+    local t = Text:new()
+    t:render(' showing ' .. text.lineNr .. ' out of ' .. #logs .. ' ')
+    t:nl()
+    view.filter_panel:render(t)
+    view.filter_panel:open()
+  end
 end
 
 function renderer.render(view)
@@ -107,7 +109,13 @@ function renderer.render_log(view, text, log)
   end
 
   local key = log.attributes.date .. log.attributes.id
-  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true, text = log.title, log = log }
+  view.items[line] = {
+    key = key,
+    level = log.attributes.level,
+    is_top_level = true,
+    text = log.title,
+    log = log
+  }
 
   text:render(' ')
 
