@@ -7,10 +7,9 @@
 -- * [done] fix open vsplit, tab etc on jump
 -- * [done] hover functionality to show full text
 -- * [done] online/offline checks? (might need the tailer to signal that)
+-- * [done] add possibility to create paste from current log functionality
 -- * filter functionality/command
 -- * when there are filters applied, show number of hidden messages (maybe on buffer title)
--- * add possibility to create paste from current log functionality
--- * inform if process stops working
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
 -- * [done] improve perf when jumping to file
@@ -115,6 +114,8 @@ function Slog.action(action)
     view:toggle_filter()
   elseif action == "hover" then
     view:hover()
+  elseif action == "paste" then
+    view:paste()
   elseif action == "clear" then
     Slog.clear()
   else

@@ -18,24 +18,22 @@ function M.start(opts, callback)
   local parent_directory_path = util.parentdir(filename)
   local tailer_path = parent_directory_path .. '/tailer.mjs'
 
-  tailer_job = util.create_async_job(
-    { 'node', tailer_path, opts.tier },
-    function(error, result)
-      vim.schedule(function()
-        if error ~= nil then
-          return util.error(error)
-        end
-        if result == nil then
-          return
-        end
-        local jsonParsedSuccessfully, jsonOrError = pcall(vim.json.decode, result)
-        if not jsonParsedSuccessfully then
-          return util.error(jsonOrError)
-        end
-        callback(jsonOrError)
-      end)
+  tailer_job = util.create_async_job({
+    cmd = { 'node', tailer_path, opts.tier },
+    callback = function(error, result)
+      if error ~= nil then
+        return util.error(error)
+      end
+      if result == nil then
+        return
+      end
+      local jsonParsedSuccessfully, jsonOrError = pcall(vim.json.decode, result)
+      if not jsonParsedSuccessfully then
+        return util.error(jsonOrError)
+      end
+      callback(jsonOrError)
     end
-  )
+  })
 end
 
 function M.shutdown()

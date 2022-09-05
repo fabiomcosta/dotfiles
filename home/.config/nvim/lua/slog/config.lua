@@ -30,6 +30,7 @@ local defaults = {
     preview = "p", -- preview the file's location
     toggle_filter = "f", -- filter messages by the level of the log under the cursor
     hover = "K", -- shows complete text on a popup
+    paste = "P", -- creates a paste containing the current trace (uses `pastry`)
     clear = "c", -- clears the list of logs
   },
 }

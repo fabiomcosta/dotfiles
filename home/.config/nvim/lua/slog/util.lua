@@ -38,6 +38,10 @@ function M.count(tab)
   return count
 end
 
+function M.info(msg)
+  vim.notify(msg, vim.log.levels.INFO, { title = "slog" })
+end
+
 function M.warn(msg)
   vim.notify(msg, vim.log.levels.WARN, { title = "slog" })
 end
@@ -52,12 +56,14 @@ function M.debug(msg)
   end
 end
 
-function M.create_async_job(cmd, callback)
-  local command = table.remove(cmd, 1)
-  local args = cmd
+function M.create_async_job(opts)
+  local command = table.remove(opts.cmd, 1)
+  local args = opts.cmd
+  local callback = vim.schedule_wrap(opts.callback)
   local job = Job:new({
     command = command,
     args = args,
+    writer = opts.writer,
     on_stderr = callback,
     on_stdout = callback,
   })

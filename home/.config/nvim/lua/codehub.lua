@@ -97,7 +97,9 @@ end
 
 local function copyToRegister(url)
   vim.fn.setreg('+', url)
-  vim.cmd([[silent OSCYankReg +]])
+  if vim.api.nvim_get_commands({}).OSCYankReg then
+    vim.cmd([[silent OSCYankReg +]])
+  end
   print('copied ' .. url)
 end
 

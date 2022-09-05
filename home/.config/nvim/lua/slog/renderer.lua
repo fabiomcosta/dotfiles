@@ -1,7 +1,6 @@
 local config = require('slog.config')
 local Text = require('slog.text')
 local folds = require('slog.folds')
-local b64 = require('slog.b64')
 local util = require('slog.util')
 local tailer = require('slog.tailer')
 
@@ -24,25 +23,6 @@ local function get_sign_for_level(level)
   end
   return config.options.signs.none, 'None'
 end
-
-local print_function_name = util.memoize(function(function_name)
-  return string.gsub(function_name, 'base64json::<(.-)>', function(base64json)
-    local json_str = b64.decode(base64json)
-    local json = vim.json.decode(json_str)
-    if type(json) == 'string' then
-      return '"' .. json .. '"'
-    elseif type(json) == 'table' then
-      if json._special_text_key_DONT_USE then
-        return json._special_text_key_DONT_USE
-      elseif json[1] ~= nil then
-        return 'vec[' .. #json .. ']'
-      else
-        return 'dict[' .. util.count(json) .. ']'
-      end
-    end
-    return json_str
-  end)
-end)
 
 local function render(view)
   local text = Text:new()
@@ -127,7 +107,7 @@ function renderer.render_log(view, text, log)
   end
 
   local key = log.attributes.date .. log.attributes.id
-  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true, text = log.title }
+  view.items[line] = { key = key, level = log.attributes.level, is_top_level = true, text = log.title, log = log }
 
   text:render(' ')
 
@@ -181,22 +161,17 @@ function renderer.render_log_details(view, text, log)
 
     text:render(indent, 'Indent')
 
-    local function_name = print_function_name(trace_item.functionName)
+    local function_name = stringify.function_name(trace_item.functionName)
     text:render(function_name, 'Text', ' ')
 
-    local file_location = nil
-    if trace_item.fileName ~= nil and trace_item.fileLine ~= nil then
-      file_location = trace_item.fileName .. ':' .. trace_item.fileLine
+    local file_location = stringify.file(trace_item)
+    if file_location ~= nil then
       text:render(file_location, 'Location', ' ')
     end
 
-    local metadata = nil
-    if trace_item.metadata ~= nil then
-      local metadata_serialized = ''
-      for mk, mv in pairs(trace_item.metadata) do
-        metadata_serialized = metadata_serialized .. ' <' .. mk .. ':' .. mv .. '>'
-      end
-      metadata = 'with metadata' .. metadata_serialized
+    local metadata = stringify.metadata(trace_item)
+    if metadata ~= nil then
+      metadata = 'with metadata' .. metadata
       text:render(metadata, 'Metadata')
     end
 

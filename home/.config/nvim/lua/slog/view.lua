@@ -3,6 +3,7 @@ local config = require('slog.config')
 local folds = require('slog.folds')
 local util = require('slog.util')
 local preview_sign = require('slog.preview_sign')
+local stringify = require('slog.stringify')
 local StatusPanel = require('slog.status_panel')
 
 local View = {}
@@ -377,6 +378,50 @@ function View:preview()
   vim.cmd('edit +' .. item.fileLine .. ' ' .. item.fileName)
   self:place_preview_sign_at_line(item.fileLine)
   switch_to_win(self.win)
+end
+
+function View:paste()
+
+  if not is_valid_parent_window(self.parent) then
+    return
+  end
+
+  local item = self:current_item()
+  if not item then
+    return
+  end
+
+  if not item.is_top_level then
+    return
+  end
+
+  -- pastry
+  local pastry_job = util.create_async_job({
+    cmd = {'pastry', '--json'},
+    writer = stringify.log(item.log),
+    callback = function(error, result)
+      if error ~= nil then
+        return util.error(error)
+      end
+      local jsonParsedSuccessfully, jsonOrError = pcall(vim.json.decode, result)
+      if not jsonParsedSuccessfully then
+        return util.error(jsonOrError)
+      end
+      result = jsonOrError
+
+      if result.type == 'activityTick' then
+        util.info(result.data.name)
+      elseif result.type == 'data' and result.data and result.data.createdPaste and result.data.createdPaste.url then
+        local url = result.data.createdPaste.url
+        vim.fn.setreg('+', url)
+        if vim.api.nvim_get_commands({}).OSCYankReg then
+          vim.cmd([[silent OSCYankReg +]])
+        end
+        print('Copied ' .. url .. ' to the clipboard.')
+      end
+    end
+  })
+
 end
 
 return View
