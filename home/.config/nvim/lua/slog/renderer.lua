@@ -124,7 +124,10 @@ function renderer.render_log(view, text, log)
 
   local sign, level = get_sign_for_level(log.attributes.level)
 
-  text:render(os.date('%X %a %b', log.attributes.date), level .. 'Date')
+  local tz_offset = util.date_offset(log.attributes.date)
+  local local_ts = log.attributes.date + (tz_offset * (60 * 60))
+
+  text:render(os.date('%X %a %b', local_ts), level .. 'Date')
   text:render(' ', level)
 
   text:render(sign .. ' ', level .. 'Sign')

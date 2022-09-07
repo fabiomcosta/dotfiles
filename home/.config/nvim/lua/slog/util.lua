@@ -75,4 +75,12 @@ function M.parentdir(path)
   return vim.fn.fnamemodify(path, ':h')
 end
 
+local function round(num)
+  return math.floor(num + 0.5) / 1
+end
+
+function M.date_offset(ts)
+  return round((ts - os.time()) / (60 * 60))
+end
+
 return M
