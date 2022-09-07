@@ -76,7 +76,7 @@ function M.parentdir(path)
 end
 
 local function round(num)
-  return math.floor(num + 0.5) / 1
+  return math.floor(num + 0.5)
 end
 
 function M.date_offset(ts)
