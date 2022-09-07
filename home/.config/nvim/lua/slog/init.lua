@@ -1,14 +1,13 @@
 -- TODO
--- * [done] replace all Trouble references with Slog
 -- * [done] improve colors to better match web slog
 -- * [done] quick filter functionality
 -- * [done] use signs when previewing files to highlight the line http://vimdoc.sourceforge.net/htmldoc/sign.html
 --   https://stackoverflow.com/questions/2150220/how-do-i-make-vim-syntax-highlight-a-whole-line
--- * [done] fix open vsplit, tab etc on jump
 -- * [done] hover functionality to show full text
--- * [done] online/offline checks? (might need the tailer to signal that)
--- * [done] add possibility to create paste from current log functionality
--- * [done] when there are filters applied, show number of hidden messages (maybe on buffer title)
+-- * [done] online/offline checks
+-- * [done] create paste from current log
+-- * [done] when there are filters applied, show number of shown and total logs messages
+-- * [done] possibility of showing date using client's timezone (considering TZ's environment variable)
 -- * advanced filter functionality/command
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
