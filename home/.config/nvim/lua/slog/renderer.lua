@@ -7,6 +7,7 @@ local stringify = require('slog.stringify')
 
 local renderer = {}
 local logs = {}
+local tz_offset = nil
 
 local function get_sign_for_level(level)
   if level == 'info' then
@@ -124,7 +125,9 @@ function renderer.render_log(view, text, log)
 
   local sign, level = get_sign_for_level(log.attributes.level)
 
-  local tz_offset = util.date_offset(log.attributes.date)
+  if tz_offset == nil then
+    tz_offset = util.date_offset(log.attributes.date)
+  end
   local local_ts = log.attributes.date + (tz_offset * (60 * 60))
 
   text:render(os.date('%X %a %b', local_ts), level .. 'Date')

@@ -80,7 +80,7 @@ local function round(num)
 end
 
 function M.date_offset(ts)
-  return round((ts - os.time()) / (60 * 60))
+  return round((os.time() - ts) / (60 * 60))
 end
 
 return M
