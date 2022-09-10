@@ -29,10 +29,18 @@ stringify.function_name = util.memoize(function(function_name)
 end)
 
 function stringify.file(trace_item)
-  if trace_item.fileName ~= nil and trace_item.fileLine ~= nil then
-    return trace_item.fileName .. ':' .. trace_item.fileLine
+  local filename = trace_item.fileName
+  if filename == nil or trace_item.fileLine == nil then
+    return nil
   end
-  return nil
+
+  -- trying to create a relative path, which will be less characters to show
+  local cwd = vim.fn.getcwd()
+  local _, last_index = string.find(filename, cwd)
+  if last_index ~= nil then
+    filename = string.sub(filename, last_index + 2)
+  end
+  return filename .. ':' .. trace_item.fileLine
 end
 
 function stringify.metadata(trace_item)

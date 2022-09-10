@@ -7,7 +7,6 @@ local stringify = require('slog.stringify')
 
 local renderer = {}
 local logs = {}
-local tz_offset = nil
 
 local function get_sign_for_level(level)
   if level == 'info' then
@@ -27,6 +26,10 @@ local function get_sign_for_level(level)
 end
 
 local function render(view)
+  if not view:is_valid() then
+    return
+  end
+
   view.items = {}
   vim.fn.sign_unplace('*', { buffer = view.buf })
 
@@ -92,6 +95,15 @@ function renderer.close()
   tailer.shutdown()
 end
 
+function date_adapt_to_timezone(date)
+  if vim.env.TZ == nil then
+    return date
+  end
+  local tz_offset = util.date_offset(date)
+  local local_ts = date + (tz_offset * (60 * 60))
+  return os.date('%X %a %b', local_ts)
+end
+
 function renderer.render_log(view, text, log)
 
   local line = text.lineNr + 1
@@ -125,12 +137,7 @@ function renderer.render_log(view, text, log)
 
   local sign, level = get_sign_for_level(log.attributes.level)
 
-  if tz_offset == nil then
-    tz_offset = util.date_offset(log.attributes.date)
-  end
-  local local_ts = log.attributes.date + (tz_offset * (60 * 60))
-
-  text:render(os.date('%X %a %b', local_ts), level .. 'Date')
+  text:render(date_adapt_to_timezone(log.attributes.date), level .. 'Date')
   text:render(' ', level)
 
   text:render(sign .. ' ', level .. 'Sign')
