@@ -71,6 +71,7 @@ async function main() {
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
     await createHomeSymlink('.config/alacritty/alacritty.yml');
+    await createHomeSymlink('Applications/VimProtocolHandler.app');
   }
 
   await createHomeSymlink('.vim');
@@ -85,7 +86,6 @@ async function main() {
   await createHomeSymlink('.config/nvim/autoload');
   await createHomeSymlink('.config/nvim/ftdetect');
   await createHomeSymlink('.config/stylua.toml');
-  await createHomeSymlink('Applications/VimProtocolHandler.app');
   await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 
   console.log(
