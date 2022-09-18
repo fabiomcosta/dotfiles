@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Strip urls of the form "vim:///path/to/something/" and pass
+# /path/to/something off to nvim
+# (NOTE: assumes nvim is listening on localhost:8082)
+URL=$1
+PREFIX="vim://"
+PLEN=${#PREFIX}
+SUFIX=${URL:$PLEN}
+
+osascript -e "display notification \"$URL\" with title \"Title\""
+# nvim --server localhost:8082 --remote-send ":e $PATH"

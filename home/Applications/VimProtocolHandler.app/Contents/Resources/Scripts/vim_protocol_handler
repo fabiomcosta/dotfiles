@@ -1,0 +1,104 @@
+#!/usr/bin/python3
+
+import os
+import sys
+import logging
+import subprocess
+import re
+from urllib.parse import urlparse, parse_qs, unquote
+
+dirname = os.path.dirname(__file__)
+name = os.path.basename(__file__)
+
+logpath = '/tmp/{}.log'.format(name)
+logging.basicConfig(filename=logpath, level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logger = logging.getLogger(name)
+
+
+def log_error_and_exit(message):
+  notify('{}. See error logs at {}'.format(re.sub(r'\.+$', '', message), logpath))
+  logger.error(message)
+  sys.exit(1)
+
+
+def notify(text, title = 'Vim Protocol Handler'):
+  def quote(t):
+    return t.replace('"', '\\"')
+  subprocess.run(['osascript', '-e', 'display notification "{}" with title "{}"'.format(quote(text), quote(title))], check=True)
+
+
+def focus_currently_open_terminal():
+  subprocess.run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)], check=True)
+
+
+def parse_and_validate_url(url):
+  parsed_url = urlparse(url)
+  parsed_qs = parse_qs(parsed_url.query)
+
+  validation = {
+    'scheme': ['fb-vscode'],
+    'netloc': ['nuclide.core'],
+    'path': ['/open-arc'],
+  }
+
+  if parsed_url.scheme not in validation['scheme']:
+    log_error_and_exit('scheme (protocol) not supported on {}. Supported schemes: {}'.format(url, validation['scheme']))
+
+  if parsed_url.netloc not in validation['netloc']:
+    log_error_and_exit('application (domain) not supported on {}. Supported applications: {}'.format(url, validation['netloc']))
+
+  if parsed_url.path not in validation['path']:
+    log_error_and_exit('command (path) not supported on {}. Supported commands: {}'.format(url, validation['path']))
+
+  if not 'project' in parsed_qs:
+    log_error_and_exit('No "project" query param found on {}.'.format(url))
+
+  if not 'path' in parsed_qs:
+    log_error_and_exit('No "path" query param found on {}.'.format(url))
+
+  return parsed_url, parsed_qs
+
+
+def get_valid_root_path(project):
+  # Setup your symlinks for your relevant arcanist project
+  project_to_path = {
+    'facebook-www': '~/www/',
+    'facebook-admin': '~/admin/',
+    'opsfiles': '~/opsfiles/',
+    'fbsource': '~/fbsource/',
+  };
+
+  if not project in project_to_path:
+    log_error_and_exit('Project {} not supported. Supported projects: {}'.format(project, project_to_path.keys()))
+
+  return project_to_path[project]
+
+
+if len(sys.argv) < 2:
+  log_error_and_exit('expects 1 argument')
+
+url = sys.argv[1]
+
+logger.info('Trying to handle {}'.format(url))
+
+parsed_url, parsed_qs = parse_and_validate_url(url)
+
+root_path = get_valid_root_path(parsed_qs['project'][0])
+relative_path = unquote(parsed_qs['path'][0])
+line = '+{}'.format(parsed_qs['line'][0]) if 'line' in parsed_qs else ''
+
+file_path = root_path + relative_path
+
+logger.info('Trying to open {}'.format(file_path))
+
+try:
+  # Note this relies on nvim being installed via homebrew.
+  # Is there a better way to detect where is the installed nvim?
+  subprocess.run('/usr/local/bin/nvim --server localhost:8082 --remote-send ":e {} {}<CR>"'.format(line, file_path), shell=True, check=True, capture_output=True)
+except subprocess.CalledProcessError as error:
+  logger.error('\n{}\n{}'.format(error, error.stderr))
+  log_error_and_exit("Couldn't open file. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
+
+notify('Opened {} '.format(file_path))
+focus_currently_open_terminal()
