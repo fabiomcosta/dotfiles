@@ -29,7 +29,10 @@ def notify(text, title = 'Vim Protocol Handler'):
 
 
 def focus_currently_open_terminal():
-  subprocess.run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)], check=True)
+  try:
+    subprocess.run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)], check=True, capture_output=True)
+  except subprocess.CalledProcessError as error:
+    logger.error('\n{}\n{}'.format(error, error.stderr))
 
 
 def parse_and_validate_url(url):
@@ -95,7 +98,7 @@ logger.info('Trying to open {}'.format(file_path))
 try:
   # Note this relies on nvim being installed via homebrew.
   # Is there a better way to detect where is the installed nvim?
-  subprocess.run('/usr/local/bin/nvim --server localhost:8082 --remote-send ":e {} {}<CR>"'.format(line, file_path), shell=True, check=True, capture_output=True)
+  subprocess.run(['/usr/local/bin/nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(line, file_path)], check=True, capture_output=True)
 except subprocess.CalledProcessError as error:
   logger.error('\n{}\n{}'.format(error, error.stderr))
   log_error_and_exit("Couldn't open file. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")

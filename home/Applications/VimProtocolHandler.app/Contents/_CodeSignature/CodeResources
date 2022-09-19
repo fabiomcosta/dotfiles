@@ -4,13 +4,17 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/Scripts/focus_currently_open_terminal.scpt</key>
+		<data>
+		hz2fviGSXDLZW1s7ZDp44P897d0=
+		</data>
 		<key>Resources/Scripts/main.scpt</key>
 		<data>
 		wrvE1bvM6vYhReej4tIbXUf58g4=
 		</data>
 		<key>Resources/Scripts/vim_protocol_handler</key>
 		<data>
-		oPdqwR/VKB7RHFlWaYcRCsjsdnU=
+		RJ/ZtSyeHj41OJBSQzK3GoEvqUA=
 		</data>
 		<key>Resources/applet.icns</key>
 		<data>
@@ -18,7 +22,7 @@
 		</data>
 		<key>Resources/applet.rsrc</key>
 		<data>
-		Qj16lc4303G+HQsAbBivC6oQcUU=
+		UJmUNeKnw+SdaewzLiA8VfLMIJg=
 		</data>
 		<key>Resources/description.rtfd/TXT.rtf</key>
 		<data>
@@ -27,14 +31,16 @@
 	</dict>
 	<key>files2</key>
 	<dict>
-		<key>MacOS/VimProtocolHandler</key>
+		<key>Resources/Scripts/focus_currently_open_terminal.scpt</key>
 		<dict>
-			<key>cdhash</key>
+			<key>hash</key>
 			<data>
-			7fEVYmrMZGBXfxkKM7JXzMSRJCM=
+			hz2fviGSXDLZW1s7ZDp44P897d0=
 			</data>
-			<key>requirement</key>
-			<string>cdhash H"d3a6e323f9b610f6f8e026739b9f9f9b2327cb6d" or cdhash H"edf115626acc6460577f190a33b257ccc4912423"</string>
+			<key>hash2</key>
+			<data>
+			mgTYx4la22rgMsRnXrbth55ASVxUNxLIK4PVt4ErMI8=
+			</data>
 		</dict>
 		<key>Resources/Scripts/main.scpt</key>
 		<dict>
@@ -51,11 +57,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			oPdqwR/VKB7RHFlWaYcRCsjsdnU=
+			RJ/ZtSyeHj41OJBSQzK3GoEvqUA=
 			</data>
 			<key>hash2</key>
 			<data>
-			EqaH5dtaJ0okcW6p8CefTbzulikmVzR8/ZbbsS7t8Io=
+			IU1nw4OF3rNwGIIX+ry0Tjt2eTJ+IiIO7GsYjuCK6Go=
 			</data>
 		</dict>
 		<key>Resources/applet.icns</key>
@@ -73,11 +79,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Qj16lc4303G+HQsAbBivC6oQcUU=
+			UJmUNeKnw+SdaewzLiA8VfLMIJg=
 			</data>
 			<key>hash2</key>
 			<data>
-			+qqjXnpZOErmsm3UxoYxG6bg0FbCH5JT0I3hjJoPKig=
+			cnOOMhViDM4BEYjELvAs9lmkhpCl6vOQ/ZqOeZdCnGY=
 			</data>
 		</dict>
 		<key>Resources/description.rtfd/TXT.rtf</key>

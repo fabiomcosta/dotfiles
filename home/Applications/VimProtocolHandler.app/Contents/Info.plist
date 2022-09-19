@@ -45,26 +45,6 @@
 	<true/>
 	<key>NSAppleEventsUsageDescription</key>
 	<string>This script needs to control other applications to run.</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>This script needs access to your music to run.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>This script needs access to your calendars to run.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>This script needs access to your camera to run.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>This script needs access to your contacts to run.</string>
-	<key>NSHomeKitUsageDescription</key>
-	<string>This script needs access to your HomeKit Home to run.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>This script needs access to your microphone to run.</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This script needs access to your photos to run.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>This script needs access to your reminders to run.</string>
-	<key>NSSiriUsageDescription</key>
-	<string>This script needs access to Siri to run.</string>
-	<key>NSSystemAdministrationUsageDescription</key>
-	<string>This script needs access to administer this system to run.</string>
 	<key>OSAAppletShowStartupScreen</key>
 	<false/>
 	<key>WindowState</key>
@@ -72,17 +52,17 @@
 		<key>bundleDividerCollapsed</key>
 		<false/>
 		<key>bundlePositionOfDivider</key>
-		<real>1104</real>
+		<real>804</real>
 		<key>dividerCollapsed</key>
 		<false/>
 		<key>eventLogLevel</key>
-		<integer>1</integer>
+		<integer>-1</integer>
 		<key>name</key>
 		<string>ScriptWindowState</string>
 		<key>positionOfDivider</key>
-		<real>545</real>
+		<real>528</real>
 		<key>savedFrame</key>
-		<string>823 414 1693 780 0 0 3840 2160 </string>
+		<string>154 163 1393 763 0 0 1792 1120 </string>
 		<key>selectedTab</key>
 		<string>log</string>
 	</dict>
