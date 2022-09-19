@@ -11,9 +11,15 @@ dirname = os.path.dirname(__file__)
 name = os.path.basename(__file__)
 
 logpath = '/tmp/{}.log'.format(name)
-logging.basicConfig(filename=logpath, level=logging.DEBUG,
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logging.basicConfig(
+  filename=logpath,
+  level=logging.DEBUG,
+  format='%(asctime)s %(levelname)s %(name)s %(message)s'
+)
 logger = logging.getLogger(name)
+
+# assuming tmux and nvim were installed via homebrew
+os.environ['PATH'] += ':/usr/local/bin/'
 
 
 def log_error_and_exit(message):
@@ -33,6 +39,32 @@ def focus_currently_open_terminal():
     subprocess.run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)], check=True, capture_output=True)
   except subprocess.CalledProcessError as error:
     logger.error('\n{}\n{}'.format(error, error.stderr))
+
+
+def focus_tmux_window_with_ssh():
+  # TODO, only do this if user actually is using tmux
+
+  # getting hostname from the server running the nvim instance that is listrning to localhost:8082
+  nvim_response = subprocess.run("nvim --server localhost:8082 --remote-expr 'hostname()'", shell=True, check=True, capture_output=True)
+  # not sure why it goes to stderr, but it is what it is.
+  # ex: 34120.od.fbinfra.net
+  hostname = nvim_response.stderr.decode('utf-8').strip()
+  logger.debug('hostname: {}'.format(hostname))
+
+  # getting the tty for the local ssh command that connects to the hostname running nvim
+  tty_response = subprocess.run("ps -o tty= -o command= | grep ssh | grep "+ hostname +" | grep -v grep | awk '{print $1}'", shell=True, check=True, capture_output=True)
+  # ex: ttys011
+  tty = tty_response.stdout.decode('utf-8').strip()
+  logger.debug('tty: {}'.format(tty))
+
+  # get tmux pane_id associated with the tty used by the ssh connected to our server running nvim... phew
+  tmux_response = subprocess.run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'", shell=True, check=True, capture_output=True)
+  logger.debug(tmux_response)
+  # ex: %19
+  tmux_pane_id = tmux_response.stdout.decode('utf-8').strip()
+  logger.debug('tmux pane id: {}'.format(tmux_pane_id))
+
+  subprocess.run('tmux select-window -t {}'.format(tmux_pane_id), shell=True, check=True)
 
 
 def parse_and_validate_url(url):
@@ -78,30 +110,37 @@ def get_valid_root_path(project):
   return project_to_path[project]
 
 
-if len(sys.argv) < 2:
-  log_error_and_exit('expects 1 argument')
+def main(url):
+  logger.info('Trying to handle {}'.format(url))
 
-url = sys.argv[1]
+  parsed_url, parsed_qs = parse_and_validate_url(url)
 
-logger.info('Trying to handle {}'.format(url))
+  root_path = get_valid_root_path(parsed_qs['project'][0])
+  relative_path = unquote(parsed_qs['path'][0])
+  line = '+{}'.format(parsed_qs['line'][0]) if 'line' in parsed_qs else ''
 
-parsed_url, parsed_qs = parse_and_validate_url(url)
+  file_path = root_path + relative_path
 
-root_path = get_valid_root_path(parsed_qs['project'][0])
-relative_path = unquote(parsed_qs['path'][0])
-line = '+{}'.format(parsed_qs['line'][0]) if 'line' in parsed_qs else ''
+  logger.info('Trying to open {}'.format(file_path))
 
-file_path = root_path + relative_path
+  try:
+    # Note this relies on nvim being installed via homebrew.
+    # Is there a better way to detect where is the installed nvim?
+    subprocess.run(['nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(line, file_path)], check=True, capture_output=True)
+  except subprocess.CalledProcessError as error:
+    logger.error('\n{}\n{}'.format(error, error.stderr))
+    log_error_and_exit("Couldn't open file. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
 
-logger.info('Trying to open {}'.format(file_path))
+  notify('Opened {} '.format(file_path))
+  focus_currently_open_terminal()
+  focus_tmux_window_with_ssh()
 
-try:
-  # Note this relies on nvim being installed via homebrew.
-  # Is there a better way to detect where is the installed nvim?
-  subprocess.run(['/usr/local/bin/nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(line, file_path)], check=True, capture_output=True)
-except subprocess.CalledProcessError as error:
-  logger.error('\n{}\n{}'.format(error, error.stderr))
-  log_error_and_exit("Couldn't open file. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
+if __name__ == '__main__':
+  if len(sys.argv) < 2:
+    log_error_and_exit('expects 1 argument')
 
-notify('Opened {} '.format(file_path))
-focus_currently_open_terminal()
+  try:
+    main(sys.argv[1])
+  except Exception as error:
+    logger.error(error)
+    log_error_and_exit(error)
