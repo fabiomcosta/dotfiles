@@ -836,7 +836,7 @@ local function onPureNeovimConfig()
 
   _G.fabs_test_kill_last_term_window = function()
     local max_width = vim.o.columns
-    local max_height = vim.o.lines - 1
+    local max_height = vim.o.lines - 1 - vim.o.cmdheight
 
     -- get winnr from last windows
     local last_window_nr = vim.fn.winnr('$')
