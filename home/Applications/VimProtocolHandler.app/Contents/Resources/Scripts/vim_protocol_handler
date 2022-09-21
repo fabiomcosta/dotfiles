@@ -3,7 +3,7 @@
 # TODO
 # * Provide helpful error if trying to open a file that is not available to the nvim instance.
 #   Example: trying to open an fbsource link on a server that only contains www.
-# * Support local links for projects known to be local, like wa-js
+# * [DONE] Support local links for projects known to be local, like wa-js
 # * Support et?
 
 import os
@@ -25,6 +25,21 @@ logging.basicConfig(
 logger = logging.getLogger(name)
 
 
+def run_proc(cmd):
+  logger.debug(cmd)
+  try:
+    return subprocess.run(cmd, shell=isinstance(cmd, str), check=True, capture_output=True)
+  except subprocess.CalledProcessError as error:
+    logger.error('\n{}\n{}'.format(error, error.stderr))
+
+
+def run(cmd):
+  proc = run_proc(cmd)
+  if proc is None:
+    return
+  return proc.stdout.decode('utf-8').strip() or True
+
+
 def log_error(message):
   message = str(message)
   notify('{}. See error logs at {}'.format(re.sub(r'\.+$', '', message), logpath))
@@ -39,40 +54,33 @@ def log_error_and_exit(message):
 def notify(text, title = 'Vim Protocol Handler'):
   def quote(t):
     return t.replace('"', '\\"')
-  subprocess.run(['osascript', '-e', 'display notification "{}" with title "{}"'.format(quote(text), quote(title))], check=True)
+  run(['osascript', '-e', 'display notification "{}" with title "{}"'.format(quote(text), quote(title))])
 
 
 def focus_currently_open_terminal():
-  try:
-    subprocess.run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)], check=True, capture_output=True)
-  except subprocess.CalledProcessError as error:
-    logger.error('\n{}\n{}'.format(error, error.stderr))
+  run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)])
 
 
 def tmux_select_window_by_tty(tty):
-  tmux_response = subprocess.run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'", shell=True, check=True, capture_output=True)
-  logger.debug(tmux_response)
+  tmux_pane_id = run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'")
   # ex: %19
-  tmux_pane_id = tmux_response.stdout.decode('utf-8').strip()
   logger.debug('tmux pane id: {}'.format(tmux_pane_id))
 
-  subprocess.run('tmux select-window -t {}'.format(tmux_pane_id), shell=True, check=True)
+  run('tmux select-window -t {}'.format(tmux_pane_id))
 
 
 def focus_tmux_window_with_ssh():
   # TODO, only do this if user actually is using tmux
 
   # getting hostname from the server running the nvim instance that is listening to localhost:8082
-  nvim_response = subprocess.run("nvim --server localhost:8082 --remote-expr 'hostname()'", shell=True, check=True, capture_output=True)
   # not sure why it goes to stderr, but it is what it is.
+  hostname = run_proc("nvim --server localhost:8082 --remote-expr 'hostname()'").stderr.decode('utf-8').strip()
   # ex: 34120.od.fbinfra.net
-  hostname = nvim_response.stderr.decode('utf-8').strip()
   logger.debug('hostname: {}'.format(hostname))
 
   # getting the tty for the local ssh command that connects to the hostname running nvim
-  tty_response = subprocess.run("ps -o tty= -o command= | grep ssh | grep "+ hostname +" | grep -v grep | awk '{print $1}'", shell=True, check=True, capture_output=True)
+  tty = run("ps -o tty= -o command= | grep ssh | grep "+ hostname +" | grep -v grep | awk '{print $1}'")
   # ex: ttys011
-  tty = tty_response.stdout.decode('utf-8').strip()
   logger.debug('tty: {}'.format(tty))
 
   tmux_select_window_by_tty(tty)
@@ -135,15 +143,11 @@ def get_supported_project_paths(project_name):
 
 
 def attempt_to_open_file_remotely(file):
-  try:
-    # Note this relies on nvim being installed via homebrew.
-    # Is there a better way to detect where it is installed nvim?
-    subprocess.run(['nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])], check=True, capture_output=True)
-  except subprocess.CalledProcessError as error:
-    logger.error('\n{}\n{}'.format(error, error.stderr))
-    log_error("Couldn't open file remotely. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
-    return False
-  return True
+  if run(['nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])]):
+    return True
+
+  log_error("Couldn't open file remotely. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
+  return False
 
 
 def get_currently_open_nvim_processes():
@@ -164,8 +168,7 @@ def get_currently_open_nvim_processes():
       f16
       n/var/folders/gc/ljcry8fs5cd7qc7h2c25d9gc0000gn/T/nvimjI8WjN/0
   '''
-  lsof_proc = subprocess.run('lsof -a -F pfn -P -n -d 16 -d cwd -c nvim', shell=True, check=True, capture_output=True)
-  lsof_lines = lsof_proc.stdout.decode('utf-8').strip().split('\n')
+  lsof_lines = run('lsof -a -F pfn -P -n -d 16 -d cwd -c nvim').split('\n')
 
   processes = {}
   pid = None
@@ -189,7 +192,7 @@ def get_currently_open_nvim_processes():
   return processes
 
 
-def attempt_to_open_file_localy(file):
+def attempt_to_open_file_locally(file):
   processes = get_currently_open_nvim_processes()
   project_path = os.path.realpath(os.path.expanduser(file['project_path']))
   file_path = os.path.realpath(os.path.expanduser(file['path']))
@@ -201,22 +204,17 @@ def attempt_to_open_file_localy(file):
 
   logger.info('Found nvim process {} running on {}'.format(nvim_process, project_path))
 
-  nvim_tty_proc = subprocess.run(['ps', '-o', 'tty=', nvim_process['pid']], check=True, capture_output=True)
-  nvim_tty = nvim_tty_proc.stdout.decode('utf-8').strip()
+  nvim_tty = run(['ps', '-o', 'tty=', nvim_process['pid']])
 
   socket_path = nvim_process['unix_socket_path']
-  try:
-    # Note this relies on nvim being installed via homebrew.
-    # Is there a better way to detect where it is installed nvim?
-    subprocess.run(['nvim', '--server', socket_path, '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])], check=True, capture_output=True)
-  except subprocess.CalledProcessError as error:
-    logger.error('\n{}\n{}'.format(error, error.stderr))
-    log_error("Couldn't open file localy. Make sure you have a nvim instance running localy on your project's folder.")
-    return False
 
-  # TODO idely this would happen outside this function
-  tmux_select_window_by_tty(nvim_tty)
-  return True
+  if run(['nvim', '--server', socket_path, '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])]):
+    # TODO idealy this would happen outside this function
+    tmux_select_window_by_tty(nvim_tty)
+    return True
+
+  log_error("Couldn't open file locally. Make sure you have a nvim instance running locally on your project's folder.")
+  return False
 
 
 def main(url):
@@ -233,10 +231,10 @@ def main(url):
 
   logger.info('Trying to open {} on {}...'.format(relative_file_path, project_paths))
 
-  # We'll prefer trying to open the file on a remove server over localy
+  # We'll prefer trying to open the file on a remove server over locally
   # As if there is a server open that is capable of opening this file, it's
   # very likely that the user wants to use the server, instead of trying
-  # to open it localy.
+  # to open it locally.
   if 'remote' in project_paths:
     file_path = os.path.normpath(os.path.join(project_paths['remote'], relative_file_path))
     file = {'path': file_path, 'line': line}
@@ -254,9 +252,9 @@ def main(url):
     file_path = os.path.normpath(os.path.join(project_path, relative_file_path))
     file = {'project_path': project_path, 'path': file_path, 'line': line}
 
-    logger.info('Trying to open file localy...')
-    if attempt_to_open_file_localy(file):
-      logger.info('Successfully opened file localy.')
+    logger.info('Trying to open file locally...')
+    if attempt_to_open_file_locally(file):
+      logger.info('Successfully opened file locally.')
       notify('Opened {} on your local editor.'.format(file['path']))
       focus_currently_open_terminal()
 
