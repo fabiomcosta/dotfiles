@@ -6,11 +6,7 @@
 	<dict>
 		<key>Resources/Scripts/focus_currently_open_terminal.scpt</key>
 		<data>
-		hz2fviGSXDLZW1s7ZDp44P897d0=
-		</data>
-		<key>Resources/Scripts/main.rtf</key>
-		<data>
-		+S5xi1hCM8PzOJTlLb7R3chMlcc=
+		SOia6HoXagdYIFoQaZigOV4sq6k=
 		</data>
 		<key>Resources/Scripts/main.scpt</key>
 		<data>
@@ -18,7 +14,7 @@
 		</data>
 		<key>Resources/Scripts/vim_protocol_handler</key>
 		<data>
-		RJ/ZtSyeHj41OJBSQzK3GoEvqUA=
+		gqS1w2muFhVzFV+qb9tw1Oh1dMA=
 		</data>
 		<key>Resources/applet.icns</key>
 		<data>
@@ -39,22 +35,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hz2fviGSXDLZW1s7ZDp44P897d0=
+			SOia6HoXagdYIFoQaZigOV4sq6k=
 			</data>
 			<key>hash2</key>
 			<data>
-			mgTYx4la22rgMsRnXrbth55ASVxUNxLIK4PVt4ErMI8=
-			</data>
-		</dict>
-		<key>Resources/Scripts/main.rtf</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			+S5xi1hCM8PzOJTlLb7R3chMlcc=
-			</data>
-			<key>hash2</key>
-			<data>
-			Qp+hak8iO18CybouyNwuvQViVuw/rYJ5s+WSU2N+v8I=
+			ZvEDu6rDPg89toaqfXlb4j6avZJH0v9tr9jsYuHKYNI=
 			</data>
 		</dict>
 		<key>Resources/Scripts/main.scpt</key>
@@ -72,11 +57,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			RJ/ZtSyeHj41OJBSQzK3GoEvqUA=
+			gqS1w2muFhVzFV+qb9tw1Oh1dMA=
 			</data>
 			<key>hash2</key>
 			<data>
-			IU1nw4OF3rNwGIIX+ry0Tjt2eTJ+IiIO7GsYjuCK6Go=
+			2EuDjXk0NGIq7okJO2k7NG9YUFJ9N17H4+9/P7YAdMo=
 			</data>
 		</dict>
 		<key>Resources/applet.icns</key>
