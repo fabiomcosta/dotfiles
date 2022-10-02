@@ -8,6 +8,10 @@
 		<data>
 		SOia6HoXagdYIFoQaZigOV4sq6k=
 		</data>
+		<key>Resources/Scripts/main.rtf</key>
+		<data>
+		znV3bcLGlkU+pq87FBtdAFLBrW0=
+		</data>
 		<key>Resources/Scripts/main.scpt</key>
 		<data>
 		wrvE1bvM6vYhReej4tIbXUf58g4=
@@ -40,6 +44,17 @@
 			<key>hash2</key>
 			<data>
 			ZvEDu6rDPg89toaqfXlb4j6avZJH0v9tr9jsYuHKYNI=
+			</data>
+		</dict>
+		<key>Resources/Scripts/main.rtf</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			znV3bcLGlkU+pq87FBtdAFLBrW0=
+			</data>
+			<key>hash2</key>
+			<data>
+			mnii91kmAHIlE6GadPQucq5rn210W6b4I0u2l0B5iEQ=
 			</data>
 		</dict>
 		<key>Resources/Scripts/main.scpt</key>

@@ -3,8 +3,69 @@
 # TODO
 # * Provide helpful error if trying to open a file that is not available to the nvim instance.
 #   Example: trying to open an fbsource link on a server that only contains www.
-# * [DONE] Support local links for projects known to be local, like wa-js
+# * Support devserver
 # * Support et?
+# * [DONE] Support local links for projects known to be local, like wa-js
+# * [DONE] detect if ssh is properly configured
+
+'''
+This script opens codehub urls on Neovim.
+
+# How it works
+
+As you might be aware, neovim can be used in multiple ways and we also
+have local and remote projects that run on ondemand or devserver machines.
+
+This script has been tested on macOS and currently works as described below.
+
+## For Local projects
+
+We try to find an nvim process that is able to open files for the provided
+project (according to the project_to_path config), then if the nvim process is
+running on tmux, we select its window in order to change the focus to it and
+so nvim is visible on that terminalself.
+We then try to focus on any of the most known terminal applications with
+the help of the focus_currently_open_terminal.scpt script.
+
+## For Remote projects
+
+We check is ssh is configured properly, then try to find the ~/.ssh/vph_*.sock
+unix sockets that are actively in use.
+Once found, we try to see if there are nvim instances listening to those
+sockets that can actually open the requested files.
+Once those instances are found we ask them to open the file.
+When then try to select the tmux window being used by ssh to connect to
+the ondemand server so that the local tmux instance changes the focus
+to that window.
+We then try to focus on any of the most known terminal applications with
+the help of the focus_currently_open_terminal.scpt script.
+
+# Configuration
+
+In order to open files on nvim processes running on ondemands servers,
+there is still some extra setup that needs to happen, see below.
+
+## ssh
+
+Add this to your local ~/.ssh/config file:
+
+  Host *.od.fbinfra.net
+      ForwardAgent yes
+      LocalForward ${HOME}/.ssh/vph_%h.sock localhost:8082
+
+## ondemand
+
+With the previous configuration we are making sure the ssh will
+forward data from the local vph_*.sock unix socket to the localhost:8082
+address on our ondemand.
+With this setup we need to make sure that nvim is listening to localhost:8082
+so it can open files (and execute some other commands that we need).
+
+For that, make sure you add the following line on your ondemand .bashrc:
+
+  export NVIM_LISTEN_ADDRESS="localhost:8082"
+
+'''
 
 import os
 import re
@@ -14,6 +75,18 @@ import shlex
 import logging
 import subprocess
 from urllib.parse import urlparse, parse_qs, unquote
+
+project_to_path = {
+  'local': {
+    'wa-js': '~/local/whatsapp/wajs/',
+  },
+  'remote': {
+    'facebook-www': '~/www/',
+    'facebook-admin': '~/admin/',
+    'opsfiles': '~/opsfiles/',
+    'fbsource': '~/fbsource/',
+  }
+};
 
 dirname = os.path.dirname(__file__)
 name = os.path.basename(__file__)
@@ -72,7 +145,7 @@ def focus_currently_open_terminal():
   run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)])
 
 
-# Parses the outut of an lsof command with the `-F pfn` format option
+# Parses the output of an lsof command with the `-F pfn` format option
 def parse_lsof_pfn(lsof_output):
   lsof_lines = lsof_output.split('\n')
 
@@ -155,18 +228,6 @@ def parse_and_validate_url(url):
 
 
 def get_supported_project_paths(project_name):
-  # Setup your symlinks for your relevant arcanist project
-  project_to_path = {
-    'local': {
-      'wa-js': '~/local/whatsapp/wajs/',
-    },
-    'remote': {
-      'facebook-www': '~/www/',
-      'facebook-admin': '~/admin/',
-      'opsfiles': '~/opsfiles/',
-      'fbsource': '~/fbsource/',
-    }
-  };
 
   if not project_name in project_to_path['local'] and not project_name in project_to_path['remote']:
     log_error_and_exit('Project {} not supported.\nSupported local projects: {}\nSupported remote projects: {}'.format(project_name, project_to_path['local'].keys(), project_to_path['remote'].keys()))
@@ -270,6 +331,9 @@ def main(url):
   os.environ['PATH'] += ':/usr/local/bin/'
 
   logger.info('Handling url {}'.format(url))
+
+  if not run("ssh -G '*.od.fbinfra.net' | grep -i LocalForward | grep '/.ssh/vph_*'"):
+    log_error_and_exit('ssh is not properly configured. See wiki for instructions.')
 
   parsed_url, parsed_qs = parse_and_validate_url(url)
 
