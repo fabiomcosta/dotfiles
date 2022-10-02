@@ -154,6 +154,7 @@
       :rules [
         [{:sim [:d :q] :simo {:dorder :strict}} [:d :q]]
         [{:sim [:d :w] :simo {:dorder :strict}} [:d :w]]
+        [{:sim [:d :e] :simo {:dorder :strict}} [:d :e]]
         [{:sim [:d :r] :simo {:dorder :strict}} [:d :r]]
         [{:sim [:d :t] :simo {:dorder :strict}} [:d :t]]
         [{:sim [:d :a] :simo {:dorder :strict}} [:d :a]]
@@ -162,6 +163,7 @@
         [{:sim [:d :g] :simo {:dorder :strict}} [:d :g]]
         [{:sim [:d :z] :simo {:dorder :strict}} [:d :z]]
         [{:sim [:d :x] :simo {:dorder :strict}} [:d :x]]
+        [{:sim [:d :c] :simo {:dorder :strict}} [:d :c]]
         [{:sim [:d :v] :simo {:dorder :strict}} [:d :v]]
         [{:sim [:d :b] :simo {:dorder :strict}} [:d :b]]
         [{:sim [:d :y] :simo {:dorder :strict}} [:d :y]]
@@ -178,13 +180,6 @@
         [{:sim [:d :semicolon] :simo {:dorder :strict}} [:d :semicolon]]
         [{:sim [:d :return_or_enter] :simo {:dorder :strict}} [:d :return_or_enter]]
         [{:sim [:d :delete_or_backspace] :simo {:dorder :strict}} [:d :delete_or_backspace]]
-        ; These keys are also for the same finger as the "a" finger, so they
-        ; are unlikely to be pressed at the same time. Minor nit.
-        ; This only applies for columnar keyboards though... so I'm
-        ; activating it for those keys on stagered keyboards.
-        :macbook_internal
-        [{:sim [:d :e] :simo {:dorder :strict}} [:d :e]]
-        [{:sim [:d :c] :simo {:dorder :strict}} [:d :c]]
 
         ; When intending to activate navigation mode, j and k are frequently the
         ; first keys I'll press along with that, so there are higher changes
@@ -447,8 +442,6 @@
         [:##right_arrow :vk_none]
         [:##up_arrow :vk_none]
         [:##down_arrow :vk_none]
-        ; caps_lock: alone -> escape, hold -> left_control
-        [:##caps_lock :left_control nil {:alone :escape}]
     ]}
 
     {:des "kinesis advantage"
@@ -517,6 +510,12 @@
         [:##right_command :right_control nil {:alone :tab}]
         ; "enter: alone -> return_or_enter, hold -> right_control"
         [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
+    ]}
+
+    {:des "all keyboards"
+      :rules [
+        ; caps_lock: alone -> escape, hold -> left_control
+        [:##caps_lock :left_control nil {:alone :escape}]
     ]}
 
     {:des "disable cmd+q"
