@@ -7,10 +7,12 @@
 # * Support et?
 
 import os
+import re
 import sys
+import glob
+import shlex
 import logging
 import subprocess
-import re
 from urllib.parse import urlparse, parse_qs, unquote
 
 dirname = os.path.dirname(__file__)
@@ -25,16 +27,25 @@ logging.basicConfig(
 logger = logging.getLogger(name)
 
 
-def run_proc(cmd):
-  logger.debug(cmd)
+def to_int(value):
   try:
-    return subprocess.run(cmd, shell=isinstance(cmd, str), check=True, capture_output=True)
+    return int(value)
+  except ValueError as error:
+    pass
+  return None
+
+
+def run_proc(cmd, check=True):
+  is_shell = isinstance(cmd, str)
+  logger.debug('running command: {}'.format(cmd if is_shell else shlex.join(cmd)))
+  try:
+    return subprocess.run(cmd, shell=is_shell, check=check, capture_output=True)
   except subprocess.CalledProcessError as error:
-    logger.error('\n{}\n{}'.format(error, error.stderr))
+    logger.error('\n{}\nstderr: {}\nstdout: {}'.format(error, error.stderr, error.stdout))
 
 
-def run(cmd):
-  proc = run_proc(cmd)
+def run(cmd, check=True):
+  proc = run_proc(cmd, check=check)
   if proc is None:
     return
   return proc.stdout.decode('utf-8').strip() or True
@@ -61,26 +72,60 @@ def focus_currently_open_terminal():
   run(['osascript', '{}/focus_currently_open_terminal.scpt'.format(dirname)])
 
 
+# Parses the outut of an lsof command with the `-F pfn` format option
+def parse_lsof_pfn(lsof_output):
+  lsof_lines = lsof_output.split('\n')
+
+  processes = {}
+  pid = None
+  field_name = None
+
+  for line in lsof_lines:
+    field_key = line[0]
+    field_value = line[1:]
+    if field_key == 'p':
+      pid = field_value
+      processes[pid] = {'pid': pid}
+      continue
+    if field_key == 'f':
+      # "16", "6" and others is not easy to understandable, renaming it to
+      # something more descriptive
+      if not to_int(field_value) is None:
+        field_name = 'unix_socket_path'
+      continue
+    if field_key == 'n':
+      processes[pid][field_name] = field_value
+      continue
+
+  return processes
+
+
 def tmux_select_window_by_tty(tty):
   tmux_pane_id = run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'")
   # ex: %19
   logger.debug('tmux pane id: {}'.format(tmux_pane_id))
 
-  run('tmux select-window -t {}'.format(tmux_pane_id))
+  run( 'tmux select-window -t {}'.format(tmux_pane_id))
 
 
-def focus_tmux_window_with_ssh():
-  # TODO, only do this if user actually is using tmux
+# Temporary placeholder for a function that will smartly detect if the User
+# uses tmux.
+def is_tmux_user():
+  return True
 
-  # getting hostname from the server running the nvim instance that is listening to localhost:8082
+
+def focus_tmux_window_with_ssh(socket):
+  if not is_tmux_user():
+    return
+
+  # getting hostname from the server running the nvim instance that is listening to socket
   # not sure why it goes to stderr, but it is what it is.
-  hostname = run_proc("nvim --server localhost:8082 --remote-expr 'hostname()'").stderr.decode('utf-8').strip()
+  hostname = run_proc(['nvim', '--server', socket, '--remote-expr', 'hostname()']).stderr.decode('utf-8').strip()
   # ex: 34120.od.fbinfra.net
   logger.debug('hostname: {}'.format(hostname))
 
   # getting the tty for the local ssh command that connects to the hostname running nvim
   tty = run("ps -o tty= -o command= | grep ssh | grep "+ hostname +" | grep -v grep | awk '{print $1}'")
-  # ex: ttys011
   logger.debug('tty: {}'.format(tty))
 
   tmux_select_window_by_tty(tty)
@@ -142,8 +187,37 @@ def get_supported_project_paths(project_name):
   return project
 
 
-def attempt_to_open_file_remotely(file):
-  if run(['nvim', '--server', 'localhost:8082', '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])]):
+# vph == vim protocol handler
+def get_all_open_vph_sockets():
+  socket_pattern = os.path.join(os.path.expanduser('~'), '.ssh/vph_*.sock')
+  # even when this lsof call returns values it for some reason returns a
+  # non-zero status. So using check=False.
+  return parse_lsof_pfn(run('lsof -anP -F pfn {}'.format(socket_pattern), check=False))
+
+
+# TODO this could easily become an async loop
+def get_socket_for_project(project_path):
+  vph_sockets = get_all_open_vph_sockets()
+
+  for pid, socket in vph_sockets.items():
+    socket = socket['unix_socket_path']
+
+    server_has_project_path = run_proc(['nvim', '--server', socket, '--remote-expr', 'isdirectory(expand("{}"))'.format(project_path)])
+
+    if server_has_project_path is None:
+      continue
+
+    # The isdirectory function returns 1 or 0.
+    # There is no need to convert it to bool, but we are doing it for clarity.
+    if not bool(to_int(server_has_project_path.stderr.decode('utf-8').strip())):
+      continue
+
+    return socket
+
+
+def attempt_to_open_file_remotely(socket, file):
+
+  if run(['nvim', '--server', socket, '--remote-send', ':e {line} {path}<CR>'.format(**file)]):
     return True
 
   log_error("Couldn't open file remotely. Make sure to define the NVIM_LISTEN_ADDRESS='localhost:8082' env variable before running a neovim instance on your server.")
@@ -168,28 +242,7 @@ def get_currently_open_nvim_processes():
       f16
       n/var/folders/gc/ljcry8fs5cd7qc7h2c25d9gc0000gn/T/nvimjI8WjN/0
   '''
-  lsof_lines = run('lsof -a -F pfn -P -n -d 16 -d cwd -c nvim').split('\n')
-
-  processes = {}
-  pid = None
-  field_name = None
-
-  for line in lsof_lines:
-    field_key = line[0]
-    field_value = line[1:]
-    if field_key == 'p':
-      pid = field_value
-      processes[pid] = {'pid': pid}
-      continue
-    if field_key == 'f':
-      # "16" is not readable/understandable, renaming it to something more descriptive
-      field_name = 'unix_socket_path' if field_value == '16' else field_value
-      continue
-    if field_key == 'n':
-      processes[pid][field_name] = field_value
-      continue
-
-  return processes
+  return parse_lsof_pfn(run('lsof -anP -F pfn -d 16 -d cwd -c nvim'))
 
 
 def attempt_to_open_file_locally(file):
@@ -208,7 +261,7 @@ def attempt_to_open_file_locally(file):
 
   socket_path = nvim_process['unix_socket_path']
 
-  if run(['nvim', '--server', socket_path, '--remote-send', ':e {} {}<CR>'.format(file['line'], file['path'])]):
+  if run(['nvim', '--server', socket_path, '--remote-send', ':e {line} {path}<CR>'.format(**file)]):
     # TODO idealy this would happen outside this function
     tmux_select_window_by_tty(nvim_tty)
     return True
@@ -236,14 +289,20 @@ def main(url):
   # very likely that the user wants to use the server, instead of trying
   # to open it locally.
   if 'remote' in project_paths:
+    project_path = project_paths['remote']
     file_path = os.path.normpath(os.path.join(project_paths['remote'], relative_file_path))
-    file = {'path': file_path, 'line': line}
+    file = {'project_path': project_path, 'path': file_path, 'line': line}
 
     logger.info('Trying to open file remotely...')
-    if attempt_to_open_file_remotely(file):
+
+    socket = get_socket_for_project(file['project_path'])
+    if socket is None:
+      log_error_and_exit('Could not find server that can open files for project {}'.format(file['project_path']))
+
+    if attempt_to_open_file_remotely(socket, file):
       logger.info('Successfully opened file remotely.')
       notify('Opened {} on your remote editor.'.format(file['path']))
-      focus_tmux_window_with_ssh()
+      focus_tmux_window_with_ssh(socket)
       focus_currently_open_terminal()
       return sys.exit(0)
 
