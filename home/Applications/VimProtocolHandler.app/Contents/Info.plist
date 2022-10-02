@@ -30,8 +30,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>vim</string>
-				<string>atom</string>
-				<string>vscode</string>
+				<string>neovim</string>
 				<string>fb-vscode</string>
 			</array>
 		</dict>

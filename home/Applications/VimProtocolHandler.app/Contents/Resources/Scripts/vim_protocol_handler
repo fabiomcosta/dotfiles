@@ -101,11 +101,9 @@ def parse_lsof_pfn(lsof_output):
 
 
 def tmux_select_window_by_tty(tty):
-  tmux_pane_id = run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'")
   # ex: %19
-  logger.debug('tmux pane id: {}'.format(tmux_pane_id))
-
-  run( 'tmux select-window -t {}'.format(tmux_pane_id))
+  tmux_pane_id = run("tmux list-panes -a -F '#{pane_tty} #{pane_id}' | grep "+ tty +" | awk '{print $2}'")
+  run('tmux select-window -t {}'.format(tmux_pane_id))
 
 
 # Temporary placeholder for a function that will smartly detect if the User
@@ -120,14 +118,11 @@ def focus_tmux_window_with_ssh(socket):
 
   # getting hostname from the server running the nvim instance that is listening to socket
   # not sure why it goes to stderr, but it is what it is.
-  hostname = run_proc(['nvim', '--server', socket, '--remote-expr', 'hostname()']).stderr.decode('utf-8').strip()
   # ex: 34120.od.fbinfra.net
-  logger.debug('hostname: {}'.format(hostname))
+  hostname = run_proc(['nvim', '--server', socket, '--remote-expr', 'hostname()']).stderr.decode('utf-8').strip()
 
   # getting the tty for the local ssh command that connects to the hostname running nvim
   tty = run("ps -o tty= -o command= | grep ssh | grep "+ hostname +" | grep -v grep | awk '{print $1}'")
-  logger.debug('tty: {}'.format(tty))
-
   tmux_select_window_by_tty(tty)
 
 
@@ -136,7 +131,7 @@ def parse_and_validate_url(url):
   parsed_qs = parse_qs(parsed_url.query)
 
   validation = {
-    'scheme': ['fb-vscode'],
+    'scheme': ['fb-vscode', 'vim', 'neovim'],
     'netloc': ['nuclide.core'],
     'path': ['/open-arc'],
   }
