@@ -332,9 +332,6 @@ def main(url):
 
   logger.info('Handling url {}'.format(url))
 
-  if not run("ssh -G '*.od.fbinfra.net' | grep -i LocalForward | grep '/.ssh/vph_*'"):
-    log_error_and_exit('ssh is not properly configured. See wiki for instructions.')
-
   parsed_url, parsed_qs = parse_and_validate_url(url)
 
   project_paths = get_supported_project_paths(parsed_qs['project'][0])
@@ -351,6 +348,9 @@ def main(url):
     project_path = project_paths['remote']
     file_path = os.path.normpath(os.path.join(project_paths['remote'], relative_file_path))
     file = {'project_path': project_path, 'path': file_path, 'line': line}
+
+    if not run("ssh -G '*.od.fbinfra.net' | grep -i LocalForward | grep '/.ssh/vph_*'"):
+      log_error_and_exit('ssh is not properly configured. See wiki for instructions.')
 
     logger.info('Trying to open file remotely...')
 
@@ -380,6 +380,9 @@ def main(url):
 if __name__ == '__main__':
   if len(sys.argv) < 2:
     log_error_and_exit('expects 1 argument')
+
+  if sys.platform != 'darwin':
+    log_error_and_exit('This script has only be tested on macOS.')
 
   try:
     main(sys.argv[1])
