@@ -477,11 +477,11 @@ local function onPureNeovimConfig()
   })
 
   local auto_format_on_save = function(client)
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.document_formatting then
       vim.cmd([[
         augroup Format
           autocmd! * <buffer>
-          autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync(nil, 2000)
+          autocmd BufWritePre <buffer> EslintFixAll
         augroup END
       ]])
     end
@@ -506,7 +506,7 @@ local function onPureNeovimConfig()
     auto_format_on_save(client)
 
     -- Use lsp find_references if its available, and fallback to a grep_string.
-    if client.resolved_capabilities.find_references then
+    if client.server_capabilities.find_references then
       set_keymap(
         'n',
         '<LEADER>fr',
@@ -663,8 +663,8 @@ local function onPureNeovimConfig()
     nvim_lsp.eslint.setup(with_lsp_default_config({
       on_attach = function(client, bufnr)
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
-        -- the resolved capabilities of the eslint server ourselves!
-        client.resolved_capabilities.document_formatting = true
+        -- the server capabilities of the eslint server ourselves!
+        client.server_capabilities.document_formatting = true
         on_attach(client, bufnr)
       end,
       settings = {
@@ -716,6 +716,8 @@ local function onPureNeovimConfig()
           'custom_modules',
           '--exclude',
           'submodules',
+          '--exclude',
+          'node_modules',
         },
       },
     }
