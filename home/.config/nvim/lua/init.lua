@@ -937,9 +937,14 @@ local function onPureNeovimConfig()
   -- windows/buffers when it calls "wincmd =", and the same for us.
   vim.cmd([[autocmd WinNew * set winfixheight]])
   -- TODO when autocmd is supported on lua we can try to move this to lua properly
-  vim.cmd(
-    [[autocmd VimEnter,VimResized * execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
+  vim.api.nvim_create_user_command(
+    'AccordionAutoResize',
+    function()
+      vim.cmd([[execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]])
+    end,
+    {}
   )
+  vim.cmd([[autocmd VimEnter,VimResized * :AccordionAutoResize]])
 
   require('trouble').setup({
     height = 20,
@@ -1039,6 +1044,7 @@ local function onPureNeovimConfig()
   vim.keymap.set('n', '<LEADER>dmc', function()
     dap.toggle_breakpoint()
     vim.cmd('tabnew %')
+    vim.cmd('AccordionStop')
     vim.cmd([[execute "normal! \<c-o>"]])
     require('dapui').toggle()
     dap.continue()
@@ -1048,6 +1054,7 @@ local function onPureNeovimConfig()
     dap.clear_breakpoints()
     require('dapui').toggle()
     vim.cmd('tabclose')
+    vim.cmd('AccordionAutoResize')
   end)
   vim.keymap.set('n', '<LEADER>dc', dap.continue)
   vim.keymap.set('n', '<LEADER>dn', dap.step_over)
