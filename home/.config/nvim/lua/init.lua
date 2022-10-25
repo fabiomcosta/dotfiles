@@ -262,8 +262,16 @@ local function onPureNeovimSetup(use)
 
   use('tversteeg/registers.nvim')
 
-  use('nvim-treesitter/nvim-treesitter')
-  use('nvim-treesitter/nvim-treesitter-refactor')
+  use({
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+      require('nvim-treesitter.install').update({ with_sync = true })
+    end,
+  })
+  use({
+    'nvim-treesitter/nvim-treesitter-refactor',
+    requires = { { 'nvim-treesitter/nvim-treesitter' } },
+  })
   use('windwp/nvim-ts-autotag')
 
   use('onsails/lspkind-nvim')
@@ -603,7 +611,7 @@ local function onPureNeovimConfig()
     )
   end
 
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(
+  local capabilities = require('cmp_nvim_lsp').default_capabilities(
     vim.lsp.protocol.make_client_capabilities()
   )
 
