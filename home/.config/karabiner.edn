@@ -219,8 +219,8 @@
         [:##k :up_arrow]
         [:##h :left_arrow {:held :!Oleft_arrow}]
         [:##l :right_arrow {:held :!Oright_arrow}]
+        [:##s :left_option]
         ; [:##f :left_shift]
-        ; [:##s :left_option]
         ; [:##a :left_command]
         ; tab navigation mostly on browsers
         [:##i :!CSopen_bracket]
