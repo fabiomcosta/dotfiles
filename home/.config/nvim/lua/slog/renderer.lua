@@ -55,33 +55,30 @@ function renderer.render(view)
 end
 
 function renderer.start(view)
-  tailer.start(
-    { tier = config.options.tier },
-    function(log)
-      if log.timeout == true then
-        util.debug('timeout')
-        view:set_is_likely_connected(false)
-        return
-      end
-
-      view:set_is_likely_connected(true)
-
-      if log.heartbeat == true then
-        util.debug('heartbeat')
-        return
-      end
-
-      local last_log = logs[#logs]
-      if last_log ~= nil and log.title == last_log.title then
-        log.count = last_log.count + 1
-        logs[#logs] = log
-      else
-        log.count = 1
-        table.insert(logs, log)
-      end
-      render(view)
+  tailer.start({ tier = config.options.tier }, function(log)
+    if log.timeout == true then
+      util.debug('timeout')
+      view:set_is_likely_connected(false)
+      return
     end
-  )
+
+    view:set_is_likely_connected(true)
+
+    if log.heartbeat == true then
+      util.debug('heartbeat')
+      return
+    end
+
+    local last_log = logs[#logs]
+    if last_log ~= nil and log.title == last_log.title then
+      log.count = last_log.count + 1
+      logs[#logs] = log
+    else
+      log.count = 1
+      table.insert(logs, log)
+    end
+    render(view)
+  end)
 end
 
 function renderer.clear(view)
@@ -95,7 +92,7 @@ function renderer.close()
   tailer.shutdown()
 end
 
-function date_adapt_to_timezone(date)
+local function date_adapt_to_timezone(date)
   if vim.env.TZ == nil then
     return date
   end
@@ -105,19 +102,21 @@ function date_adapt_to_timezone(date)
 end
 
 function renderer.render_log(view, text, log)
-
   local line = text.lineNr + 1
 
   if log.error ~= nil then
     view.items[line] = {}
-    local report_back_msg = log.error.metadata.isLikelySlogBug and
-        ' Please report this back to https://fb.workplace.com/groups/1300890600405446' or ''
+    local report_back_msg = log.error.metadata.isLikelySlogBug
+        and ' Please report this back to https://fb.workplace.com/groups/1300890600405446'
+        or ''
     text:render('TAILER ERROR: ' .. log.error.message .. report_back_msg)
     text:nl()
     return
   end
 
-  if config.options.filters.level and config.options.filters.level ~= log.attributes.level then
+  if config.options.filters.level
+      and config.options.filters.level ~= log.attributes.level
+  then
     return
   end
 
@@ -127,12 +126,13 @@ function renderer.render_log(view, text, log)
     level = log.attributes.level,
     is_top_level = true,
     text = log.title,
-    log = log
+    log = log,
   }
 
   text:render(' ')
 
-  local fold_icon = folds.is_folded(key) and config.options.fold_closed or config.options.fold_open
+  local fold_icon = folds.is_folded(key) and config.options.fold_closed
+      or config.options.fold_open
   text:render(fold_icon, 'FoldIcon', ' ')
 
   local sign, level = get_sign_for_level(log.attributes.level)
@@ -153,7 +153,13 @@ function renderer.render_log(view, text, log)
   local title_lines = vim.fn.split(log.title, '\n')
   text:render(title_lines[1], level .. 'Title', ' ')
 
-  vim.fn.sign_place(line, '', 'Slog' .. level .. 'Sign', view.buf, { lnum = line })
+  vim.fn.sign_place(
+    line,
+    '',
+    'Slog' .. level .. 'Sign',
+    view.buf,
+    { lnum = line }
+  )
   text:nl()
 
   if not folds.is_folded(key) then
@@ -162,13 +168,13 @@ function renderer.render_log(view, text, log)
 end
 
 function renderer.render_log_details(view, text, log)
-
   local indent = ' │  '
 
   local title_lines = vim.fn.split(log.title, '\n')
   if #title_lines > 1 then
     for _, title_line in ipairs(title_lines) do
-      view.items[text.lineNr + 1] = { title = log.title, is_extended_title = true, text = log.title }
+      view.items[text.lineNr + 1] =
+      { title = log.title, is_extended_title = true, text = log.title }
       text:render(indent, 'Indent')
       text:render(title_line, 'Text')
       text:nl()
@@ -196,7 +202,8 @@ function renderer.render_log_details(view, text, log)
       text:render(metadata, 'Metadata')
     end
 
-    trace_item.text = vim.fn.join({ function_name, file_location, metadata }, ' ')
+    trace_item.text =
+    vim.fn.join({ function_name, file_location, metadata }, ' ')
 
     text:nl()
   end

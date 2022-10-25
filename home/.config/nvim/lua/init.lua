@@ -1,9 +1,11 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
-  return vim.endswith(hostname, '.fbinfra.net') or vim.endswith(hostname, '.facebook.com')
+  return vim.endswith(hostname, '.fbinfra.net')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 -- would be nice to make this async, lazy and memoized
-local IS_BIGGREP_ROOT = IS_META_SERVER and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+local IS_BIGGREP_ROOT = IS_META_SERVER
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
 
@@ -326,7 +328,7 @@ local function onPureNeovimSetup(use)
   use('theHamsta/nvim-dap-virtual-text')
 
   if IS_META_SERVER then
-    use { "/usr/share/fb-editor-support/nvim", as = "meta.nvim" }
+    use({ '/usr/share/fb-editor-support/nvim', as = 'meta.nvim' })
   end
 end
 
@@ -344,7 +346,7 @@ local function onNeovimVSCodeConfig()
   }
   vim.g.projectionist_heuristics = {
     ['jest.config.js|jest.config.ts'] = jest_alternate,
-    ['.arcconfig'] = vim.tbl_deep_extend("keep", {
+    ['.arcconfig'] = vim.tbl_deep_extend('keep', {
       ['**/__tests__/*Test.php'] = {
         alternate = '{}.php',
         type = 'test',
@@ -353,7 +355,7 @@ local function onNeovimVSCodeConfig()
         alternate = '{dirname}/__tests__/{basename}Test.php',
         type = 'source',
       },
-    }, jest_alternate)
+    }, jest_alternate),
   }
 
   require('bufjump').setup({
@@ -452,7 +454,6 @@ local function onPureNeovimConfig()
   })
   vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
 
-
   local cmp = require('cmp')
   local lspkind = require('lspkind')
 
@@ -484,14 +485,24 @@ local function onPureNeovimConfig()
     }),
   })
 
-  local auto_format_on_save = function(client)
-    if client.server_capabilities.document_formatting then
-      vim.cmd([[
-        augroup Format
-          autocmd! * <buffer>
-          autocmd BufWritePre <buffer> EslintFixAll
-        augroup END
-      ]])
+  local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+  local auto_format_on_save = function(client, bufnr)
+    -- if client.server_capabilities.document_formatting then
+    if client.supports_method('textDocument/formatting') then
+      -- vim.cmd([[
+      --   augroup Format
+      --     autocmd! * <buffer>
+      --     autocmd BufWritePre <buffer> lua vim.lsp.buf.format({ timeout_ms = 2000 })
+      --   augroup END
+      -- ]])
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+      vim.api.nvim_create_autocmd('BufWritePre', {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.format({ timeout_ms = 2000 })
+        end,
+      })
     end
   end
 
@@ -511,7 +522,7 @@ local function onPureNeovimConfig()
   )
 
   local on_attach = function(client, bufnr)
-    auto_format_on_save(client)
+    auto_format_on_save(client, bufnr)
 
     -- Use lsp find_references if its available, and fallback to a grep_string.
     if client.server_capabilities.find_references then
@@ -616,7 +627,7 @@ local function onPureNeovimConfig()
   )
 
   local function with_lsp_default_config(config)
-    return vim.tbl_deep_extend("keep", config or {}, {
+    return vim.tbl_deep_extend('keep', config or {}, {
       on_attach = on_attach,
       capabilities = capabilities,
       flags = {
@@ -668,11 +679,12 @@ local function onPureNeovimConfig()
     }))
   else
     table.insert(servers, 'flow')
+    table.insert(servers, 'pylsp')
     nvim_lsp.eslint.setup(with_lsp_default_config({
       on_attach = function(client, bufnr)
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
         -- the server capabilities of the eslint server ourselves!
-        client.server_capabilities.document_formatting = true
+        client.server_capabilities.documentFormattingProvider = true
         on_attach(client, bufnr)
       end,
       settings = {
@@ -695,8 +707,17 @@ local function onPureNeovimConfig()
             enable = false,
           },
         },
-      }
+      },
     }))
+    require('null-ls').setup({
+      on_attach = function(client, bufnr)
+        auto_format_on_save(client, bufnr)
+      end,
+      sources = {
+        require('null-ls').builtins.formatting.black,
+        require('null-ls').builtins.formatting.stylua,
+      },
+    })
   end
 
   for _, lsp in ipairs(servers) do
@@ -815,7 +836,7 @@ local function onPureNeovimConfig()
       lualine_c = { { 'filename', path = 1 } },
       lualine_x = { 'diagnostics' },
       lualine_y = { 'filetype' },
-      lualine_z = {}
+      lualine_z = {},
     },
     inactive_sections = {
       lualine_c = { { 'filename', path = 1 } },
@@ -831,12 +852,10 @@ local function onPureNeovimConfig()
   vim.g.workspace_autosave_untrailspaces = 0
   vim.g.workspace_autosave_untrailtabs = 0
 
-  vim.g.workspace_session_directory = vim.fn.expand(
-    '~/.local/share/nvim/sessions'
-  )
-  vim.g.workspace_undodir = vim.fn.expand(
-    '~/.local/share/nvim/sessions/.undodir'
-  )
+  vim.g.workspace_session_directory =
+  vim.fn.expand('~/.local/share/nvim/sessions')
+  vim.g.workspace_undodir =
+  vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
 
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
@@ -947,13 +966,11 @@ local function onPureNeovimConfig()
   -- windows/buffers when it calls "wincmd =", and the same for us.
   vim.cmd([[autocmd WinNew * set winfixheight]])
   -- TODO when autocmd is supported on lua we can try to move this to lua properly
-  vim.api.nvim_create_user_command(
-    'AccordionAutoResize',
-    function()
-      vim.cmd([[execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]])
-    end,
-    {}
-  )
+  vim.api.nvim_create_user_command('AccordionAutoResize', function()
+    vim.cmd(
+      [[execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
+    )
+  end, {})
   vim.cmd([[autocmd VimEnter,VimResized * :AccordionAutoResize]])
 
   require('trouble').setup({
@@ -984,20 +1001,12 @@ local function onPureNeovimConfig()
     autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
   ]])
 
-  vim.api.nvim_create_user_command(
-    'MetaDiffCheckout',
-    function()
-      require('meta_diff').diff_picker({ checkout = true })
-    end,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    'MetaDiffOpenFiles',
-    function()
-      require('meta_diff').diff_picker({})
-    end,
-    {}
-  )
+  vim.api.nvim_create_user_command('MetaDiffCheckout', function()
+    require('meta_diff').diff_picker({ checkout = true })
+  end, {})
+  vim.api.nvim_create_user_command('MetaDiffOpenFiles', function()
+    require('meta_diff').diff_picker({})
+  end, {})
 
   set_keymap(
     'n',
@@ -1025,12 +1034,12 @@ local function onPureNeovimConfig()
   local meta_util = require('meta.util')
   local meta_lsp = require('meta.lsp')
   local binary_folder = meta_util.get_first_matching_dir(
-    meta_lsp.VSCODE_EXTS_INSTALL_DIR .. "/nuclide.hhvm*"
+    meta_lsp.VSCODE_EXTS_INSTALL_DIR .. '/nuclide.hhvm*'
   )
   dap.adapters.hhvm = {
     type = 'executable',
     command = meta_lsp.NODE_BINARY,
-    args = { binary_folder .. '/src/hhvmWrapper.js' }
+    args = { binary_folder .. '/src/hhvmWrapper.js' },
   }
   dap.configurations.hack = {
     {
@@ -1049,20 +1058,20 @@ local function onPureNeovimConfig()
   dap.configurations.php = dap.configurations.hack
 
   require('dapui').setup()
-  require('nvim-dap-virtual-text').setup()
+  require('nvim-dap-virtual-text').setup({})
 
   vim.keymap.set('n', '<LEADER>dmc', function()
     dap.toggle_breakpoint()
     vim.cmd('tabnew %')
     vim.cmd('AccordionStop')
     vim.cmd([[execute "normal! \<c-o>"]])
-    require('dapui').toggle()
+    require('dapui').toggle({})
     dap.continue()
   end)
   vim.keymap.set('n', '<LEADER>dmx', function()
     dap.terminate()
     dap.clear_breakpoints()
-    require('dapui').toggle()
+    require('dapui').toggle({})
     vim.cmd('tabclose')
     vim.cmd('AccordionAutoResize')
   end)
@@ -1073,8 +1082,12 @@ local function onPureNeovimConfig()
   vim.keymap.set('n', '<LEADER>dbt', dap.toggle_breakpoint)
   vim.keymap.set('n', '<LEADER>dbc', dap.clear_breakpoints)
   vim.keymap.set('n', '<LEADER>dbl', dap.list_breakpoints)
-  vim.keymap.set('n', '<LEADER>dh', function() require('dapui').eval() end)
-  vim.keymap.set('n', '<LEADER>du', function() require('dapui').toggle() end)
+  vim.keymap.set('n', '<LEADER>dh', function()
+    require('dapui').eval()
+  end)
+  vim.keymap.set('n', '<LEADER>du', function()
+    require('dapui').toggle({})
+  end)
 
   local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
@@ -1083,7 +1096,6 @@ local function onPureNeovimConfig()
   end
 
   source_if_exists(vim.env.HOME .. '/.fb-vimrc')
-
 end
 
 local install_path = vim.fn.stdpath('data')
@@ -1124,14 +1136,14 @@ local function install_meta_lsp_clients()
     local meta_extensions = require('meta.lsp.extensions')
     local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
     -- remove these
-    ext["nuclide.cpp"] = nil
-    ext["nuclide.rusty"] = nil
-    ext["nuclide.pyls"] = nil
-    ext["nuclide.wasabi"] = nil
-    ext["nuclide.buck"] = nil
-    ext["nuclide.erlang"] = nil
+    ext['nuclide.cpp'] = nil
+    ext['nuclide.rusty'] = nil
+    ext['nuclide.pyls'] = nil
+    ext['nuclide.wasabi'] = nil
+    ext['nuclide.buck'] = nil
+    ext['nuclide.erlang'] = nil
     -- add these
-    ext["nuclide.hhvm"] = true
+    ext['nuclide.hhvm'] = true
     -- ["nuclide.eslint"] = true,
     -- ["nuclide.prettier"] = true,
 
@@ -1144,18 +1156,13 @@ local function install_meta_lsp_clients()
     })
     vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
     vim.cmd('TSUpdateSync')
-
   end
 end
 
-vim.api.nvim_create_user_command(
-  'SetupAndQuit',
-  function()
-    install_meta_lsp_clients()
-    vim.cmd('quitall')
-  end,
-  {}
-)
+vim.api.nvim_create_user_command('SetupAndQuit', function()
+  install_meta_lsp_clients()
+  vim.cmd('quitall')
+end, {})
 
 return packer.startup({
   function(use)
