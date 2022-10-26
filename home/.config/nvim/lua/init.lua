@@ -265,16 +265,24 @@ local function onPureNeovimSetup(use)
   use('tversteeg/registers.nvim')
 
   use({
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      require('nvim-treesitter.install').update({ with_sync = true })
-    end,
-  })
-  use({
     'nvim-treesitter/nvim-treesitter-refactor',
     requires = { { 'nvim-treesitter/nvim-treesitter' } },
   })
-  use('windwp/nvim-ts-autotag')
+  use({
+    'windwp/nvim-ts-autotag',
+    requires = { { 'nvim-treesitter/nvim-treesitter' } },
+  })
+  use({
+    'JoosepAlviste/nvim-ts-context-commentstring',
+    requires = { { 'nvim-treesitter/nvim-treesitter' } },
+  })
+  use({
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+      require('nvim-treesitter.install').prefer_git = true
+      require('nvim-treesitter.install').update({ with_sync = true })
+    end,
+  })
 
   use('onsails/lspkind-nvim')
   use('hrsh7th/vim-vsnip')
@@ -289,7 +297,6 @@ local function onPureNeovimSetup(use)
 
   use('neovim/nvim-lspconfig')
   use('williamboman/mason.nvim')
-  use('JoosepAlviste/nvim-ts-context-commentstring')
   use({
     'jose-elias-alvarez/null-ls.nvim',
     requires = { { 'nvim-lua/plenary.nvim' } },
@@ -410,6 +417,7 @@ local function onPureNeovimConfig()
     { silent = true, noremap = true }
   )
 
+
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
     parser_install_dir = TS_PARSER_INSTALL_PATH,
@@ -453,6 +461,7 @@ local function onPureNeovimConfig()
     },
   })
   vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
+
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
