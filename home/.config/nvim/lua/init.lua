@@ -1045,58 +1045,62 @@ local function onPureNeovimConfig()
   local binary_folder = meta_util.get_first_matching_dir(
     meta_lsp.VSCODE_EXTS_INSTALL_DIR .. '/nuclide.hhvm*'
   )
-  dap.adapters.hhvm = {
-    type = 'executable',
-    command = meta_lsp.NODE_BINARY,
-    args = { binary_folder .. '/src/hhvmWrapper.js' },
-  }
-  dap.configurations.hack = {
-    {
-      type = 'hhvm',
-      name = 'Attach to hhvm process',
-      request = 'attach',
-      action = 'attach',
-      debugPort = 8999,
-      -- not sure how this is used yet... but I know
-      -- it's supposed to be either a nuclide:// or file:// uri.
-      -- The core attach debugger functionality works just
-      -- fine with it being an empty string.
-      targetUri = '',
-    },
-  }
-  dap.configurations.php = dap.configurations.hack
+  -- hhvm has been buggy to install lately... to avoid errors on startup
+  -- let's do this check while I figure out what is gong on there.
+  if binary_folder ~= nil then
+    dap.adapters.hhvm = {
+      type = 'executable',
+      command = meta_lsp.NODE_BINARY,
+      args = { binary_folder .. '/src/hhvmWrapper.js' },
+    }
+    dap.configurations.hack = {
+      {
+        type = 'hhvm',
+        name = 'Attach to hhvm process',
+        request = 'attach',
+        action = 'attach',
+        debugPort = 8999,
+        -- not sure how this is used yet... but I know
+        -- it's supposed to be either a nuclide:// or file:// uri.
+        -- The core attach debugger functionality works just
+        -- fine with it being an empty string.
+        targetUri = '',
+      },
+    }
+    dap.configurations.php = dap.configurations.hack
 
-  require('dapui').setup()
-  require('nvim-dap-virtual-text').setup({})
+    require('dapui').setup()
+    require('nvim-dap-virtual-text').setup({})
 
-  vim.keymap.set('n', '<LEADER>dmc', function()
-    dap.toggle_breakpoint()
-    vim.cmd('tabnew %')
-    vim.cmd('AccordionStop')
-    vim.cmd([[execute "normal! \<c-o>"]])
-    require('dapui').toggle({})
-    dap.continue()
-  end)
-  vim.keymap.set('n', '<LEADER>dmx', function()
-    dap.terminate()
-    dap.clear_breakpoints()
-    require('dapui').toggle({})
-    vim.cmd('tabclose')
-    vim.cmd('AccordionAutoResize')
-  end)
-  vim.keymap.set('n', '<LEADER>dc', dap.continue)
-  vim.keymap.set('n', '<LEADER>dn', dap.step_over)
-  vim.keymap.set('n', '<LEADER>di', dap.step_into)
-  vim.keymap.set('n', '<LEADER>do', dap.step_out)
-  vim.keymap.set('n', '<LEADER>dbt', dap.toggle_breakpoint)
-  vim.keymap.set('n', '<LEADER>dbc', dap.clear_breakpoints)
-  vim.keymap.set('n', '<LEADER>dbl', dap.list_breakpoints)
-  vim.keymap.set('n', '<LEADER>dh', function()
-    require('dapui').eval()
-  end)
-  vim.keymap.set('n', '<LEADER>du', function()
-    require('dapui').toggle({})
-  end)
+    vim.keymap.set('n', '<LEADER>dmc', function()
+      dap.toggle_breakpoint()
+      vim.cmd('tabnew %')
+      vim.cmd('AccordionStop')
+      vim.cmd([[execute "normal! \<c-o>"]])
+      require('dapui').toggle({})
+      dap.continue()
+    end)
+    vim.keymap.set('n', '<LEADER>dmx', function()
+      dap.terminate()
+      dap.clear_breakpoints()
+      require('dapui').toggle({})
+      vim.cmd('tabclose')
+      vim.cmd('AccordionAutoResize')
+    end)
+    vim.keymap.set('n', '<LEADER>dc', dap.continue)
+    vim.keymap.set('n', '<LEADER>dn', dap.step_over)
+    vim.keymap.set('n', '<LEADER>di', dap.step_into)
+    vim.keymap.set('n', '<LEADER>do', dap.step_out)
+    vim.keymap.set('n', '<LEADER>dbt', dap.toggle_breakpoint)
+    vim.keymap.set('n', '<LEADER>dbc', dap.clear_breakpoints)
+    vim.keymap.set('n', '<LEADER>dbl', dap.list_breakpoints)
+    vim.keymap.set('n', '<LEADER>dh', function()
+      require('dapui').eval()
+    end)
+    vim.keymap.set('n', '<LEADER>du', function()
+      require('dapui').toggle({})
+    end)
+  end
 
   local function source_if_exists(file)
     if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
