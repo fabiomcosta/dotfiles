@@ -262,7 +262,12 @@ local function onPureNeovimSetup(use)
   use('rhysd/git-messenger.vim')
   use('tpope/vim-vinegar')
 
-  use('tversteeg/registers.nvim')
+  use({
+    'tversteeg/registers.nvim',
+    config = function()
+      require('registers').setup()
+    end,
+  })
 
   use({
     'nvim-treesitter/nvim-treesitter-refactor',
@@ -280,7 +285,7 @@ local function onPureNeovimSetup(use)
     'nvim-treesitter/nvim-treesitter',
     run = function()
       require('nvim-treesitter.install').prefer_git = true
-      require('nvim-treesitter.install').update({ with_sync = true })
+      require('nvim-treesitter.install').update()
     end,
   })
 
@@ -333,6 +338,8 @@ local function onPureNeovimSetup(use)
   use('mfussenegger/nvim-dap')
   use('rcarriga/nvim-dap-ui')
   use('theHamsta/nvim-dap-virtual-text')
+
+  use('j-hui/fidget.nvim')
 
   if IS_META_SERVER then
     use({ '/usr/share/fb-editor-support/nvim', as = 'meta.nvim' })
@@ -417,7 +424,7 @@ local function onPureNeovimConfig()
     { silent = true, noremap = true }
   )
 
-
+  vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
   require('nvim-treesitter.install').prefer_git = true
   require('nvim-treesitter.configs').setup({
     parser_install_dir = TS_PARSER_INSTALL_PATH,
@@ -438,9 +445,9 @@ local function onPureNeovimConfig()
       'graphql',
       'hack',
     },
-    highlight = {
-      enable = true,
-    },
+    -- highlight = {
+    --   enable = true,
+    -- },
     indent = {
       enable = true,
     },
@@ -450,17 +457,16 @@ local function onPureNeovimConfig()
     context_commentstring = {
       enable = true,
     },
-    refactor = {
-      highlight_definitions = { enable = true },
-      smart_rename = {
-        enable = true,
-        keymaps = {
-          smart_rename = '<LEADER>rn',
-        },
-      },
-    },
+    -- refactor = {
+    --   highlight_definitions = { enable = true },
+    --   smart_rename = {
+    --     enable = true,
+    --     keymaps = {
+    --       smart_rename = '<LEADER>rn',
+    --     },
+    --   },
+    -- },
   })
-  vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
 
 
   local cmp = require('cmp')
@@ -514,8 +520,6 @@ local function onPureNeovimConfig()
       })
     end
   end
-
-  local nvim_lsp = require('lspconfig')
 
   vim.api.nvim_set_keymap(
     'n',
@@ -740,6 +744,8 @@ local function onPureNeovimConfig()
       enable = false,
     },
   })
+
+  require('fidget').setup({})
 
   local telescope_setup = {}
   if vim.fn.executable('fd') == 1 then
@@ -1162,12 +1168,12 @@ local function install_meta_lsp_clients()
 
     vim.cmd('SyncMetaLS')
 
+    vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
     require('nvim-treesitter').setup()
     require('nvim-treesitter.install').prefer_git = true
     require('nvim-treesitter.configs').setup({
       parser_install_dir = TS_PARSER_INSTALL_PATH,
     })
-    vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
     vim.cmd('TSUpdateSync')
   end
 end
