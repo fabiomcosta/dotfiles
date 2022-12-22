@@ -468,9 +468,9 @@ local function onPureNeovimConfig()
     -- },
   })
 
-
   local cmp = require('cmp')
   local lspkind = require('lspkind')
+  local lspkind = require('nvim_lsp')
 
   cmp.setup({
     snippet = {
@@ -520,6 +520,8 @@ local function onPureNeovimConfig()
       })
     end
   end
+
+  local nvim_lsp = require('lspconfig')
 
   vim.api.nvim_set_keymap(
     'n',
