@@ -470,7 +470,6 @@ local function onPureNeovimConfig()
 
   local cmp = require('cmp')
   local lspkind = require('lspkind')
-  local lspkind = require('nvim_lsp')
 
   cmp.setup({
     snippet = {
