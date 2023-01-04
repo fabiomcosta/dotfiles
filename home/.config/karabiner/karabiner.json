@@ -2890,7 +2890,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2912,7 +2912,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2931,7 +2931,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2950,7 +2950,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^io\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$" ]
           } ],
           "type" : "basic"
         } ]
@@ -4255,7 +4255,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
+            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4274,7 +4274,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
+            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -4300,7 +4300,7 @@
             "key_code" : "r"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
+            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4319,7 +4319,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
+            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
           } ],
           "from" : {
             "simultaneous" : [ {

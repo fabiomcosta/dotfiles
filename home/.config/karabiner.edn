@@ -44,7 +44,7 @@
     :browser ["^com\\.google\\.Chrome$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
     :workplace_chat ["^workplace-desktop$"]
-    :terminal ["^io\\.alacritty$"]
+    :terminal ["^org\\.alacritty$"]
   }
 
   :templates {
@@ -52,8 +52,8 @@
     ;; https://github.com/kfix/ddcctl
     ;; -i 16 is display-port 2
     ;; -d 1 is display 1
-    :external_display_brightness_increment "/usr/local/bin/ddcctl -i 16 -d 1 -b 20+"
-    :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 16 -d 1 -b 20-"
+    :external_display_brightness_increment "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
+    :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
   }
 
   :simlayer-threshold 210
@@ -305,12 +305,6 @@
     ; ]}
 
 
-    ; {:des "toggle numbers"
-    ;   :rules [
-    ;     [:delete_forward [["numbers_mode" 1], ["symbols_mode" 0]] :symbols_mode {:alone :delete_forward :afterup ["numbers_mode" 0]}]
-    ;     ; [{:sim [:delete_forward :return_or_enter] :simo {:dorder :strict}} ["numbers_mode" 1] nil {:afterup {:set ["numbers_mode" 0]} :params {:sim 5000}}]
-
-    ; ]}
     ; :modi :any is so that the protection also works while pressing the
     ; keys with other modifier keys, like shift and command.
     ; the sim param increases the timeout to 200 so that we only enable numbers
