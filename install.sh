@@ -26,14 +26,15 @@ if command_exists ttls_forward_proxy_server; then
   fi
 fi
 
-
-../fbsource/xplat/third-party/node/bin/node install.mjs
-
 pushd $DIR &> /dev/null
   if command_exists yarn; then
     yarn
   elif command_exists npm; then
     npm install .
   fi
-  ./install.mjs
+  if ! command_exists node; then
+    ../fbsource/xplat/third-party/node/bin/node install.mjs
+  else
+    ./install.mjs
+  fi
 popd &> /dev/null

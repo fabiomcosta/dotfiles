@@ -20,13 +20,15 @@ await $`brew bundle --verbose`;
 await $`brew cleanup`;
 
 // fish
+const brewPrefix = (await $silent`brew --prefix`).stdout.trim()
+const fishPath = `${brewPrefix}/bin/fish`;
 const isFishInstalled = Boolean(
-  (await $silent`grep '/usr/local/bin/fish' /etc/shells`).stdout
+  (await $swallow`grep ${fishPath} /etc/shells`).stdout
 );
 if (!isFishInstalled) {
   console.log('Setting up fish...');
-  await $`echo /usr/local/bin/fish | sudo tee -a /etc/shells`;
-  await $`chsh -s /usr/local/bin/fish`;
+  await $`echo ${fishPath} | sudo tee -a /etc/shells`;
+  await $`chsh -s ${fishPath}`;
   OK`fish setup done.`;
 } else {
   OK`fish already installed.`;

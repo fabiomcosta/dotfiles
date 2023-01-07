@@ -39,6 +39,15 @@ set -x CLICOLOR 1
 set -x LSCOLORS ExFxCxDxBxegedabagacad
 
 if command_exists brew
+
+  # On Meta machines, a warning message is shown when running the brew command
+  # and the PATH doesn't have one of the alternative paths inside it already.
+  # So we have to set it before calling `brew --prefix`.
+  if test -d $HOME/homebrew
+    set -x PATH $HOME/homebrew/bin $PATH
+    set -x PATH $HOME/homebrew/sbin $PATH
+  end
+
   ## brew
   set -x BREW_PREFIX (brew --prefix)
 
@@ -49,11 +58,12 @@ if command_exists brew
   set -x NODE_PATH $BREW_PREFIX/lib/node_modules $NODE_PATH
   set -x PATH $BREW_PREFIX/share/npm/bin $PATH
 
-  set -x PATH $BREW_PREFIX/bin $PATH
-  set -x PATH $BREW_PREFIX/sbin $PATH
+  if ! test -d $HOME/homebrew
+    set -x PATH $BREW_PREFIX/bin $PATH
+    set -x PATH $BREW_PREFIX/sbin $PATH
+  end
 
   set -x PKG_CONFIG_PATH $PKG_CONFIG_PATH $BREW_PREFIX/opt/libffi/lib/pkgconfig
-
 end
 
 # do not create .pyc files
