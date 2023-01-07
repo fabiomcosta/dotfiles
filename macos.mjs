@@ -34,4 +34,8 @@ if (!isFishInstalled) {
   OK`fish already installed.`;
 }
 
+// Install fzf key bindings like ctrl+r
+const fzfInstallPath = `${brewPrefix}/opt/fzf/install`;
+await $`${fzfInstallPath} --no-zsh --no-bash --key-bindings --completion --update-rc`;
+
 await $`./macos.sh`;
