@@ -22,6 +22,8 @@ async function main() {
   const hostname = (await $silent`hostname`).stdout.trim();
   const IS_WORK_MACHINE = hostname.endsWith('facebook.com') || hostname.endsWith('fbinfra.net');
 
+  await $`git submodule update --init`;
+
   if (IS_WORK_MACHINE) {
     await applyTemplate(
       secrets('facebook-devserver/.gitconfig'),
