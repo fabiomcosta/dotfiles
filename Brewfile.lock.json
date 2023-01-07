@@ -846,6 +846,12 @@
         "options": {
           "full_name": "hiddenbar"
         }
+      },
+      "authy": {
+        "version": "2.2.2",
+        "options": {
+          "full_name": "authy"
+        }
       }
     }
   },
