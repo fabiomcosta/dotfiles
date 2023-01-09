@@ -48,12 +48,12 @@
   }
 
   :templates {
-    :hsl "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
+    :hsl "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
     ;; https://github.com/kfix/ddcctl
     ;; -i 16 is display-port 2
     ;; -d 1 is display 1
-    :external_display_brightness_increment "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
-    :external_display_brightness_decrement "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
+    :external_display_brightness_increment "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
+    :external_display_brightness_decrement "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
   }
 
   :simlayer-threshold 210

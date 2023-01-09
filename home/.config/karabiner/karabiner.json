@@ -4255,7 +4255,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
+            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4274,7 +4274,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20-"
+            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -4300,7 +4300,7 @@
             "key_code" : "r"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
+            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4319,7 +4319,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/ddcctl -i 27 -d 1 -b 20+"
+            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5194,7 +5194,7 @@
             "key_code" : "a"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5213,7 +5213,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5239,7 +5239,7 @@
             "key_code" : "b"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5258,7 +5258,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5284,7 +5284,7 @@
             "key_code" : "c"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5303,7 +5303,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5329,7 +5329,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5348,7 +5348,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5374,7 +5374,7 @@
             "key_code" : "f"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5393,7 +5393,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5419,7 +5419,7 @@
             "key_code" : "m"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5438,7 +5438,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5464,7 +5464,7 @@
             "key_code" : "t"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5483,7 +5483,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5509,7 +5509,7 @@
             "key_code" : "n"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5528,7 +5528,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5554,7 +5554,7 @@
             "key_code" : "v"
           },
           "to" : [ {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5573,7 +5573,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "/usr/local/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
