@@ -114,10 +114,15 @@ set -x NDK_CCACHE "/usr/local/bin/ccache"
 set -x CCACHE_DIR "$HOME/.ccache"
 set -x USE_CCACHE 1
 
-
-eval (starship init fish)
+if command_exists starship
+  eval (starship init fish)
+end
 
 # fnm
 if command_exists fnm
   fnm env --use-on-cd | source
+end
+
+if command_exists direnv
+  eval (direnv hook fish)
 end

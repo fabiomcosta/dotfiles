@@ -656,10 +656,15 @@ local function onPureNeovimConfig()
   -- map buffer local keybindings when the language server attaches
   local servers = {}
 
+  nvim_lsp.flow.setup(with_lsp_default_config({
+    cmd = { 'flow', 'lsp' },
+  }))
+
   if IS_META_SERVER then
     require('meta')
     require('meta.lsp')
     table.insert(servers, 'hhvm')
+    table.insert(servers, 'prettier@meta')
     table.insert(servers, 'eslint@meta')
     -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
     --   settings = {
@@ -687,12 +692,7 @@ local function onPureNeovimConfig()
     --     }
     --   }
     -- }))
-    table.insert(servers, 'prettier@meta')
-    nvim_lsp.flow.setup(with_lsp_default_config({
-      cmd = { 'flow', 'lsp' },
-    }))
   else
-    table.insert(servers, 'flow')
     table.insert(servers, 'pylsp')
     nvim_lsp.eslint.setup(with_lsp_default_config({
       on_attach = function(client, bufnr)

@@ -54,6 +54,7 @@
     ;; -d 1 is display 1
     :external_display_brightness_increment "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
     :external_display_brightness_decrement "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
+    :display_sleep "pmset displaysleepnow"
   }
 
   :simlayer-threshold 210
@@ -510,6 +511,7 @@
       :rules [
         ; caps_lock: alone -> escape, hold -> left_control
         [:##caps_lock :left_control nil {:alone :escape}]
+        [:!CWs [:display_sleep]]
     ]}
 
     {:des "disable cmd+q"
