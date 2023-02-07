@@ -4328,7 +4328,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
+            "shell_command" : "~/bin/m1ddc chg luminance -20"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4347,7 +4347,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
+            "shell_command" : "~/bin/m1ddc chg luminance -20"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -4373,7 +4373,7 @@
             "key_code" : "r"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
+            "shell_command" : "~/bin/m1ddc chg luminance +20"
           } ],
           "conditions" : [ {
             "name" : "media_fn_mode",
@@ -4392,7 +4392,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
+            "shell_command" : "~/bin/m1ddc chg luminance +20"
           } ],
           "from" : {
             "simultaneous" : [ {

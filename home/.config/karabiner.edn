@@ -52,8 +52,8 @@
     ;; https://github.com/kfix/ddcctl
     ;; -i 16 is display-port 2
     ;; -d 1 is display 1
-    :external_display_brightness_increment "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20+"
-    :external_display_brightness_decrement "~/homebrew/bin/ddcctl -i 27 -d 1 -b 20-"
+    :external_display_brightness_decrement "~/bin/m1ddc chg luminance -20"
+    :external_display_brightness_increment "~/bin/m1ddc chg luminance +20"
     :display_sleep "pmset displaysleepnow"
   }
 

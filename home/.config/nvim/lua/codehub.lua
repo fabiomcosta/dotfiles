@@ -35,7 +35,7 @@ local function canUseOpen()
   if possiblyHasOpenerSocketFile() then
     return true
   end
-  return not isMacos() and not isRemoteSession()
+  return isMacos() and not isRemoteSession()
 end
 
 local BASE_URL = 'https://www.internalfb.com/code/'
