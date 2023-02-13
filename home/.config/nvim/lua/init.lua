@@ -262,12 +262,12 @@ local function onPureNeovimSetup(use)
   use('rhysd/git-messenger.vim')
   use('tpope/vim-vinegar')
 
-  use({
-    'tversteeg/registers.nvim',
-    config = function()
-      require('registers').setup()
-    end,
-  })
+  -- use({
+  --   'tversteeg/registers.nvim',
+  --   config = function()
+  --     require('registers').setup()
+  --   end,
+  -- })
 
   use({
     'nvim-treesitter/nvim-treesitter-refactor',
