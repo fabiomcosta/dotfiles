@@ -1154,19 +1154,6 @@ end
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
     local meta_extensions = require('meta.lsp.extensions')
-    local ext = meta_extensions.META_VSCODE_EXTENSIONS_FOR_LS
-    -- remove these
-    ext['nuclide.cpp'] = nil
-    ext['nuclide.rusty'] = nil
-    ext['nuclide.pyls'] = nil
-    ext['nuclide.wasabi'] = nil
-    ext['nuclide.buck'] = nil
-    ext['nuclide.erlang'] = nil
-    -- add these
-    ext['nuclide.hhvm'] = true
-    -- ["nuclide.eslint"] = true,
-    -- ["nuclide.prettier"] = true,
-
     vim.cmd('SyncMetaLS')
 
     vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
