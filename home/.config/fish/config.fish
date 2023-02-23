@@ -86,9 +86,6 @@ set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob='!.git/*'"
 # prepends .carg folder from rust
 set -x PATH $HOME/.cargo/bin $PATH
 
-# prepends depot_tools from the chromium project
-set -x PATH $DEV/other/depot_tools $PATH
-
 # prepends my bin folder to the path
 set -x PATH $HOME/bin $PATH
 
@@ -96,19 +93,23 @@ set -x PATH $HOME/bin $PATH
 set -x PATH $HOME/gdrive/code/gd/bin $PATH
 
 # Java
-set -x JAVA_HOME "/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home"
+# set -x JAVA_HOME "(/usr/libexec/java_home -v 11)"
 
 # Android DEV
-set -x ANDROID_NDK "/opt/android_ndk"
-set -x ANDROID_NDK_REPOSITORY $ANDROID_NDK
-set -x ANDROID_NDK_ROOT "$ANDROID_NDK/r17c"
-set -x ANDROID_SDK "/opt/android_sdk"
-set -x ANDROID_SDK_ROOT $ANDROID_SDK
-set -x ANDROID_HOME $ANDROID_SDK
-set -x PATH $ANDROID_SDK/emulator $PATH
-set -x PATH $ANDROID_SDK/tools $PATH
-set -x PATH $ANDROID_SDK/tools/bin $PATH
-set -x PATH $ANDROID_SDK/platform-tools $PATH
+#
+# set -x ANDROID_NDK "/opt/android_ndk"
+# set -x ANDROID_NDK_REPOSITORY $ANDROID_NDK
+# set -x ANDROID_NDK_ROOT "$ANDROID_NDK/r17c"
+# set -x ANDROID_SDK "/opt/android_sdk"
+# set -x ANDROID_SDK_ROOT $ANDROID_SDK
+# set -x ANDROID_HOME $ANDROID_SDK
+
+# You'll need `fisher install edc/bass` before this.
+bass 'source $HOME/.waandroid/env.sh'
+set -x PATH $JAVA_HOME/bin $PATH
+set -x PATH $ANDROID_HOME/emulator $PATH
+set -x PATH $ANDROID_HOME/tools $PATH
+set -x PATH $ANDROID_HOME/tools/bin $PATH
 
 set -x NDK_CCACHE "/usr/local/bin/ccache"
 set -x CCACHE_DIR "$HOME/.ccache"

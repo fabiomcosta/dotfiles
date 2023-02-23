@@ -49,9 +49,6 @@
 
   :templates {
     :hsl "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
-    ;; https://github.com/kfix/ddcctl
-    ;; -i 16 is display-port 2
-    ;; -d 1 is display 1
     :external_display_brightness_decrement "~/bin/m1ddc chg luminance -20"
     :external_display_brightness_increment "~/bin/m1ddc chg luminance +20"
     :display_sleep "pmset displaysleepnow"
@@ -308,40 +305,40 @@
 
     ; :modi :any is so that the protection also works while pressing the
     ; keys with other modifier keys, like shift and command.
-    ; the sim param increases the timeout to 200 so that we only enable numbers
-    ; mode after space is held for 200ms without any other simultaneous key pressed.
+    ; the sim param controls the timeout so that we only enable numbers
+    ; mode after space is held for {:sim}ms without any other simultaneous key pressed.
     {:des "numbers mode, fluid typing protection"
       :rules [
-        [{:sim [:spacebar :q] :simo {:dorder :strict} :modi :any} [:spacebar :q] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :w] :simo {:dorder :strict} :modi :any} [:spacebar :w] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :e] :simo {:dorder :strict} :modi :any} [:spacebar :e] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :r] :simo {:dorder :strict} :modi :any} [:spacebar :r] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :t] :simo {:dorder :strict} :modi :any} [:spacebar :t] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :a] :simo {:dorder :strict} :modi :any} [:spacebar :a] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :s] :simo {:dorder :strict} :modi :any} [:spacebar :s] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :d] :simo {:dorder :strict} :modi :any} [:spacebar :d] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :f] :simo {:dorder :strict} :modi :any} [:spacebar :f] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :g] :simo {:dorder :strict} :modi :any} [:spacebar :g] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :z] :simo {:dorder :strict} :modi :any} [:spacebar :z] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :x] :simo {:dorder :strict} :modi :any} [:spacebar :x] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :c] :simo {:dorder :strict} :modi :any} [:spacebar :c] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :v] :simo {:dorder :strict}} [:spacebar :v] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :b] :simo {:dorder :strict} :modi :any} [:spacebar :b] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :y] :simo {:dorder :strict} :modi :any} [:spacebar :y] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :u] :simo {:dorder :strict} :modi :any} [:spacebar :u] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :i] :simo {:dorder :strict} :modi :any} [:spacebar :i] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :o] :simo {:dorder :strict} :modi :any} [:spacebar :o] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :p] :simo {:dorder :strict} :modi :any} [:spacebar :p] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :h] :simo {:dorder :strict} :modi :any} [:spacebar :h] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :j] :simo {:dorder :strict} :modi :any} [:spacebar :j] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :k] :simo {:dorder :strict} :modi :any} [:spacebar :k] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :l] :simo {:dorder :strict} :modi :any} [:spacebar :l] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :semicolon] :simo {:dorder :strict} :modi :any} [:spacebar :semicolon] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :n] :simo {:dorder :strict} :modi :any} [:spacebar :n] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :m] :simo {:dorder :strict} :modi :any} [:spacebar :m] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :comma] :simo {:dorder :strict} :modi :any} [:spacebar :comma] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :period] :simo {:dorder :strict} :modi :any} [:spacebar :period] nil {:params {:sim 140}}]
-        [{:sim [:spacebar :slash] :simo {:dorder :strict} :modi :any} [:spacebar :slash] nil {:params {:sim 140}}]
+        [{:sim [:spacebar :q] :simo {:dorder :strict} :modi :any} [:spacebar :q] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :w] :simo {:dorder :strict} :modi :any} [:spacebar :w] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :e] :simo {:dorder :strict} :modi :any} [:spacebar :e] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :r] :simo {:dorder :strict} :modi :any} [:spacebar :r] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :t] :simo {:dorder :strict} :modi :any} [:spacebar :t] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :a] :simo {:dorder :strict} :modi :any} [:spacebar :a] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :s] :simo {:dorder :strict} :modi :any} [:spacebar :s] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :d] :simo {:dorder :strict} :modi :any} [:spacebar :d] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :f] :simo {:dorder :strict} :modi :any} [:spacebar :f] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :g] :simo {:dorder :strict} :modi :any} [:spacebar :g] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :z] :simo {:dorder :strict} :modi :any} [:spacebar :z] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :x] :simo {:dorder :strict} :modi :any} [:spacebar :x] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :c] :simo {:dorder :strict} :modi :any} [:spacebar :c] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :v] :simo {:dorder :strict}} [:spacebar :v] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :b] :simo {:dorder :strict} :modi :any} [:spacebar :b] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :y] :simo {:dorder :strict} :modi :any} [:spacebar :y] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :u] :simo {:dorder :strict} :modi :any} [:spacebar :u] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :i] :simo {:dorder :strict} :modi :any} [:spacebar :i] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :o] :simo {:dorder :strict} :modi :any} [:spacebar :o] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :p] :simo {:dorder :strict} :modi :any} [:spacebar :p] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :h] :simo {:dorder :strict} :modi :any} [:spacebar :h] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :j] :simo {:dorder :strict} :modi :any} [:spacebar :j] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :k] :simo {:dorder :strict} :modi :any} [:spacebar :k] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :l] :simo {:dorder :strict} :modi :any} [:spacebar :l] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :semicolon] :simo {:dorder :strict} :modi :any} [:spacebar :semicolon] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :n] :simo {:dorder :strict} :modi :any} [:spacebar :n] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :m] :simo {:dorder :strict} :modi :any} [:spacebar :m] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :comma] :simo {:dorder :strict} :modi :any} [:spacebar :comma] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :period] :simo {:dorder :strict} :modi :any} [:spacebar :period] nil {:params {:sim 120}}]
+        [{:sim [:spacebar :slash] :simo {:dorder :strict} :modi :any} [:spacebar :slash] nil {:params {:sim 120}}]
         ; [{:sim [:spacebar :return_or_enter] :simo {:dorder :strict}} [:spacebar :return_or_enter]]
         ; [{:sim [:spacebar :delete_or_backspace] :simo {:dorder :strict}} [:spacebar :delete_or_backspace]]
         ; [{:sim [:spacebar :left_command] :simo {:dorder :strict}} [:spacebar :left_command]]

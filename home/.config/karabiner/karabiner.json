@@ -3148,7 +3148,7 @@
         "description" : "numbers mode, fluid typing protection",
         "manipulators" : [ {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3174,7 +3174,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3200,7 +3200,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3226,7 +3226,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3252,7 +3252,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3278,7 +3278,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3304,7 +3304,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3330,7 +3330,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3356,7 +3356,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3382,7 +3382,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3408,7 +3408,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3434,7 +3434,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3460,7 +3460,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3486,7 +3486,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "simultaneous" : [ {
@@ -3509,7 +3509,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3535,7 +3535,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3561,7 +3561,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3587,7 +3587,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3613,7 +3613,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3639,7 +3639,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3665,7 +3665,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3691,7 +3691,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3717,7 +3717,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3743,7 +3743,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3769,7 +3769,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3795,7 +3795,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3821,7 +3821,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3847,7 +3847,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3873,7 +3873,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
@@ -3899,7 +3899,7 @@
           "type" : "basic"
         }, {
           "parameters" : {
-            "basic.simultaneous_threshold_milliseconds" : 140
+            "basic.simultaneous_threshold_milliseconds" : 120
           },
           "from" : {
             "modifiers" : {
