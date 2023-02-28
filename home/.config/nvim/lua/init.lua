@@ -270,6 +270,13 @@ local function onPureNeovimSetup(use)
   -- })
 
   use({
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+      require('nvim-treesitter.install').prefer_git = true
+      require('nvim-treesitter.install').update()
+    end,
+  })
+  use({
     'nvim-treesitter/nvim-treesitter-refactor',
     requires = { { 'nvim-treesitter/nvim-treesitter' } },
   })
@@ -280,13 +287,6 @@ local function onPureNeovimSetup(use)
   use({
     'JoosepAlviste/nvim-ts-context-commentstring',
     requires = { { 'nvim-treesitter/nvim-treesitter' } },
-  })
-  use({
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      require('nvim-treesitter.install').prefer_git = true
-      require('nvim-treesitter.install').update()
-    end,
   })
 
   use('onsails/lspkind-nvim')
