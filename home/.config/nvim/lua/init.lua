@@ -3,11 +3,89 @@ local IS_META_SERVER = (function()
   return vim.endswith(hostname, '.fbinfra.net')
       or vim.endswith(hostname, '.facebook.com')
 end)()
+
 -- would be nice to make this async, lazy and memoized
 local IS_BIGGREP_ROOT = IS_META_SERVER
     and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
+
+local function identity(a1)
+  return a1
+end
+
+-- See https://www.lua.org/pil/17.1.html
+function memoize(fn, cache_key_gen)
+  cache_key_gen = cache_key_gen or identity
+  local cache = {}
+  setmetatable(cache, { __mode = 'kv' })
+  return function(...)
+    local args = { ... }
+    local cache_key = cache_key_gen(unpack(args))
+    if type(cache_key) ~= 'string' then
+      return error('Cache key needs to be a string.')
+    end
+    if cache[cache_key] == vim.NIL then
+      return nil
+    end
+    if cache[cache_key] ~= nil then
+      return cache[cache_key]
+    end
+    local result = fn(unpack(args))
+    cache[cache_key] = result == nil and vim.NIL or result
+    return result
+  end
+end
+
+local function get_os_command_output(cmd, opts)
+  local Job = require("plenary.job")
+  opts = opts or {}
+  local command = table.remove(cmd, 1)
+  local stderr = {}
+  local stdout, ret = Job:new({
+    command = command,
+    args = cmd,
+    cwd = opts.cwd,
+    on_stderr = function(_, data)
+      table.insert(stderr, data)
+    end,
+  }):sync(opts.timeout)
+  return stdout, ret, stderr
+end
+
+local function system(cmd, opts)
+  local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
+  if exit_code ~= 0 then
+    return error('stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout))
+  end
+  return vim.trim(stdout[1] or '')
+end
+
+local function is_system_success(cmd, opts)
+  local _, exit_code = get_os_command_output(cmd, opts)
+  return exit_code == 0
+end
+
+local is_hg_repo_in_cwd = memoize(function(cwd)
+  return is_system_success({ 'hg', 'root' }, { cwd = cwd })
+end)
+
+local function is_hg_repo()
+  return is_hg_repo_in_cwd(vim.loop.cwd())
+end
+
+local is_biggrep_repo_in_cwd = memoize(function(cwd)
+  local _, exit_code, stderr = get_os_command_output({ 'bgs' }, { cwd = cwd })
+  if exit_code ~= 0 then
+    return not vim.startswith(vim.trim(stderr[1]), 'Error:')
+  end
+  -- This is unexpected, return false
+  return false
+end)
+
+local function is_biggrep_repo()
+  return is_biggrep_repo_in_cwd(vim.loop.cwd())
+end
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -785,12 +863,29 @@ local function onPureNeovimConfig()
   require('telescope').load_extension('fzy_native')
 
   if IS_BIGGREP_ROOT then
-    set_keymap(
-      'n',
-      '<LEADER>ff',
-      '<cmd>Telescope myles<CR>',
-      { silent = false, noremap = true }
-    )
+    -- myles only works on hg repos
+    if is_hg_repo() then
+      set_keymap(
+        'n',
+        '<LEADER>ff',
+        '<cmd>Telescope myles<CR>',
+        { silent = false, noremap = true }
+      )
+    elseif is_biggrep_repo() then
+      set_keymap(
+        'n',
+        '<LEADER>ff',
+        '<cmd>Telescope biggrep f<CR>',
+        { silent = false, noremap = true }
+      )
+    else
+      set_keymap(
+        'n',
+        '<LEADER>ff',
+        '<cmd>Telescope find_files<CR>',
+        { silent = false, noremap = true }
+      )
+    end
     set_keymap(
       'n',
       '<LEADER>fg',
@@ -1109,13 +1204,13 @@ local function onPureNeovimConfig()
     end)
   end
 
-  local function source_if_exists(file)
-    if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
-      vim.cmd('source ' .. file)
-    end
-  end
+  -- local function source_if_exists(file)
+  --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
+  --     vim.cmd('source ' .. file)
+  --   end
+  -- end
 
-  source_if_exists(vim.env.HOME .. '/.fb-vimrc')
+  -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
 end
 
 local install_path = vim.fn.stdpath('data')
