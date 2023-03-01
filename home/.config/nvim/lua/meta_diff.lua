@@ -60,30 +60,29 @@ local function split(inputstr, pattern)
   return t
 end
 
-local NIL = {}
-local function memoize(fn, cache_key_gen)
-  cache_key_gen = cache_key_gen or function(a1)
-    return a1
-  end
+local function identity(a1)
+  return a1
+end
+
+-- See https://www.lua.org/pil/17.1.html
+function memoize(fn, cache_key_gen)
+  cache_key_gen = cache_key_gen or identity
   local cache = {}
+  setmetatable(cache, { __mode = 'kv' })
   return function(...)
-    local arg = { ... }
-    local cache_key = cache_key_gen(unpack(arg))
-    if cache_key == nil then
-      return error("Cache key can't be nil.")
+    local args = { ... }
+    local cache_key = cache_key_gen(unpack(args))
+    if type(cache_key) ~= 'string' then
+      return error('Cache key needs to be a string.')
     end
-    if cache[cache_key] == NIL then
+    if cache[cache_key] == vim.NIL then
       return nil
     end
     if cache[cache_key] ~= nil then
       return cache[cache_key]
     end
-    local result = fn(unpack(arg))
-    if result == nil then
-      cache[cache_key] = NIL
-    else
-      cache[cache_key] = result
-    end
+    local result = fn(unpack(args))
+    cache[cache_key] = result == nil and vim.NIL or result
     return result
   end
 end
