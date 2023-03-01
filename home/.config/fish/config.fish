@@ -105,15 +105,17 @@ set -x PATH $HOME/gdrive/code/gd/bin $PATH
 # set -x ANDROID_HOME $ANDROID_SDK
 
 # You'll need `fisher install edc/bass` before this.
-bass 'source $HOME/.waandroid/env.sh'
-set -x PATH $JAVA_HOME/bin $PATH
-set -x PATH $ANDROID_HOME/emulator $PATH
-set -x PATH $ANDROID_HOME/tools $PATH
-set -x PATH $ANDROID_HOME/tools/bin $PATH
+if command_exists bass
+  bass 'source $HOME/.waandroid/env.sh'
+  set -x PATH $JAVA_HOME/bin $PATH
+  set -x PATH $ANDROID_HOME/emulator $PATH
+  set -x PATH $ANDROID_HOME/tools $PATH
+  set -x PATH $ANDROID_HOME/tools/bin $PATH
 
-set -x NDK_CCACHE "/usr/local/bin/ccache"
-set -x CCACHE_DIR "$HOME/.ccache"
-set -x USE_CCACHE 1
+  set -x NDK_CCACHE "/usr/local/bin/ccache"
+  set -x CCACHE_DIR "$HOME/.ccache"
+  set -x USE_CCACHE 1
+end
 
 if command_exists starship
   eval (starship init fish)
