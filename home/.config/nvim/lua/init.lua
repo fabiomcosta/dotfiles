@@ -294,7 +294,7 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 set_keymap(
   'n',
   'cp',
-  ':let @+ = resolve(fnamemodify(expand("%"), ":~:.")) | :OSCYankReg +<CR>',
+  ':let @+ = resolve(fnamemodify(expand("%"), ":~:.")) | :OSCYankRegister +<CR>',
   { noremap = true }
 )
 
@@ -1109,7 +1109,7 @@ local function onPureNeovimConfig()
   vim.g.beacon_size = 12
 
   vim.cmd([[
-    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankReg "' | endif
+    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister "' | endif
   ]])
 
   vim.api.nvim_create_user_command('MetaDiffCheckout', function()
@@ -1248,7 +1248,6 @@ end
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
-    local meta_extensions = require('meta.lsp.extensions')
     vim.cmd('SyncMetaLS')
 
     vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
