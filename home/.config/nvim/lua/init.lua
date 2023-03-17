@@ -351,7 +351,7 @@ local function onPureNeovimSetup(use)
     'nvim-treesitter/nvim-treesitter',
     run = function()
       require('nvim-treesitter.install').prefer_git = true
-      require('nvim-treesitter.install').update()
+      require('nvim-treesitter.install').update({ with_sync = true })()
     end,
   })
   use({
