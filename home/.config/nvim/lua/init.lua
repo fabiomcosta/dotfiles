@@ -291,12 +291,11 @@ set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
 set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
 -- copies current buffer file path to register
-set_keymap(
-  'n',
-  'cp',
-  ':let @+ = resolve(fnamemodify(expand("%"), ":~:.")) | :OSCYankRegister +<CR>',
-  { noremap = true }
-)
+vim.keymap.set('n', 'cp', function()
+  local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand("%"), ":~:."))
+  vim.fn.setreg('+', path)
+  require('osc52').copy(path)
+end)
 
 -- Keeps selection when changing indentation
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
@@ -324,7 +323,7 @@ local function onNeovimVSCodeSetup(use)
   use('christoomey/vim-tmux-navigator')
 
   use('editorconfig/editorconfig-vim')
-  use('ojroques/vim-oscyank')
+  use('ojroques/nvim-osc52')
   -- use 'godlygeek/tabular'
   -- use 'jeffkreeftmeijer/vim-numbertoggle'
 
@@ -772,6 +771,7 @@ local function onPureNeovimConfig()
     -- }))
   else
     table.insert(servers, 'pylsp')
+    table.insert(servers, 'tsserver')
     nvim_lsp.eslint.setup(with_lsp_default_config({
       on_attach = function(client, bufnr)
         -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
@@ -808,6 +808,7 @@ local function onPureNeovimConfig()
       sources = {
         require('null-ls').builtins.formatting.black,
         require('null-ls').builtins.formatting.stylua,
+        require('null-ls').builtins.formatting.prettier,
       },
     })
   end
@@ -964,9 +965,9 @@ local function onPureNeovimConfig()
   vim.g.workspace_autosave_untrailtabs = 0
 
   vim.g.workspace_session_directory =
-  vim.fn.expand('~/.local/share/nvim/sessions')
+      vim.fn.expand('~/.local/share/nvim/sessions')
   vim.g.workspace_undodir =
-  vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
+      vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
 
   vim.g['test#strategy'] = 'neovim'
   vim.g['test#neovim#term_position'] = 'botright 20'
@@ -1108,9 +1109,12 @@ local function onPureNeovimConfig()
   vim.g.beacon_shrink = 0
   vim.g.beacon_size = 12
 
-  vim.cmd([[
-    autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '' | execute 'OSCYankRegister "' | endif
-  ]])
+  local function copy()
+    if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+      require('osc52').copy_register('"')
+    end
+  end
+  vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
 
   vim.api.nvim_create_user_command('MetaDiffCheckout', function()
     require('meta_diff').diff_picker({ checkout = true })
@@ -1274,9 +1278,9 @@ return packer.startup({
     local configStatus, configError = pcall(config)
     if not configStatus and configError ~= nil then
       local isModuleNotFoundError = string.find(
-        configError,
-        [[module ['"][%w._-]+['"] not found:]]
-      ) ~= nil
+            configError,
+            [[module ['"][%w._-]+['"] not found:]]
+          ) ~= nil
       if isModuleNotFoundError then
         -- I already setup everything on start on the meta server
         -- so only execute this otherwise
