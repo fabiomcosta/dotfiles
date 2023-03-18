@@ -783,7 +783,7 @@ local function onPureNeovimConfig()
         format = { enable = true }, -- this will enable formatting
       },
     }))
-    nvim_lsp.sumneko_lua.setup(with_lsp_default_config({
+    nvim_lsp.lua_ls.setup(with_lsp_default_config({
       settings = {
         Lua = {
           diagnostics = {
