@@ -351,19 +351,20 @@ local function onPureNeovimSetup(use)
     run = function()
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.install').update({ with_sync = true })()
+
+      use({
+        'nvim-treesitter/nvim-treesitter-refactor',
+        requires = { { 'nvim-treesitter/nvim-treesitter' } },
+      })
+      use({
+        'windwp/nvim-ts-autotag',
+        requires = { { 'nvim-treesitter/nvim-treesitter' } },
+      })
+      use({
+        'JoosepAlviste/nvim-ts-context-commentstring',
+        requires = { { 'nvim-treesitter/nvim-treesitter' } },
+      })
     end,
-  })
-  -- use({
-  --   'nvim-treesitter/nvim-treesitter-refactor',
-  --   requires = { { 'nvim-treesitter/nvim-treesitter' } },
-  -- })
-  use({
-    'windwp/nvim-ts-autotag',
-    requires = { { 'nvim-treesitter/nvim-treesitter' } },
-  })
-  use({
-    'JoosepAlviste/nvim-ts-context-commentstring',
-    requires = { { 'nvim-treesitter/nvim-treesitter' } },
   })
 
   use('onsails/lspkind-nvim')
@@ -1252,6 +1253,7 @@ end
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
+    require('meta')
     vim.cmd('SyncMetaLS')
 
     vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
