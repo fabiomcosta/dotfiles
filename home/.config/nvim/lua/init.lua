@@ -353,10 +353,10 @@ local function onPureNeovimSetup(use)
       require('nvim-treesitter.install').update({ with_sync = true })()
     end,
   })
-  use({
-    'nvim-treesitter/nvim-treesitter-refactor',
-    requires = { { 'nvim-treesitter/nvim-treesitter' } },
-  })
+  -- use({
+  --   'nvim-treesitter/nvim-treesitter-refactor',
+  --   requires = { { 'nvim-treesitter/nvim-treesitter' } },
+  -- })
   use({
     'windwp/nvim-ts-autotag',
     requires = { { 'nvim-treesitter/nvim-treesitter' } },
