@@ -419,6 +419,8 @@ local function onPureNeovimSetup(use)
 
   use('j-hui/fidget.nvim')
 
+  use('chipsenkbeil/distant.nvim')
+
   if IS_META_SERVER then
     use({ '/usr/share/fb-editor-support/nvim', as = 'meta.nvim' })
   end
@@ -458,6 +460,14 @@ local function onNeovimVSCodeConfig()
 end
 
 local function onPureNeovimConfig()
+  require('distant').setup({
+    -- Applies Chip's personal settings to every machine you connect to
+    -- 1. Ensures that distant servers terminate with no connections
+    -- 2. Provides navigation bindings for remote directories
+    -- 3. Provides keybinding to jump into a remote file's parent directory
+    ['*'] = require('distant.settings').chip_default()
+  })
+
   set_keymap(
     'n',
     '<LEADER>W',
