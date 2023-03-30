@@ -460,6 +460,7 @@ local function onNeovimVSCodeConfig()
 end
 
 local function onPureNeovimConfig()
+
   require('distant').setup({
     -- Applies Chip's personal settings to every machine you connect to
     -- 1. Ensures that distant servers terminate with no connections
@@ -467,6 +468,8 @@ local function onPureNeovimConfig()
     -- 3. Provides keybinding to jump into a remote file's parent directory
     ['*'] = require('distant.settings').chip_default()
   })
+
+  require('osc52').setup({ silent = true })
 
   set_keymap(
     'n',
