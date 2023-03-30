@@ -752,6 +752,7 @@ local function onPureNeovimConfig()
   }))
 
   if IS_META_SERVER then
+    require('meta')
     require('meta.lsp')
     table.insert(servers, 'hhvm')
     table.insert(servers, 'prettier@meta')
@@ -1265,6 +1266,7 @@ end
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
+    require('meta')
     require('meta.lsp')
     vim.cmd('SyncMetaLS')
 
