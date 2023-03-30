@@ -1275,6 +1275,7 @@ local function install_meta_lsp_clients()
       parser_install_dir = TS_PARSER_INSTALL_PATH,
     })
     vim.cmd('TSUpdateSync')
+    vim.cmd('sleep 60')
   end
 end
 
