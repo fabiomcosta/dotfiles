@@ -1276,7 +1276,7 @@ require('lazy').setup({
       end, {})
     end
   },
-  { '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', enabled = IS_META_SERVER },
+  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', enabled = IS_META_SERVER },
 })
 
 
