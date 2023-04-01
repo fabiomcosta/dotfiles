@@ -327,6 +327,29 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
+local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+local auto_format_on_save = function(client, bufnr)
+  -- if client.server_capabilities.document_formatting then
+  if client.supports_method('textDocument/formatting') then
+    -- vim.cmd([[
+    --   augroup Format
+    --     autocmd! * <buffer>
+    --     autocmd BufWritePre <buffer> lua vim.lsp.buf.format({ timeout_ms = 2000 })
+    --   augroup END
+    -- ]])
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ timeout_ms = 2000 })
+      end,
+    })
+  end
+end
+
+
 require('lazy').setup({
   {
     'dracula/vim',
@@ -593,30 +616,8 @@ require('lazy').setup({
 
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'kkharji/lspsaga.nvim', 'hrsh7th/cmp-nvim-lsp' },
+    dependencies = { 'kkharji/lspsaga.nvim', 'hrsh7th/cmp-nvim-lsp', 'meta.nvim' },
     config = function()
-      local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
-      local auto_format_on_save = function(client, bufnr)
-        -- if client.server_capabilities.document_formatting then
-        if client.supports_method('textDocument/formatting') then
-          -- vim.cmd([[
-          --   augroup Format
-          --     autocmd! * <buffer>
-          --     autocmd BufWritePre <buffer> lua vim.lsp.buf.format({ timeout_ms = 2000 })
-          --   augroup END
-          -- ]])
-          vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-          vim.api.nvim_create_autocmd('BufWritePre', {
-            group = augroup,
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.format({ timeout_ms = 2000 })
-            end,
-          })
-        end
-      end
-
-      local nvim_lsp = require('lspconfig')
 
       vim.api.nvim_set_keymap(
         'n',
@@ -747,6 +748,8 @@ require('lazy').setup({
       end
 
 
+      local nvim_lsp = require('lspconfig')
+
       -- Use a loop to conveniently call 'setup' on multiple servers and
       -- map buffer local keybindings when the language server attaches
       local servers = {}
@@ -821,16 +824,6 @@ require('lazy').setup({
             },
           },
         }))
-        require('null-ls').setup({
-          on_attach = function(client, bufnr)
-            auto_format_on_save(client, bufnr)
-          end,
-          sources = {
-            require('null-ls').builtins.formatting.black,
-            require('null-ls').builtins.formatting.stylua,
-            require('null-ls').builtins.formatting.prettier,
-          },
-        })
       end
 
       for _, lsp in ipairs(servers) do
@@ -847,6 +840,20 @@ require('lazy').setup({
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      if not IS_META_SERVER then
+        require('null-ls').setup({
+          on_attach = function(client, bufnr)
+            auto_format_on_save(client, bufnr)
+          end,
+          sources = {
+            require('null-ls').builtins.formatting.black,
+            require('null-ls').builtins.formatting.stylua,
+            require('null-ls').builtins.formatting.prettier,
+          },
+        })
+      end
+    end
   },
 
   {
@@ -1151,6 +1158,7 @@ require('lazy').setup({
 
   {
     'mfussenegger/nvim-dap',
+    dependencies = { 'meta.nvim' },
     config = function()
       if not module_exists('meta') then
         return
@@ -1277,7 +1285,7 @@ require('lazy').setup({
       end, {})
     end
   },
-  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', enabled = IS_META_SERVER },
+  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', dependencies = {'jose-elias-alvarez/null-ls.nvim', 'neovim/nvim-lspconfig', 'nvim-treesitter'}, enabled = IS_META_SERVER },
 })
 
 
@@ -1375,6 +1383,8 @@ set_keymap(
   '<CMD>SlogToggle<CR>',
   { silent = true, noremap = true }
 )
+
+vim.cmd([[filetype plugin indent on]])
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
