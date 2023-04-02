@@ -573,13 +573,13 @@ require('lazy').setup({
     'hrsh7th/nvim-cmp',
     dependencies = {
       'onsails/lspkind-nvim',
-      'hrsh7th/vim-vsnip',
-      'rafamadriz/friendly-snippets',
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-cmdline',
-      'hrsh7th/cmp-vsnip'
+      'hrsh7th/cmp-vsnip',
+      'hrsh7th/vim-vsnip',
+      'rafamadriz/friendly-snippets',
     },
     config = function()
       local cmp = require('cmp')
@@ -759,11 +759,16 @@ require('lazy').setup({
       }))
 
       if IS_META_SERVER then
-        require('meta')
-        require('meta.lsp')
+
         table.insert(servers, 'hhvm')
-        table.insert(servers, 'prettier@meta')
-        table.insert(servers, 'eslint@meta')
+
+        local installed_extensions = require('meta.lsp.extensions').get_installed_extensions()
+        if installed_extensions['nuclide.prettier'] then
+          table.insert(servers, 'prettier@meta')
+        end
+        if installed_extensions['nuclide.eslint'] then
+          table.insert(servers, 'eslint@meta')
+        end
         -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
         --   settings = {
         --     editor = {
@@ -831,12 +836,7 @@ require('lazy').setup({
       end
     end
   },
-  {
-    'williamboman/mason.nvim',
-    config = function()
-      require('mason').setup()
-    end
-  },
+  { 'williamboman/mason.nvim', config = function() require('mason').setup() end },
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -1029,9 +1029,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-          vim.fn.expand('~/.local/share/nvim/sessions')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-          vim.fn.expand('~/.local/share/nvim/sessions/.undodir')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end
   },
   {
@@ -1285,29 +1285,21 @@ require('lazy').setup({
       end, {})
     end
   },
-  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', dependencies = {'jose-elias-alvarez/null-ls.nvim', 'neovim/nvim-lspconfig', 'nvim-treesitter'}, enabled = IS_META_SERVER },
+  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', dependencies = {'jose-elias-alvarez/null-ls.nvim', 'neovim/nvim-lspconfig', 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'}, enabled = IS_META_SERVER },
 })
 
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
-    require('meta')
-    require('meta.lsp')
+    require('lazy').sync()
     vim.cmd('SyncMetaLS')
-
-    vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
-    require('nvim-treesitter').setup()
-    require('nvim-treesitter.install').prefer_git = true
-    require('nvim-treesitter.configs').setup({
-      parser_install_dir = TS_PARSER_INSTALL_PATH,
-    })
-    vim.cmd('TSUpdateSync')
-    vim.cmd('sleep 60')
   end
 end
 
 vim.api.nvim_create_user_command('SetupAndQuit', function()
   install_meta_lsp_clients()
+  vim.cmd('autocmd User SyncMetaLSComplete quitall')
+  vim.cmd('sleep 60')
   vim.cmd('quitall')
 end, {})
 
