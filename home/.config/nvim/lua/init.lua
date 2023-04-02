@@ -1052,7 +1052,9 @@ require('lazy').setup({
       vim.g['test#javascript#jest#options'] = '--verbose=false'
       vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' } }
 
-      _G.fabs_test_kill_last_term_window = function()
+      -- Closes the last term window according to vim's order, so either the
+      -- bottom-most or if there is none on the bottom, the last to the right.
+      vim.keymap.set('n', '<LEADER>tk', function()
         local max_width = vim.o.columns
         local max_height = vim.o.lines - 1 - vim.o.cmdheight
 
@@ -1074,15 +1076,8 @@ require('lazy').setup({
           return replace_termcodes('<C-w>' .. last_window_nr .. 'c')
         end
         return ''
-      end
-      set_keymap(
-        'n',
-        '<LEADER>tk',
-        -- Closes the last term window according to vim's order, so either the
-        -- bottom-most or if there is none on the bottom, the last to the right.
-        'v:lua.fabs_test_kill_last_term_window()',
-        { silent = true, noremap = false, expr = true }
-      )
+      end, { silent = true, expr = true })
+
       set_keymap(
         'n',
         '<LEADER>tn',
