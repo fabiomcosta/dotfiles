@@ -97,6 +97,14 @@ end
 local function module_exists(module_name)
   return pcall(require, module_name)
 end
+
+local function require_if_exists(module_name, callback)
+  local exists, module = pcall(require, module_name)
+  if exists then
+    callback(module)
+  end
+end
+
 --     if not configStatus and configError ~= nil then
 
 -- local function feedkeys(key, mode)
@@ -300,7 +308,9 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand("%"), ":~:."))
   vim.fn.setreg('+', path)
-  require('osc52').copy(path)
+  require_if_exists('osc52', function(osc52)
+    osc52.copy(path)
+  end)
 end)
 
 -- Keeps selection when changing indentation
@@ -438,8 +448,8 @@ require('lazy').setup({
   -- not needed on vscode
   { 'ntpeters/vim-better-whitespace' },
   {
-    'sheerun/vim-polyglot',
     -- This plugin already constains 'tpope/vim-sleuth'
+    'sheerun/vim-polyglot',
     config = function()
       vim.g.javascript_plugin_flow = 1
     end
