@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_BIGGREP_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
 
@@ -38,7 +38,7 @@ local function memoize(fn, cache_key_gen)
 end
 
 local function get_os_command_output(cmd, opts)
-  local Job = require("plenary.job")
+  local Job = require('plenary.job')
   opts = opts or {}
   local command = table.remove(cmd, 1)
   local stderr = {}
@@ -56,7 +56,9 @@ end
 local function system(cmd, opts)
   local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
   if exit_code ~= 0 then
-    return error('stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout))
+    return error(
+      'stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout)
+    )
   end
   return vim.trim(stdout[1] or '')
 end
@@ -303,7 +305,7 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
 -- copies current buffer file path to register
 vim.keymap.set('n', 'cp', function()
-  local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand("%"), ":~:."))
+  local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
   vim.fn.setreg('+', path)
   require_if_exists('osc52', function(osc52)
     osc52.copy(path)
@@ -320,20 +322,18 @@ set_keymap('x', '>', '>gv', { noremap = true })
 vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
 vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 
-
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
+    'git',
+    'clone',
+    '--filter=blob:none',
+    'https://github.com/folke/lazy.nvim.git',
+    '--branch=stable', -- latest stable release
     lazypath,
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
 
 local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 local auto_format_on_save = function(client, bufnr)
@@ -356,7 +356,6 @@ local auto_format_on_save = function(client, bufnr)
   end
 end
 
-
 require('lazy').setup({
   {
     'dracula/vim',
@@ -371,7 +370,7 @@ require('lazy').setup({
     'othree/eregex.vim',
     config = function()
       vim.g.eregex_default_enable = 0
-    end
+    end,
   },
   -- { 'wbthomason/packer.nvim' },
   { 'antoinemadec/FixCursorHold.nvim' },
@@ -408,7 +407,7 @@ require('lazy').setup({
           },
         }, jest_alternate),
       }
-    end
+    end,
   },
   { 'moll/vim-node' },
   -- { 'jparise/vim-graphql' },
@@ -426,7 +425,7 @@ require('lazy').setup({
         end
       end
       vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
-    end
+    end,
   },
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
@@ -439,7 +438,7 @@ require('lazy').setup({
         forward = '<C-n>',
       })
       set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
-    end
+    end,
   },
 
   -- not needed on vscode
@@ -449,7 +448,7 @@ require('lazy').setup({
     'sheerun/vim-polyglot',
     config = function()
       vim.g.javascript_plugin_flow = 1
-    end
+    end,
   },
   {
     'haya14busa/incsearch.vim',
@@ -469,7 +468,7 @@ require('lazy').setup({
         '<Plug>(incsearch-forward)<C-r><C-w><CR>',
         { noremap = false }
       )
-    end
+    end,
   },
   {
     'rhysd/git-messenger.vim',
@@ -482,7 +481,7 @@ require('lazy').setup({
         ':GitMessenger<CR>',
         { silent = true, noremap = false }
       )
-    end
+    end,
   },
   {
     'tpope/vim-vinegar',
@@ -494,17 +493,17 @@ require('lazy').setup({
         ':Vexplore<CR>',
         { silent = true, noremap = true }
       )
-    end
+    end,
   },
 
   {
-    "tversteeg/registers.nvim",
-    name = "registers",
+    'tversteeg/registers.nvim',
+    name = 'registers',
     -- keys = {
     --   { "\"",    mode = { "n", "v" } },
     --   { "<C-R>", mode = "i" }
     -- },
-    cmd = "Registers",
+    cmd = 'Registers',
   },
 
   {
@@ -562,19 +561,16 @@ require('lazy').setup({
 
   {
     'nvim-treesitter/nvim-treesitter-refactor',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
   },
-
   {
     'windwp/nvim-ts-autotag',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
   },
-
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' }
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
   },
-
 
   {
     'hrsh7th/nvim-cmp',
@@ -590,7 +586,6 @@ require('lazy').setup({
     },
     config = function()
       local cmp = require('cmp')
-
       cmp.setup({
         snippet = {
           expand = function(args)
@@ -618,25 +613,30 @@ require('lazy').setup({
           { name = 'buffer' },
         }),
       })
-    end
+    end,
   },
   {
     'folke/neodev.nvim',
     config = function()
       require('neodev').setup()
-    end
+    end,
   },
   {
     'neovim/nvim-lspconfig',
-    dependencies = { 'folke/neodev.nvim', 'kkharji/lspsaga.nvim', 'hrsh7th/cmp-nvim-lsp', 'meta.nvim' },
+    dependencies = {
+      'folke/neodev.nvim',
+      'kkharji/lspsaga.nvim',
+      'hrsh7th/cmp-nvim-lsp',
+      'meta.nvim',
+    },
     config = function()
-      vim.api.nvim_set_keymap(
+      set_keymap(
         'n',
         '[d',
         '<cmd>lua vim.diagnostic.goto_prev()<CR>',
         { silent = true, noremap = true }
       )
-      vim.api.nvim_set_keymap(
+      set_keymap(
         'n',
         ']d',
         '<cmd>lua vim.diagnostic.goto_next()<CR>',
@@ -646,101 +646,79 @@ require('lazy').setup({
       local on_attach = function(client, bufnr)
         auto_format_on_save(client, bufnr)
 
+        local function buf_set_keymap(mode, keys, remapped_keys)
+          vim.api.nvim_buf_set_keymap(
+            bufnr,
+            mode,
+            keys,
+            remapped_keys,
+            { noremap = true, silent = true }
+          )
+        end
+
         -- Use lsp find_references if its available, and fallback to a grep_string.
         if client.server_capabilities.find_references then
-          set_keymap(
-            'n',
-            '<LEADER>fr',
-            '<cmd>Telescope lsp_references<CR>',
-            { silent = false, noremap = true }
-          )
+          buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>')
           -- The ideal check here is to check for biggrep support somehow
         elseif IS_BIGGREP_ROOT then
           -- Use Telescope biggrep with the current selection
-          set_keymap(
-            'n',
-            '<LEADER>fr',
-            "viw:'<,'>Bgs<CR>",
-            { silent = false, noremap = true }
-          )
+          buf_set_keymap('n', '<LEADER>fr', "viw:'<,'>Bgs<CR>")
         else
-          set_keymap(
-            'n',
-            '<LEADER>fr',
-            '<cmd>Telescope grep_string<CR>',
-            { silent = false, noremap = true }
-          )
+          buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope grep_string<CR>')
         end
 
-        local function buf_set_keymap(...)
-          vim.api.nvim_buf_set_keymap(bufnr, ...)
-        end
-
-        -- Mappings.
-        local opts = { noremap = true, silent = true }
-
-        buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+        buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
         buf_set_keymap(
           'n',
           '<LEADER>q',
-          '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>',
-          opts
+          '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>'
         )
 
         -- lspsaga key bindings
         buf_set_keymap(
           'n',
           'K',
-          '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>'
         )
         buf_set_keymap(
           'n',
           'gh',
-          '<cmd>lua require"lspsaga.provider".preview_definition()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.provider".preview_definition()<CR>'
         )
         buf_set_keymap(
           'n',
           'gk',
-          '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>'
         )
         buf_set_keymap(
           'n',
           '[d',
-          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>'
         )
         buf_set_keymap(
           'n',
           ']d',
-          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>'
         )
         buf_set_keymap(
           'n',
           '<LEADER>e',
-          '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>'
         )
         buf_set_keymap(
           'n',
           '<LEADER>ca',
-          '<cmd>lua require"lspsaga.codeaction".code_action()<CR>',
-          opts
+          '<cmd>lua require"lspsaga.codeaction".code_action()<CR>'
         )
         buf_set_keymap(
           'v',
           '<LEADER>ca',
-          ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>',
-          opts
+          ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>'
         )
         buf_set_keymap(
           'n',
           '<LEADER>lg',
-          '<cmd>lua require"lspsaga.floaterm".open_float_terminal("lazygit")<CR>',
-          opts
+          '<cmd>lua require"lspsaga.floaterm".open_float_terminal("lazygit")<CR>'
         )
       end
 
@@ -758,7 +736,6 @@ require('lazy').setup({
         })
       end
 
-
       local nvim_lsp = require('lspconfig')
 
       -- Use a loop to conveniently call 'setup' on multiple servers and
@@ -772,7 +749,8 @@ require('lazy').setup({
       if IS_META_SERVER then
         table.insert(servers, 'hhvm')
 
-        local installed_extensions = require('meta.lsp.extensions').get_installed_extensions()
+        local installed_extensions =
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -808,7 +786,7 @@ require('lazy').setup({
       else
         table.insert(servers, 'pylsp')
         nvim_lsp.tsserver.setup(with_lsp_default_config({
-          filetypes = { "typescript", "typescriptreact", "typescript.tsx" }
+          filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
         }))
         nvim_lsp.eslint.setup(with_lsp_default_config({
           on_attach = function(client, bufnr)
@@ -834,13 +812,13 @@ require('lazy').setup({
       for _, lsp in ipairs(servers) do
         nvim_lsp[lsp].setup(with_lsp_default_config())
       end
-    end
+    end,
   },
   {
     'williamboman/mason.nvim',
     config = function()
       require('mason').setup()
-    end
+    end,
   },
   {
     'jose-elias-alvarez/null-ls.nvim',
@@ -858,7 +836,7 @@ require('lazy').setup({
           },
         })
       end
-    end
+    end,
   },
 
   {
@@ -871,7 +849,7 @@ require('lazy').setup({
           enable = false,
         },
       })
-    end
+    end,
   },
 
   { 'nvim-lua/popup.nvim' },
@@ -987,7 +965,7 @@ require('lazy').setup({
         '<cmd>Telescope git_status<CR>',
         { silent = false, noremap = true }
       )
-    end
+    end,
   },
 
   {
@@ -997,7 +975,7 @@ require('lazy').setup({
         disable_commit_confirmation = true,
         disable_insert_on_commit = false,
       })
-    end
+    end,
   },
   {
     'hoob3rt/lualine.nvim',
@@ -1020,7 +998,7 @@ require('lazy').setup({
           lualine_x = {},
         },
       })
-    end
+    end,
   },
   {
     'thaerkh/vim-workspace',
@@ -1034,10 +1012,10 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
-    end
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+    end,
   },
   {
     'vim-test/vim-test',
@@ -1105,7 +1083,7 @@ require('lazy').setup({
         ':TestVisit<CR>',
         { silent = true, noremap = false }
       )
-    end
+    end,
   },
   {
     'mattboehm/vim-accordion',
@@ -1120,7 +1098,7 @@ require('lazy').setup({
         )
       end, {})
       vim.cmd([[autocmd VimEnter,VimResized * :AccordionAutoResize]])
-    end
+    end,
   },
   {
     'folke/trouble.nvim',
@@ -1145,7 +1123,7 @@ require('lazy').setup({
         '<CMD>Trouble document_diagnostics<CR>',
         { silent = true, noremap = true }
       )
-    end
+    end,
   },
   {
     'danilamihailov/beacon.nvim',
@@ -1153,7 +1131,7 @@ require('lazy').setup({
       vim.g.beacon_show_jumps = 0
       vim.g.beacon_shrink = 0
       vim.g.beacon_size = 12
-    end
+    end,
   },
 
   {
@@ -1195,14 +1173,17 @@ require('lazy').setup({
         }
         dap.configurations.php = dap.configurations.hack
       end
-    end
+    end,
   },
   {
     'theHamsta/nvim-dap-virtual-text',
-    dependencies = { 'mfussenegger/nvim-dap', 'nvim-treesitter/nvim-treesitter' },
+    dependencies = {
+      'mfussenegger/nvim-dap',
+      'nvim-treesitter/nvim-treesitter',
+    },
     config = function()
       require('nvim-dap-virtual-text').setup({})
-    end
+    end,
   },
   {
     'rcarriga/nvim-dap-ui',
@@ -1240,14 +1221,14 @@ require('lazy').setup({
       vim.keymap.set('n', '<LEADER>du', function()
         require('dapui').toggle({})
       end)
-    end
+    end,
   },
 
   {
     'j-hui/fidget.nvim',
     config = function()
       require('fidget').setup()
-    end
+    end,
   },
 
   {
@@ -1257,7 +1238,7 @@ require('lazy').setup({
       require('distant').setup({
         ['fabs.sb.facebook.com'] = {
           distant = {
-            bin = '/home/fabs/bin/distant'
+            bin = '/home/fabs/bin/distant',
           },
         },
         -- Applies Chip's personal settings to every machine you connect to
@@ -1268,9 +1249,10 @@ require('lazy').setup({
       })
 
       vim.api.nvim_create_user_command('DisSpawn', function()
-        local err, remote_process = require('distant.fn').spawn({ cmd = 'echoer' })
+        local err, remote_process =
+          require('distant.fn').spawn({ cmd = 'echoer' })
         if err then
-          return error('Spawning hostname threw an error');
+          return error('Spawning hostname threw an error')
         end
         remote_process.read_stdout_string(function(_err, text)
           print(vim.inspect(text))
@@ -1283,18 +1265,20 @@ require('lazy').setup({
           end
         end)
       end, {})
-    end
+    end,
   },
   {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
-    dependencies = { 'jose-elias-alvarez/null-ls.nvim',
-      'neovim/nvim-lspconfig', 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
-    enabled =
-        IS_META_SERVER
+    dependencies = {
+      'jose-elias-alvarez/null-ls.nvim',
+      'neovim/nvim-lspconfig',
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-lua/plenary.nvim',
+    },
+    enabled = IS_META_SERVER,
   },
 })
-
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
@@ -1310,15 +1294,12 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
   vim.cmd('quitall')
 end, {})
 
-
-
 set_keymap(
   'n',
   '<LEADER>W',
   ':StripWhitespace<CR>',
   { silent = true, noremap = true }
 )
-
 
 set_keymap(
   'n',
@@ -1345,7 +1326,6 @@ set_keymap(
   { noremap = true }
 )
 
-
 vim.api.nvim_create_user_command('MetaDiffCheckout', function()
   require('meta_diff').diff_picker({ checkout = true })
 end, {})
@@ -1365,7 +1345,6 @@ set_keymap(
   '<CMD>MetaDiffOpenFiles<CR>',
   { silent = true, noremap = true }
 )
-
 
 -- starts terminal mode on insert mode
 -- disables line numbers on a newly opened terminal window (not really working)
