@@ -818,9 +818,7 @@ require('lazy').setup({
           settings = {
             Lua = {
               -- Do not send telemetry data containing a randomized but unique identifier
-              telemetry = {
-                enable = false,
-              },
+              telemetry = { enable = false },
             },
           },
         }))
@@ -831,7 +829,12 @@ require('lazy').setup({
       end
     end
   },
-  { 'williamboman/mason.nvim',       config = function() require('mason').setup() end },
+  {
+    'williamboman/mason.nvim',
+    config = function()
+      require('mason').setup()
+    end
+  },
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
