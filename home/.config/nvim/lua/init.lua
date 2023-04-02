@@ -372,7 +372,6 @@ require('lazy').setup({
   { 'tpope/vim-git' },
   { 'tpope/vim-surround' },
   { 'tpope/vim-repeat' },
-  { 'tpope/vim-sleuth' },
   { 'tpope/vim-fugitive' },
   { 'tpope/vim-commentary' },
   {
@@ -440,6 +439,7 @@ require('lazy').setup({
   { 'ntpeters/vim-better-whitespace' },
   {
     'sheerun/vim-polyglot',
+    -- This plugin already constains 'tpope/vim-sleuth'
     config = function()
       vim.g.javascript_plugin_flow = 1
     end
@@ -618,7 +618,6 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = { 'kkharji/lspsaga.nvim', 'hrsh7th/cmp-nvim-lsp', 'meta.nvim' },
     config = function()
-
       vim.api.nvim_set_keymap(
         'n',
         '[d',
@@ -759,7 +758,6 @@ require('lazy').setup({
       }))
 
       if IS_META_SERVER then
-
         table.insert(servers, 'hhvm')
 
         local installed_extensions = require('meta.lsp.extensions').get_installed_extensions()
@@ -836,7 +834,7 @@ require('lazy').setup({
       end
     end
   },
-  { 'williamboman/mason.nvim', config = function() require('mason').setup() end },
+  { 'williamboman/mason.nvim',       config = function() require('mason').setup() end },
   {
     'jose-elias-alvarez/null-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
@@ -1285,7 +1283,14 @@ require('lazy').setup({
       end, {})
     end
   },
-  { dir = '/usr/share/fb-editor-support/nvim', name = 'meta.nvim', dependencies = {'jose-elias-alvarez/null-ls.nvim', 'neovim/nvim-lspconfig', 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim'}, enabled = IS_META_SERVER },
+  {
+    dir = '/usr/share/fb-editor-support/nvim',
+    name = 'meta.nvim',
+    dependencies = { 'jose-elias-alvarez/null-ls.nvim',
+      'neovim/nvim-lspconfig', 'nvim-treesitter/nvim-treesitter', 'nvim-lua/plenary.nvim' },
+    enabled =
+        IS_META_SERVER
+  },
 })
 
 
@@ -1375,8 +1380,6 @@ set_keymap(
   '<CMD>SlogToggle<CR>',
   { silent = true, noremap = true }
 )
-
-vim.cmd([[filetype plugin indent on]])
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
