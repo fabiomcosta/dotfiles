@@ -93,7 +93,6 @@ local function replace_termcodes(str)
   return vim.api.nvim_replace_termcodes(str, true, false, true)
 end
 
-
 local function module_exists(module_name)
   return pcall(require, module_name)
 end
@@ -104,8 +103,6 @@ local function require_if_exists(module_name, callback)
     callback(module)
   end
 end
-
---     if not configStatus and configError ~= nil then
 
 -- local function feedkeys(key, mode)
 --   mode = mode or 'x'
@@ -1393,43 +1390,3 @@ set_keymap(
 -- end
 
 -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
-
--- return packer.startup({
---   function(use)
---     setup(use)
-
---     -- Calls PackerSync if we get any module not found error on the
---     -- config step.
---     local configStatus, configError = pcall(config)
---     if not configStatus and configError ~= nil then
---       local isModuleNotFoundError = string.find(
---             configError,
---             [[module ['"][%w._-]+['"] not found:]]
---           ) ~= nil
---       if isModuleNotFoundError then
---         -- I already setup everything on start on the meta server
---         -- so only execute this otherwise
---         -- if not IS_META_SERVER then
---         --   vim.api.nvim_create_autocmd('User PackerComplete', {
---         --     callback = function()
---         --       install_meta_lsp_clients()
---         --       vim.cmd('quitall')
---         --     end
---         --   })
---         --   packer.sync()
---         -- end
---       else
---         error(configError)
---       end
---     end
-
---     vim.cmd([[filetype plugin indent on]])
---   end,
---   config = {
---     display = {
---       open_fn = function()
---         return require('packer.util').float({ border = 'single' })
---       end,
---     },
---   },
--- })
