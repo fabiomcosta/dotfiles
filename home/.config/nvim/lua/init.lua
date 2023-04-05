@@ -258,9 +258,6 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
 
--- turn on syntax highlighting
-vim.cmd([[syntax on]])
-
 set_keymap('n', 'j', 'gj', { noremap = true })
 set_keymap('n', 'k', 'gk', { noremap = true })
 
@@ -534,9 +531,10 @@ require('lazy').setup({
           'graphql',
           'hack',
         },
-        -- highlight = {
-        --   enable = true,
-        -- },
+        highlight = {
+          enable = true,
+          disable = { 'lua' },
+        },
         indent = {
           enable = true,
         },
@@ -895,6 +893,8 @@ require('lazy').setup({
       end
       require('telescope').setup(telescope_setup)
       require('telescope').load_extension('fzy_native')
+      require('telescope').load_extension('distant_myles')
+      require('telescope').load_extension('distant_biggrep')
 
       if IS_BIGGREP_ROOT then
         -- myles only works on hg repos
