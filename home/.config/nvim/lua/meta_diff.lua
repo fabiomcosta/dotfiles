@@ -27,14 +27,14 @@
 --   { silent = true, noremap = true }
 -- )
 
-local pickers = require("telescope.pickers")
-local finders = require("telescope.finders")
-local conf = require("telescope.config").values
-local actions = require("telescope.actions")
-local action_state = require("telescope.actions.state")
-local themes = require("telescope.themes")
-local previewers = require("telescope.previewers")
-local Job = require("plenary.job")
+local pickers = require('telescope.pickers')
+local finders = require('telescope.finders')
+local conf = require('telescope.config').values
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+local themes = require('telescope.themes')
+local previewers = require('telescope.previewers')
+local Job = require('plenary.job')
 
 local function map(tbl, f)
   local t = {}
@@ -105,7 +105,9 @@ end
 local function system(cmd, opts)
   local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
   if exit_code ~= 0 then
-    return error('stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout))
+    return error(
+      'stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout)
+    )
   end
   return vim.trim(stdout[1] or '')
 end
@@ -132,7 +134,8 @@ local function hg_get_repo_root_in_cwd(cwd)
 end
 
 local get_repo_root_in_cwd = memoize(function(cwd)
-  return is_hg_repo_in_cwd(cwd) and hg_get_repo_root_in_cwd(cwd) or git_get_repo_root_in_cwd(cwd)
+  return is_hg_repo_in_cwd(cwd) and hg_get_repo_root_in_cwd(cwd)
+      or git_get_repo_root_in_cwd(cwd)
 end)
 
 local function get_repo_root()
@@ -147,8 +150,17 @@ end
 local function git_get_commit_hash_from_diff_id(diff_id)
   -- Looking only till 3 months so we dont keep looking for too long.
   -- 3 months should be enough??
-  return system({ 'git', 'log', '--all', '--since="3 months ago"', '-1', '--format=%H', '--extended-regexp', '--grep',
-    '^Differential Revision:.*?' .. diff_id .. '$' })
+  return system({
+    'git',
+    'log',
+    '--all',
+    '--since="3 months ago"',
+    '-1',
+    '--format=%H',
+    '--extended-regexp',
+    '--grep',
+    '^Differential Revision:.*?' .. diff_id .. '$',
+  })
 end
 
 local function git_get_branch_name_from_commit_hash(commit_hash)
@@ -189,21 +201,23 @@ end
 
 local function get_diff_files_finder(opts)
   local repo_root = get_repo_root()
-  local filter = opts.filter or function(entry)
-    return string.find(entry.path, '/__generated__/') == nil
-  end
-  opts.entry_maker = opts.entry_maker or function(value)
-    local entry = {
-      value = value,
-      display = value,
-      ordinal = value,
-      path = repo_root .. '/' .. value
-    }
-    if not filter(entry) then
-      return nil
-    end
-    return entry
-  end
+  local filter = opts.filter
+      or function(entry)
+        return string.find(entry.path, '/__generated__/') == nil
+      end
+  opts.entry_maker = opts.entry_maker
+      or function(value)
+        local entry = {
+          value = value,
+          display = value,
+          ordinal = value,
+          path = repo_root .. '/' .. value,
+        }
+        if not filter(entry) then
+          return nil
+        end
+        return entry
+      end
   if is_hg_repo() then
     return hg_get_diff_files_finder(opts)
   else
@@ -244,68 +258,70 @@ local function parse_diff_entry(diff_entry)
 end
 
 local function hg_get_own_diffs_finder(opts)
-  opts.entry_maker = opts.entry_maker or function(entry)
-    local diff_entry = vim.trim(entry)
-    local commit_parts = vim.fn.split(diff_entry, ',')
+  opts.entry_maker = opts.entry_maker
+      or function(entry)
+        local diff_entry = vim.trim(entry)
+        local commit_parts = vim.fn.split(diff_entry, ',')
 
-    local commit_hash = table.remove(commit_parts, 1)
-    local diff_id = table.remove(commit_parts, 1)
-    local diff_status = table.remove(commit_parts, 1)
+        local commit_hash = table.remove(commit_parts, 1)
+        local diff_id = table.remove(commit_parts, 1)
+        local diff_status = table.remove(commit_parts, 1)
 
-    -- this can be "" on local only diffs (diffs that haven't been submited to phabricator yet)
-    -- Setting diff_id to the commit hash might bite us in the future :)
-    local diff_short_id = diff_id
-    if diff_id == '' then
-      diff_id = commit_hash
-      -- we want this to have the same size as a diff id so it looks nice on the
-      -- UI list.
-      -- Real recent diff id: D36107299
-      diff_short_id = string.sub(commit_hash, 1, 9)
-      diff_status = 'Local Only'
-    end
+        -- this can be "" on local only diffs (diffs that haven't been submited to phabricator yet)
+        -- Setting diff_id to the commit hash might bite us in the future :)
+        local diff_short_id = diff_id
+        if diff_id == '' then
+          diff_id = commit_hash
+          -- we want this to have the same size as a diff id so it looks nice on the
+          -- UI list.
+          -- Real recent diff id: D36107299
+          diff_short_id = string.sub(commit_hash, 1, 9)
+          diff_status = 'Local Only'
+        end
 
-    local diff = {
-      id = diff_id,
-      short_id = diff_short_id,
-      status = diff_status,
-      title = vim.fn.join(commit_parts, ','),
-    }
+        local diff = {
+          id = diff_id,
+          short_id = diff_short_id,
+          status = diff_status,
+          title = vim.fn.join(commit_parts, ','),
+        }
 
-    local value = diff.short_id .. '\t' .. diff.status .. '\t' .. diff.title
-    return {
-      value = value,
-      display = value,
-      ordinal = value,
-      diff = diff,
-    }
-  end
+        local value = diff.short_id .. '\t' .. diff.status .. '\t' .. diff.title
+        return {
+          value = value,
+          display = value,
+          ordinal = value,
+          diff = diff,
+        }
+      end
   return finders.new_oneshot_job({
     'hg',
     'log',
     '--rev',
     'sort(smartlog() & draft(), -date)',
     '--template',
-    '{node},{phabdiff},{phabstatus},{desc|firstline}\n'
+    '{node},{phabdiff},{phabstatus},{desc|firstline}\n',
   }, opts)
 end
 
 local function git_get_own_diffs_finder(opts)
-  opts.entry_maker = opts.entry_maker or function(entry)
-    local diff_entry = vim.trim(entry)
-    local diff = parse_diff_entry(diff_entry)
-    if diff == nil then
-      return nil
-    end
-    if not is_diff_from_current_repo(diff.id) then
-      return nil
-    end
-    return {
-      value = entry,
-      display = entry,
-      ordinal = entry,
-      diff = diff,
-    }
-  end
+  opts.entry_maker = opts.entry_maker
+      or function(entry)
+        local diff_entry = vim.trim(entry)
+        local diff = parse_diff_entry(diff_entry)
+        if diff == nil then
+          return nil
+        end
+        if not is_diff_from_current_repo(diff.id) then
+          return nil
+        end
+        return {
+          value = entry,
+          display = entry,
+          ordinal = entry,
+          diff = diff,
+        }
+      end
   return finders.new_oneshot_job({ 'jf', 'list' }, opts)
 end
 
@@ -321,48 +337,74 @@ local function get_file_diff_previewer(opts)
   if is_hg_repo() then
     return previewers.new_termopen_previewer({
       get_command = function(entry)
-        return { 'hg', 'log', '--page=never', '--template', '" "', '-p', '-r', opts.diff.id, entry.path }
-      end
+        return {
+          'hg',
+          'log',
+          '--page=never',
+          '--template',
+          '" "',
+          '-p',
+          '-r',
+          opts.diff.id,
+          entry.path,
+        }
+      end,
     })
   else
     return previewers.new_termopen_previewer({
       get_command = function(entry)
         local commit_hash = git_get_commit_hash_from_diff_id(opts.diff.id)
-        return { 'git', '--no-pager', 'show', '-p', '--format=', commit_hash, '--', entry.path }
-      end
+        return {
+          'git',
+          '--no-pager',
+          'show',
+          '-p',
+          '--format=',
+          commit_hash,
+          '--',
+          entry.path,
+        }
+      end,
     })
   end
 end
 
 local function diff_file_picker(opts)
-  pickers.new(opts, {
-    prompt_title = 'Files on ' .. opts.diff.short_id .. ' ' .. opts.diff.title,
-    finder = get_diff_files_finder(opts),
-    sorter = conf.generic_sorter(opts),
-    previewer = get_file_diff_previewer(opts),
-  }):find()
+  pickers
+      .new(opts, {
+        prompt_title = 'Files on '
+            .. opts.diff.short_id
+            .. ' '
+            .. opts.diff.title,
+        finder = get_diff_files_finder(opts),
+        sorter = conf.generic_sorter(opts),
+        previewer = get_file_diff_previewer(opts),
+      })
+      :find()
 end
 
 local function diff_picker(opts)
   opts = themes.get_dropdown(opts or {})
-  pickers.new(opts, {
-    prompt_title = 'Your ' .. get_project_id() .. ' diffs',
-    finder = get_own_diffs_finder(opts),
-    sorter = conf.generic_sorter(opts),
-    attach_mappings = function(prompt_bufnr)
-      actions.select_default:replace(function()
-        actions.close(prompt_bufnr)
-        local selection = action_state.get_selected_entry()
-        if opts.checkout then
-          checkout_diff(selection.diff.id)
-        end
-        diff_file_picker(selection)
-      end)
-      return true
-    end,
-  }):find()
+  pickers
+      .new(opts, {
+        prompt_title = 'Your ' .. get_project_id() .. ' diffs',
+        finder = get_own_diffs_finder(opts),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local selection = action_state.get_selected_entry()
+            if opts.checkout then
+              checkout_diff(selection.diff.id)
+            end
+            diff_file_picker(selection)
+          end)
+          return true
+        end,
+      })
+      :find()
 end
 
 return {
-  diff_picker = diff_picker
+  diff_picker = diff_picker,
 }
