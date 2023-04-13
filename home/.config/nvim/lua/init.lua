@@ -1,115 +1,18 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
-local IS_BIGGREP_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+local IS_ARC_ROOT = IS_META_SERVER
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
 
-local function identity(a1)
-  return a1
-end
-
--- See https://www.lua.org/pil/17.1.html
-local function memoize(fn, cache_key_gen)
-  cache_key_gen = cache_key_gen or identity
-  local cache = {}
-  setmetatable(cache, { __mode = 'kv' })
-  return function(...)
-    local args = { ... }
-    local cache_key = cache_key_gen(unpack(args))
-    if type(cache_key) ~= 'string' then
-      return error('Cache key needs to be a string.')
-    end
-    if cache[cache_key] == vim.NIL then
-      return nil
-    end
-    if cache[cache_key] ~= nil then
-      return cache[cache_key]
-    end
-    local result = fn(unpack(args))
-    cache[cache_key] = result == nil and vim.NIL or result
-    return result
-  end
-end
-
-local function get_os_command_output(cmd, opts)
-  local Job = require('plenary.job')
-  opts = opts or {}
-  local command = table.remove(cmd, 1)
-  local stderr = {}
-  local stdout, ret = Job:new({
-    command = command,
-    args = cmd,
-    cwd = opts.cwd,
-    on_stderr = function(_, data)
-      table.insert(stderr, data)
-    end,
-  }):sync(opts.timeout)
-  return stdout, ret, stderr
-end
-
-local function system(cmd, opts)
-  local stdout, exit_code, stderr = get_os_command_output(cmd, opts)
-  if exit_code ~= 0 then
-    return error(
-      'stderr: ' .. vim.inspect(stderr) .. '\nstdout: ' .. vim.inspect(stdout)
-    )
-  end
-  return vim.trim(stdout[1] or '')
-end
-
-local function is_system_success(cmd, opts)
-  local _, exit_code = get_os_command_output(cmd, opts)
-  return exit_code == 0
-end
-
-local is_hg_repo_in_cwd = memoize(function(cwd)
-  return is_system_success({ 'hg', 'root' }, { cwd = cwd })
-end)
-
-local function is_hg_repo()
-  return is_hg_repo_in_cwd(vim.loop.cwd())
-end
-
-local is_biggrep_repo_in_cwd = memoize(function(cwd)
-  local _, exit_code, stderr = get_os_command_output({ 'bgs' }, { cwd = cwd })
-  if exit_code ~= 0 then
-    return not vim.startswith(vim.trim(stderr[1]), 'Error:')
-  end
-  -- This is unexpected, return false
-  return false
-end)
-
-local function is_biggrep_repo()
-  return is_biggrep_repo_in_cwd(vim.loop.cwd())
-end
-
 local set_keymap = vim.api.nvim_set_keymap
 
-local function replace_termcodes(str)
-  return vim.api.nvim_replace_termcodes(str, true, false, true)
-end
-
-local function module_exists(module_name)
-  return pcall(require, module_name)
-end
-
-local function require_if_exists(module_name, callback)
-  local exists, module = pcall(require, module_name)
-  if exists then
-    callback(module)
-  end
-end
-
--- local function feedkeys(key, mode)
---   mode = mode or 'x'
---   vim.api.nvim_feedkeys(replace_termcodes(key), mode, false)
--- end
+local utils = require('utils')
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -304,7 +207,7 @@ set_keymap('n', 'Q', '<NOP>', { noremap = true })
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
   vim.fn.setreg('+', path)
-  require_if_exists('osc52', function(osc52)
+  utils.require_if_exists('osc52', function(osc52)
     osc52.copy(path)
   end)
 end)
@@ -410,7 +313,10 @@ require('lazy').setup({
   -- { 'jparise/vim-graphql' },
   { 'christoomey/vim-tmux-navigator' },
 
+  -- TODO remove this plugin once 0.9 is available as it has editorconfig
+  -- support builtin :)
   { 'editorconfig/editorconfig-vim' },
+
   {
     'ojroques/nvim-osc52',
     config = function()
@@ -658,7 +564,7 @@ require('lazy').setup({
         if client.server_capabilities.find_references then
           buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>')
           -- The ideal check here is to check for biggrep support somehow
-        elseif IS_BIGGREP_ROOT then
+        elseif utils.is_biggrep_repo() then
           -- Use Telescope biggrep with the current selection
           buf_set_keymap('n', '<LEADER>fr', "viw:'<,'>Bgs<CR>")
         else
@@ -748,7 +654,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -893,19 +799,17 @@ require('lazy').setup({
       end
       require('telescope').setup(telescope_setup)
       require('telescope').load_extension('fzy_native')
-      require('telescope').load_extension('distant_myles')
-      require('telescope').load_extension('distant_biggrep')
 
-      if IS_BIGGREP_ROOT then
+      if IS_ARC_ROOT then
         -- myles only works on hg repos
-        if is_hg_repo() then
+        if utils.is_hg_repo() then
           set_keymap(
             'n',
             '<LEADER>ff',
             '<cmd>Telescope myles<CR>',
             { silent = false, noremap = true }
           )
-        elseif is_biggrep_repo() then
+        elseif utils.is_biggrep_repo() then
           set_keymap(
             'n',
             '<LEADER>ff',
@@ -1012,9 +916,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
@@ -1048,7 +952,7 @@ require('lazy').setup({
             -- Sticky size/position
             vim.g['test#neovim#term_position'] = 'botright ' .. window_height
           end
-          return replace_termcodes('<C-w>' .. last_window_nr .. 'c')
+          return utils.replace_termcodes('<C-w>' .. last_window_nr .. 'c')
         end
         return ''
       end, { silent = true, expr = true })
@@ -1138,7 +1042,7 @@ require('lazy').setup({
     'mfussenegger/nvim-dap',
     dependencies = { 'meta.nvim' },
     config = function()
-      if not module_exists('meta') then
+      if not utils.module_exists('meta') then
         return
       end
 
@@ -1236,35 +1140,18 @@ require('lazy').setup({
     version = 'v0.2',
     config = function()
       require('distant').setup({
-        ['fabs.sb.facebook.com'] = {
-          distant = {
-            bin = '/home/fabs/bin/distant',
+        ['*'] = {
+          projects = {
+            dotfiles = { root = '~/dotfiles' },
           },
         },
+        -- ['fabs.sb.facebook.com'] = {},
         -- Applies Chip's personal settings to every machine you connect to
         -- 1. Ensures that distant servers terminate with no connections
         -- 2. Provides navigation bindings for remote directories
         -- 3. Provides keybinding to jump into a remote file's parent directory
         -- ['*'] = require('distant.settings').chip_default()
       })
-
-      vim.api.nvim_create_user_command('DisSpawn', function()
-        local err, remote_process =
-          require('distant.fn').spawn({ cmd = 'echoer' })
-        if err then
-          return error('Spawning hostname threw an error')
-        end
-        remote_process.read_stdout_string(function(_err, text)
-          print(vim.inspect(text))
-          if not remote_process.is_done() then
-            remote_process.read_stdout_string(function(_err, text)
-              print(vim.inspect(text))
-            end)
-          else
-            print('TAVA DONE JAH')
-          end
-        end)
-      end, {})
     end,
   },
   {
@@ -1290,7 +1177,6 @@ end
 vim.api.nvim_create_user_command('SetupAndQuit', function()
   install_meta_lsp_clients()
   vim.cmd('autocmd User SyncMetaLSComplete quitall')
-  vim.cmd('sleep 60')
   vim.cmd('quitall')
 end, {})
 
@@ -1369,3 +1255,14 @@ set_keymap(
 -- end
 
 -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
+
+vim.api.nvim_create_user_command('DevReload', function(context)
+  local module_name = context.args
+  package.loaded[module_name] = nil
+  for name, _ in pairs(package.loaded) do
+    if vim.startswith(name, module_name .. '.') then
+      package.loaded[name] = nil
+    end
+  end
+  require(module_name)
+end, { nargs = '?' })
