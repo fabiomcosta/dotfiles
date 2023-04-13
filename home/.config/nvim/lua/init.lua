@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
 
@@ -654,7 +654,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-            require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -883,8 +883,12 @@ require('lazy').setup({
   },
   {
     'hoob3rt/lualine.nvim',
-    dependencies = { 'kyazdani42/nvim-web-devicons' },
+    dependencies = {
+      'kyazdani42/nvim-web-devicons',
+      'chipsenkbeil/distant.nvim',
+    },
     config = function()
+      local distant_status = require('meta-local').status
       require('lualine').setup({
         options = {
           theme = 'dracula',
@@ -895,7 +899,7 @@ require('lazy').setup({
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = { 'diagnostics' },
           lualine_y = { 'filetype' },
-          lualine_z = {},
+          lualine_z = { distant_status },
         },
         inactive_sections = {
           lualine_c = { { 'filename', path = 1 } },
@@ -916,9 +920,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
