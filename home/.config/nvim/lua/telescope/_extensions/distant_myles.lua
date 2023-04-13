@@ -5,10 +5,10 @@ if not has_telescope then
   error('This plugins requires nvim-telescope/telescope.nvim')
 end
 
-local previewers = require('telescope.previewers')
 local pickers = require('telescope.pickers')
 local async_job_finder = require('telescope.finders.async_job_finder')
 local distant = require('distant')
+local utils = require('telescope._extensions.utils')
 
 -- TODO this is an option or path of a distant-project plugin setup
 local distant_project = {
@@ -16,15 +16,6 @@ local distant_project = {
     cwd = '/home/fabs/www',
   },
 }
-
--- TODO make this async
-local function system(opts)
-  local output = vim.fn.system(distant.wrap(opts))
-  if vim.v.shell_error ~= 0 then
-    return nil
-  end
-  return vim.trim(output)
-end
 
 local function myles(opts)
   local local_cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
@@ -34,8 +25,7 @@ local function myles(opts)
   local remote_cwd = distant_project.config.cwd
 
   -- myles requires an hg repo to work
-  local project_root = system({ cmd = { 'hg', 'root' }, cwd = remote_cwd })
-  if project_root == nil then
+  if utils.has_hg_root(remote_cwd) == nil then
     vim.notify('No hg root found for: ' .. remote_cwd, vim.log.levels.ERROR)
     return nil
   end
@@ -50,13 +40,6 @@ local function myles(opts)
         filename = filename,
         path = 'distant://' .. filename,
       }
-    end
-  end
-
-  -- TODO do we need this?
-  if opts.path_display == nil then
-    opts.path_display = function(_, path)
-      return path
     end
   end
 
@@ -78,17 +61,11 @@ local function myles(opts)
     end,
   }, opts)
 
-  local previewer_opts = vim.tbl_extend('force', {
-    get_command = function(entry)
-      return distant.wrap({ cmd = { 'cat', entry.filename } })
-    end,
-  }, opts)
-
   pickers
     .new(opts, {
       prompt_title = 'Find files using Myles',
       finder = async_job_finder(finder_opts),
-      previewer = previewers.new_termopen_previewer(previewer_opts),
+      previewer = utils.distant_buffer_previewer(opts),
     })
     :find()
 end
