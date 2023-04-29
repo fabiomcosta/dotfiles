@@ -1,39 +1,39 @@
-local a = require('meta-local.async')
+-- local a = require('meta-local.async')
 -- local Path = require('plenary.path')
---
 -- local uv = vim.loop
 
 local function p(...)
   print(vim.inspect(...))
 end
 
-local function timeout(ms, callback)
-  callback(ms, 'yey')
-end
-local timer = a.wrap(timeout)
+-- local function timeout(ms, callback)
+--   callback(ms, 'yey')
+-- end
+-- local timer = a.wrap(timeout)
 
-local atimeout = function(ms)
-  return a.sync(function()
-    return a.wait(timer(ms))
-  end)
-end
+-- local atimer = function(ms)
+--   return a.sync(function()
+--     return a.wait(timer(ms))
+--   end)
+-- end
 
-local main = a.sync(function()
-  local ti, b = a.wait_all({ timer(10), timer(10) })
-  p('top')
-  p(ti)
-  p('top')
-  p(b)
-  p('top')
-  p(c, d, e)
-  -- local tid = a.wait(atimeout(1234))
-  -- p('top')
-  -- p(tid)
-  -- p('bottom')
-  -- p(a.wait_all({ timer(100), atimeout(100) }))
-end)
+-- local main = a.sync(function()
+--   local ti, b = a.wait_all({ timer(12), atimer(10) })
+--   p('eu eimm')
+--   p(ti)
+--   p('top')
+--   p(b)
+--   p('toppp')
+--   -- local tid = a.wait(atimeout(1234))
+--   -- p('top')
+--   -- p(tid)
+--   -- p('bottom')
+--   -- p(a.wait_all({ timer(100), atimeout(100) }))
+-- end)
 
-main()
+-- main()
+p('ok')
+p('hh')
 
 -- local function asyncfn(ms, callback)
 --   a.sync(function()
@@ -114,3 +114,5 @@ main()
 -- end
 
 -- colors(themes.get_dropdown({}))
+--
+return {}

@@ -1,7 +1,7 @@
 local distant_cli = require('distant.cli')
 local connection = require('meta-local.connection')
 
-require('telescope').load_extension('distant_myles')
+require('telescope').load_extension('distant_find_files')
 require('telescope').load_extension('distant_biggrep')
 
 vim.api.nvim_create_user_command('MetaSelectConnection', function()
@@ -15,9 +15,11 @@ vim.api.nvim_create_user_command('MetaSelectConnection', function()
   end)
 end, {})
 
-vim.api.nvim_create_user_command('MetaConnectToNewServer', function() end, {})
-vim.api.nvim_create_user_command('MetaSelectProjectRoot', function()
-  connection.select_connection()
+vim.api.nvim_create_user_command('MetaConnectToNewServer', function()
+end, {})
+
+vim.api.nvim_create_user_command('MetaSelectCwd', function()
+  connection.select_cwd()
 end, {})
 
 return {
@@ -25,5 +27,5 @@ return {
 }
 
 -- just while developing
--- connection.select_project_root()
+-- connection.select_cwd()
 -- connection.select_connection()

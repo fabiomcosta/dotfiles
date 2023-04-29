@@ -152,7 +152,7 @@ function M.distant_buffer_previewer(opts)
   end
 
   return previewers.new_buffer_previewer({
-    title = 'BigGrep Preview',
+    title = 'Preview file',
     get_buffer_by_name = function(_, entry)
       return entry.path
     end,

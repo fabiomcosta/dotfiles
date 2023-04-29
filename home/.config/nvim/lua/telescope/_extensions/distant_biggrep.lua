@@ -1,4 +1,5 @@
 -- @lint-ignore-every LUA_LUAJIT
+
 -- Here is a little story about why there is so much code on this file...
 -- Telescope's buffer previewers have the assumption that the files are on the
 -- local file system, and don't provide any option to change that ATM.
@@ -18,15 +19,9 @@ local finders = require('telescope.finders')
 local make_entry = require('telescope.make_entry')
 local pickers = require('telescope.pickers')
 local sorters = require('telescope.sorters')
-local distant = require('distant')
 local utils = require('telescope._extensions.utils')
-
--- TODO this is an option or path of a distant-project plugin setup
-local distant_project = {
-  config = {
-    cwd = '/home/fabs/www',
-  },
-}
+local distant = require('distant')
+local distant_state = require('distant.state')
 
 local BIGGREP_ENGINE = {
   s = 'Substring',
@@ -56,7 +51,7 @@ local function make_biggrep(bg_suffix)
     opts.cwd = local_cwd
     opts.max_results = opts.max_results or vim.o.lines or 100
 
-    local remote_cwd = distant_project.config.cwd
+    local remote_cwd = distant_state:get_cwd()
 
     -- the biggrep commands need to run from an hg repo folder
     if utils.has_hg_root(remote_cwd) == nil then
@@ -97,7 +92,7 @@ local function make_biggrep(bg_suffix)
 
       table.insert(cmd, vim.fn.json_encode(prompt))
 
-      return distant.wrap({ cmd = cmd, cwd = remote_cwd })
+      return distant.wrap({ cmd = cmd })
     end
 
     if not opts.entry_maker then

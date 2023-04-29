@@ -18,6 +18,31 @@ proxy_curl() {
   ALL_PROXY=http://fwdproxy:8080 curl $@
 }
 
+get_distant_version() {
+  $distant_path --version 2>&1 | cut -d ' ' -f 2-
+}
+
+get_distant_running_servers() {
+  ps aux | grep distant | grep "$LOG_NAME" | grep -v grep
+}
+
+get_ipv6_for_host() {
+  local host=$1
+  host -6 $host | tail -1 | rev | cut -d ' ' -f 1 | rev
+}
+
+run_distant_server_and_return_address() {
+  # REMINDER we'll likely want to allow this port to be configurable,
+  # but not sure.
+  #
+  # @nocommit The --config option is not supposed to be used in the final
+  # version of this script
+  $distant_path server listen --port 8082 --host any -6 --daemon \
+    --log-file "/tmp/$LOG_NAME" \
+    --config ~/distant.config.toml | \
+    grep 'distant://'
+}
+
 assert_distant_installed() {
   if [[ ! -f "$distant_path" || "$(get_distant_version)" != "$version" ]]; then
     get_distant_binary_download_url() {
@@ -29,30 +54,6 @@ assert_distant_installed() {
 
   # Always doing this just in case distant was installed without this script.
   chmod u+x $distant_path
-}
-
-get_distant_version() {
-  $distant_path --version 2>&1 | cut -d ' ' -f 2-
-}
-
-get_distant_running_servers() {
-  ps aux | grep distant | grep "$LOG_NAME" | grep -v grep
-}
-
-get_distant_server_address() {
-  # REMINDER we'll likely want to allow this port to be configurable,
-  # but not sure.
-  #
-  # @nocommit The --config option is not supposed to be used in the final
-  # version of this script
-  $distant_path server listen --port 8082 --host any -6 --daemon --log-file "/tmp/$LOG_NAME" \
-    --config ~/distant.config.toml | \
-    grep 'distant://'
-}
-
-get_ipv6_for_host() {
-  local host=$1
-  host -6 $host | tail -1 | rev | cut -d ' ' -f 1 | rev
 }
 
 assert_distant_server_running() {
@@ -74,18 +75,17 @@ assert_distant_server_running() {
     fi
   done
 
-
   # This is debatable... but if there is a running server, there is no way to
   # connect to it at this point.
   # We could simply let the user know that there is already a server running
   # but there is a chance that they don't have a connection to this server
-  # anymore, so they would have to interfere manually by killing the server,
-  # for example, in order to be able to connect again.
+  # anymore, so they would have to manually kill the server in order to be
+  # able to connect again.
   # So we are deciding to kill the running server and run a new one to
   # get an address that we can connect to.
   get_distant_running_servers | awk '{ print $2 }' | xargs kill -9
 
-  address="$(get_distant_server_address)"
+  address="$(run_distant_server_and_return_address)"
   echo "<<DISTANT_ADDRESS>>${address/"[::]"/"$this_host"}"
 }
 
@@ -93,5 +93,3 @@ assert_distant_installed
 assert_distant_server_running
 
 echo '<<SUCCESS>>'
-
-

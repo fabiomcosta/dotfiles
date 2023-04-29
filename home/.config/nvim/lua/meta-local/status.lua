@@ -16,13 +16,20 @@ function status.get(config)
     local connections = vim.tbl_values(distant_state.manager.connections)
     -- distant://:nnn@devvm5089.frc0.facebook.com:8082
     local address = connections[1].destination:match('@([%w.]+):%w+$')
-    address = address:gsub('.facebook.com$', '')
-    address = address:gsub('.fbinfra.net$', '')
     table.insert(text, address)
   end
-  -- this is still not supported on distant.nvim
-  -- if config.options.show_project_root ~= false then
-  -- end
+
+  if config.options.show_project_root ~= false then
+    local cwd = distant_state:get_cwd()
+    if cwd then
+      table.insert(text, vim.fn.pathshorten(cwd, 1))
+    end
+  end
+
+  if config.options.map then
+    text = config.options.map(text)
+  end
+
   return ' ' .. table.concat(text, ':') -- f0c2
 end
 

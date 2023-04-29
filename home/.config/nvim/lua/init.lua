@@ -899,7 +899,20 @@ require('lazy').setup({
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = { 'diagnostics' },
           lualine_y = { 'filetype' },
-          lualine_z = { distant_status },
+          lualine_z = {
+            {
+              distant_status,
+              map = function(text)
+                local address = text[1]
+                if address then
+                  address = address:gsub('.facebook.com$', '')
+                  address = address:gsub('.fbinfra.net$', '')
+                  text[1] = address
+                end
+                return text
+              end,
+            },
+          },
         },
         inactive_sections = {
           lualine_c = { { 'filename', path = 1 } },
@@ -1141,12 +1154,12 @@ require('lazy').setup({
 
   {
     'chipsenkbeil/distant.nvim',
-    version = 'v0.2',
+    dev = true,
     config = function()
       require('distant').setup({
         ['*'] = {
-          projects = {
-            dotfiles = { root = '~/dotfiles' },
+          cwd = {
+            whatsapp_server = '/home/fabs/local/whatsapp/server/erl',
           },
         },
         -- ['fabs.sb.facebook.com'] = {},
@@ -1169,7 +1182,7 @@ require('lazy').setup({
     },
     enabled = IS_META_SERVER,
   },
-})
+}, { dev = { path = '~/Dev/nvim-plugins' } })
 
 local function install_meta_lsp_clients()
   if IS_META_SERVER then
@@ -1261,12 +1274,14 @@ set_keymap(
 -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
 
 vim.api.nvim_create_user_command('DevReload', function(context)
-  local module_name = context.args
-  package.loaded[module_name] = nil
-  for name, _ in pairs(package.loaded) do
-    if vim.startswith(name, module_name .. '.') then
-      package.loaded[name] = nil
+  local module_names = vim.split(context.args, ' ')
+  for _, module_name in ipairs(module_names) do
+    package.loaded[module_name] = nil
+    for name, _ in pairs(package.loaded) do
+      if vim.startswith(name, module_name .. '.') then
+        package.loaded[name] = nil
+      end
     end
+    require(module_name)
   end
-  require(module_name)
 end, { nargs = '?' })
