@@ -17,6 +17,8 @@ local function find_files(opts)
   opts.max_results = opts.max_results or vim.o.lines or 100
   local remote_cwd = distant_state:get_cwd()
   local has_hg_root = utils.has_hg_root(remote_cwd)
+  local cmd_bin = has_hg_root and 'myles' or 'find'
+  local prompt_title = 'Distant[' .. cmd_bin .. ']: file name search'
 
   local function get_cmd(prompt)
     if has_hg_root then
@@ -24,7 +26,7 @@ local function find_files(opts)
       -- myles scales a lot better for repos with a lot of files like www
       -- and fbsource, that's why we prefer it.
       return {
-        'myles',
+        cmd_bin,
         '--list',
         '--limit',
         opts.max_results,
@@ -32,20 +34,20 @@ local function find_files(opts)
         'nvim',
         prompt,
       }
-    else
-      -- fallback to find
-      -- some guidance on what flags to use at:
-      -- https://github.com/nvim-telescope/telescope.nvim/blob/79644ab67731c7ba956c354bf0545282f34e10cc/lua/telescope/builtin/files.lua
-      local cmd = {
-        'find',
-        '-type',
-        'f',
-      }
-      local tokens = vim.tbl_flatten(vim.tbl_map(function(word)
-        return { '-iname', '*' .. word .. '*' }
-      end, vim.split(prompt, ' ')))
-      return vim.list_extend(cmd, tokens)
     end
+
+    -- fallback to find
+    -- some guidance on what flags to use at:
+    -- https://github.com/nvim-telescope/telescope.nvim/blob/79644ab67731c7ba956c354bf0545282f34e10cc/lua/telescope/builtin/files.lua
+    local cmd = {
+      cmd_bin,
+      '-type',
+      'f',
+    }
+    local tokens = vim.tbl_flatten(vim.tbl_map(function(word)
+      return { '-iname', '*' .. word .. '*' }
+    end, vim.split(prompt, ' ')))
+    return vim.list_extend(cmd, tokens)
   end
 
   if not opts.entry_maker then
@@ -63,22 +65,24 @@ local function find_files(opts)
     end
   end
 
+  local function get_finder_command(prompt)
+    if not prompt or prompt == '' then
+      return nil
+    end
+    return distant.wrap({ cmd = get_cmd(prompt) })
+  end
+
   local finder_opts = vim.tbl_extend('force', {
-    command_generator = function(prompt)
-      if not prompt or prompt == '' then
-        return nil
-      end
-      return distant.wrap({ cmd = get_cmd(prompt) })
-    end,
+    command_generator = get_finder_command,
   }, opts)
 
   pickers
-    .new(opts, {
-      prompt_title = 'Distant: find files',
-      finder = async_job_finder(finder_opts),
-      previewer = utils.distant_buffer_previewer(opts),
-    })
-    :find()
+      .new(opts, {
+        prompt_title = prompt_title,
+        finder = async_job_finder(finder_opts),
+        previewer = utils.distant_buffer_previewer(opts),
+      })
+      :find()
 end
 
 return require('telescope').register_extension({

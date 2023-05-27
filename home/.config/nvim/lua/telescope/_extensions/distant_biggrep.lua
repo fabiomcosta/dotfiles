@@ -39,60 +39,71 @@ local function get_start_text(opts)
 end
 
 -- Special keys:
---   opts.files_regex -- restricts bg search to files matching this pattern
 --   opts.exclude -- exclude filenames matching this pattern
 --   opts.project -- scope results to codehub project
---   opts.ignore_case -- run a case insensitive search
 local function make_biggrep(bg_suffix)
-  local prompt_title = ('BigGrep %s Search'):format(BIGGREP_ENGINE[bg_suffix])
-
   return function(opts)
     local local_cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
     opts.cwd = local_cwd
     opts.max_results = opts.max_results or vim.o.lines or 100
-
     local remote_cwd = distant_state:get_cwd()
+    local has_hg_root = utils.has_hg_root(remote_cwd)
+    local cmd_bin = has_hg_root and 'bg' .. bg_suffix or 'rg'
+    local prompt_title = 'Distant[' .. cmd_bin .. '] file content search'
 
-    -- the biggrep commands need to run from an hg repo folder
-    if utils.has_hg_root(remote_cwd) == nil then
-      vim.notify('No hg root found for: ' .. remote_cwd, vim.log.levels.ERROR)
-      return nil
+    local function get_cmd(prompt)
+      -- the biggrep commands need to run from an hg repo folder
+      if has_hg_root then
+        local cmd = {
+          cmd_bin,
+          '-n',
+          opts.max_results,
+          '-s',
+        }
+
+        if opts.exclude then
+          table.insert(cmd, '--exclude')
+          table.insert(cmd, opts.exclude)
+        end
+
+        if opts.project then
+          table.insert(cmd, '-p')
+          table.insert(cmd, opts.project)
+        end
+
+        table.insert(cmd, vim.fn.json_encode(prompt))
+
+        return cmd
+      end
+
+      -- Use rg as a fallback for repos that don't support biggrep, generally
+      -- non-hg repos.
+      local cmd = {
+        cmd_bin,
+        '--color=never',
+        '--no-heading',
+        '--with-filename',
+        '--line-number',
+        '--column',
+        '--smart-case',
+        '--trim',
+      }
+      if opts.exclude then
+        table.insert(cmd, '--ignore-file')
+        table.insert(cmd, opts.exclude)
+      end
+
+      table.insert(cmd, vim.fn.json_encode(prompt))
+      table.insert(cmd, '.')
+
+      return cmd
     end
 
     local function get_finder_command(prompt)
       if not prompt or prompt == '' then
         return nil
       end
-
-      local cmd = {
-        'bg' .. bg_suffix,
-        '-n',
-        opts.max_results,
-        '-s',
-      }
-
-      if opts.files_regex then
-        table.insert(cmd, '-f')
-        table.insert(cmd, opts.files_regex)
-      end
-
-      if opts.exclude then
-        table.insert(cmd, '--exclude')
-        table.insert(cmd, opts.exclude)
-      end
-
-      if opts.project then
-        table.insert(cmd, '-p')
-        table.insert(cmd, opts.project)
-      end
-
-      if opts.ignore_case then
-        table.insert(cmd, '--ignore-case')
-      end
-
-      table.insert(cmd, vim.fn.json_encode(prompt))
-
-      return distant.wrap({ cmd = cmd })
+      return distant.wrap({ cmd = get_cmd(prompt) })
     end
 
     if not opts.entry_maker then

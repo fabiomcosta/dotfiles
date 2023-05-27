@@ -60,9 +60,9 @@ local function get_connections(cb)
 
   local distant_bin_path = distant_install.path()
   local list_cmd = distant_cmd.manager
-      .list()
-      :set_from_tbl(distant_state.manager.config.network)
-      :as_list()
+    .list()
+    :set_from_tbl(distant_state.manager.config.network)
+    :as_list()
   table.insert(list_cmd, 1, distant_bin_path)
 
   local connections = {}
@@ -144,7 +144,7 @@ local function get_dev_connect_cmd(cb)
   local homedir = vim.loop.os_homedir()
   local distant_bin_path = distant_install.path()
   local remote_distant_bin_path = '~'
-      .. string.sub(distant_bin_path, #homedir + 1)
+    .. string.sub(distant_bin_path, #homedir + 1)
 
   local get_distant_version_cmd = ([[%s --version 2>&1 | cut -d ' ' -f 2-]]):format(
     distant_bin_path
@@ -159,8 +159,7 @@ local function get_dev_connect_cmd(cb)
       end
     )
     cb(
-      ([[dev connect --no-release-prompt --skip-waiting-dotfiles-sync --skip-homedir -- 'bash -s' < %s "$(%s)" '%s' '%s']])
-      :format(
+      ([[dev connect --no-release-prompt --skip-waiting-dotfiles-sync --skip-homedir -- 'bash -s' < %s "$(%s)" '%s' '%s']]):format(
         setup_script_path,
         get_distant_version_cmd,
         remote_distant_bin_path,
@@ -182,10 +181,10 @@ local function connect_to_new_server(cb)
   local win_id = vim.api.nvim_open_win(buffer_id, true, {
     relative = 'editor',
     border = 'single',
-    width = width,                   --vim.o.columns - (gutter * 2),
-    height = height,                 --max_height - gutter,
+    width = width, --vim.o.columns - (gutter * 2),
+    height = height, --max_height - gutter,
     row = (max_height - height) / 2, -- (gutter / 2) - 1,
-    col = (max_width - width) / 2,   -- gutter,
+    col = (max_width - width) / 2, -- gutter,
   })
 
   local entered_insert_mode = false
@@ -205,10 +204,11 @@ local function connect_to_new_server(cb)
             entered_insert_mode = true
           elseif stream_marker.find(text, 'CONNECTION_ID') then
             connection_id =
-                vim.trim(stream_marker.remove(text, 'CONNECTION_ID'))
+              vim.trim(stream_marker.remove(text, 'CONNECTION_ID'))
           elseif stream_marker.find(text, 'DISTANT_ADDRESS') then
+            vim.notify('Distant address received ' .. text)
             distant_address =
-                vim.trim(stream_marker.remove(text, 'DISTANT_ADDRESS'))
+              vim.trim(stream_marker.remove(text, 'DISTANT_ADDRESS'))
           elseif stream_marker.find(text, 'SUCCESS') then
             vim.api.nvim_win_close(win_id, true)
           end
@@ -268,39 +268,39 @@ local function select_cwd(opts)
       -- couldn't build a reliable one.
       get_available_cwds(remote_username, function(roots)
         pickers
-            .new(opts, {
-              prompt_title = 'Distant: select your project root',
-              finder = finders.new_table({
-                results = roots,
-                entry_maker = function(entry)
-                  local filename = vim.fn.fnamemodify(entry.path, ':t')
-                  if
-                      not entry.is_user_config
-                      and (
-                        entry.file_type ~= 'dir' or vim.startswith(filename, '.')
-                      )
-                  then
-                    return nil
-                  end
-                  local label = entry.label or filename
-                  return {
-                    value = entry,
-                    display = label .. ' at ' .. entry.path,
-                    ordinal = label,
-                  }
-                end,
-              }),
-              sorter = conf.generic_sorter(opts),
-              attach_mappings = function(prompt_bufnr)
-                actions.select_default:replace(function()
-                  actions.close(prompt_bufnr)
-                  local entry = action_state.get_selected_entry()
-                  distant_command.cwd(entry.value.path)
-                end)
-                return true
+          .new(opts, {
+            prompt_title = 'Distant: select your project root',
+            finder = finders.new_table({
+              results = roots,
+              entry_maker = function(entry)
+                local filename = vim.fn.fnamemodify(entry.path, ':t')
+                if
+                  not entry.is_user_config
+                  and (
+                    entry.file_type ~= 'dir' or vim.startswith(filename, '.')
+                  )
+                then
+                  return nil
+                end
+                local label = entry.label or filename
+                return {
+                  value = entry,
+                  display = label .. ' at ' .. entry.path,
+                  ordinal = label,
+                }
               end,
-            })
-            :find()
+            }),
+            sorter = conf.generic_sorter(opts),
+            attach_mappings = function(prompt_bufnr)
+              actions.select_default:replace(function()
+                actions.close(prompt_bufnr)
+                local entry = action_state.get_selected_entry()
+                distant_command.cwd(entry.value.path)
+              end)
+              return true
+            end,
+          })
+          :find()
       end)
     end)
   )
@@ -320,61 +320,61 @@ local function select_distant_connection(opts)
       return
     end
     pickers
-        .new(opts, {
-          prompt_title = 'Distant: select a connection, or create a new one',
-          finder = finders.new_table({
-            results = connections,
-            entry_maker = function(entry)
-              local current_label = entry.selected and ' (current)' or ''
-              local label = entry.label and entry.label
-                  or string.format(
-                    '%s://%s:%s id:%s%s',
-                    entry.scheme,
-                    entry.host,
-                    entry.port,
-                    entry.id,
-                    current_label
-                  )
-              return {
-                value = entry,
-                display = label,
-                ordinal = label,
-              }
-            end,
-          }),
-          sorter = conf.generic_sorter(opts),
-          attach_mappings = function(prompt_bufnr)
-            actions.select_default:replace(function()
-              actions.close(prompt_bufnr)
-              local entry = action_state.get_selected_entry()
-              if entry.value.selected then
-                vim.notify(
-                  'You were already using this connection, you are good to go!'
-                )
-                return
-              end
-              if entry.value.new_connection then
-                connect_to_new_server(function()
-                  select_cwd()
-                end)
-                return
-              end
-              distant_state.manager:select(
-                { connection = entry.value.id },
-                function()
-                  vim.notify(
-                    string.format(
-                      'Distant is now using "%s" to communicate to the server.',
-                      entry.display
-                    )
-                  )
-                end
+      .new(opts, {
+        prompt_title = 'Distant: select a connection, or create a new one',
+        finder = finders.new_table({
+          results = connections,
+          entry_maker = function(entry)
+            local current_label = entry.selected and ' (current)' or ''
+            local label = entry.label and entry.label
+              or string.format(
+                '%s://%s:%s id:%s%s',
+                entry.scheme,
+                entry.host,
+                entry.port,
+                entry.id,
+                current_label
               )
-            end)
-            return true
+            return {
+              value = entry,
+              display = label,
+              ordinal = label,
+            }
           end,
-        })
-        :find()
+        }),
+        sorter = conf.generic_sorter(opts),
+        attach_mappings = function(prompt_bufnr)
+          actions.select_default:replace(function()
+            actions.close(prompt_bufnr)
+            local entry = action_state.get_selected_entry()
+            if entry.value.selected then
+              vim.notify(
+                'You were already using this connection, you are good to go!'
+              )
+              return
+            end
+            if entry.value.new_connection then
+              connect_to_new_server(function()
+                select_cwd()
+              end)
+              return
+            end
+            distant_state.manager:select(
+              { connection = entry.value.id },
+              function()
+                vim.notify(
+                  string.format(
+                    'Distant is now using "%s" to communicate to the server.',
+                    entry.display
+                  )
+                )
+              end
+            )
+          end)
+          return true
+        end,
+      })
+      :find()
   end)
 end
 
