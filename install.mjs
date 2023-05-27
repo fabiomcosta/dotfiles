@@ -17,6 +17,7 @@ import { dir, home, secrets, DIR } from './src/path.mjs';
 
 async function main() {
   const IS_MACOS = os.platform() === 'darwin';
+  const IS_LINUX = os.platform() === 'linux';
   const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
 
   const hostname = (await $silent`hostname`).stdout.trim();
@@ -39,6 +40,8 @@ async function main() {
 
   if (IS_WORK_MACHINE) {
     await import('./secrets/facebook-devserver/install.mjs');
+  } else if (IS_LINUX) {
+    await import('./linux.mjs');
   }
 
   if (IS_WORK_MACHINE) {

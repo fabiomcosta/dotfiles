@@ -3,21 +3,21 @@ import { commandExists, $swallow, $silent } from './src/shell.mjs';
 import { dir } from './src/path.mjs';
 import { OK } from './src/log.mjs';
 
-console.log('Executing the OSX specific setup...');
-
-await $swallow`xcode-select --install`;
-// This install even macos updates...
-// I think I'll just avoid it...
-// await $`softwareupdate --all --install --force`;
-
-if (!(await commandExists('brew'))) {
-  console.log('Installing brew...');
-  await $`/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`;
+if (!(await commandExists('apt-get'))) {
+  console.log('apt-get not available, and other installers are not support. Silently ignoring Linux setup...');
+  process.exit(0);
 }
 
-console.log('brew update... (can take a while)');
-await $`brew bundle --verbose`;
-await $`brew cleanup`;
+console.log('Executing the Linux specific setup...');
+
+if (!(await commandExists('starship'))) {
+  await $`curl -sS https://starship.rs/install.sh | sh`;
+} else {
+  OK`starship already installed.`;
+}
+
+await $`sudo apt-get update`;
+await $`sudo apt-get install -y neovim tmux git fish rsync ripgrep fzf bat`;
 
 // fish
 const fishPath = (await $silent`which fish`).stdout.trim();
@@ -40,9 +40,3 @@ if (process.env.SHELL !== fishPath) {
 } else {
   OK`fish is already the default shell.`;
 }
-
-// Install fzf key bindings like ctrl+r
-const fzfInstallPath = `${brewPrefix}/opt/fzf/install`;
-await $`${fzfInstallPath} --no-zsh --no-bash --key-bindings --completion --update-rc`;
-
-await $`./macos.sh`;
