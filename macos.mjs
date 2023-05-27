@@ -20,7 +20,8 @@ await $`brew bundle --verbose`;
 await $`brew cleanup`;
 
 // fish
-const fishPath = (await $silent`which fish`).stdout.trim();
+const brewPrefix = (await $silent`brew --prefix`).stdout.trim();
+const fishPath = `${brewPrefix}/bin/fish`;
 
 const isFishInstalled = Boolean(
   (await $swallow`grep ${fishPath} /etc/shells`).stdout
