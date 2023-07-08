@@ -87,6 +87,7 @@ set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob='!.git/*'"
 set -x PATH $HOME/.cargo/bin $PATH
 
 # prepends my bin folder to the path
+set -x PATH $HOME/.local/bin $PATH
 set -x PATH $HOME/bin $PATH
 
 # prepends my gdrive/code/gd/bin folder to the path
