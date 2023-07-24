@@ -261,7 +261,7 @@ require('lazy').setup({
     'dracula/vim',
     name = 'dracula',
     lazy = false,
-    priority = 1000, -- make sure to load this before all the other start plugins
+    priority = 1000, -- loads this before all the other start plugins
     config = function()
       vim.cmd([[colorscheme dracula]])
     end,
@@ -849,6 +849,12 @@ require('lazy').setup({
             '<cmd>Telescope biggrep f<CR>',
             { silent = false, noremap = true }
           )
+          set_keymap(
+            'n',
+            '<LEADER>fg',
+            '<cmd>Telescope biggrep s<CR>',
+            { silent = false, noremap = true }
+          )
         else
           set_keymap(
             'n',
@@ -856,13 +862,13 @@ require('lazy').setup({
             '<cmd>Telescope find_files<CR>',
             { silent = false, noremap = true }
           )
-        end
-        set_keymap(
-          'n',
-          '<LEADER>fg',
-          '<cmd>Telescope biggrep s<CR>',
-          { silent = false, noremap = true }
-        )
+          set_keymap(
+            'n',
+            '<LEADER>fg',
+            '<cmd>Telescope live_grep<CR>',
+            { silent = false, noremap = true }
+          )
+          end
       else
         set_keymap(
           'n',
@@ -973,7 +979,6 @@ require('lazy').setup({
   },
   {
     'vim-test/vim-test',
-    dependencies = { 'voldikss/vim-floaterm' },
     config = function()
       vim.g['test#strategy'] = 'neovim'
       vim.g['test#neovim#term_position'] = 'botright 20'
@@ -1187,7 +1192,7 @@ require('lazy').setup({
 
   {
     'chipsenkbeil/distant.nvim',
-    dev = true,
+    -- dev = true,
     config = function()
       require('distant').setup({
         ['*'] = {
