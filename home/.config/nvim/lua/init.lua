@@ -222,6 +222,20 @@ set_keymap('x', '>', '>gv', { noremap = true })
 vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
 vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 
+vim.filetype.add({
+  extension = {
+    php = function(path, bufnr)
+      if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
+        return 'hack', function(bufnr)
+          vim.opt_local.syntax = 'php'
+          vim.opt_local.iskeyword:append('$')
+        end
+      end
+      return 'php'
+    end,
+  },
+})
+
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -849,12 +863,6 @@ require('lazy').setup({
             '<cmd>Telescope biggrep f<CR>',
             { silent = false, noremap = true }
           )
-          set_keymap(
-            'n',
-            '<LEADER>fg',
-            '<cmd>Telescope biggrep s<CR>',
-            { silent = false, noremap = true }
-          )
         else
           set_keymap(
             'n',
@@ -868,7 +876,15 @@ require('lazy').setup({
             '<cmd>Telescope live_grep<CR>',
             { silent = false, noremap = true }
           )
-          end
+        end
+        if utils.is_biggrep_repo() then
+          set_keymap(
+            'n',
+            '<LEADER>fg',
+            '<cmd>Telescope biggrep s<CR>',
+            { silent = false, noremap = true }
+          )
+        end
       else
         set_keymap(
           'n',
