@@ -8,7 +8,7 @@ end)()
 local IS_ARC_ROOT = IS_META_SERVER
     and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
-local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site/parser'
+local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site'
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -286,7 +286,6 @@ require('lazy').setup({
       vim.g.eregex_default_enable = 0
     end,
   },
-  -- { 'wbthomason/packer.nvim' },
   { 'antoinemadec/FixCursorHold.nvim' },
   { 'jordwalke/VimAutoMakeDirectory' },
   { 'tpope/vim-git' },
@@ -426,6 +425,7 @@ require('lazy').setup({
   {
     'nvim-treesitter/nvim-treesitter',
     build = function()
+      vim.opt.runtimepath:append(TS_PARSER_INSTALL_PATH)
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.install').update({ with_sync = true })()
     end,
