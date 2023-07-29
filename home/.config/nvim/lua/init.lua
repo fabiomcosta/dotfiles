@@ -655,13 +655,28 @@ require('lazy').setup({
       end
 
       local nvim_lsp = require('lspconfig')
+      local nvim_lsp_util = require('lspconfig.util')
 
       -- Use a loop to conveniently call 'setup' on multiple servers and
       -- map buffer local keybindings when the language server attaches
       local servers = {}
 
+      local flow_root_dir_finder = nvim_lsp_util.root_pattern('.flowconfig')
       nvim_lsp.flow.setup(with_lsp_default_config({
         cmd = { 'flow', 'lsp' },
+        root_dir = flow_root_dir_finder,
+        on_new_config = function(config, new_root_dir)
+          -- We'll only create new LSP client for root_dirs that are
+          -- not the same as the one from the cwd, because the `flow` name
+          -- is already used for that, avoiding the creation of a duplica
+          -- client.
+          if flow_root_dir_finder(vim.loop.cwd()) ~= new_root_dir then
+            config.name = 'flow-' .. new_root_dir
+            -- This makes LspRestart work with the new client configs
+            local lspconfigs = require('lspconfig.configs')
+            rawset(lspconfigs, config.name, lspconfigs.flow)
+          end
+        end,
       }))
 
       if IS_META_SERVER then
