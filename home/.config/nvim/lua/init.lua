@@ -958,7 +958,7 @@ require('lazy').setup({
       'chipsenkbeil/distant.nvim',
     },
     config = function()
-      local distant_status = require('meta-local').status
+      -- local distant_status = require('meta-local').status
       require('lualine').setup({
         options = {
           theme = 'dracula',
@@ -969,20 +969,20 @@ require('lazy').setup({
           lualine_c = { { 'filename', path = 1 } },
           lualine_x = { 'diagnostics' },
           lualine_y = { 'filetype' },
-          lualine_z = {
-            {
-              distant_status,
-              map = function(text)
-                local address = text[1]
-                if address then
-                  address = address:gsub('.facebook.com$', '')
-                  address = address:gsub('.fbinfra.net$', '')
-                  text[1] = address
-                end
-                return text
-              end,
-            },
-          },
+          -- lualine_z = {
+          --   {
+          --     distant_status,
+          --     map = function(text)
+          --       local address = text[1]
+          --       if address then
+          --         address = address:gsub('.facebook.com$', '')
+          --         address = address:gsub('.fbinfra.net$', '')
+          --         text[1] = address
+          --       end
+          --       return text
+          --     end,
+          --   },
+          -- },
         },
         inactive_sections = {
           lualine_c = { { 'filename', path = 1 } },
