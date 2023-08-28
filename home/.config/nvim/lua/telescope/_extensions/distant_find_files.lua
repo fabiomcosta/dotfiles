@@ -9,13 +9,13 @@ local pickers = require('telescope.pickers')
 local async_job_finder = require('telescope.finders.async_job_finder')
 local utils = require('telescope._extensions.utils')
 local distant = require('distant')
-local distant_state = require('distant.state')
+-- local distant_state = require('distant.state')
 
 local function find_files(opts)
   local local_cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
   opts.cwd = local_cwd
   opts.max_results = opts.max_results or vim.o.lines or 100
-  local remote_cwd = distant_state:get_cwd()
+  -- local remote_cwd = distant_state:get_cwd()
   local has_hg_root = utils.has_hg_root(remote_cwd)
   local cmd_bin = has_hg_root and 'myles' or 'find'
   local prompt_title = 'Distant[' .. cmd_bin .. ']: file name search'

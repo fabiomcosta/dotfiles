@@ -8,11 +8,13 @@ LOG_NAME="nvim-meta-distant.log"
 platform="distant-linux64-musl-x86"
 # ex: "v0.19.0-alpha.3"
 version="$1"
+
+distant_path="~/.local/bin/distant"
 # the eval can expand tilde from a path, if there is one
-distant_path="$(eval echo $2)"
+# distant_path="$(eval echo $2)"
 # the existing distant connections.
 # ex: "1234234#abc.sb.facebook.com/432434#bcd.sb.facebook.com"
-hosts="$3"
+hosts="$2"
 
 proxy_curl() {
   ALL_PROXY=http://fwdproxy:8080 curl $@
@@ -34,13 +36,9 @@ get_ipv6_for_host() {
 run_distant_server_and_return_address() {
   # REMINDER we'll likely want to allow this port to be configurable,
   # but not sure.
-  #
-  # @nocommit The --config option is not supposed to be used in the final
-  # version of this script
   $distant_path server listen --port 8082 --host any -6 --daemon \
     --log-file "/tmp/$LOG_NAME" \
-    --config ~/distant.config.toml | \
-    grep 'distant://'
+    | grep 'distant://'
 }
 
 assert_distant_installed() {

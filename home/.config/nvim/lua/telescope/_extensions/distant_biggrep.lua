@@ -21,7 +21,7 @@ local pickers = require('telescope.pickers')
 local sorters = require('telescope.sorters')
 local utils = require('telescope._extensions.utils')
 local distant = require('distant')
-local distant_state = require('distant.state')
+-- local distant_state = require('distant.state')
 
 local BIGGREP_ENGINE = {
   s = 'Substring',
@@ -46,7 +46,7 @@ local function make_biggrep(bg_suffix)
     local local_cwd = opts.cwd and vim.fn.expand(opts.cwd) or vim.loop.cwd()
     opts.cwd = local_cwd
     opts.max_results = opts.max_results or vim.o.lines or 100
-    local remote_cwd = distant_state:get_cwd()
+    -- local remote_cwd = distant_state:get_cwd()
     local has_hg_root = utils.has_hg_root(remote_cwd)
     local cmd_bin = has_hg_root and 'bg' .. bg_suffix or 'rg'
     local prompt_title = 'Distant[' .. cmd_bin .. '] file content search'
@@ -117,19 +117,19 @@ local function make_biggrep(bg_suffix)
     end
 
     pickers
-      .new(opts, {
-        prompt_title = prompt_title,
-        finder = finders.new_job(
-          get_finder_command,
-          opts.entry_maker,
-          opts.max_results,
-          opts.cwd
-        ),
-        previewer = utils.distant_buffer_previewer(opts),
-        sorter = sorters.highlighter_only(opts),
-        default_text = get_start_text(opts),
-      })
-      :find()
+        .new(opts, {
+          prompt_title = prompt_title,
+          finder = finders.new_job(
+            get_finder_command,
+            opts.entry_maker,
+            opts.max_results,
+            opts.cwd
+          ),
+          previewer = utils.distant_buffer_previewer(opts),
+          sorter = sorters.highlighter_only(opts),
+          default_text = get_start_text(opts),
+        })
+        :find()
   end
 end
 

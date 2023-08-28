@@ -1,4 +1,4 @@
-local distant_state = require('distant.state')
+-- local distant_state = require('distant.state')
 
 local status = {}
 
