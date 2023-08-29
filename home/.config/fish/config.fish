@@ -5,6 +5,15 @@ function command_exists
   type -q $cmd
 end
 
+
+# On Meta machines, a warning message is shown when running the brew command
+# and the PATH doesn't have one of the alternative paths inside it already.
+# So we have to set it before calling `brew --prefix`.
+if test -d $HOME/homebrew
+  set -x PATH $HOME/homebrew/bin $PATH
+  set -x PATH $HOME/homebrew/sbin $PATH
+end
+
 if command_exists nvim
   alias vim='nvim'
   alias vi='nvim'
@@ -39,14 +48,6 @@ set -x CLICOLOR 1
 set -x LSCOLORS ExFxCxDxBxegedabagacad
 
 if command_exists brew
-
-  # On Meta machines, a warning message is shown when running the brew command
-  # and the PATH doesn't have one of the alternative paths inside it already.
-  # So we have to set it before calling `brew --prefix`.
-  if test -d $HOME/homebrew
-    set -x PATH $HOME/homebrew/bin $PATH
-    set -x PATH $HOME/homebrew/sbin $PATH
-  end
 
   ## brew
   set -x BREW_PREFIX (brew --prefix)
