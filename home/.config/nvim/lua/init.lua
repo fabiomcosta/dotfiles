@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local TS_PARSER_INSTALL_PATH = vim.fn.stdpath('data') .. '/site'
 
@@ -203,12 +203,21 @@ set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
 -- avoid going on ex mode
 set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
--- copies current buffer file path to register
+-- copies current buffer file path relative to cwd to register
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
   vim.fn.setreg('+', path)
   utils.require_if_exists('osc52', function(osc52)
     osc52.copy(path)
+  end)
+end)
+
+-- copies current buffer filename to register
+vim.keymap.set('n', 'cf', function()
+  local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':t'))
+  vim.fn.setreg('+', filename)
+  utils.require_if_exists('osc52', function(osc52)
+    osc52.copy(filename)
   end)
 end)
 
@@ -226,10 +235,11 @@ vim.filetype.add({
   extension = {
     php = function(path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
-        return 'hack', function(bufnr)
-          vim.opt_local.syntax = 'php'
-          vim.opt_local.iskeyword:append('$')
-        end
+        return 'hack',
+            function(bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -591,6 +601,7 @@ require('lazy').setup({
           '<LEADER>q',
           '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>'
         )
+        buf_set_keymap('n', '<LEADER>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
 
         -- lspsaga key bindings
         buf_set_keymap(
@@ -683,7 +694,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1003,9 +1014,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
