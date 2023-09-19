@@ -201,6 +201,17 @@ set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
 -- avoid going on ex mode
 set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
+
+-- Keeps selection when changing indentation
+-- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
+set_keymap('x', '<', '<gv', { noremap = true })
+set_keymap('x', '>', '>gv', { noremap = true })
+
+-- Disable cursorline highlight on insert mode
+-- https://github.com/mhinz/vim-galore#smarter-cursorline
+vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
+vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
+
 -- copies current buffer file path relative to cwd to register
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
@@ -219,29 +230,21 @@ vim.keymap.set('n', 'cf', function()
   end)
 end)
 
--- Keeps selection when changing indentation
--- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-set_keymap('x', '<', '<gv', { noremap = true })
-set_keymap('x', '>', '>gv', { noremap = true })
-
--- Disable cursorline highlight on insert mode
--- https://github.com/mhinz/vim-galore#smarter-cursorline
-vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
-vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
-
 vim.filetype.add({
   extension = {
     php = function(path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
-        return 'hack',
-            function(bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+        return 'hack', function(bufnr)
+          vim.opt_local.syntax = 'php'
+          vim.opt_local.iskeyword:append('$')
+        end
       end
       return 'php'
     end,
   },
+  pattern = {
+    ['.*%.js.flow'] = 'javascript',
+  }
 })
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -365,11 +368,13 @@ require('lazy').setup({
     end,
   },
 
-  -- not needed on vscode
   { 'ntpeters/vim-better-whitespace' },
   {
     -- This plugin already constains 'tpope/vim-sleuth'
     'sheerun/vim-polyglot',
+    init = function()
+      vim.g.polyglot_disabled = {'ftdetect', 'sensible'}
+    end,
     config = function()
       vim.g.javascript_plugin_flow = 1
     end,
