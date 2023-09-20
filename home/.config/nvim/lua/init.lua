@@ -237,6 +237,7 @@ vim.filetype.add({
         return 'hack', function(bufnr)
           vim.opt_local.syntax = 'php'
           vim.opt_local.iskeyword:append('$')
+          vim.opt_local.commentstring = "/* %s */"
         end
       end
       return 'php'
