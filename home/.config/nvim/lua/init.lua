@@ -427,16 +427,6 @@ require('lazy').setup({
   },
 
   {
-    'tversteeg/registers.nvim',
-    name = 'registers',
-    -- keys = {
-    --   { "\"",    mode = { "n", "v" } },
-    --   { "<C-R>", mode = "i" }
-    -- },
-    cmd = 'Registers',
-  },
-
-  {
     'nvim-treesitter/nvim-treesitter',
     build = function()
       require('nvim-treesitter.install').prefer_git = true
@@ -954,15 +944,6 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'TimUntersberger/neogit',
-    config = function()
-      require('neogit').setup({
-        disable_commit_confirmation = true,
-        disable_insert_on_commit = false,
-      })
-    end,
-  },
   {
     'hoob3rt/lualine.nvim',
     dependencies = {
