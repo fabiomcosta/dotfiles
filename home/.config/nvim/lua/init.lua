@@ -948,7 +948,6 @@ require('lazy').setup({
     'hoob3rt/lualine.nvim',
     dependencies = {
       'kyazdani42/nvim-web-devicons',
-      'chipsenkbeil/distant.nvim',
     },
     config = function()
       -- local distant_status = require('meta-local').status
@@ -1214,26 +1213,6 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'chipsenkbeil/distant.nvim',
-    -- dev = true,
-    branch = 'v0.3',
-    config = function()
-      require('distant'):setup({
-        [''] = {
-          cwd = {
-            whatsapp_server = '/home/fabs/local/whatsapp/server/erl',
-          },
-        },
-        -- ['fabs.sb.facebook.com'] = {},
-        -- Applies Chip's personal settings to every machine you connect to
-        -- 1. Ensures that distant servers terminate with no connections
-        -- 2. Provides navigation bindings for remote directories
-        -- 3. Provides keybinding to jump into a remote file's parent directory
-        -- ['*'] = require('distant.settings').chip_default()
-      })
-    end,
-  },
   {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
