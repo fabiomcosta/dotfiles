@@ -1226,17 +1226,12 @@ require('lazy').setup({
   },
 }, { dev = { path = '~/Dev/nvim-plugins' } })
 
-local function install_meta_lsp_clients()
-  if IS_META_SERVER then
-    require('lazy').sync()
-    vim.cmd('SyncMetaLS')
-  end
-end
-
 vim.api.nvim_create_user_command('SetupAndQuit', function()
-  install_meta_lsp_clients()
-  vim.cmd('autocmd User SyncMetaLSComplete quitall')
-  vim.cmd('quitall')
+  if IS_META_SERVER then
+    vim.cmd('autocmd User SyncMetaLSComplete quitall')
+    vim.cmd('SyncMetaLS')
+    require('lazy').sync()
+  end
 end, {})
 
 set_keymap(
