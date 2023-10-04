@@ -1228,9 +1228,9 @@ require('lazy').setup({
 
 vim.api.nvim_create_user_command('SetupAndQuit', function()
   if IS_META_SERVER then
+    require('lazy').sync()
     vim.cmd('autocmd User SyncMetaLSComplete quitall')
     vim.cmd('SyncMetaLS')
-    require('lazy').sync()
   end
 end, {})
 
