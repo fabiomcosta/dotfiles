@@ -1228,9 +1228,33 @@ require('lazy').setup({
 
 vim.api.nvim_create_user_command('SetupAndQuit', function()
   if IS_META_SERVER then
-    require('lazy').sync()
-    vim.cmd('autocmd User SyncMetaLSComplete quitall')
+    local group = vim.api.nvim_create_augroup('SetupAndQuit')
+    local is_meta_sync_done = false
+    local is_lazy_done = false
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'SyncMetaLSComplete',
+      callback = function()
+        is_meta_sync_done = true
+        if is_lazy_done then
+          -- quit when both events run. (there has to be a bette way)
+          vim.cmd('quitall')
+        end
+      end,
+    })
+    vim.api.nvim_create_autocmd('User', {
+      group = group,
+      pattern = 'LazyDone',
+      callback = function()
+        is_lazy_done = true
+        if is_meta_sync_done then
+          -- quit when both events run. (there has to be a bette way)
+          vim.cmd('quitall')
+        end
+      end,
+    })
     vim.cmd('SyncMetaLS')
+    require('lazy').sync()
   end
 end, {})
 
