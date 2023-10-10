@@ -435,6 +435,7 @@ require('lazy').setup({
     config = function()
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.configs').setup({
+        sync_install = true,
         ensure_installed = {
           'javascript',
           'typescript',
@@ -1228,7 +1229,7 @@ require('lazy').setup({
 
 vim.api.nvim_create_user_command('SetupAndQuit', function()
   if IS_META_SERVER then
-    local group = vim.api.nvim_create_augroup('SetupAndQuit')
+    local group = vim.api.nvim_create_augroup('SetupAndQuit', {})
     local is_meta_sync_done = false
     local is_lazy_done = false
     vim.api.nvim_create_autocmd('User', {
@@ -1244,7 +1245,7 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
     })
     vim.api.nvim_create_autocmd('User', {
       group = group,
-      pattern = 'LazyDone',
+      pattern = 'LazySync',
       callback = function()
         is_lazy_done = true
         if is_meta_sync_done then
