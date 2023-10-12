@@ -455,10 +455,11 @@ require('lazy').setup({
         },
         highlight = {
           enable = true,
-          disable = { 'lua' },
+          disable = { 'c' },
         },
         indent = {
           enable = true,
+          disable = { 'c' },
         },
         autotag = {
           enable = true,
