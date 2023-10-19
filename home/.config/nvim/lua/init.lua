@@ -436,6 +436,7 @@ require('lazy').setup({
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.configs').setup({
         sync_install = true,
+        parser_install_dir = vim.fn.stdpath('data') .. '/site',
         ensure_installed = {
           'javascript',
           'typescript',
@@ -1255,8 +1256,9 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
         end
       end,
     })
-    vim.cmd('SyncMetaLS')
+    -- vim.cmd('SyncMetaLS')
     require('lazy').sync()
+    vim.cmd('quitall')
   end
 end, {})
 
