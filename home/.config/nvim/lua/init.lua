@@ -1256,9 +1256,8 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
         end
       end,
     })
-    -- vim.cmd('SyncMetaLS')
+    vim.cmd('SyncMetaLS')
     require('lazy').sync()
-    vim.cmd('quitall')
   end
 end, {})
 
