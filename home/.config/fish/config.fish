@@ -1,10 +1,18 @@
 #!/usr/bin/env fish
-
+#
 function command_exists
   set cmd $argv[1]
   type -q $cmd
 end
 
+set CURRENT_FILENAME_PATH (realpath (status --current-filename))
+# this file's path looks like this and, and we want the path for the "dotfiles"
+# folder:
+# dotfiles/home/.config/fish/config.fish
+set DOTFILES_PATH (dirname (dirname (dirname (dirname $CURRENT_FILENAME_PATH))))
+set SECRETS_PATH "$DOTFILES_PATH/secrets"
+
+source "$SECRETS_PATH/config.fish"
 
 # On Meta machines, a warning message is shown when running the brew command
 # and the PATH doesn't have one of the alternative paths inside it already.
@@ -123,7 +131,6 @@ if command_exists starship
   eval (starship init fish)
 end
 
-# fnm
 if command_exists fnm
   fnm env --use-on-cd | source
 end
