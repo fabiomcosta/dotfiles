@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -234,22 +234,22 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-            vim.opt_local.commentstring = '/* %s */'
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+              vim.opt_local.commentstring = '/* %s */'
+            end
       end
       return 'php'
     end,
-    js = function(_path, bufnr)
-      for _, line in ipairs(vim.filetype.getlines(bufnr, 1, 16)) do
-        if string.find(line, '@flow') then
-          return 'flow'
-        end
-      end
-      return 'javascript'
-    end,
+    -- js = function(_path, bufnr)
+    --   for _, line in ipairs(vim.filetype.getlines(bufnr, 1, 16)) do
+    --     if string.find(line, '@flow') then
+    --       return 'flow'
+    --     end
+    --   end
+    --   return 'javascript'
+    -- end,
   },
   pattern = {
     ['.*%.js.flow'] = 'flow',
@@ -696,7 +696,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1006,9 +1006,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
