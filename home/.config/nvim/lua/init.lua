@@ -234,11 +234,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-              vim.opt_local.commentstring = '/* %s */'
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -473,9 +472,6 @@ require('lazy').setup({
         autotag = {
           enable = true,
         },
-        context_commentstring = {
-          enable = true,
-        },
         -- refactor = {
         --   highlight_definitions = { enable = true },
         --   smart_rename = {
@@ -500,6 +496,13 @@ require('lazy').setup({
   {
     'JoosepAlviste/nvim-ts-context-commentstring',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = function()
+      require('ts_context_commentstring').setup({
+        languages = {
+          hack = require('ts_context_commentstring.config').config.languages.php
+        }
+      })
+    end
   },
 
   {
@@ -736,8 +739,9 @@ require('lazy').setup({
         }))
         nvim_lsp.eslint.setup(with_lsp_default_config({
           on_attach = function(client, bufnr)
-            -- neovim's LSP client does not currently support dynamic capabilities registration, so we need to set
-            -- the server capabilities of the eslint server ourselves!
+            -- neovim's LSP client does not currently support dynamic capabilities
+            -- registration, so we need to set the server capabilities of the
+            -- eslint server ourselves!
             client.server_capabilities.documentFormattingProvider = true
             on_attach(client, bufnr)
           end,
