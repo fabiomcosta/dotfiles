@@ -706,6 +706,9 @@ require('lazy').setup({
         if installed_extensions['nuclide.eslint'] then
           table.insert(servers, 'eslint@meta')
         end
+        if installed_extensions['nuclide.erlang'] then
+          table.insert(servers, 'erlang@meta')
+        end
         -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
         --   settings = {
         --     editor = {
