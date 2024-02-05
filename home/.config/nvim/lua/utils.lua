@@ -76,7 +76,9 @@ local is_biggrep_repo_in_cwd = memoize(function(cwd)
   return false
 end)
 
-local utils = {}
+local utils = {
+  get_os_command_output = get_os_command_output,
+}
 
 function utils.is_hg_repo()
   return is_hg_repo_in_cwd(vim.loop.cwd())

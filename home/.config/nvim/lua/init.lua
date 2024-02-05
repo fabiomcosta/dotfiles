@@ -1349,8 +1349,28 @@ set_keymap(
 --     vim.cmd('source ' .. file)
 --   end
 -- end
-
 -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
+
+vim.api.nvim_create_user_command('GitOpenActiveFiles', function()
+  local file_paths = utils.get_os_command_output({
+    'git',
+    'diff',
+    '--relative', -- prints paths relative to CWD
+    '--name-only',
+    '--diff-filter=AM',
+  })
+  for _, name in ipairs(file_paths) do
+    vim.cmd('vsplit')
+    vim.cmd('e ' .. name)
+  end
+end, {})
+
+set_keymap(
+  'n',
+  '<LEADER>om', -- open modified [files]
+  '<CMD>GitOpenActiveFiles<CR>',
+  { silent = true, noremap = true }
+)
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
