@@ -883,8 +883,7 @@ require('lazy').setup({
       require('telescope').load_extension('fzy_native')
 
       if IS_ARC_ROOT then
-        -- myles only works on hg repos
-        if utils.is_hg_repo() then
+        if utils.is_myles_repo() then
           set_keymap(
             'n',
             '<LEADER>ff',

@@ -72,7 +72,24 @@ local is_biggrep_repo_in_cwd = memoize(function(cwd)
   if exit_code ~= 0 then
     return not vim.startswith(vim.trim(stderr[1]), 'Error:')
   end
-  -- This is unexpected, return false
+  return false
+end)
+
+local is_myles_repo_in_cwd = memoize(function(cwd)
+  local is_success, stdout, exit_code, stderr = pcall(
+    get_os_command_output,
+    { 'myles', 'rage' },
+    { cwd = cwd }
+  )
+  if is_success then
+    for _, text in ipairs(stdout) do
+      lower_text = string.lower(text)
+      if string.find(lower_text, "is supported") then
+        is_supported = vim.split(lower_text, ':')[2]
+        return vim.trim(is_supported) ~= 'false'
+      end
+    end
+  end
   return false
 end)
 
@@ -86,6 +103,10 @@ end
 
 function utils.is_biggrep_repo()
   return is_biggrep_repo_in_cwd(vim.loop.cwd())
+end
+
+function utils.is_myles_repo()
+  return is_myles_repo_in_cwd(vim.loop.cwd())
 end
 
 function utils.replace_termcodes(str)
