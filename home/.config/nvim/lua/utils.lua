@@ -76,6 +76,13 @@ local is_biggrep_repo_in_cwd = memoize(function(cwd)
 end)
 
 local is_myles_repo_in_cwd = memoize(function(cwd)
+  -- This makes sure to start myles if it hasn't been started yet.
+  pcall(
+    get_os_command_output,
+    -- '.hg' here is "random", it could be anything
+    { 'myles', '--list', '.hg' },
+    { cwd = cwd }
+  )
   local is_success, stdout, exit_code, stderr = pcall(
     get_os_command_output,
     { 'myles', 'rage' },
