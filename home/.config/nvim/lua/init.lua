@@ -1380,28 +1380,51 @@ local function tbl_contains(table, element)
   return false
 end
 
+local function get_keywords()
+  local keywords = ''
+  for _, value in pairs(vim.opt.iskeyword:get()) do
+    -- This might not be the best heuristic for this, but works for now.
+    if #value == 1 then
+      keywords = keywords .. value
+    end
+  end
+  return keywords
+end
+
+-- Escapes characters to be used in lua regexes
+local function regex_escape(str)
+  return vim.fn.escape(str, '^$.*?[]~-/\\')
+end
+
 local function is_snake_case(word)
-  return string.find(word, '_') and #word:gsub('[%l_]+', '') == 0
+  local keywords = regex_escape(get_keywords())
+  return string.find(word, '_') and #word:gsub('[%l_'..keywords..']+', '') == 0
 end
 
 local function is_upper_case(word)
-  return string.find(word, '_') and #word:gsub('[%u_]+', '') == 0
+  local keywords = regex_escape(get_keywords())
+  return string.find(word, '_') and #word:gsub('[%u_'..keywords..']+', '') == 0
 end
 
 local function is_kebab_case(word)
-  return string.find(word, '-') and #word:gsub('[%l-]+', '') == 0
+  local keywords = regex_escape(get_keywords())
+  return string.find(word, '-') and #word:gsub('[%l-'..keywords..']+', '') == 0
 end
 
 local function is_camel_case(word)
-  return #word:gsub('[%l%u]+', '') == 0
+  local keywords = regex_escape(get_keywords())
+  local word_without_special_keywords = word:gsub('['..keywords..']+', '')
+  return #word:gsub('[%l%u'..keywords..']+', '') == 0
     and #word:gsub('%l+', '') > 0
-    and word:match('^%l')
+    and word_without_special_keywords:match('^%l')
 end
 
 local function is_pascal_case(word)
-  return #word:gsub('[%l%u]+', '') == 0
+  local keywords = regex_escape(get_keywords())
+  local word_without_special_keywords = word:gsub('['..keywords..']+', '')
+  return #word:gsub('[%l%u'..keywords..']+', '') == 0
     and #word:gsub('%l+', '') > 0
-    and word:match('^%u')
+    and word_without_special_keywords:match('^%u')
 end
 
 local function to_snake_case(word)
@@ -1413,7 +1436,8 @@ local function to_snake_case(word)
   if string.find(word, '-') then
     return word:gsub('-', '_'):lower()
   end
-  word = word:gsub('^%u', string.lower)
+  local keywords = regex_escape(get_keywords())
+  word = word:gsub('^['..keywords..']?%u', string.lower)
   return word:gsub('(%u)', function(c)
     return '_' .. c:lower()
   end)
@@ -1434,7 +1458,8 @@ local function to_kebab_case(word)
 end
 
 local function to_pascal_case(word)
-  return to_camel_case(word):gsub('^%l', string.upper)
+  local keywords = regex_escape(get_keywords())
+  return to_camel_case(word):gsub('^['..keywords..']?%l', string.upper)
 end
 
 local function cycle_case(word)
@@ -1445,9 +1470,8 @@ local function cycle_case(word)
     return to_camel_case(word)
   end
 
-  local keywords = vim.opt.iskeyword:get()
-  local ft_supports_kebab_case = tbl_contains(keywords, '-')
   if is_camel_case(word) then
+    local ft_supports_kebab_case = tbl_contains(vim.opt.iskeyword:get(), '-')
     if ft_supports_kebab_case then
       return to_kebab_case(word)
     else
