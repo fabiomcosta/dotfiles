@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -499,10 +499,10 @@ require('lazy').setup({
     config = function()
       require('ts_context_commentstring').setup({
         languages = {
-          hack = require('ts_context_commentstring.config').config.languages.php
-        }
+          hack = require('ts_context_commentstring.config').config.languages.php,
+        },
       })
-    end
+    end,
   },
 
   {
@@ -699,7 +699,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-            require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1012,9 +1012,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
@@ -1368,6 +1368,110 @@ set_keymap(
   'n',
   '<LEADER>om', -- open modified [files]
   '<CMD>GitOpenActiveFiles<CR>',
+  { silent = true, noremap = true }
+)
+
+local function tbl_contains(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
+end
+
+local function is_snake_case(word)
+  return string.find(word, '_') and #word:gsub('[%l_]+', '') == 0
+end
+
+local function is_upper_case(word)
+  return string.find(word, '_') and #word:gsub('[%u_]+', '') == 0
+end
+
+local function is_kebab_case(word)
+  return string.find(word, '-') and #word:gsub('[%l-]+', '') == 0
+end
+
+local function is_camel_case(word)
+  return #word:gsub('[%l%u]+', '') == 0
+    and #word:gsub('%l+', '') > 0
+    and word:match('^%l')
+end
+
+local function is_pascal_case(word)
+  return #word:gsub('[%l%u]+', '') == 0
+    and #word:gsub('%l+', '') > 0
+    and word:match('^%u')
+end
+
+local function to_snake_case(word)
+  -- if snake_case or UPPER_CASE
+  if string.find(word, '_') then
+    return word:lower()
+  end
+  -- if kebab-case (lower and upper)
+  if string.find(word, '-') then
+    return word:gsub('-', '_'):lower()
+  end
+  word = word:gsub('^%u', string.lower)
+  return word:gsub('(%u)', function(c)
+    return '_' .. c:lower()
+  end)
+end
+
+local function to_upper_case(word)
+  return to_snake_case(word):upper()
+end
+
+local function to_camel_case(word)
+  return to_snake_case(word):gsub('_(%l)', function(c)
+    return c:upper()
+  end)
+end
+
+local function to_kebab_case(word)
+  return to_snake_case(word):gsub('_', '-')
+end
+
+local function to_pascal_case(word)
+  return to_camel_case(word):gsub('^%l', string.upper)
+end
+
+local function cycle_case(word)
+  if is_snake_case(word) then
+    return to_upper_case(word)
+  end
+  if is_upper_case(word) then
+    return to_camel_case(word)
+  end
+
+  local keywords = vim.opt.iskeyword:get()
+  local ft_supports_kebab_case = tbl_contains(keywords, '-')
+  if is_camel_case(word) then
+    if ft_supports_kebab_case then
+      return to_kebab_case(word)
+    else
+      return to_pascal_case(word)
+    end
+  end
+
+  if is_kebab_case(word) then
+    return to_pascal_case(word)
+  end
+  if is_pascal_case(word) then
+    return to_snake_case(word)
+  end
+end
+
+vim.api.nvim_create_user_command('CodeCycleCase', function()
+  local cursorword = vim.fn.expand('<cword>')
+  vim.cmd('normal! diwi' .. cycle_case(cursorword))
+end, {})
+
+set_keymap(
+  'n',
+  '<LEADER>cc',
+  '<CMD>CodeCycleCase<CR>',
   { silent = true, noremap = true }
 )
 
