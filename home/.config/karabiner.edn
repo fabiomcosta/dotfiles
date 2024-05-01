@@ -481,13 +481,14 @@
         [:!Speriod :vk_none]
         [:!Rperiod :vk_none]
 
+        ; This used to be on the keyboard itself, now moved here.
+        [:##left_control :left_command]
+
         ; "delete_forward: alone -> escape, hold -> left_shift"
         [:##delete_forward :left_shift nil {:alone :escape}]
-        ; "left_command alone -> escape, hold -> left_command"
-        ; [:##left_command :left_command nil {:alone :escape}]
-        ; "left_command alone -> tab, hold -> symbols_mode"
-        [:##right_command :right_control nil {:alone :tab}]
-        ; "enter: alone -> return_or_enter, hold -> right_control"
+        ; "right_control alone -> tab, hold -> right_control"
+        [:##right_control :right_control nil {:alone :tab}]
+        ; "enter: alone -> return_or_enter, hold -> symbols_mode"
         [:##return_or_enter ["symbols_mode" 1] nil {:alone :return_or_enter :afterup ["symbols_mode" 0]}]
         [:spacebar ["numbers_mode" 1] nil {:alone :spacebar :afterup ["numbers_mode" 0]}]
     ]}
