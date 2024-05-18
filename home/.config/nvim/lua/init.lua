@@ -1074,15 +1074,6 @@ require('lazy').setup({
     end,
   },
   {
-    'danilamihailov/beacon.nvim',
-    config = function()
-      vim.g.beacon_show_jumps = 0
-      vim.g.beacon_shrink = 0
-      vim.g.beacon_size = 12
-    end,
-  },
-
-  {
     'mfussenegger/nvim-dap',
     dependencies = { 'meta.nvim' },
     config = function()
