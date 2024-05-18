@@ -211,22 +211,23 @@ set_keymap('x', '>', '>gv', { noremap = true })
 vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
 vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 
+local function copy_to_clipboard(str)
+  vim.fn.setreg('+', str)
+  utils.require_if_exists('osc52', function(osc52)
+    osc52.copy(str)
+  end)
+end
+
 -- copies current buffer file path relative to cwd to register
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
-  vim.fn.setreg('+', path)
-  utils.require_if_exists('osc52', function(osc52)
-    osc52.copy(path)
-  end)
+  copy_to_clipboard(path)
 end)
 
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':t'))
-  vim.fn.setreg('+', filename)
-  utils.require_if_exists('osc52', function(osc52)
-    osc52.copy(filename)
-  end)
+  copy_to_clipboard(filename)
 end)
 
 vim.filetype.add({
