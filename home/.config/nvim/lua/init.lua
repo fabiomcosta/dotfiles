@@ -1186,7 +1186,7 @@ require('lazy').setup({
   },
   {
     'rcarriga/nvim-dap-ui',
-    dependencies = { 'mfussenegger/nvim-dap', "nvim-neotest/nvim-nio" },
+    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
     config = function()
       require('dapui').setup()
 
@@ -1398,31 +1398,34 @@ end
 
 local function is_snake_case(word)
   local keywords = regex_escape(get_keywords())
-  return string.find(word, '_') and #word:gsub('[%l_'..keywords..']+', '') == 0
+  return string.find(word, '_')
+    and #word:gsub('[%l_' .. keywords .. ']+', '') == 0
 end
 
 local function is_upper_case(word)
   local keywords = regex_escape(get_keywords())
-  return string.find(word, '_') and #word:gsub('[%u_'..keywords..']+', '') == 0
+  return string.find(word, '_')
+    and #word:gsub('[%u_' .. keywords .. ']+', '') == 0
 end
 
 local function is_kebab_case(word)
   local keywords = regex_escape(get_keywords())
-  return string.find(word, '-') and #word:gsub('[%l-'..keywords..']+', '') == 0
+  return string.find(word, '-')
+    and #word:gsub('[%l-' .. keywords .. ']+', '') == 0
 end
 
 local function is_camel_case(word)
   local keywords = regex_escape(get_keywords())
-  local word_without_special_keywords = word:gsub('['..keywords..']+', '')
-  return #word:gsub('[%l%u'..keywords..']+', '') == 0
+  local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
+  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
     and #word:gsub('%l+', '') > 0
     and word_without_special_keywords:match('^%l')
 end
 
 local function is_pascal_case(word)
   local keywords = regex_escape(get_keywords())
-  local word_without_special_keywords = word:gsub('['..keywords..']+', '')
-  return #word:gsub('[%l%u'..keywords..']+', '') == 0
+  local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
+  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
     and #word:gsub('%l+', '') > 0
     and word_without_special_keywords:match('^%u')
 end
@@ -1437,7 +1440,7 @@ local function to_snake_case(word)
     return word:gsub('-', '_'):lower()
   end
   local keywords = regex_escape(get_keywords())
-  word = word:gsub('^['..keywords..']?%u', string.lower)
+  word = word:gsub('^[' .. keywords .. ']?%u', string.lower)
   return word:gsub('(%u)', function(c)
     return '_' .. c:lower()
   end)
@@ -1459,7 +1462,7 @@ end
 
 local function to_pascal_case(word)
   local keywords = regex_escape(get_keywords())
-  return to_camel_case(word):gsub('^['..keywords..']?%l', string.upper)
+  return to_camel_case(word):gsub('^[' .. keywords .. ']?%l', string.upper)
 end
 
 local function cycle_case(word)
