@@ -299,19 +299,42 @@ require('lazy').setup({
       vim.cmd([[colorscheme dracula]])
     end,
   },
-  {
-    'othree/eregex.vim',
-    config = function()
-      vim.g.eregex_default_enable = 0
-    end,
-  },
   { 'antoinemadec/FixCursorHold.nvim' },
   { 'jordwalke/VimAutoMakeDirectory' },
   { 'tpope/vim-git' },
   { 'tpope/vim-surround' },
   { 'tpope/vim-repeat' },
   { 'tpope/vim-fugitive' },
+  { 'moll/vim-node' },
+  { 'christoomey/vim-tmux-navigator' },
+  { 'ntpeters/vim-better-whitespace' },
+  -- { 'jparise/vim-graphql' },
+  -- { 'godlygeek/tabular' },
+  -- { 'jeffkreeftmeijer/vim-numbertoggle' },
+
+  -- TO BE DEPRECATED ONCE 0.10 is available in all envs I work on
+  { 'editorconfig/editorconfig-vim' },
   { 'tpope/vim-commentary' },
+  {
+    'ojroques/nvim-osc52',
+    config = function()
+      require('osc52').setup({ silent = true })
+      local function copy()
+        if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+          require('osc52').copy_register('"')
+        end
+      end
+      vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
+    end,
+  },
+  -- END DEPRECATED
+
+  {
+    'othree/eregex.vim',
+    config = function()
+      vim.g.eregex_default_enable = 0
+    end,
+  },
   {
     'tpope/vim-projectionist',
     config = function()
@@ -341,30 +364,6 @@ require('lazy').setup({
       }
     end,
   },
-  { 'moll/vim-node' },
-  -- { 'jparise/vim-graphql' },
-  { 'christoomey/vim-tmux-navigator' },
-
-  -- TODO remove this plugin once 0.9 is available as it has editorconfig
-  -- support builtin :)
-  { 'editorconfig/editorconfig-vim' },
-
-  {
-    'ojroques/nvim-osc52',
-    config = function()
-      require('osc52').setup({ silent = true })
-
-      local function copy()
-        if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
-          require('osc52').copy_register('"')
-        end
-      end
-      vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
-    end,
-  },
-  -- { 'godlygeek/tabular' },
-  -- { 'jeffkreeftmeijer/vim-numbertoggle' },
-
   {
     'kwkarlwang/bufjump.nvim',
     config = function()
@@ -375,8 +374,6 @@ require('lazy').setup({
       set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
     end,
   },
-
-  { 'ntpeters/vim-better-whitespace' },
   {
     -- This plugin already constains 'tpope/vim-sleuth'
     'sheerun/vim-polyglot',
@@ -432,7 +429,6 @@ require('lazy').setup({
       )
     end,
   },
-
   {
     'nvim-treesitter/nvim-treesitter',
     build = function()
