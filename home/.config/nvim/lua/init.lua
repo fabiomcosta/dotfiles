@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -27,6 +27,13 @@ if vim.fn.has('gui_running') > 0 then
 end
 
 vim.g.mapleader = ','
+
+-- Unless any plugin requires these, there is no reason for them to polute
+-- the checkhealth screen with confusing warnings.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
 
 -- avoiding possible issues on plugins that are generaly only tested on bash.
 vim.opt.shell = 'bash'
@@ -71,7 +78,6 @@ vim.opt.showmode = true
 vim.opt.showcmd = true
 vim.opt.hidden = true
 vim.opt.ruler = true
-vim.opt.lazyredraw = true
 -- allows colors on long lines
 vim.opt.synmaxcol = 5000
 -- allow backspacing over everything in insert mode
@@ -235,10 +241,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -375,6 +381,35 @@ require('lazy').setup({
       set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
     end,
   },
+  -- lazy.nvim
+  {
+    'folke/noice.nvim',
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'rcarriga/nvim-notify',
+    },
+    event = 'VeryLazy',
+    config = function()
+      require('noice').setup({
+        lsp = {
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+            ['vim.lsp.util.stylize_markdown'] = true,
+            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = true,         -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
+        },
+      })
+    end,
+  },
   {
     -- This plugin already constains 'tpope/vim-sleuth'
     'sheerun/vim-polyglot',
@@ -457,6 +492,10 @@ require('lazy').setup({
           'erlang',
           'graphql',
           'hack',
+          'vim',
+          'regex',
+          'markdown',
+          'markdown_inline',
         },
         highlight = {
           enable = true,
@@ -696,7 +735,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -961,9 +1000,9 @@ require('lazy').setup({
       vim.g.workspace_autosave_untrailtabs = 0
 
       vim.g.workspace_session_directory =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
       vim.g.workspace_undodir =
-        vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
+          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
     end,
   },
   {
@@ -1339,35 +1378,35 @@ end
 local function is_snake_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[%l_' .. keywords .. ']+', '') == 0
+      and #word:gsub('[%l_' .. keywords .. ']+', '') == 0
 end
 
 local function is_upper_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[%u_' .. keywords .. ']+', '') == 0
+      and #word:gsub('[%u_' .. keywords .. ']+', '') == 0
 end
 
 local function is_kebab_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '-')
-    and #word:gsub('[%l-' .. keywords .. ']+', '') == 0
+      and #word:gsub('[%l-' .. keywords .. ']+', '') == 0
 end
 
 local function is_camel_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
-    and #word:gsub('%l+', '') > 0
-    and word_without_special_keywords:match('^%l')
+      and #word:gsub('%l+', '') > 0
+      and word_without_special_keywords:match('^%l')
 end
 
 local function is_pascal_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
-    and #word:gsub('%l+', '') > 0
-    and word_without_special_keywords:match('^%u')
+      and #word:gsub('%l+', '') > 0
+      and word_without_special_keywords:match('^%u')
 end
 
 local function to_snake_case(word)
