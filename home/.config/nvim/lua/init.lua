@@ -42,13 +42,8 @@ vim.opt.signcolumn = 'number'
 
 -- adds possibility of using 256 colors
 vim.opt.termguicolors = true
--- vim.opt.t_8b = '^[[48;2;%lu;%lu;%lum'
--- vim.opt.t_8f = '^[[38;2;%lu;%lu;%lum'
--- vim.opt.t_Co = '256'
--- vim.opt.t_ut = nil
 
 -- only show file name on tabs
--- vim.opt.tabline = '%t'
 vim.opt.showtabline = 0
 
 -- for the dark version
@@ -280,12 +275,6 @@ local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 local auto_format_on_save = function(client, bufnr)
   -- if client.server_capabilities.document_formatting then
   if client.supports_method('textDocument/formatting') then
-    -- vim.cmd([[
-    --   augroup Format
-    --     autocmd! * <buffer>
-    --     autocmd BufWritePre <buffer> lua vim.lsp.buf.format({ timeout_ms = 2000 })
-    --   augroup END
-    -- ]])
     vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
     vim.api.nvim_create_autocmd('BufWritePre', {
       group = augroup,
