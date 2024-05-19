@@ -2,13 +2,12 @@ local M = {
   default_config = {
     directory = nil,
   },
-  loaded = false,
 }
 
 local setup_config = function(config)
   vim.validate({ config = { config, 'table', true } })
   config =
-    vim.tbl_deep_extend('force', vim.deepcopy(M.default_config), config or {})
+      vim.tbl_deep_extend('force', vim.deepcopy(M.default_config), config or {})
   vim.validate({
     directory = { config.directory, 'string' },
   })
@@ -58,41 +57,46 @@ end
 local read = function()
   local session_path = get_session_path(get_session_name())
   vim.cmd(('silent! source %s'):format(vim.fn.fnameescape(session_path)))
-  M.loaded = true
   -- vim.notify(('Loaded session %s'):format(session_path))
 end
 
 local write = function()
-  if not M.loaded then
-    return
-  end
   local session_path = get_session_path(get_session_name())
   vim.cmd(('mksession! %s'):format(vim.fn.fnameescape(session_path)))
   -- vim.notify(('Saved session %s'):format(session_path))
 end
 
 local create_autocommands = function()
+  local loaded = false
+  local _read = function()
+    if not is_something_shown() then
+      read()
+      loaded = true
+    end
+  end
+  local _write = function()
+    if not loaded then
+      return
+    end
+    write()
+  end
   local augroup = vim.api.nvim_create_augroup('MicroSessions', {})
   vim.api.nvim_create_autocmd('VimEnter', {
     group = augroup,
     nested = true,
     once = true,
     desc = 'Autoread session',
-    callback = function()
-      if not is_something_shown() then
-        read()
-      end
-    end,
+    callback = _read,
   })
   vim.api.nvim_create_autocmd('VimLeavePre', {
     group = augroup,
     desc = 'Autowrite session when leaving Vim',
-    callback = write,
+    callback = _write,
   })
   vim.api.nvim_create_autocmd('BufEnter', {
     group = augroup,
     desc = 'Autowrite session when opening a new buffer',
-    callback = write,
+    callback = _write,
   })
 end
 
