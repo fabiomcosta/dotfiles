@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -237,10 +237,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -649,7 +649,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1232,8 +1232,7 @@ vim.api.nvim_create_user_command('GitOpenActiveFiles', function()
     '--diff-filter=AM',
   })
   for _, name in ipairs(file_paths) do
-    vim.cmd('vsplit')
-    vim.cmd('e ' .. name)
+    vim.cmd('vsplit | e ' .. name)
   end
 end, {})
 
@@ -1252,6 +1251,10 @@ set_keymap(
   '<CMD>CodeCycleCase<CR>',
   { silent = true, noremap = true }
 )
+
+require('micro_sessions').setup({
+  directory = vim.fs.joinpath(vim.fn.stdpath('data'), 'session'),
+})
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
