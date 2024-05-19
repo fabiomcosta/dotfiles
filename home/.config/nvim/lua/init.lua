@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -242,10 +242,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -660,7 +660,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-            require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1255,129 +1255,7 @@ set_keymap(
   { silent = true, noremap = true }
 )
 
-local function tbl_contains(table, element)
-  for _, value in pairs(table) do
-    if value == element then
-      return true
-    end
-  end
-  return false
-end
-
-local function get_keywords()
-  local keywords = ''
-  for _, value in pairs(vim.opt.iskeyword:get()) do
-    -- This might not be the best heuristic for this, but works for now.
-    if #value == 1 then
-      keywords = keywords .. value
-    end
-  end
-  return keywords
-end
-
--- Escapes characters to be used in lua regexes
-local function regex_escape(str)
-  return vim.fn.escape(str, '^$.*?[]~-/\\')
-end
-
-local function is_snake_case(word)
-  local keywords = regex_escape(get_keywords())
-  return string.find(word, '_')
-      and #word:gsub('[%l_' .. keywords .. ']+', '') == 0
-end
-
-local function is_upper_case(word)
-  local keywords = regex_escape(get_keywords())
-  return string.find(word, '_')
-      and #word:gsub('[%u_' .. keywords .. ']+', '') == 0
-end
-
-local function is_kebab_case(word)
-  local keywords = regex_escape(get_keywords())
-  return string.find(word, '-')
-      and #word:gsub('[%l-' .. keywords .. ']+', '') == 0
-end
-
-local function is_camel_case(word)
-  local keywords = regex_escape(get_keywords())
-  local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
-  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
-      and #word:gsub('%l+', '') > 0
-      and word_without_special_keywords:match('^%l')
-end
-
-local function is_pascal_case(word)
-  local keywords = regex_escape(get_keywords())
-  local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
-  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
-      and #word:gsub('%l+', '') > 0
-      and word_without_special_keywords:match('^%u')
-end
-
-local function to_snake_case(word)
-  -- if snake_case or UPPER_CASE
-  if string.find(word, '_') then
-    return word:lower()
-  end
-  -- if kebab-case (lower and upper)
-  if string.find(word, '-') then
-    return word:gsub('-', '_'):lower()
-  end
-  local keywords = regex_escape(get_keywords())
-  word = word:gsub('^[' .. keywords .. ']?%u', string.lower)
-  return word:gsub('(%u)', function(c)
-    return '_' .. c:lower()
-  end)
-end
-
-local function to_upper_case(word)
-  return to_snake_case(word):upper()
-end
-
-local function to_camel_case(word)
-  return to_snake_case(word):gsub('_(%l)', function(c)
-    return c:upper()
-  end)
-end
-
-local function to_kebab_case(word)
-  return to_snake_case(word):gsub('_', '-')
-end
-
-local function to_pascal_case(word)
-  local keywords = regex_escape(get_keywords())
-  return to_camel_case(word):gsub('^[' .. keywords .. ']?%l', string.upper)
-end
-
-local function cycle_case(word)
-  if is_snake_case(word) then
-    return to_upper_case(word)
-  end
-  if is_upper_case(word) then
-    return to_camel_case(word)
-  end
-
-  if is_camel_case(word) then
-    local ft_supports_kebab_case = tbl_contains(vim.opt.iskeyword:get(), '-')
-    if ft_supports_kebab_case then
-      return to_kebab_case(word)
-    else
-      return to_pascal_case(word)
-    end
-  end
-
-  if is_kebab_case(word) then
-    return to_pascal_case(word)
-  end
-  if is_pascal_case(word) then
-    return to_snake_case(word)
-  end
-end
-
-vim.api.nvim_create_user_command('CodeCycleCase', function()
-  local cursorword = vim.fn.expand('<cword>')
-  vim.cmd('normal! diwi' .. cycle_case(cursorword))
-end, {})
+require('keyword_case').setup()
 
 set_keymap(
   'n',

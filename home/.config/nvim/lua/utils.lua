@@ -91,7 +91,7 @@ local is_myles_repo_in_cwd = memoize(function(cwd)
   if is_success then
     for _, text in ipairs(stdout) do
       lower_text = string.lower(text)
-      if string.find(lower_text, "is supported") then
+      if string.find(lower_text, 'is supported') then
         is_supported = vim.split(lower_text, ':')[2]
         return vim.trim(is_supported) ~= 'false'
       end
@@ -134,6 +134,15 @@ function utils.require_if_exists(module_name, callback)
   if exists then
     callback(module)
   end
+end
+
+function utils.tbl_contains(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
 end
 
 return utils
