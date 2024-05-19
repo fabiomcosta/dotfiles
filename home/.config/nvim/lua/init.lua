@@ -48,7 +48,8 @@ vim.opt.termguicolors = true
 -- vim.opt.t_ut = nil
 
 -- only show file name on tabs
-vim.opt.tabline = '%t'
+-- vim.opt.tabline = '%t'
+vim.opt.showtabline = 0
 
 -- for the dark version
 vim.opt.background = 'dark'
@@ -381,7 +382,6 @@ require('lazy').setup({
       set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
     end,
   },
-  -- lazy.nvim
   {
     'folke/noice.nvim',
     dependencies = {
@@ -404,8 +404,7 @@ require('lazy').setup({
           bottom_search = true,         -- use a classic bottom cmdline for search
           command_palette = true,       -- position the cmdline and popupmenu together
           long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false,       -- add a border to hover docs and signature help
+          lsp_doc_border = true,        -- add a border to hover docs and signature help
         },
       })
     end,
@@ -594,7 +593,7 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       'folke/neodev.nvim',
-      'kkharji/lspsaga.nvim',
+      'nvimdev/lspsaga.nvim',
       'hrsh7th/cmp-nvim-lsp',
       'meta.nvim',
     },
@@ -645,51 +644,14 @@ require('lazy').setup({
         buf_set_keymap('n', '<LEADER>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
 
         -- lspsaga key bindings
-        buf_set_keymap(
-          'n',
-          'K',
-          '<cmd>lua require"lspsaga.hover".render_hover_doc()<CR>'
-        )
-        buf_set_keymap(
-          'n',
-          'gh',
-          '<cmd>lua require"lspsaga.provider".preview_definition()<CR>'
-        )
-        buf_set_keymap(
-          'n',
-          'gk',
-          '<cmd>lua require"lspsaga.provider".lsp_finder()<CR>'
-        )
-        buf_set_keymap(
-          'n',
-          '[d',
-          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_prev()<CR>'
-        )
-        buf_set_keymap(
-          'n',
-          ']d',
-          '<cmd>lua require"lspsaga.diagnostic".lsp_jump_diagnostic_next()<CR>'
-        )
+        buf_set_keymap('n', 'gh', '<CMD>Lspsaga peek_definition<CR>')
+        buf_set_keymap('n', 'gk', '<CMD>Lspsaga finder<CR>')
         buf_set_keymap(
           'n',
           '<LEADER>e',
-          '<cmd>lua require"lspsaga.diagnostic".show_line_diagnostics()<CR>'
+          '<CMD>Lspsaga show_line_diagnostics<CR>'
         )
-        buf_set_keymap(
-          'n',
-          '<LEADER>ca',
-          '<cmd>lua require"lspsaga.codeaction".code_action()<CR>'
-        )
-        buf_set_keymap(
-          'v',
-          '<LEADER>ca',
-          ':<C-U>lua require"lspsaga.codeaction".range_code_action()<CR>'
-        )
-        buf_set_keymap(
-          'n',
-          '<LEADER>lg',
-          '<cmd>lua require"lspsaga.floaterm".open_float_terminal("lazygit")<CR>'
-        )
+        buf_set_keymap('n', '<LEADER>ca', '<CMD>Lspsaga code_action<CR>')
       end
 
       local capabilities = require('cmp_nvim_lsp').default_capabilities(
@@ -829,14 +791,11 @@ require('lazy').setup({
   },
 
   {
-    'kkharji/lspsaga.nvim',
+    'nvimdev/lspsaga.nvim',
     config = function()
-      require('lspsaga').init_lsp_saga({
-        code_action_prompt = {
-          -- This was making the "lamp" icon show on the cursor's line all the time
-          -- for some projects.
-          enable = false,
-        },
+      require('lspsaga').setup({
+        symbol_in_winbar = { enable = true },
+        lightbulb = { enable = false },
       })
     end,
   },
