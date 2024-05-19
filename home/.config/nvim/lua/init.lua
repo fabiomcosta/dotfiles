@@ -911,23 +911,6 @@ require('lazy').setup({
     end,
   },
   {
-    'thaerkh/vim-workspace',
-    config = function()
-      vim.g.workspace_autosave = 0
-      vim.g.workspace_autocreate = 1
-      vim.g.workspace_session_disable_on_args = 1
-      -- This plugin functionality makes no sense, it's completely unrelated from its
-      -- core functionality :|
-      vim.g.workspace_autosave_untrailspaces = 0
-      vim.g.workspace_autosave_untrailtabs = 0
-
-      vim.g.workspace_session_directory =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions')
-      vim.g.workspace_undodir =
-          vim.fn.expand(vim.fn.stdpath('data') .. '/sessions/.undodir')
-    end,
-  },
-  {
     'vim-test/vim-test',
     config = function()
       vim.g['test#strategy'] = 'neovim'
