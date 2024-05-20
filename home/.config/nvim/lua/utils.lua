@@ -145,4 +145,19 @@ function utils.tbl_contains(table, element)
   return false
 end
 
+function utils.joinpath(...)
+  local args = { ... }
+  if vim.fs.joinpath ~= nil then
+    return vim.fs.joinpath(unpack(args))
+  end
+  local res = ''
+  for i, value in pairs(args) do
+    if i ~= 1 then
+      res = '/' .. res
+    end
+    res = res .. value
+  end
+  return res
+end
+
 return utils
