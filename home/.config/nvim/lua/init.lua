@@ -1113,6 +1113,9 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
     },
     enabled = IS_META_SERVER,
+    config = function()
+      require('meta')
+    end
   },
 }, { dev = { path = '~/Dev/nvim-plugins' } })
 
@@ -1133,7 +1136,6 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
     group = group,
     pattern = 'LazySync',
     callback = function()
-      require('meta')
       vim.cmd('SyncMetaLS')
     end,
   })
