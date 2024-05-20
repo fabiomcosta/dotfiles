@@ -379,6 +379,9 @@ require('lazy').setup({
     },
     event = 'VeryLazy',
     config = function()
+      require('notify').setup({
+        stages = vim.env.SSH_CLIENT ~= nil and "static" or "fade_in_slide_out",
+      })
       require('noice').setup({
         lsp = {
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
