@@ -380,7 +380,7 @@ require('lazy').setup({
     event = 'VeryLazy',
     config = function()
       require('notify').setup({
-        stages = vim.env.SSH_CLIENT ~= nil and "static" or "fade_in_slide_out",
+        stages = vim.env.SSH_CLIENT ~= nil and 'static' or 'fade_in_slide_out',
       })
       require('noice').setup({
         lsp = {
@@ -429,7 +429,7 @@ require('lazy').setup({
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.configs').setup({
         sync_install = true,
-        parser_install_dir = vim.fn.stdpath('data') .. '/site',
+        parser_install_dir = utils.joinpath(vim.fn.stdpath('data'), 'site'),
         ensure_installed = {
           'javascript',
           'typescript',
@@ -1118,7 +1118,7 @@ require('lazy').setup({
     enabled = IS_META_SERVER,
     config = function()
       require('meta')
-    end
+    end,
   },
 }, { dev = { path = '~/Dev/nvim-plugins' } })
 
