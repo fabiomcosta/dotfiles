@@ -4,6 +4,7 @@ local M = {
   default_config = {
     directory = nil,
   },
+  config = nil
 }
 
 local setup_config = function(config)
@@ -14,6 +15,13 @@ local setup_config = function(config)
     directory = { config.directory, 'string' },
   })
   M.config = config
+end
+
+local setup_directory = function()
+  local directory = M.config.directory
+  if vim.fn.isdirectory(directory) ~= 1 then
+    vim.fn.mkdir(directory, 'p')
+  end
 end
 
 -- from mini.session
@@ -107,6 +115,7 @@ return {
   write = write,
   setup = function(config)
     setup_config(config)
+    setup_directory()
     create_autocommands()
   end,
 }

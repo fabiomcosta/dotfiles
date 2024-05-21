@@ -1250,7 +1250,7 @@ set_keymap(
 )
 
 require('micro_sessions').setup({
-  directory = utils.joinpath(vim.fn.stdpath('data'), 'session'),
+  directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
 
 vim.api.nvim_create_user_command('DevReload', function(context)

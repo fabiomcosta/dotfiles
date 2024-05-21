@@ -150,14 +150,7 @@ function utils.joinpath(...)
   if vim.fs.joinpath ~= nil then
     return vim.fs.joinpath(unpack(args))
   end
-  local res = ''
-  for i, value in pairs(args) do
-    if i ~= 1 then
-      res = '/' .. res
-    end
-    res = res .. value
-  end
-  return res
+  return vim.fn.join(args, '/')
 end
 
 return utils
