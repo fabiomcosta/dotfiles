@@ -737,7 +737,7 @@ require('lazy').setup({
     end,
   },
   {
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       if not IS_META_SERVER then
@@ -1131,7 +1131,7 @@ require('lazy').setup({
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
     dependencies = {
-      'jose-elias-alvarez/null-ls.nvim',
+      'nvimtools/none-ls.nvim',
       'neovim/nvim-lspconfig',
       'nvim-treesitter/nvim-treesitter',
       'nvim-lua/plenary.nvim',
