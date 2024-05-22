@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = vim.api.nvim_set_keymap
 
@@ -156,10 +156,13 @@ vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({ 'stack' })
 
-vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+vim.opt.completeopt = { 'menu', 'popup' }
 
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
+
+vim.opt.conceallevel = 2
+vim.opt.concealcursor = 'nc'
 
 set_keymap('n', 'j', 'gj', { noremap = true })
 set_keymap('n', 'k', 'gk', { noremap = true })
@@ -237,10 +240,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -398,6 +401,12 @@ require('lazy').setup({
     end,
   },
   {
+    'j-hui/fidget.nvim',
+    config = function()
+      require('fidget').setup()
+    end,
+  },
+  {
     -- This plugin already constains 'tpope/vim-sleuth'
     'sheerun/vim-polyglot',
     init = function()
@@ -532,6 +541,7 @@ require('lazy').setup({
         sources = cmp.config.sources({
           { name = 'nvim_lsp' },
           { name = 'vsnip' },
+          { name = 'orgmode' },
         }, {
           { name = 'buffer' },
         }),
@@ -652,7 +662,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-            require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1098,14 +1108,25 @@ require('lazy').setup({
   --     end)
   --   end,
   -- },
-
   {
-    'j-hui/fidget.nvim',
+    'chipsenkbeil/org-roam.nvim',
+    tag = '0.1.0',
+    dependencies = {
+      {
+        'nvim-orgmode/orgmode',
+        tag = '0.3.4',
+      },
+    },
     config = function()
-      require('fidget').setup()
+      require('orgmode').setup({
+        org_agenda_files = '~/orgfiles/**/*',
+        org_default_notes_file = '~/orgfiles/refile.org',
+      })
+      require('org-roam').setup({
+        directory = '~/orgfiles',
+      })
     end,
   },
-
   {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
