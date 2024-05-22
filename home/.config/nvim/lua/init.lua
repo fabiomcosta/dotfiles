@@ -8,7 +8,12 @@ end)()
 local IS_ARC_ROOT = IS_META_SERVER
     and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
-local set_keymap = vim.api.nvim_set_keymap
+local set_keymap = function(mode, lhs, rhs, opts)
+  opts = vim.tbl_deep_extend('keep', opts or {}, {
+    silent = true,
+  })
+  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+end
 
 local utils = require('utils')
 
@@ -188,8 +193,8 @@ set_keymap(
   ':e ' .. initLuaFilePath .. '<CR>',
   { noremap = true }
 )
-set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', { noremap = true })
-set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', { noremap = true })
+set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', { noremap = true, silent = true })
+set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', { noremap = true, silent = true })
 
 -- changes the size of the buffer windows
 set_keymap('n', '=', '<C-w>=', { noremap = true })
@@ -199,17 +204,17 @@ set_keymap('n', '+', ':resize +5<CR>', { noremap = true })
 set_keymap('n', '-', ':resize -5<CR>', { noremap = true })
 
 -- tab related mappings
-set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true })
-set_keymap('n', '<LEADER>tp', ':tabprevious<CR>', { noremap = true })
-set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true })
+set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true, silent = true })
+set_keymap('n', '<LEADER>tp', ':tabprevious<CR>', { noremap = true, silent = true })
+set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true, silent = true })
 
 -- avoid going on ex mode
 set_keymap('n', 'Q', '<NOP>', { noremap = true })
 
 -- Keeps selection when changing indentation
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-set_keymap('x', '<', '<gv', { noremap = true })
-set_keymap('x', '>', '>gv', { noremap = true })
+set_keymap('x', '<', '<gv', { noremap = true, silent = true })
+set_keymap('x', '>', '>gv', { noremap = true, silent = true })
 
 -- Disable cursorline highlight on insert mode
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
@@ -815,27 +820,27 @@ require('lazy').setup({
             'n',
             '<LEADER>ff',
             '<cmd>Telescope myles<CR>',
-            { silent = false, noremap = true }
+            { silent = true, noremap = true }
           )
         elseif utils.is_biggrep_repo() then
           set_keymap(
             'n',
             '<LEADER>ff',
             '<cmd>Telescope biggrep f<CR>',
-            { silent = false, noremap = true }
+            { silent = true, noremap = true }
           )
         else
           set_keymap(
             'n',
             '<LEADER>ff',
             '<cmd>Telescope find_files<CR>',
-            { silent = false, noremap = true }
+            { silent = true, noremap = true }
           )
           set_keymap(
             'n',
             '<LEADER>fg',
             '<cmd>Telescope live_grep<CR>',
-            { silent = false, noremap = true }
+            { silent = true, noremap = true }
           )
         end
         if utils.is_biggrep_repo() then
@@ -843,7 +848,7 @@ require('lazy').setup({
             'n',
             '<LEADER>fg',
             '<cmd>Telescope biggrep s<CR>',
-            { silent = false, noremap = true }
+            { silent = true, noremap = true }
           )
         end
       else
@@ -851,13 +856,13 @@ require('lazy').setup({
           'n',
           '<LEADER>ff',
           '<cmd>Telescope find_files<CR>',
-          { silent = false, noremap = true }
+          { silent = true, noremap = true }
         )
         set_keymap(
           'n',
           '<LEADER>fg',
           '<cmd>Telescope live_grep<CR>',
-          { silent = false, noremap = true }
+          { silent = true, noremap = true }
         )
       end
 
@@ -865,25 +870,25 @@ require('lazy').setup({
         'n',
         '<LEADER>fh',
         '<cmd>Telescope find_files hidden=true<CR>',
-        { silent = false, noremap = true }
+        { silent = true, noremap = true }
       )
       set_keymap(
         'n',
         '<LEADER>fb',
         '<cmd>Telescope buffers<CR>',
-        { silent = false, noremap = true }
+        { silent = true, noremap = true }
       )
       set_keymap(
         'n',
         '<LEADER>fd',
         '<cmd>Telescope diagnostics<CR>',
-        { silent = false, noremap = true }
+        { silent = true, noremap = true }
       )
       set_keymap(
         'n',
         '<LEADER>gs',
         '<cmd>Telescope git_status<CR>',
-        { silent = false, noremap = true }
+        { silent = true, noremap = true }
       )
     end,
   },
