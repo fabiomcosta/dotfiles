@@ -1177,6 +1177,8 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
       vim.cmd('SyncMetaLS')
     end,
   })
+  -- this makes lazy lines and sync meta ls stuff run on their own lines
+  print('')
   require('lazy').sync()
 end, {})
 
