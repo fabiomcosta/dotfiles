@@ -179,8 +179,8 @@ set_keymap('n', '<UP>', '12k', { noremap = true })
 set_keymap('v', '<UP>', '12k', { noremap = true })
 
 set_keymap('i', 'jj', '<ESC>', { noremap = true })
-set_keymap('n', ';', ':', { noremap = true })
-set_keymap('v', ';', ':', { noremap = true })
+set_keymap('n', ';', ':', { noremap = true, silent = false })
+set_keymap('v', ';', ':', { noremap = true, silent = false })
 
 -- makes ctrl-v work on command-line and search modes
 set_keymap('c', '<C-v>', '<C-r>"', { noremap = true })
