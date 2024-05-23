@@ -161,7 +161,7 @@ vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({ 'stack' })
 
-vim.opt.completeopt = { 'menu', 'popup' }
+vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- so vim won't force pep8 on all python files
 vim.g.python_recommended_style = 0
