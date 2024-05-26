@@ -1,16 +1,17 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
+    or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = function(mode, lhs, rhs, opts)
   opts = vim.tbl_deep_extend('keep', opts or {}, {
     silent = true,
+    noremap = true,
   })
   vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
 end
@@ -169,67 +170,47 @@ vim.g.python_recommended_style = 0
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
-set_keymap('n', 'j', 'gj', { noremap = true })
-set_keymap('n', 'k', 'gk', { noremap = true })
+set_keymap('n', 'j', 'gj')
+set_keymap('n', 'k', 'gk')
 
 -- moves cursor faster
-set_keymap('n', '<DOWN>', '12j', { noremap = true })
-set_keymap('v', '<DOWN>', '12j', { noremap = true })
-set_keymap('n', '<UP>', '12k', { noremap = true })
-set_keymap('v', '<UP>', '12k', { noremap = true })
+set_keymap('n', '<DOWN>', '12j')
+set_keymap('v', '<DOWN>', '12j')
+set_keymap('n', '<UP>', '12k')
+set_keymap('v', '<UP>', '12k')
 
-set_keymap('i', 'jj', '<ESC>', { noremap = true })
-set_keymap('n', ';', ':', { noremap = true, silent = false })
-set_keymap('v', ';', ':', { noremap = true, silent = false })
+set_keymap('i', 'jj', '<ESC>')
+set_keymap('n', ';', ':', { silent = false })
+set_keymap('v', ';', ':', { silent = false })
 
 -- makes ctrl-v work on command-line and search modes
-set_keymap('c', '<C-v>', '<C-r>"', { noremap = true })
-set_keymap('s', '<C-v>', '<C-r>"', { noremap = true })
+set_keymap('c', '<C-v>', '<C-r>"')
+set_keymap('s', '<C-v>', '<C-r>"')
 
 local initLuaFilePath = debug.getinfo(1).source:sub(2)
-set_keymap(
-  'n',
-  '<LEADER>ev',
-  ':e ' .. initLuaFilePath .. '<CR>',
-  { noremap = true }
-)
-set_keymap(
-  'n',
-  '<LEADER>\\',
-  ':vsplit<CR><C-w>l',
-  { noremap = true, silent = true }
-)
-set_keymap(
-  'n',
-  '<LEADER>-',
-  ':split<CR><C-w>j',
-  { noremap = true, silent = true }
-)
+set_keymap('n', '<LEADER>ev', ':e ' .. initLuaFilePath .. '<CR>')
+set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l')
+set_keymap('n', '<LEADER>-', ':split<CR><C-w>j')
 
 -- changes the size of the buffer windows
-set_keymap('n', '=', '<C-w>=', { noremap = true })
-set_keymap('n', '<RIGHT>', ':vertical resize +5<CR>', { noremap = true })
-set_keymap('n', '<LEFT>', ':vertical resize -5<CR>', { noremap = true })
-set_keymap('n', '+', ':resize +5<CR>', { noremap = true })
-set_keymap('n', '-', ':resize -5<CR>', { noremap = true })
+set_keymap('n', '=', '<C-w>=')
+set_keymap('n', '<RIGHT>', ':vertical resize +5<CR>')
+set_keymap('n', '<LEFT>', ':vertical resize -5<CR>')
+set_keymap('n', '+', ':resize +5<CR>')
+set_keymap('n', '-', ':resize -5<CR>')
 
 -- tab related mappings
-set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true, silent = true })
-set_keymap(
-  'n',
-  '<LEADER>tp',
-  ':tabprevious<CR>',
-  { noremap = true, silent = true }
-)
-set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true, silent = true })
+set_keymap('n', '<LEADER>tc', ':tabnew<CR>')
+set_keymap('n', '<LEADER>tp', ':tabprevious<CR>')
+set_keymap('n', '<LEADER>tn', ':tabnext<CR>')
 
 -- avoid going on ex mode
-set_keymap('n', 'Q', '<NOP>', { noremap = true })
+set_keymap('n', 'Q', '<NOP>')
 
 -- Keeps selection when changing indentation
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-set_keymap('x', '<', '<gv', { noremap = true, silent = true })
-set_keymap('x', '>', '>gv', { noremap = true, silent = true })
+set_keymap('x', '<', '<gv')
+set_keymap('x', '>', '>gv')
 
 -- Disable cursorline highlight on insert mode
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
@@ -260,10 +241,10 @@ vim.filetype.add({
     php = function(_path, bufnr)
       if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -357,7 +338,7 @@ require('lazy').setup({
   {
     'tpope/vim-projectionist',
     config = function()
-      set_keymap('n', '<LEADER>a', ':A<CR>', { silent = true, noremap = true })
+      set_keymap('n', '<LEADER>a', ':A<CR>')
       local jest_alternate = {
         ['**/__tests__/*.test.js'] = {
           alternate = '{}.js',
@@ -390,7 +371,7 @@ require('lazy').setup({
         backward = '<C-b>',
         forward = '<C-n>',
       })
-      set_keymap('n', '<C-p>', '<C-w>p', { silent = true, noremap = true })
+      set_keymap('n', '<C-p>', '<C-w>p')
     end,
   },
   {
@@ -439,12 +420,7 @@ require('lazy').setup({
     'tpope/vim-vinegar',
     config = function()
       vim.g.netrw_liststyle = 3
-      set_keymap(
-        'n',
-        '<LEADER>z',
-        ':Vexplore<CR>',
-        { silent = true, noremap = true }
-      )
+      set_keymap('n', '<LEADER>z', ':Vexplore<CR>')
     end,
   },
   {
@@ -582,18 +558,8 @@ require('lazy').setup({
       'meta.nvim',
     },
     config = function()
-      set_keymap(
-        'n',
-        '[d',
-        '<cmd>lua vim.diagnostic.goto_prev()<CR>',
-        { silent = true, noremap = true }
-      )
-      set_keymap(
-        'n',
-        ']d',
-        '<cmd>lua vim.diagnostic.goto_next()<CR>',
-        { silent = true, noremap = true }
-      )
+      set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
+      set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
 
       local on_attach = function(client, bufnr)
         auto_format_on_save(client, bufnr)
@@ -681,7 +647,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-            require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -830,80 +796,25 @@ require('lazy').setup({
 
       if IS_ARC_ROOT then
         if utils.is_myles_repo() then
-          set_keymap(
-            'n',
-            '<LEADER>ff',
-            '<cmd>Telescope myles<CR>',
-            { silent = true, noremap = true }
-          )
+          set_keymap('n', '<LEADER>ff', '<cmd>Telescope myles<CR>')
         elseif utils.is_biggrep_repo() then
-          set_keymap(
-            'n',
-            '<LEADER>ff',
-            '<cmd>Telescope biggrep f<CR>',
-            { silent = true, noremap = true }
-          )
+          set_keymap('n', '<LEADER>ff', '<cmd>Telescope biggrep f<CR>')
         else
-          set_keymap(
-            'n',
-            '<LEADER>ff',
-            '<cmd>Telescope find_files<CR>',
-            { silent = true, noremap = true }
-          )
-          set_keymap(
-            'n',
-            '<LEADER>fg',
-            '<cmd>Telescope live_grep<CR>',
-            { silent = true, noremap = true }
-          )
+          set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
+          set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
         end
         if utils.is_biggrep_repo() then
-          set_keymap(
-            'n',
-            '<LEADER>fg',
-            '<cmd>Telescope biggrep s<CR>',
-            { silent = true, noremap = true }
-          )
+          set_keymap('n', '<LEADER>fg', '<cmd>Telescope biggrep s<CR>')
         end
       else
-        set_keymap(
-          'n',
-          '<LEADER>ff',
-          '<cmd>Telescope find_files<CR>',
-          { silent = true, noremap = true }
-        )
-        set_keymap(
-          'n',
-          '<LEADER>fg',
-          '<cmd>Telescope live_grep<CR>',
-          { silent = true, noremap = true }
-        )
+        set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
+        set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
       end
 
-      set_keymap(
-        'n',
-        '<LEADER>fh',
-        '<cmd>Telescope find_files hidden=true<CR>',
-        { silent = true, noremap = true }
-      )
-      set_keymap(
-        'n',
-        '<LEADER>fb',
-        '<cmd>Telescope buffers<CR>',
-        { silent = true, noremap = true }
-      )
-      set_keymap(
-        'n',
-        '<LEADER>fd',
-        '<cmd>Telescope diagnostics<CR>',
-        { silent = true, noremap = true }
-      )
-      set_keymap(
-        'n',
-        '<LEADER>gs',
-        '<cmd>Telescope git_status<CR>',
-        { silent = true, noremap = true }
-      )
+      set_keymap('n', '<LEADER>fh', '<cmd>Telescope find_files hidden=true<CR>')
+      set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
+      set_keymap('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>')
+      set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>')
     end,
   },
 
@@ -970,32 +881,27 @@ require('lazy').setup({
         'n',
         '<LEADER>tn',
         '<LEADER>tk:TestNearest<CR><C-w>p',
-        { silent = true, noremap = false }
+        { noremap = false }
       )
       set_keymap(
         'n',
         '<LEADER>tf',
         '<LEADER>tk:TestFile<CR><C-w>p',
-        { silent = true, noremap = false }
+        { noremap = false }
       )
       set_keymap(
         'n',
         '<LEADER>ts',
         '<LEADER>tk:TestSuite<CR><C-w>p',
-        { silent = true, noremap = false }
+        { noremap = false }
       )
       set_keymap(
         'n',
         '<LEADER>tl',
         '<LEADER>tk:TestLast<CR><C-w>p',
-        { silent = true, noremap = false }
+        { noremap = false }
       )
-      set_keymap(
-        'n',
-        '<LEADER>tg',
-        ':TestVisit<CR>',
-        { silent = true, noremap = false }
-      )
+      set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
     end,
   },
   {
@@ -1024,18 +930,8 @@ require('lazy').setup({
         auto_close = true,
       })
 
-      set_keymap(
-        'n',
-        '<LEADER>xw',
-        '<CMD>Trouble workspace_diagnostics<CR>',
-        { silent = true, noremap = true }
-      )
-      set_keymap(
-        'n',
-        '<LEADER>xd',
-        '<CMD>Trouble document_diagnostics<CR>',
-        { silent = true, noremap = true }
-      )
+      set_keymap('n', '<LEADER>xw', '<CMD>Trouble workspace_diagnostics<CR>')
+      set_keymap('n', '<LEADER>xd', '<CMD>Trouble document_diagnostics<CR>')
     end,
   },
   -- {
@@ -1196,37 +1092,12 @@ vim.api.nvim_create_user_command('SetupAndQuit', function()
   require('lazy').sync()
 end, {})
 
-set_keymap(
-  'n',
-  '<LEADER>W',
-  ':StripWhitespace<CR>',
-  { silent = true, noremap = true }
-)
+set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
 
-set_keymap(
-  'n',
-  '<LEADER>hg',
-  '<cmd>lua require("codehub").openURL("n")<CR>',
-  { noremap = true }
-)
-set_keymap(
-  'v',
-  '<LEADER>hg',
-  ':<C-U>lua require("codehub").openURL("v")<CR>',
-  { noremap = true }
-)
-set_keymap(
-  'n',
-  '<LEADER>hc',
-  '<cmd>lua require("codehub").copyURL("n")<CR>',
-  { noremap = true }
-)
-set_keymap(
-  'v',
-  '<LEADER>hc',
-  ':<C-U>lua require("codehub").copyURL("v")<CR>',
-  { noremap = true }
-)
+set_keymap('n', '<LEADER>hg', '<cmd>lua require("codehub").openURL("n")<CR>')
+set_keymap('v', '<LEADER>hg', ':<C-U>lua require("codehub").openURL("v")<CR>')
+set_keymap('n', '<LEADER>hc', '<cmd>lua require("codehub").copyURL("n")<CR>')
+set_keymap('v', '<LEADER>hc', ':<C-U>lua require("codehub").copyURL("v")<CR>')
 
 vim.api.nvim_create_user_command('MetaDiffCheckout', function()
   require('meta_diff').diff_picker({ checkout = true })
@@ -1235,18 +1106,8 @@ vim.api.nvim_create_user_command('MetaDiffOpenFiles', function()
   require('meta_diff').diff_picker({})
 end, {})
 
-set_keymap(
-  'n',
-  '<LEADER>mc',
-  '<CMD>MetaDiffCheckout<CR>',
-  { silent = true, noremap = true }
-)
-set_keymap(
-  'n',
-  '<LEADER>mf',
-  '<CMD>MetaDiffOpenFiles<CR>',
-  { silent = true, noremap = true }
-)
+set_keymap('n', '<LEADER>mc', '<CMD>MetaDiffCheckout<CR>')
+set_keymap('n', '<LEADER>mf', '<CMD>MetaDiffOpenFiles<CR>')
 
 -- starts terminal mode on insert mode
 -- disables line numbers on a newly opened terminal window (not really working)
@@ -1257,12 +1118,7 @@ vim.cmd([[autocmd TermOpen term://* setlocal nonumber]])
 
 require('slog').setup()
 
-set_keymap(
-  'n',
-  '<LEADER>st',
-  '<CMD>SlogToggle<CR>',
-  { silent = true, noremap = true }
-)
+set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
@@ -1284,21 +1140,12 @@ vim.api.nvim_create_user_command('GitOpenActiveFiles', function()
   end
 end, {})
 
-set_keymap(
-  'n',
-  '<LEADER>om', -- open modified [files]
-  '<CMD>GitOpenActiveFiles<CR>',
-  { silent = true, noremap = true }
-)
+-- open modified [files]
+set_keymap('n', '<LEADER>om', '<CMD>GitOpenActiveFiles<CR>')
 
 require('keyword_case').setup()
 
-set_keymap(
-  'n',
-  '<LEADER>cc',
-  '<CMD>CodeCycleCase<CR>',
-  { silent = true, noremap = true }
-)
+set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
 
 require('micro_sessions').setup({
   directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
