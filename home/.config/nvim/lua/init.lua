@@ -875,7 +875,7 @@ require('lazy').setup({
           return utils.replace_termcodes('<C-w>' .. last_window_nr .. 'c')
         end
         return ''
-      end, { silent = true, expr = true })
+      end, { expr = true })
 
       set_keymap(
         'n',
@@ -1023,6 +1023,24 @@ require('lazy').setup({
   --     end)
   --   end,
   -- },
+  {
+    'epwalsh/obsidian.nvim',
+    version = '*', -- recommended, use latest release instead of latest commit
+    dependencies = {
+      'nvim-treesitter',
+      'hrsh7th/nvim-cmp',
+      'nvim-telescope/telescope.nvim',
+      'nvim-lua/plenary.nvim',
+    },
+    opts = {
+      workspaces = {
+        {
+          name = 'main',
+          path = '~/notes/main',
+        },
+      },
+    },
+  },
   {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
