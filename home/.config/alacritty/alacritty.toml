@@ -28,10 +28,7 @@ foreground = "#f8f8f2"
 
 [font]
 size = 12.0
-
-[font.normal]
-family = "JetBrainsMono Nerd Font"
-style = "Regular"
+normal.family = "JetBrainsMono Nerd Font"
 
 [window]
 decorations = "none"

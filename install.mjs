@@ -21,7 +21,8 @@ async function main() {
   const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
 
   const hostname = (await $silent`hostname`).stdout.trim();
-  const IS_WORK_MACHINE = hostname.endsWith('facebook.com') || hostname.endsWith('fbinfra.net');
+  const IS_WORK_MACHINE =
+    hostname.endsWith('facebook.com') || hostname.endsWith('fbinfra.net');
 
   await $`git submodule update --init`;
 
@@ -46,7 +47,10 @@ async function main() {
 
   if (IS_WORK_MACHINE) {
     // We actually want to do this before `npm i` on install.sh... tricky...
-    await createSymlinkFor(home('.npmrc'), secrets('facebook-devserver/.npmrc'));
+    await createSymlinkFor(
+      home('.npmrc'),
+      secrets('facebook-devserver/.npmrc')
+    );
     await createSymlinkFor(
       home('.bashrc'),
       secrets('facebook-devserver/.bashrc')
@@ -75,7 +79,7 @@ async function main() {
 
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
-    await createHomeSymlink('.config/alacritty/alacritty.yml');
+    await createHomeSymlink('.config/alacritty/alacritty.toml');
     await createHomeSymlink('Applications/VimProtocolHandler.app');
   }
 
@@ -101,7 +105,7 @@ async function main() {
 
 main()
   .then(process.exit)
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
     process.exit(1);
   });
