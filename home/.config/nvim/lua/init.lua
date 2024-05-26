@@ -1024,34 +1024,6 @@ require('lazy').setup({
   --   end,
   -- },
   {
-    'chipsenkbeil/org-roam.nvim',
-    tag = '0.1.0',
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      {
-        'nvim-orgmode/orgmode',
-        tag = '0.3.4',
-      },
-      'akinsho/org-bullets.nvim',
-      'lukas-reineke/headlines.nvim',
-    },
-    config = function()
-      require('orgmode').setup({
-        org_agenda_files = '~/orgfiles/**/*',
-        org_default_notes_file = '~/orgfiles/refile.org',
-      })
-      require('org-bullets').setup()
-      require('headlines').setup({
-        org = {
-          fat_headlines = false,
-        },
-      })
-      require('org-roam').setup({
-        directory = '~/orgfiles',
-      })
-    end,
-  },
-  {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
     dependencies = {
