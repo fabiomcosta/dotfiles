@@ -193,8 +193,18 @@ set_keymap(
   ':e ' .. initLuaFilePath .. '<CR>',
   { noremap = true }
 )
-set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l', { noremap = true, silent = true })
-set_keymap('n', '<LEADER>-', ':split<CR><C-w>j', { noremap = true, silent = true })
+set_keymap(
+  'n',
+  '<LEADER>\\',
+  ':vsplit<CR><C-w>l',
+  { noremap = true, silent = true }
+)
+set_keymap(
+  'n',
+  '<LEADER>-',
+  ':split<CR><C-w>j',
+  { noremap = true, silent = true }
+)
 
 -- changes the size of the buffer windows
 set_keymap('n', '=', '<C-w>=', { noremap = true })
@@ -205,7 +215,12 @@ set_keymap('n', '-', ':resize -5<CR>', { noremap = true })
 
 -- tab related mappings
 set_keymap('n', '<LEADER>tc', ':tabnew<CR>', { noremap = true, silent = true })
-set_keymap('n', '<LEADER>tp', ':tabprevious<CR>', { noremap = true, silent = true })
+set_keymap(
+  'n',
+  '<LEADER>tp',
+  ':tabprevious<CR>',
+  { noremap = true, silent = true }
+)
 set_keymap('n', '<LEADER>tn', ':tabnext<CR>', { noremap = true, silent = true })
 
 -- avoid going on ex mode
@@ -318,7 +333,6 @@ require('lazy').setup({
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
 
   -- TO BE DEPRECATED ONCE 0.10 is available in all envs I work on
-  { 'editorconfig/editorconfig-vim' },
   { 'tpope/vim-commentary' },
   {
     'ojroques/nvim-osc52',
