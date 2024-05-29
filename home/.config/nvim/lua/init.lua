@@ -239,7 +239,8 @@ end)
 vim.filetype.add({
   extension = {
     php = function(_path, bufnr)
-      if vim.startswith(vim.filetype.getlines(bufnr, 1), '<?hh') then
+      local getline = vim.filetype.getline or vim.filetype._getline;
+      if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
           function(_bufnr)
             vim.opt_local.syntax = 'php'
@@ -249,7 +250,8 @@ vim.filetype.add({
       return 'php'
     end,
     -- js = function(_path, bufnr)
-    --   for _, line in ipairs(vim.filetype.getlines(bufnr, 1, 16)) do
+    --   local getlines = vim.filetype.getlines or vim.filetype._getlines;
+    --   for _, line in ipairs(getlines(bufnr, 1, 16)) do
     --     if string.find(line, '@flow') then
     --       return 'flow'
     --     end
