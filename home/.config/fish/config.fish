@@ -14,6 +14,8 @@ set SECRETS_PATH "$DOTFILES_PATH/secrets"
 
 source "$SECRETS_PATH/config.fish"
 
+set -x OPENAI_API_KEY (cat $SECRETS_PATH/chatgpt_neovim.key)
+
 # On Meta machines, a warning message is shown when running the brew command
 # and the PATH doesn't have one of the alternative paths inside it already.
 # So we have to set it before calling `brew --prefix`.
