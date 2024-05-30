@@ -4,6 +4,7 @@
     "workspace.library": [
         "/Users/fabs/.local/share/nvim/lazy/neodev.nvim/types/stable",
         "/Users/fabs/homebrew/Cellar/neovim/0.9.1/share/nvim/runtime/lua",
-        "/Users/fabs/Dev/own/dotfiles/home/.config/nvim/lua"
+        "/Users/fabs/Dev/own/dotfiles/home/.config/nvim/lua",
+        "${3rd}/luv/library"
     ]
 }

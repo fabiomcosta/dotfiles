@@ -1,12 +1,12 @@
 local IS_META_SERVER = (function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
-    or vim.endswith(hostname, '.facebook.com')
+      or vim.endswith(hostname, '.facebook.com')
 end)()
 
 -- would be nice to make this async, lazy and memoized
 local IS_ARC_ROOT = IS_META_SERVER
-  and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
 local set_keymap = function(mode, lhs, rhs, opts)
   opts = vim.tbl_deep_extend('keep', opts or {}, {
@@ -242,10 +242,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline;
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -649,7 +649,7 @@ require('lazy').setup({
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+            require('meta.lsp.extensions').get_installed_extensions()
         if installed_extensions['nuclide.prettier'] then
           table.insert(servers, 'prettier@meta')
         end
@@ -1042,6 +1042,20 @@ require('lazy').setup({
         },
       },
     },
+  },
+  {
+    'jackMort/ChatGPT.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'nvim-lua/plenary.nvim',
+      'folke/trouble.nvim',
+      'nvim-telescope/telescope.nvim',
+    },
+    config = function()
+      require('chatgpt').setup()
+    end,
+    enabled = not IS_META_SERVER,
   },
   {
     dir = '/usr/share/fb-editor-support/nvim',
