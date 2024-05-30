@@ -806,7 +806,7 @@ require('lazy').setup({
           set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
         end
         if utils.is_biggrep_repo() then
-          set_keymap('n', '<LEADER>fg', '<cmd>Telescope biggrep s<CR>')
+          set_keymap('n', '<LEADER>fg', '<cmd>Telescope biggrep s exclude=__(tests|generated)__<CR>')
         end
       else
         set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
