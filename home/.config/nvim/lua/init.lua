@@ -217,23 +217,16 @@ set_keymap('x', '>', '>gv')
 vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
 vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
 
-local function copy_to_clipboard(str)
-  vim.fn.setreg('+', str)
-  utils.require_if_exists('osc52', function(osc52)
-    osc52.copy(str)
-  end)
-end
-
 -- copies current buffer file path relative to cwd to register
 vim.keymap.set('n', 'cp', function()
   local path = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
-  copy_to_clipboard(path)
+  vim.fn.setreg('+', path)
 end)
 
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':t'))
-  copy_to_clipboard(filename)
+  vim.fn.setreg('+', filename)
 end)
 
 vim.filetype.add({
@@ -317,26 +310,8 @@ require('lazy').setup({
 
   -- TO BE DEPRECATED ONCE 0.10 is available in all envs I work on
   { 'tpope/vim-commentary' },
-  {
-    'ojroques/nvim-osc52',
-    config = function()
-      require('osc52').setup({ silent = true })
-      local function copy()
-        if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
-          require('osc52').copy_register('"')
-        end
-      end
-      vim.api.nvim_create_autocmd('TextYankPost', { callback = copy })
-    end,
-  },
   -- END DEPRECATED
 
-  {
-    'othree/eregex.vim',
-    config = function()
-      vim.g.eregex_default_enable = 0
-    end,
-  },
   {
     'tpope/vim-projectionist',
     config = function()
