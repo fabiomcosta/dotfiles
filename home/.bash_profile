@@ -73,10 +73,6 @@ tssh() {
   ssh $1 -t "source ~/.bash_profile && tmux attach -d"
 }
 
-tmosh() {
-  mosh -6 $1 -- bash -c "source ~/.bash_profile && tmux attach -d"
-}
-
 # sets bash vi mode
 set -o vi
 
