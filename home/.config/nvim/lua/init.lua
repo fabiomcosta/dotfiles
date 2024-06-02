@@ -595,7 +595,6 @@ require('lazy').setup({
     end,
   },
 
-  { 'nvim-lua/popup.nvim' },
   {
     'nvim-telescope/telescope.nvim',
     dependencies = {
