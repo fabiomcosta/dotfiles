@@ -3,6 +3,7 @@
   "repository": "https://github.com/fabiomcosta/dotfiles.git",
   "version": "0.0.1",
   "description": "My dotfiles",
+  "type": "module",
   "dependencies": {
     "prettier": "^2.5.1",
     "zx": "^1.15.2"

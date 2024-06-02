@@ -14,6 +14,7 @@ import {
 import { OK, WARN, ERROR, hl } from './src/log.mjs';
 import { commandExists, $silent } from './src/shell.mjs';
 import { dir, home, secrets, DIR } from './src/path.mjs';
+import { setupCron } from './src/cron.js';
 
 async function main() {
   const IS_MACOS = os.platform() === 'darwin';
@@ -69,7 +70,7 @@ async function main() {
   if (IS_MACOS && !IS_REMOTE_SSH) {
     const keyboardHomePath = home('.keyboard');
     if (await isSymlink(keyboardHomePath)) {
-      OK`${hl('keyboard')} already installed.`;
+      OK`${hl('keyboard')} was already installed.`;
     } else {
       await createHomeSymlink('.keyboard');
       cd(keyboardHomePath);
@@ -77,6 +78,7 @@ async function main() {
       cd(DIR);
     }
 
+    await setupCron();
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
     await createHomeSymlink('.config/alacritty/alacritty.toml');
