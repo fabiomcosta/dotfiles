@@ -10,7 +10,9 @@ local function memoize(fn, cache_key_gen)
   return function(...)
     local args = { ... }
     local cache_key = cache_key_gen(unpack(args))
-    if type(cache_key) ~= 'string' then
+    if #args == 0 and cache_key == nil then
+      cache_key = vim.NIL
+    elseif type(cache_key) ~= 'string' then
       return error('Cache key needs to be a string.')
     end
     if cache[cache_key] == vim.NIL then
@@ -161,16 +163,16 @@ function utils.set_keymap(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
 end
 
-utils.is_meta_server = function()
+utils.is_meta_server = memoize(function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
       or vim.endswith(hostname, '.facebook.com')
-end
+end)
 
-utils.is_arc_root = function()
+utils.is_arc_root = memoize(function()
   return utils.is_meta_server()
       and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
-end
+end)
 
 local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 function utils.auto_format_on_save(client, bufnr)
