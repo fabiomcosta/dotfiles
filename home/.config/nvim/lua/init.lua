@@ -8,15 +8,8 @@ end)()
 local IS_ARC_ROOT = IS_META_SERVER
     and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
 
-local set_keymap = function(mode, lhs, rhs, opts)
-  opts = vim.tbl_deep_extend('keep', opts or {}, {
-    silent = true,
-    noremap = true,
-  })
-  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-end
-
 local utils = require('utils')
+local set_keymap = utils.set_keymap
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -232,7 +225,7 @@ end)
 vim.filetype.add({
   extension = {
     php = function(_path, bufnr)
-      local getline = vim.filetype.getline or vim.filetype._getline;
+      local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
             function(_bufnr)
@@ -286,120 +279,7 @@ local auto_format_on_save = function(client, bufnr)
 end
 
 require('lazy').setup({
-  {
-    'dracula/vim',
-    name = 'dracula',
-    lazy = false,
-    priority = 1000, -- loads this before all the other start plugins
-    config = function()
-      vim.cmd([[colorscheme dracula]])
-    end,
-  },
-  { 'antoinemadec/FixCursorHold.nvim' },
-  { 'jordwalke/VimAutoMakeDirectory' },
-  { 'tpope/vim-git' },
-  { 'tpope/vim-surround' },
-  { 'tpope/vim-repeat' },
-  { 'tpope/vim-fugitive' },
-  { 'moll/vim-node' },
-  { 'christoomey/vim-tmux-navigator' },
-  { 'ntpeters/vim-better-whitespace' },
-  -- { 'jparise/vim-graphql' },
-  -- { 'godlygeek/tabular' },
-  -- { 'jeffkreeftmeijer/vim-numbertoggle' },
-
-  -- TO BE DEPRECATED ONCE 0.10 is available in all envs I work on
-  { 'tpope/vim-commentary' },
-  -- END DEPRECATED
-
-  {
-    'tpope/vim-projectionist',
-    config = function()
-      set_keymap('n', '<LEADER>a', ':A<CR>')
-      local jest_alternate = {
-        ['**/__tests__/*.test.js'] = {
-          alternate = '{}.js',
-          type = 'test',
-        },
-        ['*.js'] = {
-          alternate = '{dirname}/__tests__/{basename}.test.js',
-          type = 'source',
-        },
-      }
-      vim.g.projectionist_heuristics = {
-        ['jest.config.js|jest.config.ts'] = jest_alternate,
-        ['.arcconfig'] = vim.tbl_deep_extend('keep', {
-          ['**/__tests__/*Test.php'] = {
-            alternate = '{}.php',
-            type = 'test',
-          },
-          ['*.php'] = {
-            alternate = '{dirname}/__tests__/{basename}Test.php',
-            type = 'source',
-          },
-        }, jest_alternate),
-      }
-    end,
-  },
-  {
-    'kwkarlwang/bufjump.nvim',
-    config = function()
-      require('bufjump').setup({
-        backward = '<C-b>',
-        forward = '<C-n>',
-      })
-      set_keymap('n', '<C-p>', '<C-w>p')
-    end,
-  },
-  {
-    'folke/noice.nvim',
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'rcarriga/nvim-notify',
-    },
-    event = 'VeryLazy',
-    config = function()
-      require('notify').setup({
-        stages = vim.env.SSH_CLIENT ~= nil and 'static' or 'fade_in_slide_out',
-      })
-      require('noice').setup({
-        lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-            ['vim.lsp.util.stylize_markdown'] = true,
-            ['cmp.entry.get_documentation'] = true, -- requires hrsh7th/nvim-cmp
-          },
-        },
-        presets = {
-          lsp_doc_border = true, -- add a border to hover docs and signature help
-        },
-      })
-    end,
-  },
-  {
-    'j-hui/fidget.nvim',
-    config = function()
-      require('fidget').setup()
-    end,
-  },
-  {
-    -- This plugin already constains 'tpope/vim-sleuth'
-    'sheerun/vim-polyglot',
-    init = function()
-      vim.g.polyglot_disabled = { 'ftdetect', 'sensible' }
-    end,
-    config = function()
-      vim.g.javascript_plugin_flow = 1
-    end,
-  },
-  {
-    'tpope/vim-vinegar',
-    config = function()
-      vim.g.netrw_liststyle = 3
-      set_keymap('n', '<LEADER>z', ':Vexplore<CR>')
-    end,
-  },
+  { import = 'plugins' },
   {
     'nvim-treesitter/nvim-treesitter',
     build = function()
@@ -518,12 +398,6 @@ require('lazy').setup({
           { name = 'buffer' },
         }),
       })
-    end,
-  },
-  {
-    'folke/neodev.nvim',
-    config = function()
-      require('neodev').setup()
     end,
   },
   {
@@ -693,12 +567,6 @@ require('lazy').setup({
     end,
   },
   {
-    'williamboman/mason.nvim',
-    config = function()
-      require('mason').setup()
-    end,
-  },
-  {
     'nvimtools/none-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
@@ -781,7 +649,11 @@ require('lazy').setup({
           set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
         end
         if utils.is_biggrep_repo() then
-          set_keymap('n', '<LEADER>fg', '<cmd>Telescope biggrep s exclude=__(tests|generated)__<CR>')
+          set_keymap(
+            'n',
+            '<LEADER>fg',
+            '<cmd>Telescope biggrep s exclude=__(tests|generated)__<CR>'
+          )
         end
       else
         set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')

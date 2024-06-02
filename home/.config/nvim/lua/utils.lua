@@ -153,4 +153,12 @@ function utils.joinpath(...)
   return vim.fn.join(args, '/')
 end
 
+function utils.set_keymap(mode, lhs, rhs, opts)
+  opts = vim.tbl_deep_extend('keep', opts or {}, {
+    silent = true,
+    noremap = true,
+  })
+  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
+end
+
 return utils
