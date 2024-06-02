@@ -91,7 +91,7 @@ return {
       end,
     }))
 
-    if is_meta_server() then
+    if utils.is_meta_server() then
       table.insert(servers, 'hhvm')
 
       local installed_extensions =

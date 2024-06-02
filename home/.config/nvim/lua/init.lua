@@ -299,9 +299,6 @@ vim.cmd([[autocmd TermOpen term://* setlocal nonumber]])
 -- autocmd TermClose term://* call feedkeys("\<cr>")
 -- tnoremap <Esc> <C-\><C-n>
 
-require('slog').setup()
-
-set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
@@ -363,3 +360,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   { import = 'plugins' },
 }, { dev = { path = '~/Dev/nvim-plugins' } })
+
+require('slog').setup()
+
+set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')
