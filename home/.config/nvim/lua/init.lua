@@ -1,7 +1,6 @@
 local utils = require('utils')
 local set_keymap = utils.set_keymap
 local is_meta_server = utils.is_meta_server
-local is_arc_root = utils.is_arc_root
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -220,10 +219,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -298,7 +297,6 @@ vim.cmd([[autocmd TermOpen term://* setlocal nonumber]])
 -- close terminal buffer without showing the exit status of the shell
 -- autocmd TermClose term://* call feedkeys("\<cr>")
 -- tnoremap <Esc> <C-\><C-n>
-
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
