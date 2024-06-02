@@ -1,15 +1,7 @@
-local IS_META_SERVER = (function()
-  local hostname = vim.loop.os_gethostname()
-  return vim.endswith(hostname, '.fbinfra.net')
-      or vim.endswith(hostname, '.facebook.com')
-end)()
-
--- would be nice to make this async, lazy and memoized
-local IS_ARC_ROOT = IS_META_SERVER
-    and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
-
 local utils = require('utils')
 local set_keymap = utils.set_keymap
+local is_meta_server = utils.is_meta_server
+local is_arc_root = utils.is_arc_root
 
 -- fonts and other gui stuff
 -- make sure to install the powerline patched font
@@ -494,7 +486,7 @@ require('lazy').setup({
         end,
       }))
 
-      if IS_META_SERVER then
+      if is_meta_server() then
         table.insert(servers, 'hhvm')
 
         local installed_extensions =
@@ -570,7 +562,7 @@ require('lazy').setup({
     'nvimtools/none-ls.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
-      if not IS_META_SERVER then
+      if not is_meta_server() then
         require('null-ls').setup({
           on_attach = function(client, bufnr)
             auto_format_on_save(client, bufnr)
@@ -638,7 +630,7 @@ require('lazy').setup({
       require('telescope').setup(telescope_setup)
       require('telescope').load_extension('fzy_native')
 
-      if IS_ARC_ROOT then
+      if is_arc_root() then
         if utils.is_myles_repo() then
           set_keymap('n', '<LEADER>ff', '<cmd>Telescope myles<CR>')
         elseif utils.is_biggrep_repo() then
@@ -752,36 +744,6 @@ require('lazy').setup({
       set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
     end,
   },
-  {
-    'mattboehm/vim-accordion',
-    config = function()
-      -- This makes sure that accordion won't change the height of horizontal
-      -- windows/buffers when it calls "wincmd =", and the same for us.
-      vim.cmd([[autocmd WinNew * set winfixheight]])
-      -- TODO when autocmd is supported on lua we can try to move this to lua properly
-      vim.api.nvim_create_user_command('AccordionAutoResize', function()
-        vim.cmd(
-          [[execute ":AccordionAll " . string(floor(&columns/(&colorcolumn + 11)))]]
-        )
-      end, {})
-      vim.cmd([[autocmd VimEnter,VimResized * :AccordionAutoResize]])
-    end,
-  },
-  {
-    'folke/trouble.nvim',
-    dependencies = { 'kyazdani42/nvim-web-devicons' },
-    config = function()
-      require('trouble').setup({
-        height = 20,
-        padding = false,
-        auto_preview = false,
-        auto_close = true,
-      })
-
-      set_keymap('n', '<LEADER>xw', '<CMD>Trouble workspace_diagnostics<CR>')
-      set_keymap('n', '<LEADER>xd', '<CMD>Trouble document_diagnostics<CR>')
-    end,
-  },
   -- {
   --   'mfussenegger/nvim-dap',
   --   dependencies = { 'meta.nvim' },
@@ -872,38 +834,6 @@ require('lazy').setup({
   --   end,
   -- },
   {
-    'epwalsh/obsidian.nvim',
-    version = '*', -- recommended, use latest release instead of latest commit
-    dependencies = {
-      'nvim-treesitter',
-      'hrsh7th/nvim-cmp',
-      'nvim-telescope/telescope.nvim',
-      'nvim-lua/plenary.nvim',
-    },
-    opts = {
-      workspaces = {
-        {
-          name = 'main',
-          path = '~/notes/main',
-        },
-      },
-    },
-  },
-  {
-    'jackMort/ChatGPT.nvim',
-    event = 'VeryLazy',
-    dependencies = {
-      'MunifTanjim/nui.nvim',
-      'nvim-lua/plenary.nvim',
-      'folke/trouble.nvim',
-      'nvim-telescope/telescope.nvim',
-    },
-    config = function()
-      require('chatgpt').setup()
-    end,
-    enabled = not IS_META_SERVER,
-  },
-  {
     dir = '/usr/share/fb-editor-support/nvim',
     name = 'meta.nvim',
     dependencies = {
@@ -912,7 +842,7 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter',
       'nvim-lua/plenary.nvim',
     },
-    enabled = IS_META_SERVER,
+    enabled = is_meta_server(),
     config = function()
       require('meta')
     end,
@@ -920,7 +850,7 @@ require('lazy').setup({
 }, { dev = { path = '~/Dev/nvim-plugins' } })
 
 vim.api.nvim_create_user_command('SetupAndQuit', function()
-  if not IS_META_SERVER then
+  if not is_meta_server() then
     return
   end
 

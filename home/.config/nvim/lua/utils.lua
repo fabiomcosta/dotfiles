@@ -83,16 +83,16 @@ local is_myles_repo_in_cwd = memoize(function(cwd)
     { 'myles', '--list', '.hg' },
     { cwd = cwd }
   )
-  local is_success, stdout, exit_code, stderr = pcall(
+  local is_success, stdout = pcall(
     get_os_command_output,
     { 'myles', 'rage' },
     { cwd = cwd }
   )
   if is_success then
     for _, text in ipairs(stdout) do
-      lower_text = string.lower(text)
+      local lower_text = string.lower(text)
       if string.find(lower_text, 'is supported') then
-        is_supported = vim.split(lower_text, ':')[2]
+        local is_supported = vim.split(lower_text, ':')[2]
         return vim.trim(is_supported) ~= 'false'
       end
     end
@@ -160,5 +160,16 @@ function utils.set_keymap(mode, lhs, rhs, opts)
   })
   vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
 end
+
+utils.is_meta_server = memoize(function()
+  local hostname = vim.loop.os_gethostname()
+  return vim.endswith(hostname, '.fbinfra.net')
+      or vim.endswith(hostname, '.facebook.com')
+end)
+
+utils.is_arc_root = memoize(function()
+  return utils.is_meta_server()
+      and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+end)
 
 return utils
