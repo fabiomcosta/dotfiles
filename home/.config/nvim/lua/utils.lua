@@ -161,15 +161,30 @@ function utils.set_keymap(mode, lhs, rhs, opts)
   vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
 end
 
-utils.is_meta_server = memoize(function()
+utils.is_meta_server = function()
   local hostname = vim.loop.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
       or vim.endswith(hostname, '.facebook.com')
-end)
+end
 
-utils.is_arc_root = memoize(function()
+utils.is_arc_root = function()
   return utils.is_meta_server()
       and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
-end)
+end
+
+local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+function utils.auto_format_on_save(client, bufnr)
+  -- if client.server_capabilities.document_formatting then
+  if client.supports_method('textDocument/formatting') then
+    vim.api.nvim_clear_autocmds({ group = lsp_augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = lsp_augroup,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format({ timeout_ms = 2000 })
+      end,
+    })
+  end
+end
 
 return utils
