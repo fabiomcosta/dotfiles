@@ -17,7 +17,6 @@ return {
       local max_height = vim.o.lines - 1 - vim.o.cmdheight
 
       for window_nr = vim.fn.winnr('$'), 0, -1 do
-        local window_nr = i
         local window_width = vim.fn.winwidth(window_nr)
         local window_height = vim.fn.winheight(window_nr)
 
