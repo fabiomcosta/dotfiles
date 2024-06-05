@@ -11,7 +11,7 @@ return {
       auto_close = true,
     })
 
-    set_keymap('n', '<LEADER>xw', '<CMD>Trouble workspace_diagnostics<CR>')
-    set_keymap('n', '<LEADER>xd', '<CMD>Trouble document_diagnostics<CR>')
+    set_keymap('n', '<LEADER>xw', '<CMD>Trouble diagnostics toggle<CR>')
+    set_keymap('n', '<LEADER>xd', '<CMD>Trouble diagnostics toggle filter.buf=0<CR>')
   end,
 }
