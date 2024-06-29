@@ -1,7 +1,6 @@
 local utils = require('utils')
 
 return {
-  { 'antoinemadec/FixCursorHold.nvim' },
   { 'jordwalke/VimAutoMakeDirectory' },
   { 'tpope/vim-git' },
   { 'tpope/vim-surround' },
@@ -10,6 +9,8 @@ return {
   { 'moll/vim-node' },
   { 'christoomey/vim-tmux-navigator' },
   { 'ntpeters/vim-better-whitespace' },
+  { 'andymass/vim-matchup' },
+  { 'wellle/targets.vim' },
   -- { 'jparise/vim-graphql' },
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
@@ -18,22 +19,7 @@ return {
   { 'tpope/vim-commentary' },
   -- END DEPRECATED
 
-  { 'j-hui/fidget.nvim',              config = true },
-  { 'folke/neodev.nvim',              config = true },
-  {
-    'williamboman/mason.nvim',
-    enabled = not utils.is_meta_server(),
-    config = true,
-    build = function()
-      local packages = {
-        'prettier',
-        'stylua',
-        'eslint-lsp',
-        'typescript-language-server',
-        'lua-language-server',
-        'rust-analyzer',
-      }
-      vim.cmd(':MasonInstall ' .. vim.fn.join(packages, ' '))
-    end,
-  },
+  { 'j-hui/fidget.nvim', config = true },
+  { 'folke/neodev.nvim', config = true },
+  { 'williamboman/mason.nvim', config = true },
 }
