@@ -94,8 +94,14 @@ return {
     if utils.is_meta_server() then
       table.insert(servers, 'hhvm')
 
+      nvim_lsp.relay_lsp.setup(with_lsp_default_config({
+        cmd = { 'relay', 'lsp' },
+        root_dir = function() return utils.get_arc_root() end,
+      }))
+
       local installed_extensions =
         require('meta.lsp.extensions').get_installed_extensions()
+
       if installed_extensions['nuclide.prettier'] then
         table.insert(servers, 'prettier@meta')
       end

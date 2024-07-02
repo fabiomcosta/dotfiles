@@ -169,10 +169,25 @@ utils.is_meta_server = memoize(function()
       or vim.endswith(hostname, '.facebook.com')
 end)
 
-utils.is_arc_root = memoize(function()
-  return utils.is_meta_server()
-      and vim.fn.system({ 'arc', 'get-config', 'project_id' }) ~= ''
+
+local get_arc_root_in_cwd = memoize(function(cwd)
+  if not utils.is_meta_server() then
+    return nil
+  end
+  local stdout, exit_code, _ = get_os_command_output({ 'arc', 'projectid', '--closest', '--dir-only' }, { cwd = cwd })
+  if exit_code ~= 0 then
+    return nil
+  end
+  return stdout[1]
 end)
+
+function utils.get_arc_root()
+  return get_arc_root_in_cwd(vim.loop.cwd())
+end
+
+function utils.is_arc_root()
+  return utils.get_arc_root() ~= nil
+end
 
 local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 function utils.auto_format_on_save(client, bufnr)
