@@ -12,7 +12,7 @@ return {
 
     -- Closes the last term window according to vim's order, so either the
     -- bottom-most or if there is none on the bottom, the last to the right.
-    vim.keymap.set('n', '<LEADER>tk', function()
+    local kill_bottom_sheet = function()
       local max_width = vim.o.columns
       local max_height = vim.o.lines - 1 - vim.o.cmdheight
 
@@ -34,30 +34,48 @@ return {
         end
       end
       return ''
-    end, { expr = true })
+    end
 
+    vim.api.nvim_create_user_command(
+      'TestKillBottomSheet',
+      kill_bottom_sheet,
+      { nargs = '?' }
+    )
+
+    vim.keymap.set(
+      'n',
+      '<LEADER>tk',
+      kill_bottom_sheet,
+      { expr = true, desc = 'Kills "bottom sheet" window' }
+    )
     set_keymap(
       'n',
       '<LEADER>tn',
-      '<LEADER>tk:TestNearest<CR><C-w>p',
+      ':TestKillBottomSheet<CR>:TestNearest<CR><C-w>p',
+      { noremap = false }
+    )
+    set_keymap(
+      'n',
+      '<LEADER>tn',
+      ':TestKillBottomSheet<CR>:TestNearest<CR><C-w>p',
       { noremap = false }
     )
     set_keymap(
       'n',
       '<LEADER>tf',
-      '<LEADER>tk:TestFile<CR><C-w>p',
+      ':TestKillBottomSheet<CR>:TestFile<CR><C-w>p',
       { noremap = false }
     )
     set_keymap(
       'n',
       '<LEADER>ts',
-      '<LEADER>tk:TestSuite<CR><C-w>p',
+      ':TestKillBottomSheet<CR>:TestSuite<CR><C-w>p',
       { noremap = false }
     )
     set_keymap(
       'n',
       '<LEADER>tl',
-      '<LEADER>tk:TestLast<CR><C-w>p',
+      ':TestKillBottomSheet<CR>:TestLast<CR><C-w>p',
       { noremap = false }
     )
     set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
