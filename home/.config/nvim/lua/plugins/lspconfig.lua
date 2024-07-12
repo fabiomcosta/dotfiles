@@ -29,7 +29,6 @@ return {
       -- Use lsp find_references if its available, and fallback to a grep_string.
       if client.server_capabilities.find_references then
         buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>')
-        -- The ideal check here is to check for biggrep support somehow
       elseif utils.is_biggrep_repo() then
         -- Use Telescope biggrep with the current selection
         buf_set_keymap('n', '<LEADER>fr', "viw:'<,'>Bgs<CR>")
@@ -105,11 +104,11 @@ return {
       if installed_extensions['nuclide.prettier'] then
         table.insert(servers, 'prettier@meta')
       end
-      if installed_extensions['nuclide.eslint'] then
-        table.insert(servers, 'eslint@meta')
-      end
       if installed_extensions['nuclide.erlang'] then
         table.insert(servers, 'erlang@meta')
+      end
+      if installed_extensions['nuclide.eslint'] then
+        table.insert(servers, 'eslint@meta')
       end
       -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
       --   settings = {

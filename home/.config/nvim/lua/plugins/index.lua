@@ -1,5 +1,3 @@
-local utils = require('utils')
-
 return {
   { 'jordwalke/VimAutoMakeDirectory' },
   { 'tpope/vim-git' },

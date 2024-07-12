@@ -3,9 +3,6 @@ local set_keymap = utils.set_keymap
 local is_meta_server = utils.is_meta_server
 
 -- fonts and other gui stuff
--- make sure to install the powerline patched font
--- version of the font you like
--- https://github.com/Lokaltog/powerline-fonts
 if vim.fn.has('gui_running') > 0 then
   vim.opt.guioptions:remove('T') -- remove toolbar
   vim.opt.guioptions:remove('r') -- remove right-hand scroll bar
@@ -81,8 +78,6 @@ vim.opt.clipboard:append({ 'unnamed', 'unnamedplus' })
 vim.opt.history = 1000
 -- mark the ideal max text width
 vim.opt.colorcolumn = '80'
--- some stuff to get the mouse going in term
-vim.opt.mouse = 'a'
 -- keep going up dirs until a tags file is found
 vim.opt.tags = 'tags;/'
 
@@ -219,10 +214,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
