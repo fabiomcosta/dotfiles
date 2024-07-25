@@ -30,17 +30,11 @@ return {
             -- Sticky size/position
             vim.g['test#neovim#term_position'] = 'botright ' .. window_height
           end
-          return utils.replace_termcodes('<C-w>' .. window_nr .. 'c')
+          return '<C-w>' .. window_nr .. 'c'
         end
       end
       return ''
     end
-
-    vim.api.nvim_create_user_command(
-      'TestKillBottomSheet',
-      kill_bottom_sheet,
-      { nargs = '?' }
-    )
 
     vim.keymap.set(
       'n',
@@ -48,35 +42,37 @@ return {
       kill_bottom_sheet,
       { expr = true, desc = 'Kills "bottom sheet" window' }
     )
-    set_keymap(
+    vim.keymap.set(
       'n',
       '<LEADER>tn',
-      ':TestKillBottomSheet<CR>:TestNearest<CR><C-w>p',
-      { noremap = false }
+      function()
+        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestNearest<CR><C-w>p')
+      end,
+      { expr = true }
     )
-    set_keymap(
-      'n',
-      '<LEADER>tn',
-      ':TestKillBottomSheet<CR>:TestNearest<CR><C-w>p',
-      { noremap = false }
-    )
-    set_keymap(
+    vim.keymap.set(
       'n',
       '<LEADER>tf',
-      ':TestKillBottomSheet<CR>:TestFile<CR><C-w>p',
-      { noremap = false }
+      function()
+        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestFile<CR><C-w>p')
+      end,
+      { expr = true }
     )
-    set_keymap(
+    vim.keymap.set(
       'n',
       '<LEADER>ts',
-      ':TestKillBottomSheet<CR>:TestSuite<CR><C-w>p',
-      { noremap = false }
+      function()
+        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestSuite<CR><C-w>p')
+      end,
+      { expr = true }
     )
-    set_keymap(
+    vim.keymap.set(
       'n',
       '<LEADER>tl',
-      ':TestKillBottomSheet<CR>:TestLast<CR><C-w>p',
-      { noremap = false }
+      function()
+        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestLast<CR><C-w>p')
+      end,
+      { expr = true }
     )
     set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
   end,
