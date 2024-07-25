@@ -30,49 +30,60 @@ return {
             -- Sticky size/position
             vim.g['test#neovim#term_position'] = 'botright ' .. window_height
           end
-          return '<C-w>' .. window_nr .. 'c'
+          return vim.api.nvim_win_close(window_id, false)
         end
       end
-      return ''
+    end
+
+    local create_handler_with_preserved_focus = function(fn)
+      return function()
+        local current_window_id = vim.api.nvim_get_current_win()
+        fn()
+        vim.api.nvim_set_current_win(current_window_id)
+      end
     end
 
     vim.keymap.set(
       'n',
       '<LEADER>tk',
       kill_bottom_sheet,
-      { expr = true, desc = 'Kills "bottom sheet" window' }
+      { desc = 'Kills "bottom sheet" window' }
     )
     vim.keymap.set(
       'n',
       '<LEADER>tn',
-      function()
-        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestNearest<CR><C-w>p')
-      end,
-      { expr = true }
+      create_handler_with_preserved_focus(function()
+        kill_bottom_sheet()
+        vim.cmd('TestNearest')
+      end),
+      {}
     )
     vim.keymap.set(
       'n',
       '<LEADER>tf',
-      function()
-        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestFile<CR><C-w>p')
-      end,
-      { expr = true }
+      create_handler_with_preserved_focus(function()
+        kill_bottom_sheet()
+        vim.cmd('TestFile')
+      end),
+      {}
     )
     vim.keymap.set(
       'n',
       '<LEADER>ts',
-      function()
-        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestSuite<CR><C-w>p')
-      end,
-      { expr = true }
+      create_handler_with_preserved_focus(function()
+        kill_bottom_sheet()
+        vim.cmd('TestSuite')
+      end),
+      {}
     )
     vim.keymap.set(
       'n',
       '<LEADER>tl',
-      function()
-        return utils.replace_termcodes(kill_bottom_sheet() .. ':TestLast<CR><C-w>p')
-      end,
-      { expr = true }
+      create_handler_with_preserved_focus(function()
+        kill_bottom_sheet()
+        vim.cmd('TestLast')
+      end),
+      {}
     )
     set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
   end,
