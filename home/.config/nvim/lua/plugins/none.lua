@@ -1,23 +1,28 @@
 local utils = require('utils')
 
 return {
-  'nvimtools/none-ls.nvim',
+  -- 'nvimtools/none-ls.nvim',
+  -- I'm hopping my PR will get landed and we can get back to using the
+  -- official none-ls fork again.
+  'fabiomcosta/none-ls.nvim',
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
-    -- none-ls needs to be enabled because "meta" uses it, but we only want to
-    -- call setup localy, because mason only works localy.
-    if utils.is_meta_server() then
-      return
-    end
-
+    local meta = require('meta')
     local none = require('null-ls')
+
+    -- mason doesn't work on the meta server, so we only use black, stylua
+    -- and prettier when not on meta.
+    local sources = utils.is_meta_server() and {
+      require('arclint'),
+    } or {
+      none.builtins.formatting.black,
+      none.builtins.formatting.stylua,
+      none.builtins.formatting.prettier,
+    }
+
     none.setup({
       on_attach = utils.auto_format_on_save,
-      sources = {
-        none.builtins.formatting.black,
-        none.builtins.formatting.stylua,
-        none.builtins.formatting.prettier,
-      },
+      sources = sources,
     })
   end,
 }
