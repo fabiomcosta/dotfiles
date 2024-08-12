@@ -20,4 +20,11 @@ return {
   { 'j-hui/fidget.nvim', config = true },
   { 'folke/neodev.nvim', config = true },
   { 'williamboman/mason.nvim', config = true },
+  {
+    'ariel-frischer/bmessages.nvim',
+    opts = {
+      split_type = 'split',
+      split_direction = 'botright',
+    },
+  },
 }
