@@ -5400,7 +5400,7 @@
             "key_code" : "b"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Arc\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5419,7 +5419,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Arc\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
