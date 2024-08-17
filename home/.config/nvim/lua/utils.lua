@@ -107,15 +107,15 @@ local utils = {
 }
 
 function utils.is_hg_repo()
-  return is_hg_repo_in_cwd(vim.loop.cwd())
+  return is_hg_repo_in_cwd(vim.uv.cwd())
 end
 
 function utils.is_biggrep_repo()
-  return is_biggrep_repo_in_cwd(vim.loop.cwd())
+  return is_biggrep_repo_in_cwd(vim.uv.cwd())
 end
 
 function utils.is_myles_repo()
-  return is_myles_repo_in_cwd(vim.loop.cwd())
+  return is_myles_repo_in_cwd(vim.uv.cwd())
 end
 
 function utils.replace_termcodes(str)
@@ -164,17 +164,19 @@ function utils.set_keymap(mode, lhs, rhs, opts)
 end
 
 utils.is_meta_server = memoize(function()
-  local hostname = vim.loop.os_gethostname()
+  local hostname = vim.uv.os_gethostname()
   return vim.endswith(hostname, '.fbinfra.net')
       or vim.endswith(hostname, '.facebook.com')
 end)
-
 
 local get_arc_root_in_cwd = memoize(function(cwd)
   if not utils.is_meta_server() then
     return nil
   end
-  local stdout, exit_code, _ = get_os_command_output({ 'arc', 'projectid', '--closest', '--dir-only' }, { cwd = cwd })
+  local stdout, exit_code, _ = get_os_command_output(
+    { 'arc', 'projectid', '--closest', '--dir-only' },
+    { cwd = cwd }
+  )
   if exit_code ~= 0 then
     return nil
   end
@@ -182,7 +184,7 @@ local get_arc_root_in_cwd = memoize(function(cwd)
 end)
 
 function utils.get_arc_root()
-  return get_arc_root_in_cwd(vim.loop.cwd())
+  return get_arc_root_in_cwd(vim.uv.cwd())
 end
 
 function utils.is_arc_root()
