@@ -7,7 +7,6 @@ return {
   'fabiomcosta/none-ls.nvim',
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
-    local meta = require('meta')
     local none = require('null-ls')
 
     -- mason doesn't work on the meta server, so we only use black, stylua
