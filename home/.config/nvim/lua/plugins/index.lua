@@ -18,7 +18,6 @@ return {
   -- END DEPRECATED
 
   { 'j-hui/fidget.nvim', config = true },
-  { 'folke/neodev.nvim', config = true },
   { 'williamboman/mason.nvim', config = true },
   {
     'ariel-frischer/bmessages.nvim',

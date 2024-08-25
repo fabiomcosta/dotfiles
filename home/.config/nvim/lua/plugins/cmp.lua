@@ -9,6 +9,7 @@ return {
     'hrsh7th/cmp-vsnip',
     'hrsh7th/vim-vsnip',
     'rafamadriz/friendly-snippets',
+    'folke/lazydev.nvim',
   },
   config = function()
     local cmp = require('cmp')
@@ -33,6 +34,8 @@ return {
         documentation = cmp.config.window.bordered(),
       },
       sources = cmp.config.sources({
+        -- set group index to 0 to skip loading LuaLS completions
+        { name = 'lazydev', group_index = 0 },
         { name = 'nvim_lsp' },
         { name = 'vsnip' },
       }, {
