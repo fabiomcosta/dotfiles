@@ -17,7 +17,6 @@ return {
   { 'tpope/vim-commentary' },
   -- END DEPRECATED
 
-  { 'j-hui/fidget.nvim', config = true },
   { 'williamboman/mason.nvim', config = true },
   {
     'ariel-frischer/bmessages.nvim',
