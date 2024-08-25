@@ -4,7 +4,9 @@ import { dir } from './src/path.mjs';
 import { OK } from './src/log.mjs';
 
 if (!(await commandExists('apt-get'))) {
-  console.log('apt-get not available, and other installers are not support. Silently ignoring Linux setup...');
+  console.log(
+    'apt-get not available, and other installers are not support. Silently ignoring Linux setup...'
+  );
   process.exit(0);
 }
 
