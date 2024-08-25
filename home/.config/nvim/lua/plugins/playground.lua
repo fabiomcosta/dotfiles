@@ -1,11 +1,7 @@
 ---@diagnostic disable
 
-local function p(...)
-  print(unpack(vim.tbl_map(vim.inspect, { ... })))
-end
-
-local pa = require('plenary.async')
-local co = coroutine
+-- local pa = require('plenary.async')
+-- TODO: play with error handling
 
 -- To me https://github.com/ms-jpq/lua-async-await is THE
 -- async library that should be the standard at this point.
@@ -63,39 +59,24 @@ local co = coroutine
 
 local co = coroutine
 
---#################### UTILS ####################
-
--- Only lets this method be called once.
--- the followingi  calls ignore the wrapped function and simply return nil.
-local once = function(func)
-  local called = nil
-  return function(...)
-    if called == nil then
-      called = true
-      return func(...)
-    end
-  end
+local function p(...)
+  print(unpack(vim.tbl_map(vim.inspect, { ... })))
+  -- print(debug.traceback())
+  --   local status, error = xpcall(func, debug.traceback)
+  --   if not status then trace(error) end
 end
+
+--#################### UTILS ####################
 
 function create_callable(func, props)
   return setmetatable(props or {}, {
-    __call = function(self, ...)
-      return func(...)
-    end,
+    __call = func,
   })
-end
-
-local function identity(a1)
-  return a1
-end
-
-local function first(a1)
-  return a1[1]
 end
 
 local function is_callable(fn)
   return type(fn) == 'function'
-    or (type(fn) == 'table' and type(getmetatable(fn)['__call']) == 'function')
+    or (type(fn) == 'table' and type(getmetatable(fn).__call) == 'function')
 end
 
 local function assert_callable(func)
@@ -105,16 +86,73 @@ local function assert_callable(func)
   )
 end
 
-local function w(func, name)
-  return create_callable(func, { name = name })
-end
-
 --#################### END UTILS ####################
 
-local await = create_callable(function(defer)
+-- use with wrap
+local pong = function(func, callback)
+  local thread = co.create(func)
+  local step
+  step = function(...)
+    local stat, ret = co.resume(thread, ...)
+    assert(stat, ret)
+    if co.status(thread) == 'dead' then
+      return (callback or function() end)(ret)
+    end
+    return ret(step)
+  end
+  return step()
+end
+
+-- use with pong, creates thunk factory
+local wrap = create_callable(function(self, func)
+  return function(...)
+    local params = { ... }
+    return function(step)
+      table.insert(params, step)
+      return func(unpack(params))
+    end
+  end
+end)
+
+local thunk_factory = wrap(pong)
+local async = function(func, callback)
+  return function(...)
+    -- This check allows the async function to be the root async function,
+    -- else it would never run.
+    -- TODO this needs to improve because we need to make sure this is actually
+    -- our coroutine that is running, not any coroutine.
+    -- ^ do we really though?
+    local params = { ... }
+    local async_func = function()
+      return func(unpack(params))
+    end
+    if not co.running() then
+      return pong(async_func, callback)
+    end
+    return thunk_factory(async_func)
+  end
+end
+
+local await = create_callable(function(self, defer)
   assert_callable(defer)
   return co.yield(defer)
 end)
+
+local a = {
+  sync = async,
+  wait = await,
+  wrap = wrap,
+}
+
+--#################### START JOIN ####################
+
+local function identity(a1)
+  return a1
+end
+
+local function first(a1)
+  return a1[1]
+end
 
 local join = function(thunks, map)
   map = map or identity
@@ -144,47 +182,19 @@ await.all = function(defer, map)
   return await(join(defer, map))
 end
 
--- use with wrap
-local pong = function(func, callback)
-  local thread = co.create(func)
-  local step
-  step = function(...)
-    local stat, ret = co.resume(thread, ...)
-    assert(stat, ret)
-    if co.status(thread) == 'dead' then
-      return (callback or function() end)(ret)
-    end
-    return ret(step)
-  end
-  return step()
-end
+--#################### END JOIN ####################
 
--- use with pong, creates thunk factory
-local wrap = create_callable(function(func)
-  return function(...)
-    local params = { ... }
-    return function(step)
-      table.insert(params, step)
-      return func(unpack(params))
-    end
-  end
-end)
+--#################### START ASYNC ITER ####################
 
-local thunk_factory = wrap(pong)
-local async = function(func)
+-- Only lets this method be called once.
+-- the following calls ignore the wrapped function and simply return nil.
+local once = function(func)
+  local called = nil
   return function(...)
-    -- This check allows the async function to be the root async function,
-    -- else it would never run.
-    -- TODO this needs to improve because we need to make sure this is actually
-    -- our coroutine that is running, not any coroutine.
-    local params = { ... }
-    local async_func = function()
-      return func(unpack(params))
+    if called == nil then
+      called = true
+      return func(...)
     end
-    if not coroutine.running() then
-      return pong(async_func)
-    end
-    return thunk_factory(async_func)
   end
 end
 
@@ -192,88 +202,48 @@ end
 -- the iterator to stop.
 wrap.iter = function(func)
   local thunk_factory = wrap(func)
-  return function(...)
+  return async(function(...)
     local thunk = once(thunk_factory(...))
     return function()
       return await(thunk)
     end
-  end
+  end)
 end
 
-local a = {
-  sync = async,
-  wait = await,
-  wrap = wrap,
-}
-
-function defer_iter_cb(timeout, done)
-  -- p('PARAMS1!', timeout, done)
-  vim.defer_fn(function()
-    done(timeout)
-  end, timeout)
-  vim.defer_fn(function()
-    done(nil)
-  end, 600)
-  vim.defer_fn(function()
-    done(300)
-  end, 300)
-end
-
-function defer_iter_cb2(timeout, done)
-  -- p('PARAMS2!', timeout)
-  vim.defer_fn(function()
-    done(timeout)
-  end, timeout)
-  vim.defer_fn(function()
-    done(nil)
-  end, 600)
-  vim.defer_fn(function()
-    done(300)
-  end, 300)
-end
-
--- TODO: play with error handling
+--#################### END ASYNC ITER ####################
 
 local defer = wrap(function(timeout, done)
-  vim.defer_fn(function()
+  vim.schedule(function()
     done(timeout, 900)
-  end, timeout)
+  end)
 end)
 
-local defer_iter = wrap.iter(defer_iter_cb)
-local defer_iter2 = wrap.iter(defer_iter_cb2)
+local defer_iter = wrap.iter(function(timeout, done)
+  -- done(timeout)
+  -- done(300)
+  -- done(nil)
+  vim.schedule(function()
+    done(timeout)
+  end)
+  vim.schedule(function()
+    done(300)
+  end)
+  vim.schedule(function()
+    done(nil)
+  end)
+end)
 
--- local x = async(function(a, b, c)
---   -- p(await(defer(300)))
---   for y in defer_iter(12) do
---     p('y', y)
---     for z in defer_iter2(20) do
---       p('z', z)
---     end
---   end
---   -- p(await(defer(200)))
--- end)
-
-local x = async(function()
-  -- p(await(defer(300)))
-  for x in defer_iter2(111) do
-    p('x', x)
+async(function()
+  print('before')
+  p(await(defer(100)))
+  for y in await(defer_iter(12)) do
+    p('y', y)
+    --for x in await(defer_iter2(14)) do
+    --  p('x', x)
+    --end
   end
-  -- p(await(defer(200)))
-end)
+  p(await(defer(100)))
+  print('after')
+end)()
 
--- async(function()
---   p('before')
---   for y in defer_iter(222) do
---     p('y', y)
---     -- await(x())
---     -- for z in defer_iter(20) do
---     --   p('z', z)
---     -- end
---   end
---   -- local a, b = await.all({ defer(600), defer(300) }, first)
---   -- p(a)
---   -- p(b)
---   p('after')
--- end)()
 return {}
