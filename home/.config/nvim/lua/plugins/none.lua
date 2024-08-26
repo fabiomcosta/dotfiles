@@ -1,10 +1,7 @@
 local utils = require('utils')
 
 return {
-  -- 'nvimtools/none-ls.nvim',
-  -- I'm hopping my PR will get landed and we can get back to using the
-  -- official none-ls fork again.
-  'fabiomcosta/none-ls.nvim',
+  'nvimtools/none-ls.nvim',
   dependencies = { 'nvim-lua/plenary.nvim' },
   config = function()
     local none = require('null-ls')
