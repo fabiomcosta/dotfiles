@@ -4,6 +4,7 @@ local null_utils = require("null-ls.utils")
 local util = require("meta.util")
 
 local Job = require('plenary.job')
+local fnamemodify = vim.fn.fnamemodify
 
 function stream_stdout(opts, on_stdout, on_exit)
   opts = vim.tbl_deep_extend('force', opts or {}, {
@@ -59,7 +60,7 @@ function generator_fn(params, done)
       name = "arclint",
       description = params.err:gsub("^notice ", ""),
       severity = "advice",
-      filename = params.bufname,
+      filename = filename,
     })
   end
 
@@ -87,6 +88,14 @@ function generator_fn(params, done)
         diagnostic.line = diagnostic.line - 1
       end
       diagnostic.name = 'arclint/' .. diagnostic.name
+
+      -- There are some edge cases where the path is not actually correct, so
+      -- we try our best to fix that in a "smart" way.
+      if filename ~= diagnostic.path then
+        if fnamemodify(filename, ':t') == fnamemodify(diagnostic.path, ':t') then
+          diagnostic.path = filename
+        end
+      end
 
       done(parser({ output = { diagnostic } })[1])
     end,
