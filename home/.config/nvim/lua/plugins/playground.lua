@@ -212,38 +212,38 @@ end
 
 --#################### END ASYNC ITER ####################
 
-local defer = wrap(function(timeout, done)
-  vim.schedule(function()
-    done(timeout, 900)
-  end)
-end)
+-- local defer = wrap(function(timeout, done)
+--   vim.schedule(function()
+--     done(timeout, 900)
+--   end)
+-- end)
 
-local defer_iter = wrap.iter(function(timeout, done)
-  -- done(timeout)
-  -- done(300)
-  -- done(nil)
-  vim.schedule(function()
-    done(timeout)
-  end)
-  vim.schedule(function()
-    done(300)
-  end)
-  vim.schedule(function()
-    done(nil)
-  end)
-end)
+-- local defer_iter = wrap.iter(function(timeout, done)
+--   -- done(timeout)
+--   -- done(300)
+--   -- done(nil)
+--   vim.schedule(function()
+--     done(timeout)
+--   end)
+--   vim.schedule(function()
+--     done(300)
+--   end)
+--   vim.schedule(function()
+--     done(nil)
+--   end)
+-- end)
 
-async(function()
-  print('before')
-  p(await(defer(100)))
-  for y in await(defer_iter(12)) do
-    p('y', y)
-    --for x in await(defer_iter2(14)) do
-    --  p('x', x)
-    --end
-  end
-  p(await(defer(100)))
-  print('after')
-end)()
+--async(function()
+--  print('before')
+--  p(await(defer(100)))
+--  for y in await(defer_iter(12)) do
+--    p('y', y)
+--    --for x in await(defer_iter2(14)) do
+--    --  p('x', x)
+--    --end
+--  end
+--  p(await(defer(100)))
+--  print('after')
+--end)()
 
 return {}
