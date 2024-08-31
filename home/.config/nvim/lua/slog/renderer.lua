@@ -70,6 +70,7 @@ function renderer.start(view)
     end
 
     local last_log = logs[#logs]
+    -- groups similar logs into the same line
     if last_log ~= nil and log.title == last_log.title then
       log.count = last_log.count + 1
       logs[#logs] = log

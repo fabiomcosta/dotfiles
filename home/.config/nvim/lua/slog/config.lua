@@ -9,7 +9,19 @@ local defaults = {
   width = 50, -- width of the list when position is left or right
   fold_open = "", -- icon used for open folds
   fold_closed = "", -- icon used for closed folds
-  filters = {}, -- define log message filters
+  -- define log message filters
+  filters = {
+    -- The "level" key is used by the "toggle_filter" action
+    level = nil,
+    -- function that defines if a log entry should show or not.
+    log = function(_log)
+      return true
+    end,
+    -- function that defines if a trace entry should show or not.
+    trace = function(_trace)
+      return true
+    end
+  },
   signs = {
     mustfix = "",
     fatal = "",
@@ -42,7 +54,7 @@ local function is_fb_hostname(hostname)
 end
 
 local function get_tier()
-  local hostname = vim.loop.os_gethostname()
+  local hostname = vim.uv.os_gethostname()
   if not is_fb_hostname(hostname) then
     return nil
   end

@@ -230,7 +230,7 @@ function View:on_enter()
   self.parent = self.parent or vim.fn.win_getid(vim.fn.winnr("#"))
 
   if (not is_valid_parent_window(self.parent)) or self.parent == self.win then
-    util.debug("not valid parent")
+    util.debug('not valid parent')
     for _, win in pairs(vim.api.nvim_list_wins()) do
       if is_valid_parent_window(win) and win ~= self.win then
         self.parent = win
@@ -401,7 +401,7 @@ function View:paste()
   end
 
   -- pastry
-  local pastry_job = util.create_async_job({
+  util.create_async_job({
     cmd = { 'pastry', '--json' },
     writer = stringify.log(item.log),
     callback = function(error, result)
@@ -419,9 +419,6 @@ function View:paste()
       elseif result.type == 'data' and result.data and result.data.createdPaste and result.data.createdPaste.url then
         local url = result.data.createdPaste.url
         vim.fn.setreg('+', url)
-        if vim.api.nvim_get_commands({}).OSCYankReg then
-          vim.cmd([[silent OSCYankReg +]])
-        end
         print('Copied ' .. url .. ' to the clipboard.')
       end
     end

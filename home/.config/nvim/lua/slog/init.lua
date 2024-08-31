@@ -29,34 +29,6 @@ local function is_open()
   return view and view:is_valid()
 end
 
-function Slog.setup(opts)
-  config.setup(opts)
-  colors.setup()
-
-  vim.api.nvim_create_user_command(
-    'SlogOpen',
-    Slog.open,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    'SlogClose',
-    Slog.close,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    'SlogToggle',
-    Slog.toggle,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    'SlogClear',
-    Slog.clear,
-    {}
-  )
-
-  return Slog
-end
-
 function Slog.open()
   if is_open() then
     view:update()
@@ -120,6 +92,34 @@ function Slog.action(action)
   else
     util.error("Action '" .. action .. "' doesn't exist.")
   end
+
+  return Slog
+end
+
+function Slog.setup(opts)
+  config.setup(opts)
+  colors.setup()
+
+  vim.api.nvim_create_user_command(
+    'SlogOpen',
+    Slog.open,
+    {}
+  )
+  vim.api.nvim_create_user_command(
+    'SlogClose',
+    Slog.close,
+    {}
+  )
+  vim.api.nvim_create_user_command(
+    'SlogToggle',
+    Slog.toggle,
+    {}
+  )
+  vim.api.nvim_create_user_command(
+    'SlogClear',
+    Slog.clear,
+    {}
+  )
 
   return Slog
 end
