@@ -378,6 +378,13 @@ local TRACE_FILTER_RULES = {
 
 require('slog').setup({
   filters = {
+    log = function(log)
+      local level = log.attributes.level
+      if level == 'mustfix' or level == 'fatal' or level == 'slog' then
+        return true
+      end
+      return false
+    end,
     trace = function(trace)
       local filename = slog_util.get_relative_filename(trace.fileName)
       if TRACE_FILTER_RULES.exact[filename] ~= nil then
