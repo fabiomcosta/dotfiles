@@ -8,7 +8,7 @@
 -- * [done] create paste from current log
 -- * [done] when there are filters applied, show number of shown and total logs messages
 -- * [done] possibility of showing date using client's timezone (considering TZ's environment variable)
--- * advanced filter functionality/command
+-- * [done] advanced filter functionality/command
 -- * allow jumping to definition on some of the special base64json elements
 -- PERF
 -- * [done] improve perf when jumping to file

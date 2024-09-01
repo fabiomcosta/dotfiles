@@ -11,16 +11,12 @@ local defaults = {
   fold_closed = "", -- icon used for closed folds
   -- define log message filters
   filters = {
-    -- The "level" key is used by the "toggle_filter" action
+    -- The "level" key is used by the "toggle_filter" action, don't define it.
     level = nil,
     -- function that defines if a log entry should show or not.
-    log = function(_log)
-      return true
-    end,
+    log = nil,
     -- function that defines if a trace entry should show or not.
-    trace = function(_trace)
-      return true
-    end
+    trace = nil,
   },
   signs = {
     mustfix = "",

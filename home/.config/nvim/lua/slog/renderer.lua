@@ -102,6 +102,13 @@ local function date_adapt_to_timezone(date)
   return os.date('%X %a %b', local_ts)
 end
 
+function should_render_log(log)
+  if config.options.filters.log == nil then
+    return true
+  end
+  return config.options.filters.log(log)
+end
+
 function renderer.render_log(view, text, log)
   local line = text.lineNr + 1
 
@@ -118,6 +125,10 @@ function renderer.render_log(view, text, log)
   if config.options.filters.level
       and config.options.filters.level ~= log.attributes.level
   then
+    return
+  end
+
+  if not should_render_log(log) then
     return
   end
 
@@ -168,6 +179,13 @@ function renderer.render_log(view, text, log)
   end
 end
 
+function should_render_trace(trace)
+  if config.options.filters.trace == nil then
+    return true
+  end
+  return config.options.filters.trace(trace)
+end
+
 function renderer.render_log_details(view, text, log)
   local indent = ' │  '
 
@@ -185,28 +203,30 @@ function renderer.render_log_details(view, text, log)
   end
 
   for _, trace_item in ipairs(log.trace) do
-    view.items[text.lineNr + 1] = trace_item
+    if should_render_trace(trace_item) then
+      view.items[text.lineNr + 1] = trace_item
 
-    text:render(indent, 'Indent')
+      text:render(indent, 'Indent')
 
-    local function_name = stringify.function_name(trace_item.functionName)
-    text:render(function_name, 'Text', ' ')
+      local function_name = stringify.function_name(trace_item.functionName)
+      text:render(function_name, 'Text', ' ')
 
-    local file_location = stringify.file(trace_item)
-    if file_location ~= nil then
-      text:render(file_location, 'Location', ' ')
+      local file_location = stringify.file(trace_item)
+      if file_location ~= nil then
+        text:render(file_location, 'Location', ' ')
+      end
+
+      local metadata = stringify.metadata(trace_item)
+      if metadata ~= nil then
+        metadata = 'with metadata' .. metadata
+        text:render(metadata, 'Metadata')
+      end
+
+      trace_item.text =
+      vim.fn.join({ function_name, file_location, metadata }, ' ')
+
+      text:nl()
     end
-
-    local metadata = stringify.metadata(trace_item)
-    if metadata ~= nil then
-      metadata = 'with metadata' .. metadata
-      text:render(metadata, 'Metadata')
-    end
-
-    trace_item.text =
-    vim.fn.join({ function_name, file_location, metadata }, ' ')
-
-    text:nl()
   end
 end
 

@@ -35,11 +35,7 @@ function stringify.file(trace_item)
   end
 
   -- trying to create a relative path, which will be less characters to show
-  local cwd = vim.fn.getcwd()
-  local _, last_index = string.find(filename, cwd)
-  if last_index ~= nil then
-    filename = string.sub(filename, last_index + 2)
-  end
+  filename = util.get_relative_filename(filename)
   return filename .. ':' .. trace_item.fileLine
 end
 

@@ -1,4 +1,3 @@
-local config = require('slog.config')
 local Job = require('plenary.job')
 
 local M = {}
@@ -51,6 +50,7 @@ function M.error(msg)
 end
 
 function M.debug(msg)
+  local config = require('slog.config')
   if config.options.debug then
     vim.notify(msg, vim.log.levels.DEBUG, { title = "slog" })
   end
@@ -81,6 +81,15 @@ end
 
 function M.date_offset(ts)
   return round((os.time() - ts) / (60 * 60))
+end
+
+function M.get_relative_filename(filename)
+  local cwd = vim.fn.getcwd()
+  local _, last_index = string.find(filename, cwd)
+  if last_index ~= nil then
+    filename = string.sub(filename, last_index + 2)
+  end
+  return filename
 end
 
 return M

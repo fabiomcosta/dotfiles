@@ -354,6 +354,48 @@ require('lazy').setup({
   { import = 'plugins' },
 }, { dev = { path = '~/Dev/nvim-plugins' } })
 
-require('slog').setup()
+local slog_util = require('slog.util')
+
+-- These are known core modules that ppl would likely want to keep hidden
+-- to avoid having them polute the trace while debugging.
+local TRACE_FILTER_RULES = {
+  exact = {
+    ['www/unknown'] = 1,
+    ['flib/init/zeusgodofthunder/__entrypoint.php'] = 1,
+    ['flib/init/routing/ZeusGodOfThunderAlite.php'] = 1,
+    ['flib/core/asio/Asio.php'] = 1,
+    ['flib/core/runtime/error/debug_rlog.php'] = 1,
+    ['flib/core/logger/logger.php'] = 1,
+    ['flib/core/shutdown/PSP.php'] = 1,
+  },
+  startswith = {
+    'flib/purpose/cipp/',
+    'flib/profiling/'
+  },
+  endswith = {
+  },
+}
+
+require('slog').setup({
+  filters = {
+    trace = function(trace)
+      local filename = slog_util.get_relative_filename(trace.fileName)
+      if TRACE_FILTER_RULES.exact[filename] ~= nil then
+        return false
+      end
+      if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
+        return vim.startswith(filename, prefix)
+      end, { predicate = true }) then
+        return false
+      end
+      if vim.tbl_contains(TRACE_FILTER_RULES.endswith, function (sufix)
+        return vim.endswith(filename, sufix)
+      end, { predicate = true }) then
+        return false
+      end
+      return true
+    end
+  }
+})
 
 set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')
