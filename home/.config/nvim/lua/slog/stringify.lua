@@ -12,7 +12,11 @@ end
 stringify.function_name = util.memoize(function(function_name)
   return string.gsub(function_name, 'base64json::<(.-)>', function(base64json)
     local json_str = b64.decode(base64json)
-    local json = vim.json.decode(json_str)
+    local ok, json = pcall(vim.json.decode, json_str)
+    if not ok then
+      util.debug([[Couldn't decode ]] .. json_str .. [[ as json.]])
+      return json_str
+    end
     if type(json) == 'string' then
       return '"' .. json .. '"'
     elseif type(json) == 'table' then
