@@ -19,9 +19,9 @@ local defaults = {
     trace = nil,
   },
   signs = {
-    mustfix = "",
-    fatal = "",
-    warning = "",
+    mustfix = "󱎘",
+    fatal = "󱎘",
+    warning = "",
     info = "",
     slog = " ",
     count = " ",
