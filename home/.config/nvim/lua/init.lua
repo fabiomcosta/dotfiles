@@ -363,14 +363,14 @@ local TRACE_FILTER_RULES = {
     ['www/unknown'] = 1,
     ['flib/init/zeusgodofthunder/__entrypoint.php'] = 1,
     ['flib/init/routing/ZeusGodOfThunderAlite.php'] = 1,
-    ['flib/core/asio/Asio.php'] = 1,
     ['flib/core/runtime/error/debug_rlog.php'] = 1,
     ['flib/core/logger/logger.php'] = 1,
     ['flib/core/shutdown/PSP.php'] = 1,
   },
   startswith = {
     'flib/purpose/cipp/',
-    'flib/profiling/'
+    'flib/profiling/',
+    'flib/core/asio/'
   },
   endswith = {
   },
