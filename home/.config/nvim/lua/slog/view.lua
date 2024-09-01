@@ -117,18 +117,10 @@ function View:setup()
   self:set_option("buflisted", false)
   self:set_option("filetype", "slog")
 
-  for action, keys in pairs(config.options.action_keys) do
-    if type(keys) == "string" then
-      keys = { keys }
-    end
-    for _, key in pairs(keys) do
-      vim.api.nvim_buf_set_keymap(self.buf, "n", key, [[<CMD>lua require("slog").action("]] .. action .. [[")<CR>]],
-        {
-          silent = true,
-          noremap = true,
-          nowait = true,
-        })
-    end
+  for key, action in pairs(config.options.keys) do
+    vim.keymap.set('n', key, function()
+      require('slog').action(action)
+    end, { buffer = self.buf, silent = true })
   end
 
   if config.options.position == "top" or config.options.position == "bottom" then

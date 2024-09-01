@@ -27,19 +27,20 @@ local defaults = {
     count = " ",
     none = " ",
   },
-  action_keys = { -- key mappings for actions in the trouble list
-    close = "q", -- close the list
-    cancel = "<esc>", -- cancel the preview and get back to your last window / buffer / cursor
-    jump = { "<cr>", "<tab>" }, -- toggle fold or jump to the file
-    open_split = "<c-x>", -- open buffer in new split
-    open_vsplit = "<c-v>", -- open buffer in new vsplit
-    open_tab = "<c-t>", -- open buffer in new tab
-    jump_close = "o", -- jump to the file and close the list
-    preview = "p", -- preview the file's location
-    toggle_filter = "f", -- filter messages by the level of the log under the cursor
-    hover = "K", -- shows complete text on a popup
-    paste = "P", -- creates a paste containing the current trace (uses `pastry`)
-    clear = "c", -- clears the list of logs
+  keys = { -- key mappings for actions in the trouble list
+    q = 'close', -- close the list
+    ['<esc>'] = 'cancel', -- cancel the preview and get back to your last window / buffer / cursor
+    ['<cr>'] = 'jump', -- toggle fold or jump to the file
+    ['<tab>'] = 'jump', -- toggle fold or jump to the file
+    ['<c-x>'] = 'open_split', -- open buffer in new split
+    ['<c-v>'] = 'open_vsplit', -- open buffer in new vsplit
+    ['<c-t>'] = 'open_tab', -- open buffer in new tab
+    o = 'jump_close', -- jump to the file and close the list
+    p = 'preview', -- preview the file's location
+    f = 'toggle_filter', -- filter messages by the level of the log under the cursor
+    K = 'hover', -- shows complete text on a popup
+    P = 'paste', -- creates a paste containing the current trace (uses `pastry`)
+    c = 'clear', -- clears the list of logs
   },
 }
 
