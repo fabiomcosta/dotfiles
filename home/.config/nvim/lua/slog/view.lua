@@ -10,10 +10,6 @@ local FloatWin = require('slog.float_win')
 local View = {}
 View.__index = View
 
--- keep track of buffers with added highlights
--- highlights are cleared on BufLeave of Trouble
-local hl_bufs = {}
-
 local function clear_hl(bufnr)
   if vim.api.nvim_buf_is_valid(bufnr) then
     vim.api.nvim_buf_clear_namespace(bufnr, config.namespace, 0, -1)
@@ -31,19 +27,21 @@ end
 
 local function wipe_rogue_buffer(buf_name)
   local bn = find_rogue_buffer(buf_name)
-  if bn then
-    local win_ids = vim.fn.win_findbuf(bn)
-    for _, id in ipairs(win_ids) do
-      if vim.fn.win_gettype(id) ~= "autocmd" and vim.api.nvim_win_is_valid(id) then
-        vim.api.nvim_win_close(id, true)
-      end
-    end
-
-    vim.api.nvim_buf_set_name(bn, "")
-    vim.schedule(function()
-      pcall(vim.api.nvim_buf_delete, bn, {})
-    end)
+  if not bn then
+    return
   end
+
+  local win_ids = vim.fn.win_findbuf(bn)
+  for _, id in ipairs(win_ids) do
+    if vim.fn.win_gettype(id) ~= "autocmd" and vim.api.nvim_win_is_valid(id) then
+      vim.api.nvim_win_close(id, true)
+    end
+  end
+
+  vim.api.nvim_buf_set_name(bn, "")
+  vim.schedule(function()
+    pcall(vim.api.nvim_buf_delete, bn, {})
+  end)
 end
 
 local function is_float(win)
@@ -242,12 +240,6 @@ function View:on_enter()
 end
 
 function View:on_leave()
-  -- Clear preview highlights
-  for buf, _ in pairs(hl_bufs) do
-    clear_hl(buf)
-  end
-  hl_bufs = {}
-
   -- Reset parent state
   local valid_win = vim.api.nvim_win_is_valid(self.parent)
   local valid_buf = self.parent_state and vim.api.nvim_buf_is_valid(self.parent_state.buf)
