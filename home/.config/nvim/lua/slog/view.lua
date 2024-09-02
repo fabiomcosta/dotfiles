@@ -20,17 +20,17 @@ local function clear_hl(bufnr)
   end
 end
 
-local function find_rogue_buffer()
+local function find_rogue_buffer(buf_name)
   for _, v in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.fn.bufname(v) == "slog for " .. config.options.tier then
+    if vim.fn.bufname(v) == buf_namer then
       return v
     end
   end
   return nil
 end
 
-local function wipe_rogue_buffer()
-  local bn = find_rogue_buffer()
+local function wipe_rogue_buffer(buf_name)
+  local bn = find_rogue_buffer(buf_name)
   if bn then
     local win_ids = vim.fn.win_findbuf(bn)
     for _, id in ipairs(win_ids) do
@@ -98,7 +98,7 @@ function View:setup()
   local tier = config.options.tier
   local buf_name = tier and 'slog for ' .. tier or 'slog'
   if not pcall(vim.api.nvim_buf_set_name, self.buf, buf_name) then
-    wipe_rogue_buffer()
+    wipe_rogue_buffer(buf_name)
     vim.api.nvim_buf_set_name(self.buf, buf_name)
   end
   self:set_win_option("wrap", false)
