@@ -18,24 +18,31 @@ end
 
 local function find_rogue_buffer(buf_name)
   for _, v in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.fn.bufname(v) == buf_namer then
+    if vim.fn.bufname(v) == buf_name then
       return v
     end
   end
   return nil
 end
 
+local function find_win_from_buf(bufnr)
+  local win_ids = vim.fn.win_findbuf(bufnr)
+  for _, id in ipairs(win_ids) do
+    if vim.fn.win_gettype(id) ~= "autocmd" and vim.api.nvim_win_is_valid(id) then
+      return id
+    end
+  end
+end
+
 local function wipe_rogue_buffer(buf_name)
   local bn = find_rogue_buffer(buf_name)
-  if not bn then
+  if bn == nil then
     return
   end
 
-  local win_ids = vim.fn.win_findbuf(bn)
-  for _, id in ipairs(win_ids) do
-    if vim.fn.win_gettype(id) ~= "autocmd" and vim.api.nvim_win_is_valid(id) then
-      vim.api.nvim_win_close(id, true)
-    end
+  local win_id = find_win_from_buf(bn)
+  if win_id ~= nil then
+    vim.api.nvim_win_close(win_id, true)
   end
 
   vim.api.nvim_buf_set_name(bn, "")
@@ -69,20 +76,39 @@ local function switch_to_win(win)
   vim.api.nvim_set_current_win(win)
 end
 
+local function get_buf_name()
+  local tier = config.options.tier
+  return tier and 'slog for ' .. tier or 'slog'
+end
+
 function View.create()
   vim.cmd("below new")
   local pos = { bottom = "J", top = "K", left = "H", right = "L" }
   vim.cmd("wincmd " .. (pos[config.options.position] or "K"))
-  local view = View:new()
+  local view = View:new(vim.api.nvim_get_current_buf(), vim.api.nvim_get_current_win())
   view:setup()
   view:switch_to_parent()
   return view
 end
 
-function View:new()
+function View.attempt_attach()
+  local buf = find_rogue_buffer(get_buf_name())
+  if buf == nil then
+    return
+  end
+  local win = find_win_from_buf(buf)
+  if win == nil then
+    return
+  end
+  local view = View:new(buf, win)
+  view:setup()
+  return view
+end
+
+function View:new(buf, win)
   local this = {
-    buf = vim.api.nvim_get_current_buf(),
-    win = vim.api.nvim_get_current_win(),
+    buf = buf,
+    win = win,
     items = {},
   }
   setmetatable(this, self)
@@ -93,8 +119,7 @@ function View:setup()
   util.debug("setup")
   vim.cmd("setlocal nonu")
   vim.cmd("setlocal nornu")
-  local tier = config.options.tier
-  local buf_name = tier and 'slog for ' .. tier or 'slog'
+  local buf_name = get_buf_name()
   if not pcall(vim.api.nvim_buf_set_name, self.buf, buf_name) then
     wipe_rogue_buffer(buf_name)
     vim.api.nvim_buf_set_name(self.buf, buf_name)

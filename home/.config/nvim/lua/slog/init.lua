@@ -121,6 +121,13 @@ function Slog.setup(opts)
     {}
   )
 
+  vim.api.nvim_create_autocmd('VimEnter', {
+    once = true,
+    callback = function()
+      view = View.attempt_attach()
+    end,
+  })
+
   return Slog
 end
 
