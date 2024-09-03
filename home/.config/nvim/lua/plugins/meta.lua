@@ -1,4 +1,6 @@
-local is_meta_server = require('utils').is_meta_server
+local utils = require('utils')
+local set_keymap = utils.set_keymap
+local is_meta_server = utils.is_meta_server
 
 return {
   dir = '/usr/share/fb-editor-support/nvim',
@@ -12,5 +14,55 @@ return {
   enabled = is_meta_server(),
   config = function()
     require('meta')
+
+    -- These are known core modules that ppl would likely want to keep hidden
+    -- to avoid having them polute the trace while debugging.
+    local TRACE_FILTER_RULES = {
+      exact = {
+        ['www/unknown'] = 1,
+        ['flib/init/zeusgodofthunder/__entrypoint.php'] = 1,
+        ['flib/init/routing/ZeusGodOfThunderAlite.php'] = 1,
+        ['flib/core/runtime/error/debug_rlog.php'] = 1,
+        ['flib/core/logger/logger.php'] = 1,
+        ['flib/core/shutdown/PSP.php'] = 1,
+      },
+      startswith = {
+        'flib/purpose/cipp/',
+        'flib/profiling/',
+        'flib/core/asio/'
+      },
+      endswith = {
+      },
+    }
+    require('meta.slog').setup({
+      filters = {
+        log = function(log)
+          local level = log.attributes.level
+          if level == 'mustfix' or level == 'fatal' or level == 'slog' then
+            return true
+          end
+          return false
+        end,
+        trace = function(trace)
+          local filename = require('meta.slog.util').get_relative_filename(trace.fileName)
+          if TRACE_FILTER_RULES.exact[filename] ~= nil then
+            return false
+          end
+          if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
+            return vim.startswith(filename, prefix)
+          end, { predicate = true }) then
+            return false
+          end
+          if vim.tbl_contains(TRACE_FILTER_RULES.endswith, function (sufix)
+            return vim.endswith(filename, sufix)
+          end, { predicate = true }) then
+            return false
+          end
+          return true
+        end
+      }
+    })
+
+    set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')
   end,
 }

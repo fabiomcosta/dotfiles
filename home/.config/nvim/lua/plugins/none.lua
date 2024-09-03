@@ -20,7 +20,7 @@ end
 
 return {
   'nvimtools/none-ls.nvim',
-  dependencies = { 'nvim-lua/plenary.nvim' },
+  dependencies = { 'meta.nvim', 'nvim-lua/plenary.nvim' },
   config = function()
     local none = require('null-ls')
     none.setup({
