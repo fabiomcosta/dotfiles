@@ -31,10 +31,15 @@ return {
         'flib/profiling/',
         'flib/core/asio/'
       },
-      endswith = {
-      },
     }
-    require('meta.slog').setup({
+
+    local slog = pcall(require, 'meta.slog')
+    slog = slog or require('slog')
+
+    local slog_util = pcall(require, 'meta.slog.util')
+    slog_util = slog_util or require('slog.util')
+
+    require('slog').setup({
       filters = {
         log = function(log)
           local level = log.attributes.level
@@ -44,17 +49,12 @@ return {
           return false
         end,
         trace = function(trace)
-          local filename = require('meta.slog.util').get_relative_filename(trace.fileName)
+          local filename = slog_util.get_relative_filename(trace.fileName)
           if TRACE_FILTER_RULES.exact[filename] ~= nil then
             return false
           end
           if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
             return vim.startswith(filename, prefix)
-          end, { predicate = true }) then
-            return false
-          end
-          if vim.tbl_contains(TRACE_FILTER_RULES.endswith, function (sufix)
-            return vim.endswith(filename, sufix)
           end, { predicate = true }) then
             return false
           end
