@@ -1,8 +1,9 @@
-local utils = require('utils')
-
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    -- It is dap_repl needs nvim-dap-repl-highlights to be setup before it can
+    -- be installed.
+    dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     build = function()
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.install').update({ with_sync = true })()
@@ -11,7 +12,7 @@ return {
       require('nvim-treesitter.install').prefer_git = true
       require('nvim-treesitter.configs').setup({
         sync_install = true,
-        parser_install_dir = utils.joinpath(vim.fn.stdpath('data'), 'site'),
+        parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
         ensure_installed = {
           'javascript',
           'typescript',
@@ -32,6 +33,7 @@ return {
           'regex',
           'markdown',
           'markdown_inline',
+          'dap_repl',
         },
         highlight = {
           enable = true,

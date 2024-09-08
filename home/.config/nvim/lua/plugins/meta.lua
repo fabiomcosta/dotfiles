@@ -10,10 +10,11 @@ return {
     'neovim/nvim-lspconfig',
     'nvim-treesitter/nvim-treesitter',
     'nvim-lua/plenary.nvim',
+    'mfussenegger/nvim-dap',
   },
   enabled = is_meta_server(),
   config = function()
-    require('meta')
+    require('meta').setup()
 
     -- These are known core modules that ppl would likely want to keep hidden
     -- to avoid having them polute the trace while debugging.
@@ -33,13 +34,13 @@ return {
       },
     }
 
-    local slog = pcall(require, 'meta.slog')
+    local _, slog = pcall(require, 'meta.slog')
     slog = slog or require('slog')
 
-    local slog_util = pcall(require, 'meta.slog.util')
+    local _0, slog_util = pcall(require, 'meta.slog.util')
     slog_util = slog_util or require('slog.util')
 
-    require('slog').setup({
+    slog.setup({
       filters = {
         log = function(log)
           local level = log.attributes.level
