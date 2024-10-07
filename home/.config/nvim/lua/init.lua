@@ -204,7 +204,7 @@ end)
 
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
-  local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':t'))
+  local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
