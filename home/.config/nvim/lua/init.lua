@@ -316,13 +316,18 @@ end, {})
 -- open modified [files]
 set_keymap('n', '<LEADER>om', '<CMD>GitOpenActiveFiles<CR>')
 
+
 require('keyword_case').setup()
 
 set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
 
+
+vim.opt.sessionoptions:remove('blank')
+vim.opt.sessionoptions:remove('buffers')
 require('micro_sessions').setup({
   directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
+
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
