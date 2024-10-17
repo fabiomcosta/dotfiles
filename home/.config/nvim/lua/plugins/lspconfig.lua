@@ -95,11 +95,13 @@ return {
 
       nvim_lsp.relay_lsp.setup(with_lsp_default_config({
         cmd = { 'relay', 'lsp' },
-        root_dir = function() return utils.get_arc_root() end,
+        root_dir = function()
+          return utils.get_arc_root()
+        end,
       }))
 
       local installed_extensions =
-        require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.prettier'] then
         table.insert(servers, 'prettier@meta')
@@ -138,7 +140,7 @@ return {
       -- }))
     else
       table.insert(servers, 'pylsp')
-      nvim_lsp.tsserver.setup(with_lsp_default_config({
+      nvim_lsp.ts_ls.setup(with_lsp_default_config({
         filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
       }))
       nvim_lsp.eslint.setup(with_lsp_default_config({
