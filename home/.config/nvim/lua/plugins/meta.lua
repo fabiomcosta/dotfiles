@@ -4,6 +4,7 @@ local is_meta_server = utils.is_meta_server
 
 return {
   dir = '/usr/share/fb-editor-support/nvim',
+  -- dir = '~/fbsource/fbcode/editor_support/nvim',
   name = 'meta.nvim',
   dependencies = {
     'nvimtools/none-ls.nvim',
