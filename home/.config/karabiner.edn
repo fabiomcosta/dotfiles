@@ -349,19 +349,19 @@
     {:des "numbers mode"
       :rules [:numbers_mode
         ; numbers row
-        [:##q :1]
-        [:!Sq :1]
-        [:!Rq :1]
+        ; [:##q :1]
+        ; [:!Sq :1]
+        ; [:!Rq :1]
 
-        [:##w :2]
-        [:##e :3]
-        [:##r :4]
-        [:##t :5]
-        [:##y :6]
+        ; [:##w :2]
+        ; [:##e :3]
+        ; [:##r :4]
+        ; [:##t :5]
+        ; [:##y :6]
         [:##u :7]
         [:##i :8]
         [:##o :9]
-        [:##p :0]
+        ; [:##p :0]
         ; numbers pad-like style, trying to see if this sticks.
         [:##m :1]
         [:##comma :2]
@@ -384,7 +384,7 @@
         ; [:a :mission_control]
         [:s :rewind]
         [:d :play_or_pause]
-        [:f :fastforward]
+        [:f :fast_forward]
         [:x :mute]
         [:c :volume_decrement]
         [:v :volume_increment]

@@ -4,7 +4,7 @@ return {
     dependencies = {
       'mfussenegger/nvim-dap',
     },
-    config = true
+    config = true,
   },
   {
     'LiadOz/nvim-dap-repl-highlights',
