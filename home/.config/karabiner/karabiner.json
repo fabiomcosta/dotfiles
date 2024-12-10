@@ -6398,7 +6398,7 @@
             }
           },
           "to" : [ {
-            "shell_command" : "pmset displaysleepnow"
+            "shell_command" : "sleep 1 && pmset sleepnow"
           } ],
           "type" : "basic"
         } ]

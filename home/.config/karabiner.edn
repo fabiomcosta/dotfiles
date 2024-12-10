@@ -51,7 +51,7 @@
     :hsl "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
     :external_display_brightness_decrement "~/bin/m1ddc chg luminance -20"
     :external_display_brightness_increment "~/bin/m1ddc chg luminance +20"
-    :display_sleep "pmset displaysleepnow"
+    :display_sleep "sleep 1 && pmset sleepnow"
   }
 
   :simlayer-threshold 210
