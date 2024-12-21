@@ -2784,7 +2784,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^org\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$", "^com\\.raphaelamorim\\.rio$", "^com\\.mitchellh\\.ghostty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2806,7 +2806,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^org\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$", "^com\\.raphaelamorim\\.rio$", "^com\\.mitchellh\\.ghostty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2825,7 +2825,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^org\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$", "^com\\.raphaelamorim\\.rio$", "^com\\.mitchellh\\.ghostty$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2844,7 +2844,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^org\\.alacritty$" ]
+            "bundle_identifiers" : [ "^org\\.alacritty$", "^com\\.raphaelamorim\\.rio$", "^com\\.mitchellh\\.ghostty$" ]
           } ],
           "type" : "basic"
         } ]

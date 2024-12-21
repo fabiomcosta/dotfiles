@@ -44,7 +44,7 @@
     :browser ["^com\\.google\\.Chrome$" "^com\\.google\\.Chrome\\.canary$" "^company\\.thebrowser\\.Browser$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
     :workplace_chat ["^workplace-desktop$"]
-    :terminal ["^org\\.alacritty$"]
+    :terminal ["^org\\.alacritty$" "^com\\.raphaelamorim\\.rio$" "^com\\.mitchellh\\.ghostty$"]
   }
 
   :templates {
