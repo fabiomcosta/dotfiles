@@ -1,3 +1,13 @@
+local utils = require('utils')
+
+function setup_proxy()
+  if utils.is_meta_server() then
+    require('nvim-treesitter.install').command_extra_args = {
+      curl = { '--proxy', 'http://fwdproxy:8080' },
+    }
+  end
+end
+
 return {
   {
     'nvim-treesitter/nvim-treesitter',
@@ -5,9 +15,7 @@ return {
     -- be installed.
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     config = function()
-      require('nvim-treesitter.install').command_extra_args = {
-        curl = { '--proxy', 'http://fwdproxy:8080' },
-      }
+      setup_proxy()
       require('nvim-treesitter.configs').setup({
         sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
@@ -56,9 +64,7 @@ return {
       })
     end,
     build = function()
-      require('nvim-treesitter.install').command_extra_args = {
-        curl = { '--proxy', 'http://fwdproxy:8080' },
-      }
+      setup_proxy()
       require('nvim-treesitter.install').update({ with_sync = true })()
     end,
   },
