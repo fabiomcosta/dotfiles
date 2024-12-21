@@ -1,6 +1,6 @@
 local utils = require('utils')
 
-function setup_proxy()
+local function setup_proxy()
   if utils.is_meta_server() then
     require('nvim-treesitter.install').command_extra_args = {
       curl = { '--proxy', 'http://fwdproxy:8080' },
