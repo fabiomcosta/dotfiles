@@ -4,9 +4,8 @@ local set_keymap = utils.set_keymap
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    'folke/neodev.nvim',
     'nvimdev/lspsaga.nvim',
-    'hrsh7th/cmp-nvim-lsp',
+    'saghen/blink.cmp',
     'meta.nvim',
   },
   config = function()
@@ -51,9 +50,7 @@ return {
       buf_set_keymap('n', '<LEADER>ca', '<CMD>Lspsaga code_action<CR>')
     end
 
-    local capabilities = require('cmp_nvim_lsp').default_capabilities(
-      vim.lsp.protocol.make_client_capabilities()
-    )
+    local capabilities = require('blink.cmp').get_lsp_capabilities()
 
     local function with_lsp_default_config(config)
       return vim.tbl_deep_extend('keep', config or {}, {

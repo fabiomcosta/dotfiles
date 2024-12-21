@@ -204,7 +204,8 @@ end)
 
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
-  local filename = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+  local filename =
+      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -214,10 +215,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,
@@ -316,18 +317,15 @@ end, {})
 -- open modified [files]
 set_keymap('n', '<LEADER>om', '<CMD>GitOpenActiveFiles<CR>')
 
-
 require('keyword_case').setup()
 
 set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
-
 
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:remove('buffers')
 require('micro_sessions').setup({
   directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
-
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')

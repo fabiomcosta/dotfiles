@@ -1,10 +1,10 @@
 local utils = require('utils')
 
-    -- mason doesn't work on the meta server, so we only use black, stylua
-    -- and prettier when not on meta.
-function get_sources()
+-- mason doesn't work on the meta server, so we only use black, stylua
+-- and prettier when not on meta.
+local function get_sources()
   if utils.is_meta_server() then
-    local meta = require("meta")
+    local meta = require('meta')
     if meta.null_ls.diagnostics.arclint.generator.async_iterator then
       return { meta.null_ls.diagnostics.arclint }
     end
