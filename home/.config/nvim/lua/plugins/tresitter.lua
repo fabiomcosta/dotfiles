@@ -81,10 +81,17 @@ return {
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function()
       require('ts_context_commentstring').setup({
+        enable_autocmd = false,
         languages = {
           hack = require('ts_context_commentstring.config').config.languages.php,
         },
       })
+      local get_option = vim.filetype.get_option
+      vim.filetype.get_option = function(filetype, option)
+        return option == "commentstring"
+          and require("ts_context_commentstring.internal").calculate_commentstring()
+          or get_option(filetype, option)
+      end
     end,
   },
 }

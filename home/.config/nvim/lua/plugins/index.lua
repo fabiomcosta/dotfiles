@@ -14,10 +14,6 @@ return {
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
 
-  -- TO BE DEPRECATED ONCE 0.10 is available in all envs I work on
-  -- { 'tpope/vim-commentary' },
-  -- END DEPRECATED
-
   { 'williamboman/mason.nvim', config = true },
   {
     'ariel-frischer/bmessages.nvim',
