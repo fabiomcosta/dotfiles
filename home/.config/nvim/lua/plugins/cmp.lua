@@ -1,11 +1,18 @@
+local utils = require('utils')
+
 return {
   'saghen/blink.cmp',
   dependencies = {
     'rafamadriz/friendly-snippets',
     'folke/lazydev.nvim',
   },
-  version = 'v0.7',
+  version = 'v0.11',
   opts = {
+    fuzzy = {
+      prebuilt_binaries = {
+        download = not utils.is_meta_server()
+      }
+    },
     keymap = { preset = 'super-tab' },
     appearance = {
       use_nvim_cmp_as_default = true,
