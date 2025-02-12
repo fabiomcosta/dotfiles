@@ -10,7 +10,9 @@ return {
   opts = {
     fuzzy = {
       prebuilt_binaries = {
-        download = not utils.is_meta_server()
+        proxy = {
+          url = utils.is_meta_server() and 'http://fwdproxy:8080' or nil
+        }
       }
     },
     keymap = { preset = 'super-tab' },
