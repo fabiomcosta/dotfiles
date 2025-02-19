@@ -60,11 +60,6 @@ async function main() {
       home('.fb-vimrc'),
       secrets('facebook-devserver/.fb-vimrc')
     );
-  } else {
-    await createSymlinkFor(
-      home('bin/devet'),
-      secrets('facebook-devserver/bin/devet')
-    );
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
