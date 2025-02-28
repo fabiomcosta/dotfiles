@@ -30,6 +30,7 @@ return {
           score_offset = 100,
         },
       },
+      cmdline = {},
     },
     completion = {
       documentation = {
