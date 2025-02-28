@@ -19,25 +19,25 @@ end
 local function is_snake_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[%l_' .. keywords .. ']+', '') == 0
+    and #word:gsub('[_%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_upper_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[%u_' .. keywords .. ']+', '') == 0
+    and #word:gsub('[_%u%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_kebab_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '-')
-    and #word:gsub('[%l-' .. keywords .. ']+', '') == 0
+    and #word:gsub('[-%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_camel_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
-  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
+  return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
     and #word:gsub('%l+', '') > 0
     and word_without_special_keywords:match('^%l')
 end
@@ -45,7 +45,7 @@ end
 local function is_pascal_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
-  return #word:gsub('[%l%u' .. keywords .. ']+', '') == 0
+  return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
     and #word:gsub('%l+', '') > 0
     and word_without_special_keywords:match('^%u')
 end
@@ -111,11 +111,14 @@ local function cycle_case(word)
   end
 end
 
+local function apply()
+  local cursorword = vim.fn.expand('<cword>')
+  vim.cmd('normal! diwi' .. cycle_case(cursorword))
+end
+
 return {
   setup = function()
-    vim.api.nvim_create_user_command('CodeCycleCase', function()
-      local cursorword = vim.fn.expand('<cword>')
-      vim.cmd('normal! diwi' .. cycle_case(cursorword))
-    end, {})
+    vim.api.nvim_create_user_command('CodeCycleCase', apply, {})
   end,
+  apply = apply,
 }
