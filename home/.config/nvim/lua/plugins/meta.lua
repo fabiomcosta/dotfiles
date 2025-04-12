@@ -51,14 +51,16 @@ return {
           return false
         end,
         trace = function(trace)
-          local filename = slog_util.get_relative_filename(trace.fileName)
-          if TRACE_FILTER_RULES.exact[filename] ~= nil then
-            return false
-          end
-          if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
-            return vim.startswith(filename, prefix)
-          end, { predicate = true }) then
-            return false
+          if trace.fileName ~= null then
+            local filename = slog_util.get_relative_filename(trace.fileName)
+            if TRACE_FILTER_RULES.exact[filename] ~= nil then
+              return false
+            end
+            if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
+              return vim.startswith(filename, prefix)
+            end, { predicate = true }) then
+              return false
+            end
           end
           return true
         end
