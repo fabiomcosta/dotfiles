@@ -62,6 +62,19 @@ return {
         --   },
         -- },
       })
+
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config.hgcommit = {
+        install_info = {
+          url = "https://github.com/zegervdv/tree-sitter-hg-commit.git",
+          files = {"src/parser.c"},
+          -- optional entries:
+          branch = "master",
+          -- generate_requires_npm = false, -- if stand-alone parser without npm dependencies
+          -- requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
+        },
+        -- filetype = "zu", -- if filetype does not match the parser name
+      }
     end,
     build = function()
       setup_proxy()
