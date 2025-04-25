@@ -94,7 +94,7 @@ return {
       local installed_extensions =
           require('meta.lsp.extensions').get_installed_extensions()
 
-      if installed_extensions['nuclide.prettier'] then
+      if installed_extensions['nuclide.meta-prettier-vscode'] then
         table.insert(servers, 'prettier@meta')
       end
       if installed_extensions['nuclide.erlang'] then
