@@ -4,7 +4,6 @@ local set_keymap = utils.set_keymap
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
-    'nvimdev/lspsaga.nvim',
     'saghen/blink.cmp',
     'meta.nvim',
   },
@@ -27,27 +26,22 @@ return {
 
       -- Use lsp find_references if its available, and fallback to a grep_string.
       if client.server_capabilities.find_references then
-        buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope lsp_references<CR>')
+        buf_set_keymap('n', '<LEADER>fr', '<CMD>Telescope lsp_references<CR>')
       elseif utils.is_biggrep_repo() then
         -- Use Telescope biggrep with the current selection
         buf_set_keymap('n', '<LEADER>fr', "viw:'<,'>Bgs<CR>")
       else
-        buf_set_keymap('n', '<LEADER>fr', '<cmd>Telescope grep_string<CR>')
+        buf_set_keymap('n', '<LEADER>fr', '<CMD>Telescope grep_string<CR>')
       end
 
-      buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
+      buf_set_keymap('n', 'gd', '<CMD>lua vim.lsp.buf.definition()<CR>')
       buf_set_keymap(
         'n',
         '<LEADER>q',
-        '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>'
+        '<CMD>lua vim.lsp.diagnostic.set_loclist()<CR>'
       )
-      buf_set_keymap('n', '<LEADER>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-
-      -- lspsaga key bindings
-      buf_set_keymap('n', 'gh', '<CMD>Lspsaga peek_definition<CR>')
-      buf_set_keymap('n', 'gk', '<CMD>Lspsaga finder<CR>')
-      buf_set_keymap('n', '<LEADER>e', '<CMD>Lspsaga show_line_diagnostics<CR>')
-      buf_set_keymap('n', '<LEADER>ca', '<CMD>Lspsaga code_action<CR>')
+      buf_set_keymap('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
+      buf_set_keymap('n', '<LEADER>ca', '<CMD>lua vim.lsp.buf.code_action()<CR>')
     end
 
     local capabilities = require('blink.cmp').get_lsp_capabilities()
