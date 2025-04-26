@@ -44,12 +44,13 @@ return {
       buf_set_keymap('n', '<LEADER>ca', '<CMD>lua vim.lsp.buf.code_action()<CR>')
     end
 
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
-
     local function with_lsp_default_config(config)
-      return vim.tbl_deep_extend('keep', config or {}, {
+      config = config or {}
+      return vim.tbl_deep_extend('keep', config, {
         on_attach = on_attach,
-        capabilities = capabilities,
+        capabilities = require('blink.cmp').get_lsp_capabilities(
+          config.capabilities
+        ),
         flags = {
           debounce_text_changes = 150,
         },
