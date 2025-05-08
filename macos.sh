@@ -20,6 +20,16 @@ defaults write com.apple.screencapture disable-shadow -bool true
 # Prevent Time Machine from prompting to use new hard drives as backup volume
 defaults write com.apple.TimeMachine DoNotOfferNewDisksForBackup -bool true
 
+# Hides Menubar
+defaults write NSGlobalDomain _HIHideMenuBar -bool true
+
+# Hides Dock
+defaults write com.apple.dock autohide -bool true && killall Dock
+
 # Disable the sound effects on boot
 # Very sounds like zx is buggy while asking for password, disabling this for now.
 # sudo nvram SystemAudioVolume=' '
+
+# Disables unnecessary/unused daemons
+sudo launchctl disable system/com.apple.tipsd
+sudo launchctl disable system/com.apple.newsd
