@@ -4,16 +4,16 @@ import { $, cd } from 'zx';
 import os from 'os';
 import path from 'path';
 import fs from 'fs/promises';
-import { applyTemplate } from './src/apply_template.mjs';
+import { applyTemplate } from './src/apply_template.js';
 import {
   isDirectory,
   isSymlink,
   createSymlinkFor,
   createHomeSymlink,
-} from './src/fs.mjs';
-import { OK, WARN, ERROR, hl } from './src/log.mjs';
-import { commandExists, $silent } from './src/shell.mjs';
-import { dir, home, secrets, DIR } from './src/path.mjs';
+} from './src/fs.js';
+import { OK, WARN, ERROR, hl } from './src/log.js';
+import { commandExists, $silent } from './src/shell.js';
+import { dir, home, secrets, DIR } from './src/path.js';
 import { setupCron } from './src/cron.js';
 
 async function main() {
@@ -37,13 +37,13 @@ async function main() {
   }
 
   if (IS_MACOS) {
-    await import('./macos.mjs');
+    await import('./macos.js');
   }
 
   if (IS_WORK_MACHINE) {
-    await import('./secrets/facebook-devserver/install.mjs');
+    await import('./secrets/facebook-devserver/install.js');
   } else if (IS_LINUX) {
-    await import('./linux.mjs');
+    await import('./linux.js');
   }
 
   if (IS_WORK_MACHINE) {

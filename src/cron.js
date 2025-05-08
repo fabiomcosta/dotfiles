@@ -1,7 +1,7 @@
 import { $ } from 'zx';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { OK, hl } from './log.mjs';
+import { OK, hl } from './log.js';
 
 // Every 30mins
 // const cronScheduleExpression = '*/30 * * * *';

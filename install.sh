@@ -33,8 +33,8 @@ pushd $DIR &> /dev/null
     npm install .
   fi
   if ! command_exists node; then
-    ../fbsource/xplat/third-party/node/bin/node install.mjs
+    ../fbsource/xplat/third-party/node/bin/node install.js
   else
-    ./install.mjs
+    ./install.js
   fi
 popd &> /dev/null

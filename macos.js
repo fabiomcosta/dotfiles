@@ -1,7 +1,7 @@
 import { $ } from 'zx';
-import { commandExists, $swallow, $silent } from './src/shell.mjs';
-import { dir } from './src/path.mjs';
-import { OK } from './src/log.mjs';
+import { commandExists, $swallow, $silent } from './src/shell.js';
+import { dir } from './src/path.js';
+import { OK } from './src/log.js';
 
 console.log('Executing the OSX specific setup...');
 

@@ -1,8 +1,8 @@
 import * as fs from 'fs/promises';
 import os from 'os';
 import path from 'path';
-import { pathExists } from './fs.mjs';
-import { WARN, hl } from './log.mjs';
+import { pathExists } from './fs.js';
+import { WARN, hl } from './log.js';
 
 function template(text) {
   return function (replacementObject) {

@@ -1,8 +1,8 @@
 import { question } from 'zx';
 import path from 'path';
 import * as fs from 'fs/promises';
-import { OK, WARN, ERROR, hl } from './log.mjs';
-import { dir, home, DIR, HOME } from './path.mjs';
+import { OK, WARN, ERROR, hl } from './log.js';
+import { dir, home, DIR, HOME } from './path.js';
 
 async function prompt(_question) {
   const answer = await question(`${_question} [yN] `);
@@ -49,7 +49,7 @@ export async function lstatOrNull(_path) {
 
 export async function isDirectory(_path) {
   const stat = await statOrNull(_path);
-  if(stat == null) {
+  if (stat == null) {
     return false;
   }
   return Boolean(stat.isDirectory());
@@ -57,7 +57,7 @@ export async function isDirectory(_path) {
 
 export async function isSymlink(_path) {
   const stat = await lstatOrNull(_path);
-  if(stat == null) {
+  if (stat == null) {
     return false;
   }
   return Boolean(stat.isSymbolicLink());
