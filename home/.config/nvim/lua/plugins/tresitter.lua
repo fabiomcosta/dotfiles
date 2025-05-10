@@ -16,6 +16,13 @@ return {
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     config = function()
       setup_proxy()
+      require("nvim-treesitter.parsers").get_parser_configs().hgcommit = {
+        install_info = {
+          url = "https://github.com/fabiomcosta/tree-sitter-hg-commit",
+          files = {"src/parser.c"},
+          branch = "master",
+        },
+      }
       require('nvim-treesitter.configs').setup({
         sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
@@ -40,6 +47,7 @@ return {
           'markdown',
           'markdown_inline',
           'dap_repl',
+          'hgcommit',
         },
         highlight = {
           enable = true,
@@ -62,19 +70,6 @@ return {
         --   },
         -- },
       })
-
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.hgcommit = {
-        install_info = {
-          url = "https://github.com/zegervdv/tree-sitter-hg-commit.git",
-          files = {"src/parser.c"},
-          -- optional entries:
-          branch = "master",
-          -- generate_requires_npm = false, -- if stand-alone parser without npm dependencies
-          -- requires_generate_from_grammar = false, -- if folder contains pre-generated src/parser.c
-        },
-        -- filetype = "zu", -- if filetype does not match the parser name
-      }
     end,
     build = function()
       setup_proxy()

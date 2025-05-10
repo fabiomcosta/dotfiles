@@ -21,13 +21,34 @@ return {
     },
     sources = {
       -- add lazydev to your completion providers
-      default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+      default = {
+        'lazydev',
+        'lsp',
+        'path',
+        'snippets',
+        'buffer',
+        'meta_tags',
+        'meta_tasks',
+        'meta_revsub'
+      },
       providers = {
         lazydev = {
           name = 'LazyDev',
           module = 'lazydev.integrations.blink',
           -- make lazydev completions top priority (see `:h blink.cmp`)
           score_offset = 100,
+        },
+        meta_tags = {
+          name = 'MetaTags',
+          module = 'meta.cmp.tags',
+        },
+        meta_tasks = {
+          name = 'MetaTasks',
+          module = 'meta.cmp.tasks',
+        },
+        meta_revsub = {
+          name = 'MetaRevSub',
+          module = 'meta.cmp.revsub',
         },
       },
       cmdline = {},
