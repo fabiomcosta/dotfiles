@@ -29,9 +29,14 @@ return {
         ['flib/core/shutdown/PSP.php'] = 1,
       },
       startswith = {
+        'flib/privacylib/',
         'flib/purpose/cipp/',
         'flib/profiling/',
-        'flib/core/asio/'
+        'flib/core/asio/',
+        'flib/core/runtime/trace/',
+        'flib/graphql/',
+        'flib/platform/graph/',
+        'flib/platform/api/'
       },
     }
 
