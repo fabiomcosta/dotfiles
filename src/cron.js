@@ -4,8 +4,7 @@ import path from 'path';
 import { OK, hl } from './log.js';
 
 // Every 30mins
-// const cronScheduleExpression = '*/30 * * * *';
-const cronScheduleExpression = '* * * * *';
+const cronScheduleExpression = '*/30 * * * *';
 const cronRootScriptPath = path.resolve(
   fileURLToPath(import.meta.url),
   '..',
