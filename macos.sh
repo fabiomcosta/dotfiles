@@ -26,6 +26,9 @@ defaults write NSGlobalDomain _HIHideMenuBar -bool true
 # Hides Dock
 defaults write com.apple.dock autohide -bool true && killall Dock
 
+# Disables "Correct spelling automatically"
+defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+
 # Disable the sound effects on boot
 # Very sounds like zx is buggy while asking for password, disabling this for now.
 # sudo nvram SystemAudioVolume=' '
