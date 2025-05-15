@@ -2739,7 +2739,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^workplace-desktop$" ]
+            "bundle_identifiers" : [ "WorkPlace", "^workplace-desktop$" ]
           } ],
           "type" : "basic"
         }, {
@@ -2759,7 +2759,7 @@
             "type" : "variable_if"
           }, {
             "type" : "frontmost_application_if",
-            "bundle_identifiers" : [ "^workplace-desktop$" ]
+            "bundle_identifiers" : [ "WorkPlace", "^workplace-desktop$" ]
           } ],
           "type" : "basic"
         } ]
@@ -5034,7 +5034,7 @@
             "key_code" : "c"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"WorkChat\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5053,7 +5053,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Workplace Chat\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"WorkChat\")'"
           } ],
           "from" : {
             "simultaneous" : [ {

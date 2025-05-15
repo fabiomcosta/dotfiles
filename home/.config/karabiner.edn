@@ -43,7 +43,7 @@
   :applications {
     :browser ["^com\\.google\\.Chrome$" "^com\\.google\\.Chrome\\.canary$" "^company\\.thebrowser\\.Browser$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
-    :workplace_chat ["^workplace-desktop$"]
+    :workplace_chat ["WorkPlace" "^workplace-desktop$"]
     :terminal ["^org\\.alacritty$" "^com\\.raphaelamorim\\.rio$" "^com\\.mitchellh\\.ghostty$"]
   }
 
@@ -407,7 +407,7 @@
       :rules [:open_mode
         [:a [:hsl "Spotify"]]
         [:b [:hsl "Google Chrome"]]
-        [:c [:hsl "Workplace Chat"]]
+        [:c [:hsl "WorkChat"]]
         [:e [:hsl "VS Code @ FB"]]
         [:f [:hsl "Finder"]]
         [:m [:hsl "Microsoft Outlook"]]
