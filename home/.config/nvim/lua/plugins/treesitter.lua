@@ -48,6 +48,7 @@ return {
           'markdown_inline',
           'dap_repl',
           'hgcommit',
+          'query'
         },
         highlight = {
           enable = true,
