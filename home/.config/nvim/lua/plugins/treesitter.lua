@@ -23,6 +23,12 @@ return {
           branch = "master",
         },
       }
+      -- This is needed to make the neotest-testrunner adapter work
+      -- neotest uses Plenary's filetype function to define the filetype
+      -- of a buffer based on their filename, which works in most cases
+      -- but not for hack files.
+      vim.treesitter.language.register('hack', 'php')
+
       require('nvim-treesitter.configs').setup({
         sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
@@ -48,7 +54,8 @@ return {
           'markdown_inline',
           'dap_repl',
           'hgcommit',
-          'query'
+          'query',
+          'vimdoc'
         },
         highlight = {
           enable = true,
