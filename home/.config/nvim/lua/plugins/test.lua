@@ -8,7 +8,7 @@ return {
     vim.g['test#neovim#term_position'] = 'botright 20'
     vim.g['test#neovim#start_normal'] = 1
     vim.g['test#javascript#jest#options'] = '--verbose=false'
-    vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' } }
+    vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = {'Arc'} }
 
     -- Closes the last term window according to vim's order, so either the
     -- bottom-most or if there is none on the bottom, the last to the right.
