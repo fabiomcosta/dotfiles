@@ -25,6 +25,14 @@ return {
           alternate = '{dirname}/__tests__/{basename}Test.php',
           type = 'source',
         },
+        ['*_SUITE.erl'] = {
+          alternate = '{dirname}/../src/{basename}.erl',
+          type = 'test',
+        },
+        ['*.erl'] = {
+          alternate = '{dirname}/../test/{basename}_SUITE.erl',
+          type = 'source',
+        },
       }, jest_alternate),
     }
   end,
