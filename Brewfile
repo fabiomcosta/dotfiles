@@ -28,6 +28,7 @@ cask "font-jetbrains-mono"
 cask "font-jetbrains-mono-nerd-font"
 brew "mistertea/et/et"
 brew "lazygit"
+brew "rustup"
 
 brew "watchexec"
 brew "goku"
