@@ -75,7 +75,11 @@ if command_exists brew
   end
 
   set -x PKG_CONFIG_PATH $PKG_CONFIG_PATH $BREW_PREFIX/opt/libffi/lib/pkgconfig
+
+  # rust (rustup)
+  set -x PATH $PATH $BREW_PREFIX/opt/rustup/bin
 end
+
 
 # do not create .pyc files
 set -x PYTHONDONTWRITEBYTECODE x
@@ -94,7 +98,7 @@ set -x RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 # fzf
 set -x FZF_DEFAULT_COMMAND "rg --files --hidden --follow --glob='!.git/*'"
 
-# prepends .carg folder from rust
+# prepends .cargo folder from rust
 set -x PATH $HOME/.cargo/bin $PATH
 
 # prepends my bin folder to the path
