@@ -1,5 +1,5 @@
 function! test#erlang#arc#test_file(file) abort
-  return filereadable('.arcconfig')
+  return test#erlang#commontest#test_file(a:file) && filereadable('.arcconfig')
 endfunction
 
 function! test#erlang#arc#build_args(args, color) abort
