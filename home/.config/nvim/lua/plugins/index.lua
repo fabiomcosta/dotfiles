@@ -14,7 +14,7 @@ return {
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
 
-  { 'williamboman/mason.nvim',       config = true },
+  { 'williamboman/mason.nvim', config = true },
   {
     'ariel-frischer/bmessages.nvim',
     opts = {

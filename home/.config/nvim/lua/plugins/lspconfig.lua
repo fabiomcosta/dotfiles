@@ -41,7 +41,11 @@ return {
         '<CMD>lua vim.lsp.diagnostic.set_loclist()<CR>'
       )
       buf_set_keymap('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
-      buf_set_keymap('n', '<LEADER>ca', '<CMD>lua vim.lsp.buf.code_action()<CR>')
+      buf_set_keymap(
+        'n',
+        '<LEADER>ca',
+        '<CMD>lua vim.lsp.buf.code_action()<CR>'
+      )
     end
 
     local function with_lsp_default_config(config)
@@ -93,7 +97,7 @@ return {
       }))
 
       local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+        require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
         table.insert(servers, 'prettier@meta')
@@ -150,8 +154,11 @@ return {
       nvim_lsp.lua_ls.setup(with_lsp_default_config({
         settings = {
           Lua = {
-            -- Do not send telemetry data containing a randomized but unique identifier
             telemetry = { enable = false },
+            diagnostics = {
+              -- Get the language server to recognize the `vim` global
+              globals = { 'vim' },
+            },
           },
         },
       }))

@@ -6,7 +6,7 @@ local meta_sources = utils.is_meta_server()
       'meta_tasks',
       'meta_revsub',
     }
-  or {}
+    or {}
 
 local meta_providers = utils.is_meta_server()
     and {
@@ -23,7 +23,7 @@ local meta_providers = utils.is_meta_server()
         module = 'meta.cmp.revsub',
       },
     }
-  or {}
+    or {}
 
 return {
   'saghen/blink.cmp',
