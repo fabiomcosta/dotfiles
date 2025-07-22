@@ -1,0 +1,8 @@
+theme = "dracula"
+
+[fonts]
+family = "JetBrainsMono Nerd Font"
+size = 12
+
+[window]
+decorations = "disabled"

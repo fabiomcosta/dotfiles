@@ -77,6 +77,7 @@ async function main() {
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
     await createHomeSymlink('.config/alacritty/alacritty.toml');
+    await createHomeSymlink('.config/rio');
     await createHomeSymlink('Applications/VimProtocolHandler.app');
   }
 
