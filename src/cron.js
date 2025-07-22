@@ -2,6 +2,7 @@ import { $ } from 'zx';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { OK, hl } from './log.js';
+import { $swallow } from './shell.js';
 
 // Every 30mins
 const cronScheduleExpression = '*/30 * * * *';
@@ -14,7 +15,7 @@ const cronRootScriptPath = path.resolve(
 export async function setupCron() {
   // https://stackoverflow.com/questions/4880290/how-do-i-create-a-crontab-through-a-script
   const cronLine = `${cronScheduleExpression} ${cronRootScriptPath} >/tmp/cron_personal_stdout.log 2>/tmp/cron_personal_stderr.log`;
-  const cronTabs = await $`crontab -l`;
+  const cronTabs = await $swallow`crontab -l`;
   if (!cronTabs.stdout.includes(cronLine)) {
     await $`sh -c "(crontab -l 2>/dev/null || true; echo ${cronLine}) | crontab -"`;
     OK`${hl('cron')} installed.`;
