@@ -42,8 +42,4 @@ if (process.env.SHELL !== fishPath) {
   OK`fish is already the default shell.`;
 }
 
-// Install fzf key bindings like ctrl+r
-const fzfInstallPath = `${brewPrefix}/opt/fzf/install`;
-await $`${fzfInstallPath} --no-zsh --no-bash --key-bindings --completion --update-rc`;
-
 await $`./macos.sh`;

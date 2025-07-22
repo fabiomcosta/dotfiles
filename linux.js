@@ -19,7 +19,7 @@ if (!(await commandExists('starship'))) {
 }
 
 await $`sudo apt-get update`;
-await $`sudo apt-get install -y neovim tmux git fish rsync ripgrep fzf bat`;
+await $`sudo apt-get install -y neovim tmux git fish rsync ripgrep bat`;
 
 // fish
 const fishPath = (await $silent`which fish`).stdout.trim();

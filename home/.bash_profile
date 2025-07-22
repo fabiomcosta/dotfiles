@@ -90,8 +90,6 @@ if command_exists rg && ! command_exists ack; then
   alias ack='rg'
 fi
 
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
-
 alias la='ls -a'
 alias ll='ls -l'
 alias simpleserver='python -m SimpleHTTPServer'
@@ -133,13 +131,6 @@ if command_exists brew; then
     source "$(brew --prefix bash-git-prompt)/share/gitprompt.sh"
   fi
 fi
-
-
-# autocomplete for ctrl-r
-if command_exists fzf; then
-  source "$HOME/.fzf.bash"
-fi
-
 
 # do not create .pyc files
 export PYTHONDONTWRITEBYTECODE=x
