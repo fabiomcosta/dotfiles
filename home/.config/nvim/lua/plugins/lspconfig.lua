@@ -14,13 +14,12 @@ return {
     local on_attach = function(client, bufnr)
       utils.auto_format_on_save(client, bufnr)
 
-      local function buf_set_keymap(mode, keys, remapped_keys)
-        vim.api.nvim_buf_set_keymap(
-          bufnr,
+      local function buf_set_keymap(mode, keys, action)
+        vim.keymap.set(
           mode,
           keys,
-          remapped_keys,
-          { noremap = true, silent = true }
+          action,
+          { noremap = true, silent = true, buffer = bufnr }
         )
       end
 
@@ -46,6 +45,9 @@ return {
         '<LEADER>ca',
         '<CMD>lua vim.lsp.buf.code_action()<CR>'
       )
+      buf_set_keymap('n', '<leader>ca', function()
+        require('tiny-code-action').code_action()
+      end)
     end
 
     local function with_lsp_default_config(config)
@@ -97,7 +99,7 @@ return {
       }))
 
       local installed_extensions =
-        require('meta.lsp.extensions').get_installed_extensions()
+          require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
         table.insert(servers, 'prettier@meta')
@@ -136,6 +138,7 @@ return {
       -- }))
     else
       table.insert(servers, 'pylsp')
+      table.insert(servers, 'rust_analyzer')
       nvim_lsp.ts_ls.setup(with_lsp_default_config({
         filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
       }))
