@@ -138,8 +138,8 @@ function utils.require_if_exists(module_name, callback)
   end
 end
 
-function utils.tbl_contains(table, element)
-  for _, value in pairs(table) do
+function utils.tbl_contains(tbl, element)
+  for _, value in pairs(tbl) do
     if value == element then
       return true
     end
