@@ -4,7 +4,7 @@ local M = {
   default_config = {
     directory = nil,
   },
-  config = nil
+  config = nil,
 }
 
 local setup_config = function(config)
@@ -56,7 +56,7 @@ local is_something_shown = function()
 end
 
 local get_session_name = function()
-  local name, _ = string.gsub(vim.fn.resolve(vim.loop.cwd()), '/', 'zZz')
+  local name, _ = string.gsub(vim.fn.resolve(vim.uv.cwd()), '/', 'zZz')
   return name
 end
 
