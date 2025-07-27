@@ -8,10 +8,10 @@ return {
     vim.g['test#neovim#term_position'] = 'botright 20'
     vim.g['test#neovim#start_normal'] = 1
     vim.g['test#javascript#jest#options'] = '--verbose=false'
-    vim.g['test#custom_runners'] = { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = {'Arc'} }
+    vim.g['test#custom_runners'] =
+      { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
 
-    -- Closes the last term window according to vim's order, so either the
-    -- bottom-most or if there is none on the bottom, the last to the right.
+    -- Closes the last term window that is also full-width.
     local kill_bottom_sheet = function()
       local max_width = vim.o.columns
       local max_height = vim.o.lines - 1 - vim.o.cmdheight
