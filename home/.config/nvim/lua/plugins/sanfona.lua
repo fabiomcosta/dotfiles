@@ -2,7 +2,7 @@ return {
   {
     'fabiomcosta/sanfona.nvim',
     opts = {
-      min_width = vim.o.colorcolumn + 11,
+      min_width = tonumber(vim.o.colorcolumn) + 11,
     },
   },
 }
