@@ -57,10 +57,6 @@ vim.opt.scrolloff = 999
 vim.opt.autoindent = true
 vim.opt.copyindent = true
 vim.opt.title = true
-vim.opt.showmode = true
-vim.opt.showcmd = true
-vim.opt.hidden = true
-vim.opt.ruler = true
 -- allows colors on long lines
 vim.opt.synmaxcol = 5000
 -- allow backspacing over everything in insert mode
