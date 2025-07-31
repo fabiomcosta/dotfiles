@@ -24,17 +24,12 @@ vim.g.loaded_ruby_provider = 0
 
 -- avoiding possible issues on plugins that are generaly only tested on bash.
 vim.opt.shell = 'bash'
+
 -- vim can merge signcolumn and number column into one
 vim.opt.signcolumn = 'number'
 
--- adds possibility of using 256 colors
-vim.opt.termguicolors = true
-
 -- only show file name on tabs
 vim.opt.showtabline = 0
-
--- for the dark version
-vim.opt.background = 'dark'
 
 -- default indent settings
 vim.opt.expandtab = true
@@ -48,17 +43,12 @@ vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
 vim.opt.visualbell = true
-vim.opt.errorbells = false
-vim.opt.encoding = 'utf-8'
 -- a large value will help prevent the weid scroll jump while changing focus
 -- between buffers. It also helps keep the cursor more to the center of
 -- the screen.
 vim.opt.scrolloff = 999
-vim.opt.autoindent = true
 vim.opt.copyindent = true
 vim.opt.title = true
--- allows colors on long lines
-vim.opt.synmaxcol = 5000
 -- allow backspacing over everything in insert mode
 vim.opt.backspace = { 'indent', 'eol', 'start' }
 -- font line-height
@@ -67,8 +57,6 @@ vim.opt.linespace = 0
 vim.opt.number = true
 -- uses OS clipboard if possible (check +clipboard)
 vim.opt.clipboard:append({ 'unnamed', 'unnamedplus' })
--- store lots of :cmdline history
-vim.opt.history = 1000
 -- mark the ideal max text width
 vim.opt.colorcolumn = '80'
 -- keep going up dirs until a tags file is found
@@ -119,8 +107,6 @@ vim.opt.smartcase = true
 -- defaults to search for every match of the pattern
 vim.opt.gdefault = true
 vim.opt.showmatch = true
--- dont wrap lines
-vim.opt.wrap = true
 -- wrap lines at convenient points
 vim.opt.linebreak = true
 vim.opt.textwidth = 360
@@ -130,7 +116,6 @@ vim.opt.list = true
 vim.opt.listchars = { tab = '▸\\ ', eol = '¬' }
 -- folding options
 vim.opt.foldmethod = 'indent'
-vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({ 'stack' })
 
