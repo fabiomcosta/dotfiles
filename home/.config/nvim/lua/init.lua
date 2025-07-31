@@ -31,6 +31,9 @@ vim.opt.signcolumn = 'number'
 -- only show file name on tabs
 vim.opt.showtabline = 0
 
+-- adds possibility of using 256 colors
+vim.opt.termguicolors = true
+
 -- default indent settings
 vim.opt.expandtab = true
 vim.opt.tabstop = 2
@@ -116,6 +119,7 @@ vim.opt.list = true
 vim.opt.listchars = { tab = '▸\\ ', eol = '¬' }
 -- folding options
 vim.opt.foldmethod = 'indent'
+vim.opt.foldenable = false
 
 vim.opt.jumpoptions:append({ 'stack' })
 
