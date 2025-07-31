@@ -48,7 +48,11 @@ return {
       if utils.is_myles_repo() then
         set_keymap('n', '<LEADER>ff', '<cmd>Telescope myles<CR>')
       elseif utils.is_biggrep_repo() then
-        set_keymap('n', '<LEADER>ff', '<cmd>Telescope biggrep f exclude=__(tests|generated|db_generated)__<CR>')
+        set_keymap(
+          'n',
+          '<LEADER>ff',
+          '<cmd>Telescope biggrep f exclude=__(tests|generated|db_generated)__<CR>'
+        )
       else
         set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
         set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
@@ -65,7 +69,8 @@ return {
       set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
     end
 
-    set_keymap('n', '<LEADER>fh', '<cmd>Telescope find_files hidden=true<CR>')
+    set_keymap('n', '<LEADER>fh', '<cmd>Telescope help_tags<CR>')
+    set_keymap('n', '<LEADER>fj', '<cmd>Telescope find_files hidden = true<CR>')
     set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
     set_keymap('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>')
     set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>')
