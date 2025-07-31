@@ -69,9 +69,6 @@ vim.opt.backspace = { 'indent', 'eol', 'start' }
 vim.opt.linespace = 0
 -- adds line numbers to the left
 vim.opt.number = true
--- prevents delay while pressing esc on insert mode
-vim.opt.timeoutlen = 5000
-vim.opt.ttimeoutlen = 0
 -- uses OS clipboard if possible (check +clipboard)
 vim.opt.clipboard:append({ 'unnamed', 'unnamedplus' })
 -- store lots of :cmdline history
