@@ -9,22 +9,21 @@ return {
     vim.g['test#neovim#start_normal'] = 1
     vim.g['test#javascript#jest#options'] = '--verbose=false'
     vim.g['test#custom_runners'] =
-      { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
+    { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
 
     -- Closes the last term window that is also full-width.
     local kill_bottom_sheet = function()
       local max_width = vim.o.columns
-      local max_height = vim.o.lines - 1 - vim.o.cmdheight
 
       for window_nr = vim.fn.winnr('$'), 0, -1 do
-        local window_width = vim.fn.winwidth(window_nr)
-        local window_height = vim.fn.winheight(window_nr)
+        local window_id = vim.fn.win_getid(window_nr)
+        local window_width = vim.fn.winwidth(window_id)
+        local window_pos = vim.api.nvim_win_get_position(window_id)
 
         local is_full_width = window_width == max_width
-        local is_partial_height = window_height < max_height
+        local is_top_positioned = window_pos[1] == 0
 
-        if is_full_width and is_partial_height then
-          local window_id = vim.fn.win_getid(window_nr)
+        if is_full_width and not is_top_positioned then
           local win_info = vim.fn.getwininfo(window_id)[1]
           if win_info.terminal == 1 then
             -- Sticky size/position
