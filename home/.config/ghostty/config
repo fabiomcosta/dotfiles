@@ -1,0 +1,6 @@
+theme = Dracula
+font-family = "JetBrains Mono"
+font-size = 11
+font-thicken = true
+cursor-style = block
+window-decoration = false
