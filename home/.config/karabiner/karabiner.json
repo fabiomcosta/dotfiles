@@ -5214,7 +5214,7 @@
             "key_code" : "t"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Ghostty\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5233,7 +5233,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Alacritty\")'"
+            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Ghostty\")'"
           } ],
           "from" : {
             "simultaneous" : [ {

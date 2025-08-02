@@ -411,7 +411,7 @@
         [:e [:hsl "VS Code @ FB"]]
         [:f [:hsl "Finder"]]
         [:m [:hsl "Microsoft Outlook"]]
-        [:t [:hsl "Alacritty"]]
+        [:t [:hsl "Ghostty"]]
         [:n [:hsl "Notion"]]
         [:v [:hsl "zoom.us"]]
     ]}

@@ -70,7 +70,7 @@ return {
     end
 
     set_keymap('n', '<LEADER>fh', '<cmd>Telescope help_tags<CR>')
-    set_keymap('n', '<LEADER>fj', '<cmd>Telescope find_files hidden = true<CR>')
+    set_keymap('n', '<LEADER>fj', '<cmd>Telescope find_files hidden=true<CR>')
     set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
     set_keymap('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>')
     set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>')
