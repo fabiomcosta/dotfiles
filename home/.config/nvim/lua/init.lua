@@ -246,18 +246,34 @@ end, {})
 
 set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
 
-vim.keymap.set('n', '<LEADER>hg', function()
-  require('codehub').openURL('n')
-end)
-vim.keymap.set('v', '<LEADER>hg', function()
-  require('codehub').openURL('v')
-end)
-vim.keymap.set('n', '<LEADER>hc', function()
-  require('codehub').copyURL('n')
-end)
-vim.keymap.set('v', '<LEADER>hc', function()
-  require('codehub').copyURL('v')
-end)
+vim.keymap.set(
+  'n',
+  '<LEADER>hg',
+  vim.schedule_wrap(function()
+    require('codehub').openURL('n')
+  end)
+)
+vim.keymap.set(
+  'v',
+  '<LEADER>hg',
+  vim.schedule_wrap(function()
+    require('codehub').openURL('v')
+  end)
+)
+vim.keymap.set(
+  'n',
+  '<LEADER>hc',
+  vim.schedule_wrap(function()
+    require('codehub').copyURL('n')
+  end)
+)
+vim.keymap.set(
+  'v',
+  '<LEADER>hc',
+  vim.schedule_wrap(function()
+    require('codehub').copyURL('v')
+  end)
+)
 
 vim.api.nvim_create_user_command('MetaDiffCheckout', function()
   require('meta_diff').diff_picker({ checkout = true })
