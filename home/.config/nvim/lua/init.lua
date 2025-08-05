@@ -22,6 +22,9 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
+-- so vim won't force pep8 on all python files
+vim.g.python_recommended_style = 0
+
 -- avoiding possible issues on plugins that are generaly only tested on bash.
 vim.opt.shell = 'bash'
 
@@ -125,9 +128,6 @@ vim.opt.jumpoptions:append({ 'stack' })
 
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
--- so vim won't force pep8 on all python files
-vim.g.python_recommended_style = 0
-
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
@@ -197,7 +197,7 @@ end)
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename =
-    vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -207,10 +207,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-          function(_bufnr)
-            vim.opt_local.syntax = 'php'
-            vim.opt_local.iskeyword:append('$')
-          end
+            function(_bufnr)
+              vim.opt_local.syntax = 'php'
+              vim.opt_local.iskeyword:append('$')
+            end
       end
       return 'php'
     end,

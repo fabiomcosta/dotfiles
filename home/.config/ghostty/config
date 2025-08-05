@@ -3,6 +3,7 @@ theme = Dracula
 font-family = "JetBrainsMono NFM Light"
 font-size = 12
 font-thicken = true
+font-feature = -calt, -liga, -dlig
 adjust-cell-width = -1
 
 cursor-style = block
