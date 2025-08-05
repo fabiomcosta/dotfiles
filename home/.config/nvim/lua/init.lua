@@ -196,7 +196,7 @@ end)
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename =
-      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+    vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -206,10 +206,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -276,7 +276,8 @@ vim.api.nvim_create_autocmd('TermClose', {
     vim.cmd([[call feedkeys("\<CR>")]])
   end,
 })
--- tnoremap <Esc> <C-\><C-n>
+-- Go to normal mode on terminal by pressing esc.
+set_keymap('t', '<ESC>', '<C-\\><C-n>')
 
 -- local function source_if_exists(file)
 --   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
