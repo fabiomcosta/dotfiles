@@ -175,8 +175,18 @@ set_keymap('x', '>', '>gv')
 
 -- Disable cursorline highlight on insert mode
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
-vim.cmd([[autocmd InsertLeave,WinEnter * set cursorline]])
-vim.cmd([[autocmd InsertEnter,WinLeave * set nocursorline]])
+vim.api.nvim_create_autocmd({ 'InsertLeave', 'WinEnter' }, {
+  pattern = '*',
+  callback = function()
+    vim.opt.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd({ 'InsertEnter', 'WinLeave' }, {
+  pattern = '*',
+  callback = function()
+    vim.opt.cursorline = false
+  end,
+})
 
 -- copies current buffer file path relative to cwd to register
 vim.keymap.set('n', 'cp', function()
@@ -187,7 +197,7 @@ end)
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename =
-      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+    vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -197,10 +207,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_bufnr)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -285,11 +295,13 @@ end, {})
 set_keymap('n', '<LEADER>mc', '<CMD>MetaDiffCheckout<CR>')
 set_keymap('n', '<LEADER>mf', '<CMD>MetaDiffOpenFiles<CR>')
 
--- starts terminal mode on insert mode
--- disables line numbers on a newly opened terminal window (not really working)
-vim.cmd([[autocmd TermOpen term://* setlocal nonumber]])
 -- close terminal buffer without showing the exit status of the shell
--- autocmd TermClose term://* call feedkeys("\<cr>")
+vim.api.nvim_create_autocmd('TermClose', {
+  pattern = 'term://*',
+  callback = function()
+    vim.cmd([[call feedkeys("\<CR>")]])
+  end,
+})
 -- tnoremap <Esc> <C-\><C-n>
 
 -- local function source_if_exists(file)
