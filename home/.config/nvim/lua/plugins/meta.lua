@@ -17,6 +17,31 @@ return {
   config = function()
     require('meta').setup()
 
+    vim.api.nvim_create_user_command('SetupAndQuit', function()
+      if not is_meta_server() then
+        return
+      end
+
+      local group = vim.api.nvim_create_augroup('SetupAndQuit', {})
+      vim.api.nvim_create_autocmd('User', {
+        group = group,
+        pattern = 'SyncMetaLSComplete',
+        callback = function()
+          vim.cmd('quitall')
+        end,
+      })
+      vim.api.nvim_create_autocmd('User', {
+        group = group,
+        pattern = 'LazySync',
+        callback = function()
+          vim.cmd('SyncMetaLS')
+        end,
+      })
+      -- this makes lazy lines and sync meta ls stuff run on their own lines
+      print('')
+      require('lazy').sync()
+    end, {})
+
     -- These are known core modules that ppl would likely want to keep hidden
     -- to avoid having them polute the trace while debugging.
     local TRACE_FILTER_RULES = {
@@ -36,7 +61,7 @@ return {
         'flib/core/runtime/trace/',
         'flib/graphql/',
         'flib/platform/graph/',
-        'flib/platform/api/'
+        'flib/platform/api/',
       },
     }
 
@@ -61,15 +86,17 @@ return {
             if TRACE_FILTER_RULES.exact[filename] ~= nil then
               return false
             end
-            if vim.tbl_contains(TRACE_FILTER_RULES.startswith, function (prefix)
-              return vim.startswith(filename, prefix)
-            end, { predicate = true }) then
+            if
+                vim.tbl_contains(TRACE_FILTER_RULES.startswith, function(prefix)
+                  return vim.startswith(filename, prefix)
+                end, { predicate = true })
+            then
               return false
             end
           end
           return true
-        end
-      }
+        end,
+      },
     })
 
     set_keymap('n', '<LEADER>st', '<CMD>SlogToggle<CR>')

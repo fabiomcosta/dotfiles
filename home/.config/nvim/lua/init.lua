@@ -1,6 +1,5 @@
 local utils = require('utils')
 local set_keymap = utils.set_keymap
-local is_meta_server = utils.is_meta_server
 
 -- fonts and other gui stuff
 if vim.fn.has('gui_running') > 0 then
@@ -228,31 +227,6 @@ vim.filetype.add({
     ['.*%.js.flow'] = 'javascript',
   },
 })
-
-vim.api.nvim_create_user_command('SetupAndQuit', function()
-  if not is_meta_server() then
-    return
-  end
-
-  local group = vim.api.nvim_create_augroup('SetupAndQuit', {})
-  vim.api.nvim_create_autocmd('User', {
-    group = group,
-    pattern = 'SyncMetaLSComplete',
-    callback = function()
-      vim.cmd('quitall')
-    end,
-  })
-  vim.api.nvim_create_autocmd('User', {
-    group = group,
-    pattern = 'LazySync',
-    callback = function()
-      vim.cmd('SyncMetaLS')
-    end,
-  })
-  -- this makes lazy lines and sync meta ls stuff run on their own lines
-  print('')
-  require('lazy').sync()
-end, {})
 
 set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
 
