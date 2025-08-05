@@ -28,6 +28,7 @@ return {
       -- of a buffer based on their filename, which works in most cases
       -- but not for hack files.
       vim.treesitter.language.register('hack', 'php')
+      vim.treesitter.language.register('tsx', 'javascript')
 
       require('nvim-treesitter.configs').setup({
         sync_install = true,
@@ -96,10 +97,11 @@ return {
     'JoosepAlviste/nvim-ts-context-commentstring',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
     config = function()
+      local config = require('ts_context_commentstring.config').config
       require('ts_context_commentstring').setup({
         enable_autocmd = false,
         languages = {
-          hack = require('ts_context_commentstring.config').config.languages.php,
+          hack = config.languages.php,
         },
       })
       local get_option = vim.filetype.get_option

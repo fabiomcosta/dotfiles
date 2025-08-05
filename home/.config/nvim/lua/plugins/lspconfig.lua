@@ -64,7 +64,6 @@ return {
     nvim_lsp.flow.setup(with_lsp_default_config({
       cmd = { 'flow', 'lsp' },
       root_dir = flow_root_dir_finder,
-      filetypes = { 'javascript', 'flow', 'flow.jsx' },
       on_new_config = function(config, new_root_dir)
         -- We'll only create new LSP client for root_dirs that are
         -- not the same as the one from the cwd, because the `flow` name
@@ -93,14 +92,10 @@ return {
           require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
-        nvim_lsp['prettier@meta'].setup(with_lsp_default_config({
-          filetypes = { 'javascript', 'flow', 'flow.jsx' },
-        }))
+        table.insert(servers, 'prettier@meta')
       end
       if installed_extensions['nuclide.eslint'] then
-        nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
-          filetypes = { 'javascript', 'flow', 'flow.jsx' },
-        }))
+        table.insert(servers, 'eslint@meta')
       end
       if installed_extensions['nuclide.erlang'] then
         table.insert(servers, 'erlang@meta')
