@@ -28,6 +28,9 @@ return {
       -- of a buffer based on their filename, which works in most cases
       -- but not for hack files.
       vim.treesitter.language.register('hack', 'php')
+
+      -- This drasticaly improves the javascript code highlight especially on
+      -- flow and jsx code.
       vim.treesitter.language.register('tsx', 'javascript')
 
       require('nvim-treesitter.configs').setup({
