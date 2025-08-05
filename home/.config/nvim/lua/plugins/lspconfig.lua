@@ -93,14 +93,19 @@ return {
           require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
-        table.insert(servers, 'prettier@meta')
+        nvim_lsp['prettier@meta'].setup(with_lsp_default_config({
+          filetypes = { 'javascript', 'flow', 'flow.jsx' },
+        }))
+      end
+      if installed_extensions['nuclide.eslint'] then
+        nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
+          filetypes = { 'javascript', 'flow', 'flow.jsx' },
+        }))
       end
       if installed_extensions['nuclide.erlang'] then
         table.insert(servers, 'erlang@meta')
       end
-      if installed_extensions['nuclide.eslint'] then
-        table.insert(servers, 'eslint@meta')
-      end
+
       -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
       --   settings = {
       --     editor = {
