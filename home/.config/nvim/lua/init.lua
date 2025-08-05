@@ -213,15 +213,15 @@ vim.filetype.add({
       end
       return 'php'
     end,
-    -- js = function(_path, bufnr)
-    --   local getlines = vim.filetype.getlines or vim.filetype._getlines;
-    --   for _, line in ipairs(getlines(bufnr, 1, 16)) do
-    --     if string.find(line, '@flow') then
-    --       return 'flow'
-    --     end
-    --   end
-    --   return 'javascript'
-    -- end,
+    js = function(_path, bufnr)
+      local getlines = vim.filetype.getlines or vim.filetype._getlines;
+      for _, line in ipairs(getlines(bufnr, 1, 16)) do
+        if string.find(line, '@flow') then
+          return 'flow.jsx'
+        end
+      end
+      return 'javascript'
+    end,
   },
   pattern = {
     ['.*%.js.flow'] = 'javascript',
