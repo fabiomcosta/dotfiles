@@ -16,11 +16,11 @@ return {
 
   { 'williamboman/mason.nvim', config = true },
   {
-    'ariel-frischer/bmessages.nvim',
+    'OliverChao/bufmsg.nvim',
     opts = {
       split_type = 'split',
-      split_direction = 'botright',
-      keep_focus = true,
+      -- split_direction = 'botright',
+      -- keep_focus = true,
     },
   },
   {
