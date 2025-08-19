@@ -46,6 +46,7 @@ local function getLineRange(mode)
   end
   local startLine = vim.fn.line("'<")
   local endLine = vim.fn.line("'>")
+
   if endLine == 0 then
     return startLine
   end
@@ -79,16 +80,17 @@ local function getURLForGitRepo(mode)
   return url
 end
 
-local metaCmdsStatus, metaCmds = pcall(require, 'meta.cmds')
-local metaUtilStatus, metaUtil = pcall(require, 'meta.util')
 
-local function getURL(mode)
+local function getURL(mode, opts)
+  local metaCmdsStatus, metaCmds = pcall(require, 'meta.cmds')
+  local metaUtilStatus, metaUtil = pcall(require, 'meta.util')
+
   if metaCmdsStatus and metaUtilStatus then
     if metaUtil.hg.get_root_path() ~= nil then
       if mode == 'n' then
         return metaCmds.get_codehub_link()
       else
-        return metaCmds.get_codehub_link(2, vim.fn.line("'<"), vim.fn.line("'>"))
+        return metaCmds.get_codehub_link(2, opts.line1, opts.line2)
       end
     end
   end
@@ -100,17 +102,50 @@ local function copyToRegister(url)
   print('copied ' .. url)
 end
 
-return {
-  copyURL = function(mode)
-    local url = getURL(mode)
+local function copyURL(mode, opts)
+  local url = getURL(mode, opts)
+  copyToRegister(url)
+end
+
+local function openURL(mode, opts)
+  local url = getURL(mode, opts)
+  if canUseOpen() then
+    vim.cmd("silent !open '" .. url .. "'")
+  else
     copyToRegister(url)
-  end,
-  openURL = function(mode)
-    local url = getURL(mode)
-    if canUseOpen() then
-      vim.cmd("silent !open '" .. url .. "'")
-    else
-      copyToRegister(url)
-    end
-  end,
+  end
+end
+
+local function codehub_link_yank(opts)
+  local action = opts.fargs[1]
+
+  local mode = vim.fn.mode() -- detect current mode
+  if mode == 'v' or mode == 'V' or mode == '\22' then -- <C-V>
+    mode = 'v'
+    vim.cmd([[execute "normal! \<ESC>"]])
+  end
+  local opts = {
+    line1 = vim.fn.line("'<"),
+    line2 = vim.fn.line("'>")
+  }
+
+  if action == 'copy' then
+    copyURL(mode, opts)
+  elseif action == 'open' then
+    openURL(mode, opts)
+  end
+  assert('copy and open are the only supported actions.')
+end
+
+vim.api.nvim_create_user_command("CodehubLinkYank", codehub_link_yank, {
+  desc = "Yank codehub link command",
+  nargs = '+',
+})
+
+-- vim.cmd([[
+--   command -range CodehubLinkYank lua require('codehub').codehub_link_yank(<range>, <line1>, <line2>)
+-- ]])
+
+return {
+  codehub_link_yank = codehub_link_yank
 }

@@ -230,33 +230,21 @@ vim.filetype.add({
 
 set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
 
+require('codehub')
+
 vim.keymap.set(
-  'n',
+  {'n', 'v'},
   '<LEADER>hg',
-  vim.schedule_wrap(function()
-    require('codehub').openURL('n')
-  end)
+  function()
+    vim.cmd("CodehubLinkYank open")
+  end
 )
 vim.keymap.set(
-  'v',
-  '<LEADER>hg',
-  vim.schedule_wrap(function()
-    require('codehub').openURL('v')
-  end)
-)
-vim.keymap.set(
-  'n',
+  {'n', 'v'},
   '<LEADER>hc',
-  vim.schedule_wrap(function()
-    require('codehub').copyURL('n')
-  end)
-)
-vim.keymap.set(
-  'v',
-  '<LEADER>hc',
-  vim.schedule_wrap(function()
-    require('codehub').copyURL('v')
-  end)
+  function()
+    vim.cmd("CodehubLinkYank copy")
+  end
 )
 
 vim.api.nvim_create_user_command('MetaDiffCheckout', function()
