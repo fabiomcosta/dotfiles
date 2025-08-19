@@ -80,7 +80,6 @@ local function getURLForGitRepo(mode)
   return url
 end
 
-
 local function getURL(mode, opts)
   local metaCmdsStatus, metaCmds = pcall(require, 'meta.cmds')
   local metaUtilStatus, metaUtil = pcall(require, 'meta.util')
@@ -130,9 +129,9 @@ local function codehub_link_yank(opts)
   }
 
   if action == 'copy' then
-    copyURL(mode, opts)
+    return copyURL(mode, opts)
   elseif action == 'open' then
-    openURL(mode, opts)
+    return openURL(mode, opts)
   end
   assert('copy and open are the only supported actions.')
 end
@@ -141,10 +140,6 @@ vim.api.nvim_create_user_command("CodehubLinkYank", codehub_link_yank, {
   desc = "Yank codehub link command",
   nargs = '+',
 })
-
--- vim.cmd([[
---   command -range CodehubLinkYank lua require('codehub').codehub_link_yank(<range>, <line1>, <line2>)
--- ]])
 
 return {
   codehub_link_yank = codehub_link_yank
