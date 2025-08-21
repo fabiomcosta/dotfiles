@@ -26,6 +26,7 @@ return {
         if is_full_width and not is_top_positioned then
           local win_info = vim.fn.getwininfo(window_id)[1]
           if win_info.terminal == 1 then
+            local window_height = vim.fn.winheight(window_id)
             -- Sticky size/position
             vim.g['test#neovim#term_position'] = 'botright ' .. window_height
           end
