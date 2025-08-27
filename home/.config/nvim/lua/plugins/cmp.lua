@@ -2,7 +2,7 @@ local utils = require('utils')
 
 local meta_sources = utils.is_meta_server()
     and {
-      -- 'meta_title',
+      'meta_title',
       'meta_tags',
       'meta_tasks',
       'meta_revsub',
@@ -11,10 +11,10 @@ local meta_sources = utils.is_meta_server()
 
 local meta_providers = utils.is_meta_server()
     and {
-      -- meta_title = {
-      --   name = 'MetaTitle',
-      --   module = 'meta.cmp.title',
-      -- },
+      meta_title = {
+        name = 'MetaTitle',
+        module = 'meta.cmp.title',
+      },
       meta_tags = {
         name = 'MetaTags',
         module = 'meta.cmp.tags',
