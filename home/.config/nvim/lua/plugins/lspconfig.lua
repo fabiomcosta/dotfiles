@@ -53,15 +53,15 @@ return {
       })
     end
 
-    local nvim_lsp = require('lspconfig')
+    local function lsp_enable(lsp_name, config)
+      vim.lsp.config(lsp_name, with_lsp_default_config(config))
+      vim.lsp.enable(lsp_name)
+    end
+
     local nvim_lsp_util = require('lspconfig.util')
 
-    -- Use a loop to conveniently call 'setup' on multiple servers and
-    -- map buffer local keybindings when the language server attaches
-    local servers = {}
-
     local flow_root_dir_finder = nvim_lsp_util.root_pattern('.flowconfig')
-    nvim_lsp.flow.setup(with_lsp_default_config({
+    lsp_enable('flow', {
       cmd = { 'flow', 'lsp' },
       root_dir = flow_root_dir_finder,
       on_new_config = function(config, new_root_dir)
@@ -76,32 +76,32 @@ return {
           rawset(lspconfigs, config.name, lspconfigs.flow)
         end
       end,
-    }))
+    })
 
     if utils.is_meta_server() then
-      table.insert(servers, 'hhvm')
+      lsp_enable('hhvm')
 
-      nvim_lsp.relay_lsp.setup(with_lsp_default_config({
+      lsp_enable('relay_lsp', {
         cmd = { 'relay', 'lsp' },
         root_dir = function()
           return utils.get_arc_root()
         end,
-      }))
+      })
 
       local installed_extensions =
           require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
-        table.insert(servers, 'prettier@meta')
+        lsp_enable('prettier@meta')
       end
       if installed_extensions['nuclide.eslint'] then
-        table.insert(servers, 'eslint@meta')
+        lsp_enable('eslint@meta')
       end
       if installed_extensions['nuclide.erlang'] then
-        table.insert(servers, 'erlang@meta')
+        lsp_enable('erlang@meta')
       end
 
-      -- nvim_lsp['eslint@meta'].setup(with_lsp_default_config({
+      -- lsp_enable('eslint@meta', {
       --   settings = {
       --     editor = {
       --       codeActionsOnSave = {
@@ -126,14 +126,14 @@ return {
       --       "@fb-tools/sort-requires"
       --     }
       --   }
-      -- }))
+      -- })
     else
-      table.insert(servers, 'pylsp')
-      table.insert(servers, 'rust_analyzer')
-      nvim_lsp.ts_ls.setup(with_lsp_default_config({
+      lsp_enable('pylsp')
+      lsp_enable('rust_analyzer')
+      lsp_enable('ts_ls', {
         filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
-      }))
-      nvim_lsp.eslint.setup(with_lsp_default_config({
+      })
+      lsp_enable('eslint', {
         on_attach = function(client, bufnr)
           -- neovim's LSP client does not currently support dynamic capabilities
           -- registration, so we need to set the server capabilities of the
@@ -144,8 +144,8 @@ return {
         settings = {
           format = { enable = true }, -- this will enable formatting
         },
-      }))
-      nvim_lsp.lua_ls.setup(with_lsp_default_config({
+      })
+      lsp_enable('lua_ls', {
         settings = {
           Lua = {
             telemetry = { enable = false },
@@ -155,11 +155,7 @@ return {
             },
           },
         },
-      }))
-    end
-
-    for _, lsp in ipairs(servers) do
-      nvim_lsp[lsp].setup(with_lsp_default_config())
+      })
     end
   end,
 }
