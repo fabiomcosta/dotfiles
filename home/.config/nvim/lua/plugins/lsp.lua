@@ -60,22 +60,8 @@ return {
 
     local nvim_lsp_util = require('lspconfig.util')
 
-    local flow_root_dir_finder = nvim_lsp_util.root_pattern('.flowconfig')
     lsp_enable('flow', {
       cmd = { 'flow', 'lsp' },
-      root_dir = flow_root_dir_finder,
-      on_new_config = function(config, new_root_dir)
-        -- We'll only create new LSP client for root_dirs that are
-        -- not the same as the one from the cwd, because the `flow` name
-        -- is already used for that, avoiding the creation of a duplica
-        -- client.
-        if flow_root_dir_finder(vim.loop.cwd()) ~= new_root_dir then
-          config.name = 'flow-' .. new_root_dir
-          -- This makes LspRestart work with the new client configs
-          local lspconfigs = require('lspconfig.configs')
-          rawset(lspconfigs, config.name, lspconfigs.flow)
-        end
-      end,
     })
 
     if utils.is_meta_server() then
@@ -83,8 +69,8 @@ return {
 
       lsp_enable('relay_lsp', {
         cmd = { 'relay', 'lsp' },
-        root_dir = function()
-          return utils.get_arc_root()
+        root_dir = function(bufnr, on_dir)
+          on_dir(utils.get_arc_root())
         end,
       })
 
@@ -100,33 +86,6 @@ return {
       if installed_extensions['nuclide.erlang'] then
         lsp_enable('erlang@meta')
       end
-
-      -- lsp_enable('eslint@meta', {
-      --   settings = {
-      --     editor = {
-      --       codeActionsOnSave = {
-      --         source = { fixAll = { eslint = true } }
-      --       },
-      --     },
-      --     eslint = {
-      --       autofixOnSave = {
-      --         ruleAllowlist = {
-      --           "fb-www/order-requires",
-      --           "lint/sort-requires",
-      --           "@fb-tools/sort-requires"
-      --         }
-      --       }
-      --     }
-      --     ['editor.codeActionsOnSave'] = {
-      --       ['source.fixAll.eslint'] = true
-      --     },
-      --     ['eslint.autofixOnSave.ruleAllowlist'] = {
-      --       "fb-www/order-requires",
-      --       "lint/sort-requires",
-      --       "@fb-tools/sort-requires"
-      --     }
-      --   }
-      -- })
     else
       lsp_enable('pylsp')
       lsp_enable('rust_analyzer')
