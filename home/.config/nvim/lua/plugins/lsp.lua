@@ -67,11 +67,18 @@ return {
     if utils.is_meta_server() then
       lsp_enable('hhvm')
 
+      -- from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/relay_lsp.lua
       lsp_enable('relay_lsp', {
         cmd = { 'relay', 'lsp' },
-        root_dir = function(bufnr, on_dir)
-          on_dir(utils.get_arc_root())
-        end,
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'javascript.jsx',
+          'typescript',
+          'typescriptreact',
+          'typescript.tsx',
+        },
+        root_markers = { 'relay.config.json', 'relay.config.js', 'package.json' },
       })
 
       local installed_extensions =
