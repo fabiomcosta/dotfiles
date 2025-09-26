@@ -147,8 +147,8 @@ set_keymap('v', ';', ':', { silent = false })
 set_keymap('c', '<C-v>', '<C-r>"')
 set_keymap('s', '<C-v>', '<C-r>"')
 
-local initLuaFilePath = debug.getinfo(1).source:sub(2)
-set_keymap('n', '<LEADER>ev', ':e ' .. initLuaFilePath .. '<CR>')
+local init_lua_file_path = debug.getinfo(1).source:sub(2)
+set_keymap('n', '<LEADER>ev', ':e ' .. init_lua_file_path .. '<CR>')
 set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l')
 set_keymap('n', '<LEADER>-', ':split<CR><C-w>j')
 

@@ -9,7 +9,7 @@ return {
     vim.g['test#neovim#start_normal'] = 1
     vim.g['test#javascript#jest#options'] = '--verbose=false'
     vim.g['test#custom_runners'] =
-    { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
+      { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
 
     -- Closes the last term window that is also full-width.
     local kill_bottom_sheet = function()

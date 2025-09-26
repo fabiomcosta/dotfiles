@@ -5,7 +5,6 @@ return {
   { 'tpope/vim-repeat' },
   { 'tpope/vim-fugitive' },
   { 'moll/vim-node' },
-  { 'christoomey/vim-tmux-navigator' },
   { 'ntpeters/vim-better-whitespace' },
   { 'andymass/vim-matchup' },
   { 'wellle/targets.vim' },
@@ -13,7 +12,6 @@ return {
   -- { 'jparise/vim-graphql' },
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
-
   { 'williamboman/mason.nvim', config = true },
   {
     'OliverChao/bufmsg.nvim',
