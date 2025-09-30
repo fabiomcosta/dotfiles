@@ -1,3 +1,74 @@
+-- return {
+--   "nvim-neotest/neotest",
+--   dependencies = {
+--     "nvim-neotest/nvim-nio",
+--     "nvim-lua/plenary.nvim",
+--     "antoinemadec/FixCursorHold.nvim",
+--     "nvim-treesitter/nvim-treesitter",
+--     'nvim-neotest/neotest-jest',
+--     { dir = "~/neotest-testrunner" }
+--   },
+--   config = function()
+--     require("neotest").setup({
+--       log_level = 0,
+--       discovery = { enabled = false },
+--       watch = {
+--         symbol_queries = {
+--           hack = [[
+--             ;query
+--             ;; Catches {@symbol}::*
+--             ;; ex: await WhatsAppSMBMarketingMessagesABProps::genABPropByWABA<bool>()
+--             ;; @symbol == WhatsAppSMBMarketingMessagesABProps
+--             ;; ex: EnumName::ENUM_VALUE
+--             ;; @symbol == EnumName
+--             ;; ex: global_function()
+--             ;; @symbol == global_function
+--             (qualified_identifier) @symbol
+--           ]]
+--         }
+--       },
+--       summary = {
+--         open = "botright split | horizontal resize 40"
+--       },
+--       adapters = {
+--         require("neotest-testrunner").hack
+--         -- require('neotest-jest')({
+--         --   -- jestCommand = "jest",
+--         --   -- jestConfigFile = ".arcconfig",
+--         --   -- env = { CI = true },
+--         --   -- cwd = function(_)
+--         --   --   return vim.fn.getcwd()
+--         --   -- end,
+--         -- }),
+--       },
+--     })
+--
+--     vim.keymap.set('n', '<LEADER>tf', function()
+--       require('neotest').run.run(vim.fn.expand('%'))
+--     end)
+--
+--     vim.keymap.set('n', '<LEADER>tn', function()
+--       require('neotest').run.run()
+--     end)
+--
+--     vim.keymap.set('n', '<LEADER>tl', function()
+--       require('neotest').run.run_last()
+--     end)
+--
+--     vim.keymap.set('n', '<LEADER>tk', function()
+--       require('neotest').summary.close()
+--     end)
+--
+--     vim.keymap.set('n', '<LEADER>tw', function()
+--       require('neotest').watch.toggle()
+--     end)
+--
+--     vim.keymap.set('n', '<LEADER>to', function()
+--       require('neotest').output.open()
+--     end)
+--   end
+-- }
+--
 local utils = require('utils')
 local set_keymap = utils.set_keymap
 
