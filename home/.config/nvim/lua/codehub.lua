@@ -82,10 +82,9 @@ end
 
 local function getURL(mode, opts)
   local metaCmdsStatus, metaCmds = pcall(require, 'meta.cmds')
-  local metaUtilStatus, metaUtil = pcall(require, 'meta.util')
-
-  if metaCmdsStatus and metaUtilStatus then
-    if metaUtil.hg.get_root_path() ~= nil then
+  if metaCmdsStatus then
+    local hg_root_path = vim.fs.root(vim.uv.cwd() or vim.fn.getcwd(), { ".hg" })
+    if hg_root_path ~= nil then
       if mode == 'n' then
         return metaCmds.get_codehub_link()
       else
