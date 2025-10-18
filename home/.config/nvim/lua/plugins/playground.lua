@@ -76,7 +76,7 @@ end
 
 local function is_callable(fn)
   return type(fn) == 'function'
-    or (type(fn) == 'table' and type(getmetatable(fn).__call) == 'function')
+      or (type(fn) == 'table' and type(getmetatable(fn).__call) == 'function')
 end
 
 local function assert_callable(func)
