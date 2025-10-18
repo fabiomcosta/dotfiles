@@ -5,10 +5,7 @@ local utils = require('utils')
 local function get_sources()
   if utils.is_meta_server() then
     local meta = require('meta')
-    if meta.null_ls.diagnostics.arclint.generator.async_iterator then
-      return { meta.null_ls.diagnostics.arclint }
-    end
-    return { require('arclint') }
+    return { meta.null_ls.diagnostics.arclint }
   end
   local none = require('null-ls')
   return {
