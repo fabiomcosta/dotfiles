@@ -266,22 +266,6 @@ set_keymap('t', '<ESC>', '<C-\\><C-n>')
 -- end
 -- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
 
-vim.api.nvim_create_user_command('GitOpenActiveFiles', function()
-  local file_paths = utils.get_os_command_output({
-    'git',
-    'diff',
-    '--relative', -- prints paths relative to CWD
-    '--name-only',
-    '--diff-filter=AM',
-  })
-  for _, name in ipairs(file_paths) do
-    vim.cmd('vsplit | e ' .. name)
-  end
-end, {})
-
--- open modified [files]
-set_keymap('n', '<LEADER>om', '<CMD>GitOpenActiveFiles<CR>')
-
 require('keyword_case').setup()
 
 set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
