@@ -1,5 +1,4 @@
 local utils = require('utils')
-local set_keymap = utils.set_keymap
 
 return {
   'neovim/nvim-lspconfig',
@@ -8,8 +7,13 @@ return {
     'meta.nvim',
   },
   config = function()
-    set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>')
-    set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>')
+    vim.keymap.set('n', '[d', '<CMD>lua vim.diagnostic.goto_prev()<CR>')
+    vim.keymap.set('n', ']d', '<CMD>lua vim.diagnostic.goto_next()<CR>')
+    vim.keymap.set('n', 'gd', '<CMD>lua vim.lsp.buf.definition()<CR>')
+    vim.keymap.set('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
+    vim.keymap.set('n', '<LEADER>ca', function()
+      require('tiny-code-action').code_action()
+    end)
 
     local on_attach = function(client, bufnr)
       utils.auto_format_on_save(client, bufnr)
@@ -32,12 +36,6 @@ return {
       else
         buf_set_keymap('n', '<LEADER>fr', '<CMD>Telescope grep_string<CR>')
       end
-
-      buf_set_keymap('n', 'gd', '<CMD>lua vim.lsp.buf.definition()<CR>')
-      buf_set_keymap('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
-      buf_set_keymap('n', '<leader>ca', function()
-        require('tiny-code-action').code_action()
-      end)
     end
 
     local function with_lsp_default_config(config)
@@ -78,11 +76,15 @@ return {
           'typescriptreact',
           'typescript.tsx',
         },
-        root_markers = { 'relay.config.json', 'relay.config.js', 'package.json' },
+        root_markers = {
+          'relay.config.json',
+          'relay.config.js',
+          'package.json',
+        },
       })
 
       local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+        require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
         lsp_enable('prettier@meta')
