@@ -60,6 +60,14 @@ async function main() {
       home('.fb-vimrc'),
       secrets('facebook-devserver/.fb-vimrc')
     );
+    await createSymlinkFor(
+      home('bin/local-file-proxy-for-od'),
+      secrets('facebook-devserver/bin/local-file-proxy-for-od')
+    );
+    await createSymlinkFor(
+      home('bin/dev-with-fileproxy'),
+      secrets('facebook-devserver/bin/dev-with-fileproxy')
+    );
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
