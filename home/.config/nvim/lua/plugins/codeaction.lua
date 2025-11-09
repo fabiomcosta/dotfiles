@@ -1,10 +1,10 @@
 return {
   'rachartier/tiny-code-action.nvim',
   dependencies = {
-    { "folke/snacks.nvim", opts = { terminal = {} } }
+    {"nvim-telescope/telescope.nvim"},
   },
   event = 'LspAttach',
   opts = {
-    picker = "snacks",
+    picker = "telescope",
   },
 }

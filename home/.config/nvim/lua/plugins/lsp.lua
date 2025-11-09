@@ -13,7 +13,7 @@ return {
     vim.keymap.set('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
     vim.keymap.set('n', '<LEADER>ca', function()
       require('tiny-code-action').code_action()
-    end)
+    end, { noremap = true, silent = true })
 
     local on_attach = function(client, bufnr)
       utils.auto_format_on_save(client, bufnr)
