@@ -1,5 +1,3 @@
--- Simple pattern that looks for an absolute path
--- local PATH_PATTERN = '^%/?[%w%._%-%/]+$'
 local FILEPROXY_URL = 'http://localhost:8092/fileproxy'
 -- The dnd handlers are only going to work when the current buffer
 -- matches this pattern.
