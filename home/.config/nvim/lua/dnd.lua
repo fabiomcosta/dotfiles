@@ -275,7 +275,7 @@ local function handle_drop()
     ''
   )
 
-  function upload(file_path, callback)
+  local function upload(file_path, callback)
     local tmp_path = tempname_for(file_path)
     download_from_fileproxy(file_path, tmp_path, function(obj)
       px_upload(tmp_path, function(obj)
