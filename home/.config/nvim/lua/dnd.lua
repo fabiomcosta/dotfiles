@@ -24,20 +24,33 @@ end
 -- as the one provided.
 local function tempname_for(path)
   local tmp_path = vim.fn.tempname()
-  return vim.fn.join({ vim.fs.dirname(tmp_path), vim.fs.basename(path) }, '/')
+  return vim.fs.joinpath(vim.fs.dirname(tmp_path), vim.fs.basename(path))
+end
+
+local function is_ssh_session()
+  return vim.env.SSH_CLIENT ~= nil
 end
 
 -- Download file from the local fileproxy
 local function download_from_fileproxy(file_path, tmp_path, callback)
   vim.system(
-    { 'curl', '-o', tmp_path, FILEPROXY_URL .. url_encode_path(file_path) },
+    {
+      'curl',
+      '-s',
+      '-w',
+      '%{http_code}',
+      '-o',
+      tmp_path,
+      FILEPROXY_URL .. url_encode_path(file_path),
+    },
     {},
     vim.schedule_wrap(function(obj)
-      if obj.code ~= 0 then
+      if obj.code ~= 0 or obj.stdout ~= '200' then
         return vim.notify(
           string.format(
-            [[Could not download "%s" from local file proxy.]],
-            file_path
+            [[Could not download "%s" from local file proxy. HTTP error %s.]],
+            vim.fs.basename(file_path),
+            obj.stdout
           ),
           vim.log.levels.ERROR
         )
@@ -53,6 +66,7 @@ local function px_upload(file_path, callback)
   px_proc = vim.system(
     { 'px', 'upload', file_path },
     {
+      timeout = 12000,
       text = true,
       stdin = true,
       stderr = vim.schedule_wrap(function(err, data)
@@ -68,18 +82,26 @@ local function px_upload(file_path, callback)
     },
     vim.schedule_wrap(function(obj)
       if obj.code ~= 0 then
+        if obj.code == 124 and not is_ssh_session() then
+          return vim.notify(
+            string.format(
+              [[Uploading "%s" to pixelcloud timed out. You likely need to connect to the VPN.]],
+              vim.fs.basename(file_path)
+            ),
+            vim.log.levels.ERROR
+          )
+        end
         return vim.notify(
-          string.format([[Could not upload "%s" to pixelcloud.]], file_path),
+          string.format(
+            [[Could not upload "%s" to pixelcloud.]],
+            vim.fs.basename(file_path)
+          ),
           vim.log.levels.ERROR
         )
       end
       callback(obj)
     end)
   )
-end
-
-local function is_ssh_session()
-  return vim.env.SSH_CLIENT ~= nil
 end
 
 local function focus_events(focus_gained_callback, focus_lost_callback, config)
@@ -167,27 +189,34 @@ local function split_file_path(file_path)
   end, file_paths)
 end
 
+local function is_likely_dnd(file_paths)
+  for _, file_path in ipairs(file_paths) do
+    if #file_path <= 1 then
+      return false
+    end
+    if file_path:find('://') ~= nil then
+      return false
+    end
+  end
+  return true
+end
+
 local function replace_column_range(buf, line, start_col, end_col, replacement)
   local text = vim.api.nvim_buf_get_lines(buf, line, line + 1, false)[1]
   if not text then
     return
   end
   local new_text = text:sub(1, start_col)
-    .. replacement
-    .. text:sub(end_col + 1)
+      .. replacement
+      .. text:sub(end_col + 1)
   vim.api.nvim_buf_set_lines(buf, line, line + 1, false, { new_text })
 end
 
 local function handle_drop()
-  local win_id = vim.api.nvim_get_current_win()
-  local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
-
   -- In general the user needs to blur/focusout nvim in order to be able
   -- to drag-n-drop a file, and when dropping it the text is first updated
   -- before the FocusGained.
-
   if _is_focused then
-    _last_cursor_pos = cursor_pos
     return
   end
 
@@ -198,24 +227,29 @@ local function handle_drop()
     return
   end
 
+  local win_id = vim.api.nvim_get_current_win()
+  local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
+
   local initial_col
   if _last_cursor_pos ~= nil then
-    initial_col = _last_cursor_pos[2] + 1
+    initial_col = _last_cursor_pos[2] + get_cursor_size() + 1
+    vim.notify(string.format('%s %s', cursor_pos[2], initial_col))
   else
     initial_col = first_slash_index
   end
 
   local cursor_row, cursor_col = unpack(cursor_pos)
   local file_path =
-    vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
-  if file_path == '' then
+      vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
+  local file_paths = split_file_path(file_path)
+
+  if not is_likely_dnd(file_paths) then
     -- Ignore as chances are there was no file drag-n-drop event
     return
   end
 
-  local file_paths = split_file_path(file_path)
-
   -- TODO: simple path validation
+  vim.notify(('Processing %s...'):format(vim.fn.join(file_paths, ', ')))
 
   -- if this is an ssh session, we can't check if the file exists, because
   -- it is local to the client and not the server.
@@ -241,7 +275,6 @@ local function handle_drop()
     ''
   )
 
-  vim.notify('Uploading to pixelcloud ' .. vim.fn.join(file_paths, ', '))
   -- TODO an inline UI wi/Users/fabs/local.txtth "Uploading {file_path}..." message
   -- TODO it would be nice to keep the same order as the pasted files
   -- currently the first file to upload is pasted in the buffer.
@@ -279,6 +312,8 @@ function M.setup()
     _is_focused = true
   end, function()
     _is_focused = false
+    local win_id = vim.api.nvim_get_current_win()
+    _last_cursor_pos = vim.api.nvim_win_get_cursor(win_id)
   end, { pattern = PATTERN, group = augroup })
 end
 
