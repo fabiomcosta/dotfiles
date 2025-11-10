@@ -275,11 +275,7 @@ local function handle_drop()
     ''
   )
 
-  -- TODO an inline UI with "Uploading {file_path}..." message
-
-  -- TODO it would be nice to keep the same order as the pasted files
-  -- currently the first file to upload is pasted in the buffer.
-  for _, file_path in ipairs(file_paths) do
+  function upload(file_path, callback)
     local tmp_path = tempname_for(file_path)
     download_from_fileproxy(file_path, tmp_path, function(obj)
       px_upload(tmp_path, function(obj)
@@ -291,9 +287,26 @@ local function handle_drop()
           initial_col - 1,
           ' ' .. px_url
         )
+        if callback ~= nil then
+          callback()
+        end
       end)
     end)
   end
+
+  -- TODO an inline UI with "Uploading {file_path}..." message
+
+  local first_file_paths = table.remove(file_paths, 1)
+
+  -- Upload the first one blocking, then upload all the others concurrently.
+  -- This is so if px is asking for the token we are asked for it only once.
+  upload(first_file_paths, function()
+    -- TODO it would be nice to keep the same order as the pasted files
+    -- currently the first file to upload is pasted in the buffer.
+    for _, file_path in ipairs(file_paths) do
+      upload(file_path)
+    end
+  end)
 end
 
 local M = {}
