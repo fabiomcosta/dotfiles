@@ -61,7 +61,6 @@ local function download_from_fileproxy(file_path, tmp_path, callback)
 end
 
 local function px_upload(file_path, callback)
-  local stderr_data
   local px_proc
   px_proc = vim.system(
     { 'px', 'upload', file_path },
@@ -71,12 +70,13 @@ local function px_upload(file_path, callback)
       stdin = true,
       stderr = vim.schedule_wrap(function(err, data)
         -- When first running px it asks the user to paste the token
-        -- from a provided URL, this awkward prompts the user to that
+        -- from a provided URL, this awkward code prompts the user to that
         -- and writes it back to the px process.
-        if err == nil and data ~= nil and stderr_data ~= data then
-          stderr_data = data
+        if err == nil and data ~= nil and data:find(':%s*$') ~= nil then
           local token = vim.fn.input(data)
           px_proc:write(token .. '\n')
+        elseif data ~= nil then
+          vim.print(data)
         end
       end),
     },
@@ -275,10 +275,11 @@ local function handle_drop()
     ''
   )
 
-  -- TODO an inline UI wi/Users/fabs/local.txtth "Uploading {file_path}..." message
+  -- TODO an inline UI with "Uploading {file_path}..." message
+
   -- TODO it would be nice to keep the same order as the pasted files
   -- currently the first file to upload is pasted in the buffer.
-  for i, file_path in ipairs(file_paths) do
+  for _, file_path in ipairs(file_paths) do
     local tmp_path = tempname_for(file_path)
     download_from_fileproxy(file_path, tmp_path, function(obj)
       px_upload(tmp_path, function(obj)
