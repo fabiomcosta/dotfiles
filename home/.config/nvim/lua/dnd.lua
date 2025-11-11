@@ -2,8 +2,11 @@ local FILEPROXY_URL = 'http://localhost:8092/fileproxy'
 -- The dnd handlers are only going to work when the current buffer
 -- matches this pattern.
 local PATTERN = '*.commit.hg.txt'
-local _is_focused = true
-local _last_cursor_pos = nil
+local _state = {
+  is_focused = true,
+  last_cursor_pos = nil,
+  is_empty_character_under_cursor = false,
+}
 
 local function url_encode(str)
   str = str:gsub('([^%w%-_%.%~])', function(c)
@@ -63,7 +66,6 @@ local function px_upload(file_path, callback)
   px_proc = vim.system(
     { 'px', 'upload', file_path },
     {
-      timeout = 12000,
       text = true,
       stdin = true,
       stderr = vim.schedule_wrap(function(err, data)
@@ -80,15 +82,6 @@ local function px_upload(file_path, callback)
     },
     vim.schedule_wrap(function(obj)
       if obj.code ~= 0 then
-        if obj.code == 124 and not is_ssh_session() then
-          return vim.notify(
-            string.format(
-              [[Uploading "%s" to pixelcloud timed out. You likely need to connect to the VPN.]],
-              vim.fs.basename(file_path)
-            ),
-            vim.log.levels.ERROR
-          )
-        end
         return vim.notify(
           string.format(
             [[Could not upload "%s" to pixelcloud.]],
@@ -205,8 +198,8 @@ local function replace_column_range(buf, line, start_col, end_col, replacement)
     return
   end
   local new_text = text:sub(1, start_col)
-      .. replacement
-      .. text:sub(end_col + 1)
+    .. replacement
+    .. text:sub(end_col + 1)
   vim.api.nvim_buf_set_lines(buf, line, line + 1, false, { new_text })
 end
 
@@ -214,7 +207,7 @@ local function handle_drop()
   -- In general the user needs to blur/focusout nvim in order to be able
   -- to drag-n-drop a file, and when dropping it the text is first updated
   -- before the FocusGained.
-  if _is_focused then
+  if _state.is_focused then
     return
   end
 
@@ -229,16 +222,18 @@ local function handle_drop()
   local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
 
   local initial_col
-  if _last_cursor_pos ~= nil then
-    initial_col = _last_cursor_pos[2] + get_cursor_size() + 1
-    vim.notify(string.format('%s %s', cursor_pos[2], initial_col))
+  if _state.last_cursor_pos ~= nil then
+    initial_col = _state.last_cursor_pos[2] + 1
+    if not _state.is_empty_character_under_cursor then
+      initial_colg = initial_col + get_cursor_size()
+    end
   else
     initial_col = first_slash_index
   end
 
   local cursor_row, cursor_col = unpack(cursor_pos)
   local file_path =
-      vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
+    vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
   local file_paths = split_file_path(file_path)
 
   if not is_likely_dnd(file_paths) then
@@ -321,11 +316,16 @@ function M.setup()
     callback = handle_drop,
   })
   focus_events(function()
-    _is_focused = true
+    _state.is_focused = true
   end, function()
-    _is_focused = false
+    _state.is_focused = false
     local win_id = vim.api.nvim_get_current_win()
-    _last_cursor_pos = vim.api.nvim_win_get_cursor(win_id)
+    local cursor_pos = vim.api.nvim_win_get_cursor(win_id)
+    _state.last_cursor_pos = cursor_pos
+    local cursor_col = cursor_pos[2] + 1
+    _state.is_empty_character_under_cursor = vim.api
+      .nvim_get_current_line()
+      :sub(cursor_col, cursor_col) == ''
   end, { pattern = PATTERN, group = augroup })
 end
 
