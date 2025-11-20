@@ -1,4 +1,3 @@
-local FILEPROXY_URL = 'http://localhost:8092/fileproxy'
 -- The dnd handlers are only going to work when the current buffer
 -- matches this pattern.
 local PATTERN = '*.commit.hg.txt'
@@ -15,12 +14,6 @@ local function url_encode(str)
   return str
 end
 
-local function url_encode_path(path)
-  local paths = vim.split(path, '/')
-  paths = vim.tbl_map(url_encode, paths)
-  return vim.fn.join(paths, '/')
-end
-
 -- same as vim.fn.tempname but makes sure that the tmp file is the same
 -- as the one provided.
 local function tempname_for(path)
@@ -34,6 +27,11 @@ end
 
 -- Download file from the local fileproxy
 local function download_from_fileproxy(file_path, tmp_path, callback)
+  local fileproxy_url = string.format(
+    'http://localhost:%s/fileproxy?path=%s',
+    vim.env.META_SERVER_PORT,
+    url_encode(file_path)
+  )
   vim.system(
     {
       'curl',
@@ -42,7 +40,7 @@ local function download_from_fileproxy(file_path, tmp_path, callback)
       '%{http_code}',
       '-o',
       tmp_path,
-      FILEPROXY_URL .. url_encode_path(file_path),
+      fileproxy_url,
     },
     {},
     vim.schedule_wrap(function(obj)
@@ -198,8 +196,8 @@ local function replace_column_range(buf, line, start_col, end_col, replacement)
     return
   end
   local new_text = text:sub(1, start_col)
-    .. replacement
-    .. text:sub(end_col + 1)
+      .. replacement
+      .. text:sub(end_col + 1)
   vim.api.nvim_buf_set_lines(buf, line, line + 1, false, { new_text })
 end
 
@@ -233,7 +231,7 @@ local function handle_drop()
 
   local cursor_row, cursor_col = unpack(cursor_pos)
   local file_path =
-    vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
+      vim.trim(line:sub(initial_col, cursor_col + get_cursor_size()))
   local file_paths = split_file_path(file_path)
 
   if not is_likely_dnd(file_paths) then
@@ -324,8 +322,8 @@ function M.setup()
     _state.last_cursor_pos = cursor_pos
     local cursor_col = cursor_pos[2] + 1
     _state.is_empty_character_under_cursor = vim.api
-      .nvim_get_current_line()
-      :sub(cursor_col, cursor_col) == ''
+        .nvim_get_current_line()
+        :sub(cursor_col, cursor_col) == ''
   end, { pattern = PATTERN, group = augroup })
 end
 
