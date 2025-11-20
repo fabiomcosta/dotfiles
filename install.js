@@ -60,6 +60,22 @@ async function main() {
       home('.fb-vimrc'),
       secrets('facebook-devserver/.fb-vimrc')
     );
+    await createSymlinkFor(
+      home('bin/open'),
+      secrets('facebook-devserver/bin/open')
+    );
+    await createSymlinkFor(
+      home('bin/xdg-open'),
+      secrets('facebook-devserver/bin/xdg-open')
+    );
+    await createSymlinkFor(
+      home('bin/hg-rebase-my-commits'),
+      secrets('facebook-devserver/bin/hg-rebase-my-commits')
+    );
+    await createSymlinkFor(
+      home('bin/pbcopy'),
+      secrets('facebook-devserver/bin/pbcopy')
+    );
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
