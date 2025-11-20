@@ -1,5 +1,5 @@
-local function tableGetFromEnd(tableInstance, index)
-  return tableInstance[#tableInstance + 1 - index]
+local function table_get_from_end(table_instance, index)
+  return table_instance[#table_instance + 1 - index]
 end
 
 local function split(inputstr, sep)
@@ -13,133 +13,112 @@ local function split(inputstr, sep)
   return t
 end
 
-local function isMacos()
-  local uname = vim.fn.trim(vim.fn.system('uname'))
-  if vim.v.shell_error == 1 then
-    return false
-  end
-  return uname == "Darwin"
-end
-
-local function isRemoteSession()
-  return (vim.env.SSH_CLIENT or vim.env.SSH_TTY) ~= nil
-end
-
-local function possiblyHasOpenerSocketFile()
-  -- The location of this file depends on some configuration,
-  -- but this is the default value and should work in most cases.
-  return vim.fn.filereadable(vim.fn.expand('~/.opener.sock')) > 0
-end
-
-local function canUseOpen()
-  if possiblyHasOpenerSocketFile() then
-    return true
-  end
-  return isMacos() and not isRemoteSession()
-end
-
 local BASE_URL = 'https://www.internalfb.com/code/'
 
-local function getLineRange(mode)
+local function get_line_range(mode)
   if mode == 'n' then
     return vim.fn.line('.')
   end
-  local startLine = vim.fn.line("'<")
-  local endLine = vim.fn.line("'>")
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
 
-  if endLine == 0 then
-    return startLine
+  if end_line == 0 then
+    return start_line
   end
-  return startLine .. '-' .. endLine
+  return start_line .. '-' .. end_line
 end
 
-local function getRepoName()
-  local remoteURL = vim.fn.trim(
-    vim.fn.system({ 'git', 'remote', 'get-url', 'origin' })
-  )
-  local urlParts = split(remoteURL, '/')
-  return tableGetFromEnd(urlParts, 2) .. '-' .. tableGetFromEnd(urlParts, 1)
+local function get_repo_name()
+  local remote_url =
+      vim.fn.trim(vim.fn.system({ 'git', 'remote', 'get-url', 'origin' }))
+  local urlParts = split(remote_url, '/')
+  return table_get_from_end(urlParts, 2)
+      .. '-'
+      .. table_get_from_end(urlParts, 1)
 end
 
-local function getURLForGitRepo(mode)
-  local repo = getRepoName()
-  local gitPathPrefix = vim.fn.trim(
-    vim.fn.system({ 'git', 'rev-parse', '--show-prefix' })
-  )
-  local lineRange = getLineRange(mode)
-  local localPath = vim.fn.resolve(
-    vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.')
-  )
+local function get_url_for_git_repo(mode)
+  local repo = get_repo_name()
+  local git_path_prefix =
+      vim.fn.trim(vim.fn.system({ 'git', 'rev-parse', '--show-prefix' }))
+  local line_range = get_line_range(mode)
+  local local_path =
+      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%'), ':~:.'))
   local url = BASE_URL
       .. repo
       .. '/'
-      .. gitPathPrefix
-      .. localPath
+      .. git_path_prefix
+      .. local_path
       .. '?lines='
-      .. lineRange
+      .. line_range
   return url
 end
 
-local function getURL(mode, opts)
-  local metaCmdsStatus, metaCmds = pcall(require, 'meta.cmds')
-  if metaCmdsStatus then
-    local hg_root_path = vim.fs.root(vim.uv.cwd() or vim.fn.getcwd(), { ".hg" })
+local function get_url(mode, opts)
+  local meta_cmds_status, meta_cmds = pcall(require, 'meta.cmds')
+  if meta_cmds_status then
+    local hg_root_path = vim.fs.root(vim.uv.cwd() or vim.fn.getcwd(), { '.hg' })
     if hg_root_path ~= nil then
       if mode == 'n' then
-        return metaCmds.get_codehub_link()
+        return meta_cmds.get_codehub_link()
       else
-        return metaCmds.get_codehub_link(2, opts.line1, opts.line2)
+        return meta_cmds.get_codehub_link(2, opts.line1, opts.line2)
       end
     end
   end
-  return getURLForGitRepo(mode)
+  return get_url_for_git_repo(mode)
 end
 
-local function copyToRegister(url)
+local function copy_to_register(url)
   vim.fn.setreg('+', url)
   print('copied ' .. url)
 end
 
-local function copyURL(mode, opts)
-  local url = getURL(mode, opts)
-  copyToRegister(url)
+local function copy_url(mode, opts)
+  local url = get_url(mode, opts)
+  copy_to_register(url)
 end
 
-local function openURL(mode, opts)
-  local url = getURL(mode, opts)
-  if canUseOpen() then
-    vim.cmd("silent !open '" .. url .. "'")
-  else
-    copyToRegister(url)
+local function open_or_copy_url(url)
+  if vim.ui.open(url):wait().code == 0 then
+    -- if open succeeded
+    return true
   end
+  copy_to_register(url)
+  return false
+end
+
+local function open_url(mode, opts)
+  local url = get_url(mode, opts)
+  open_or_copy_url(url)
 end
 
 local function codehub_link_yank(opts)
   local action = opts.fargs[1]
 
-  local mode = vim.fn.mode() -- detect current mode
+  local mode = vim.fn.mode()                          -- detect current mode
   if mode == 'v' or mode == 'V' or mode == '\22' then -- <C-V>
     mode = 'v'
     vim.cmd([[execute "normal! \<ESC>"]])
   end
+
   local opts = {
     line1 = vim.fn.line("'<"),
-    line2 = vim.fn.line("'>")
+    line2 = vim.fn.line("'>"),
   }
-
   if action == 'copy' then
-    return copyURL(mode, opts)
+    return copy_url(mode, opts)
   elseif action == 'open' then
-    return openURL(mode, opts)
+    return open_url(mode, opts)
   end
   assert('copy and open are the only supported actions.')
 end
 
-vim.api.nvim_create_user_command("CodehubLinkYank", codehub_link_yank, {
-  desc = "Yank codehub link command",
+vim.api.nvim_create_user_command('CodehubLinkYank', codehub_link_yank, {
+  desc = 'Yank codehub link command',
   nargs = '+',
 })
 
 return {
-  codehub_link_yank = codehub_link_yank
+  codehub_link_yank = codehub_link_yank,
 }
