@@ -76,6 +76,15 @@ async function main() {
       home('bin/pbcopy'),
       secrets('facebook-devserver/bin/pbcopy')
     );
+  } else {
+    await createSymlinkFor(
+      home('bin/local-file-proxy-for-od'),
+      secrets('facebook-devserver/bin/local-file-proxy-for-od')
+    );
+    await createSymlinkFor(
+      home('bin/dev-with-fileproxy'),
+      secrets('facebook-devserver/bin/dev-with-fileproxy')
+    );
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
@@ -97,15 +106,6 @@ async function main() {
     await createHomeSymlink('.config/ghostty');
     await createHomeSymlink('Applications/VimProtocolHandler.app');
   }
-
-  await createSymlinkFor(
-    home('bin/local-file-proxy-for-od'),
-    secrets('facebook-devserver/bin/local-file-proxy-for-od')
-  );
-  await createSymlinkFor(
-    home('bin/dev-with-fileproxy'),
-    secrets('facebook-devserver/bin/dev-with-fileproxy')
-  );
 
   await createHomeSymlink('.vim');
   await createHomeSymlink('.vimrc');
