@@ -124,7 +124,7 @@ local function focus_events(focus_gained_callback, focus_lost_callback, config)
       })
     )
     vim.api.nvim_create_autocmd(
-      'CursorHold',
+      {'CursorHold', 'CursorHoldI'},
       vim.tbl_deep_extend('force', config, {
         callback = simulate_focus_lost,
       })
