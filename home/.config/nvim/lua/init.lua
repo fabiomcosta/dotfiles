@@ -272,16 +272,6 @@ vim.keymap.set({ 'n', 'v' }, '<LEADER>hc', function()
   vim.cmd('CodehubLinkYank copy')
 end)
 
-vim.api.nvim_create_user_command('MetaDiffCheckout', function()
-  require('meta_diff').diff_picker({ checkout = true })
-end, {})
-vim.api.nvim_create_user_command('MetaDiffOpenFiles', function()
-  require('meta_diff').diff_picker({})
-end, {})
-
-set_keymap('n', '<LEADER>mc', '<CMD>MetaDiffCheckout<CR>')
-set_keymap('n', '<LEADER>mf', '<CMD>MetaDiffOpenFiles<CR>')
-
 require('secrets.dnd').setup()
 
 local lazypath = utils.joinpath(vim.fn.stdpath('data'), 'lazy', 'lazy.nvim')
