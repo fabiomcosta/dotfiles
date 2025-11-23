@@ -230,25 +230,6 @@ vim.filetype.add({
 
 set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
 
-require('codehub')
-
-vim.keymap.set({ 'n', 'v' }, '<LEADER>hg', function()
-  vim.cmd('CodehubLinkYank open')
-end)
-vim.keymap.set({ 'n', 'v' }, '<LEADER>hc', function()
-  vim.cmd('CodehubLinkYank copy')
-end)
-
-vim.api.nvim_create_user_command('MetaDiffCheckout', function()
-  require('meta_diff').diff_picker({ checkout = true })
-end, {})
-vim.api.nvim_create_user_command('MetaDiffOpenFiles', function()
-  require('meta_diff').diff_picker({})
-end, {})
-
-set_keymap('n', '<LEADER>mc', '<CMD>MetaDiffCheckout<CR>')
-set_keymap('n', '<LEADER>mf', '<CMD>MetaDiffOpenFiles<CR>')
-
 -- close terminal buffer without showing the exit status of the shell
 vim.api.nvim_create_autocmd('TermClose', {
   pattern = 'term://*',
@@ -259,13 +240,6 @@ vim.api.nvim_create_autocmd('TermClose', {
 -- Go to normal mode on terminal by pressing esc.
 set_keymap('t', '<ESC>', '<C-\\><C-n>')
 
--- local function source_if_exists(file)
---   if vim.fn.filereadable(vim.fn.expand(file)) > 0 then
---     vim.cmd('source ' .. file)
---   end
--- end
--- source_if_exists(vim.env.HOME .. '/.fb-vimrc')
-
 require('keyword_case').setup()
 
 set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
@@ -275,8 +249,6 @@ vim.opt.sessionoptions:remove('buffers')
 require('micro_sessions').setup({
   directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
-
-require('dnd').setup()
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
@@ -290,6 +262,27 @@ vim.api.nvim_create_user_command('DevReload', function(context)
     require(module_name)
   end
 end, { nargs = '?' })
+
+vim.keymap.set({ 'n', 'v' }, '<LEADER>hg', function()
+  require('codehub')
+  vim.cmd('CodehubLinkYank open')
+end)
+vim.keymap.set({ 'n', 'v' }, '<LEADER>hc', function()
+  require('codehub')
+  vim.cmd('CodehubLinkYank copy')
+end)
+
+vim.api.nvim_create_user_command('MetaDiffCheckout', function()
+  require('meta_diff').diff_picker({ checkout = true })
+end, {})
+vim.api.nvim_create_user_command('MetaDiffOpenFiles', function()
+  require('meta_diff').diff_picker({})
+end, {})
+
+set_keymap('n', '<LEADER>mc', '<CMD>MetaDiffCheckout<CR>')
+set_keymap('n', '<LEADER>mf', '<CMD>MetaDiffOpenFiles<CR>')
+
+require('secrets.dnd').setup()
 
 local lazypath = utils.joinpath(vim.fn.stdpath('data'), 'lazy', 'lazy.nvim')
 if not vim.loop.fs_stat(lazypath) then
