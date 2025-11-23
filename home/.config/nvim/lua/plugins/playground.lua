@@ -246,4 +246,40 @@ end
 --  print('after')
 --end)()
 
+-- function iter()
+--   local function step()
+--     coroutine.yield(1, 2, 3)
+--     coroutine.yield(4, 5, 6)
+--   end
+--   return coroutine.wrap(step)
+-- end
+
+--
+-- vim.print('a')
+-- for x, y, z in iter() do
+--   for x, y, z in iter() do
+-- for x, y, z in iter() do
+-- vim.print({ x, y, z })
+-- end
+--   end
+-- end
+-- vim.print('b')
+
+-- local function find_all(str, pattern, start_pos)
+--   start_pos = start_pos or 1
+--   return function()
+--     local start, _end = str:find(pattern, start_pos)
+--     if start == nil then
+--       return
+--     end
+--     start_pos = _end + 1
+--     return start, _end
+--   end
+-- end
+--
+-- local text = 'fabio-m\nfabio-m\nfabio-m'
+-- for start_pos, end_pos in find_all(text, 'fabio%-[^\n]*') do
+--   vim.notify(vim.inspect({ start_pos, end_pos }))
+-- end
+
 return {}
