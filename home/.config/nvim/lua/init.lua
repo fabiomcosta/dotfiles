@@ -264,15 +264,15 @@ vim.api.nvim_create_user_command('DevReload', function(context)
 end, { nargs = '?' })
 
 vim.keymap.set({ 'n', 'v' }, '<LEADER>hg', function()
-  require('secrets.codehub')
+  require('secrets.meta.codehub')
   vim.cmd('CodehubLinkYank open')
 end)
 vim.keymap.set({ 'n', 'v' }, '<LEADER>hc', function()
-  require('secrets.codehub')
+  require('secrets.meta.codehub')
   vim.cmd('CodehubLinkYank copy')
 end)
 
-require('secrets.dnd').setup()
+require('secrets.meta.dnd').setup()
 
 local lazypath = utils.joinpath(vim.fn.stdpath('data'), 'lazy', 'lazy.nvim')
 if not vim.loop.fs_stat(lazypath) then
