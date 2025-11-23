@@ -264,11 +264,11 @@ vim.api.nvim_create_user_command('DevReload', function(context)
 end, { nargs = '?' })
 
 vim.keymap.set({ 'n', 'v' }, '<LEADER>hg', function()
-  require('codehub')
+  require('secrets.codehub')
   vim.cmd('CodehubLinkYank open')
 end)
 vim.keymap.set({ 'n', 'v' }, '<LEADER>hc', function()
-  require('codehub')
+  require('secrets.codehub')
   vim.cmd('CodehubLinkYank copy')
 end)
 
