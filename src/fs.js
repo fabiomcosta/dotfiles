@@ -2,7 +2,7 @@ import { question } from 'zx';
 import path from 'path';
 import * as fs from 'fs/promises';
 import { OK, WARN, ERROR, hl } from './log.js';
-import { dir, home, DIR, HOME } from './path.js';
+import { dir, home, metahome, DIR, HOME } from './path.js';
 
 async function prompt(_question) {
   const answer = await question(`${_question} [yN] `);
@@ -100,4 +100,8 @@ export async function createSymlinkFor(origPath, destPath) {
 
 export async function createHomeSymlink(_path) {
   await createSymlinkFor(home(_path), dir(_path));
+}
+
+export async function createMetaHomeSymlink(_path) {
+  await createSymlinkFor(home(_path), metahome(_path));
 }

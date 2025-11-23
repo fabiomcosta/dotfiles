@@ -10,10 +10,11 @@ import {
   isSymlink,
   createSymlinkFor,
   createHomeSymlink,
+  createMetaHomeSymlink,
 } from './src/fs.js';
 import { OK, WARN, ERROR, hl } from './src/log.js';
 import { commandExists, $silent } from './src/shell.js';
-import { dir, home, secrets, DIR } from './src/path.js';
+import { dir, home, metahome, secrets, DIR } from './src/path.js';
 import { setupCron } from './src/cron.js';
 
 async function main() {
@@ -28,10 +29,7 @@ async function main() {
   await $`git submodule update --init`;
 
   if (IS_WORK_MACHINE) {
-    await applyTemplate(
-      secrets('facebook-devserver/.gitconfig'),
-      home('.gitconfig')
-    );
+    await applyTemplate(metahome('.gitconfig'), home('.gitconfig'));
   } else {
     await createHomeSymlink('.gitconfig');
   }
@@ -41,50 +39,23 @@ async function main() {
   }
 
   if (IS_WORK_MACHINE) {
-    await import('./secrets/facebook-devserver/install.js');
+    await import(metahome('install.js'));
   } else if (IS_LINUX) {
     await import('./linux.js');
   }
 
   if (IS_WORK_MACHINE) {
     // We actually want to do this before `npm i` on install.sh... tricky...
-    await createSymlinkFor(
-      home('.npmrc'),
-      secrets('facebook-devserver/.npmrc')
-    );
-    await createSymlinkFor(
-      home('.bashrc'),
-      secrets('facebook-devserver/.bashrc')
-    );
-    await createSymlinkFor(
-      home('.fb-vimrc'),
-      secrets('facebook-devserver/.fb-vimrc')
-    );
-    await createSymlinkFor(
-      home('bin/open'),
-      secrets('facebook-devserver/bin/open')
-    );
-    await createSymlinkFor(
-      home('bin/xdg-open'),
-      secrets('facebook-devserver/bin/xdg-open')
-    );
-    await createSymlinkFor(
-      home('bin/hg-rebase-my-commits'),
-      secrets('facebook-devserver/bin/hg-rebase-my-commits')
-    );
-    await createSymlinkFor(
-      home('bin/pbcopy'),
-      secrets('facebook-devserver/bin/pbcopy')
-    );
+    await createMetaHomeSymlink('.npmrc');
+    await createMetaHomeSymlink('.bashrc');
+    await createMetaHomeSymlink('.fb-vimrc');
+    await createMetaHomeSymlink('bin/open');
+    await createMetaHomeSymlink('bin/xdg-open');
+    await createMetaHomeSymlink('bin/hg-rebase-my-commits');
+    await createMetaHomeSymlink('bin/pbcopy');
   } else {
-    await createSymlinkFor(
-      home('bin/local-file-proxy-for-od'),
-      secrets('facebook-devserver/bin/local-file-proxy-for-od')
-    );
-    await createSymlinkFor(
-      home('bin/dev-with-fileproxy'),
-      secrets('facebook-devserver/bin/dev-with-fileproxy')
-    );
+    await createMetaHomeSymlink('bin/local-file-proxy-for-od');
+    await createMetaHomeSymlink('bin/dev-with-fileproxy');
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
@@ -120,10 +91,7 @@ async function main() {
   await createHomeSymlink('.config/stylua.toml');
   await createSymlinkFor(home('.config/nvim/init.vim'), dir('.vimrc'));
 
-  await createSymlinkFor(
-    home('.config/nvim/lua/secrets'),
-    secrets('facebook-devserver/.config/nvim/lua/secrets')
-  );
+  await createMetaHomeSymlink('.config/nvim/lua/secrets');
 
   console.log(
     'Setting rebase to be the default for the master branch on this repo...'
