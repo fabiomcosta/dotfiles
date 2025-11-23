@@ -1,9 +1,9 @@
-local utils = require('utils')
+local utils = require('secrets.meta.utils')
 
 local function setup_proxy()
-  if utils.is_meta_server() then
+  if utils.is_meta_server() and utils.proxy then
     require('nvim-treesitter.install').command_extra_args = {
-      curl = { '--proxy', 'http://fwdproxy:8080' },
+      curl = { '--proxy', utils.proxy },
     }
   end
 end
@@ -16,11 +16,11 @@ return {
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     config = function()
       setup_proxy()
-      require("nvim-treesitter.parsers").get_parser_configs().hgcommit = {
+      require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
         install_info = {
-          url = "https://github.com/fabiomcosta/tree-sitter-hg-commit",
-          files = {"src/parser.c"},
-          branch = "master",
+          url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
+          files = { 'src/parser.c' },
+          branch = 'master',
         },
       }
       -- This is needed to make the neotest-testrunner adapter work
@@ -59,7 +59,7 @@ return {
           'dap_repl',
           'hgcommit',
           'query',
-          'vimdoc'
+          'vimdoc',
         },
         highlight = {
           enable = true,
@@ -109,9 +109,9 @@ return {
       })
       local get_option = vim.filetype.get_option
       vim.filetype.get_option = function(filetype, option)
-        return option == "commentstring"
-          and require("ts_context_commentstring.internal").calculate_commentstring()
-          or get_option(filetype, option)
+        return option == 'commentstring'
+            and require('ts_context_commentstring.internal').calculate_commentstring()
+            or get_option(filetype, option)
       end
     end,
   },

@@ -1,4 +1,5 @@
-local utils = require('utils')
+local utils = require('secrets.meta.utils')
+local auto_format_on_save = require('utils').auto_format_on_save
 
 return {
   'neovim/nvim-lspconfig',
@@ -16,7 +17,7 @@ return {
     end, { noremap = true, silent = true })
 
     local on_attach = function(client, bufnr)
-      utils.auto_format_on_save(client, bufnr)
+      auto_format_on_save(client, bufnr)
 
       local function buf_set_keymap(mode, keys, action)
         vim.keymap.set(

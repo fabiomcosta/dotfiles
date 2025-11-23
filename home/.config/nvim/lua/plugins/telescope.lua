@@ -1,5 +1,5 @@
-local utils = require('utils')
-local set_keymap = utils.set_keymap
+local utils = require('secrets.meta.utils')
+local set_keymap = require('utils').set_keymap
 
 return {
   'nvim-telescope/telescope.nvim',

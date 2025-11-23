@@ -1,4 +1,5 @@
-local utils = require('utils')
+local utils = require('secrets.meta.utils')
+local auto_format_on_save = require('utils').auto_format_on_save
 
 -- mason doesn't work on the meta server, so we only use black, stylua
 -- and prettier when not on meta.
@@ -21,7 +22,7 @@ return {
   config = function()
     local none = require('null-ls')
     none.setup({
-      on_attach = utils.auto_format_on_save,
+      on_attach = auto_format_on_save,
       sources = get_sources(),
     })
   end,

@@ -202,11 +202,11 @@ end)
 
 vim.filetype.add({
   extension = {
-    php = function(_path, bufnr)
+    php = function(_, bufnr)
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_bufnr)
+            function(_)
               vim.opt_local.syntax = 'php'
               vim.opt_local.iskeyword:append('$')
             end

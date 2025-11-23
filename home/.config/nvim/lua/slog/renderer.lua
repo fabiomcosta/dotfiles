@@ -102,7 +102,7 @@ local function date_adapt_to_timezone(date)
   return os.date('%X %a %b', local_ts)
 end
 
-function should_render_log(log)
+local function should_render_log(log)
   if config.options.filters.log == nil then
     return true
   end
@@ -122,7 +122,8 @@ function renderer.render_log(view, text, log)
     return
   end
 
-  if config.options.filters.level
+  if
+      config.options.filters.level
       and config.options.filters.level ~= log.attributes.level
   then
     return
@@ -179,7 +180,7 @@ function renderer.render_log(view, text, log)
   end
 end
 
-function should_render_trace(trace)
+local function should_render_trace(trace)
   if config.options.filters.trace == nil then
     return true
   end
@@ -223,7 +224,7 @@ function renderer.render_log_details(view, text, log)
       end
 
       trace_item.text =
-      vim.fn.join({ function_name, file_location, metadata }, ' ')
+          vim.fn.join({ function_name, file_location, metadata }, ' ')
 
       text:nl()
     end
