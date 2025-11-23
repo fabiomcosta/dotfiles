@@ -9,3 +9,4 @@ home/.config/karabiner/automatic_backups/
 home/.vim/bundle/
 home/.vim/plugged/
 home/.vim/autoload/
+home/.config/nvim/lua/secrets/
