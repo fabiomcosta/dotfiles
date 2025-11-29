@@ -15,6 +15,9 @@ return {
     vim.keymap.set('n', '<LEADER>ca', function()
       require('tiny-code-action').code_action()
     end, { noremap = true, silent = true })
+    vim.keymap.set('n', 'K', function()
+      vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
+    end, { desc = "Hover documentation" })
 
     local on_attach = function(client, bufnr)
       auto_format_on_save(client, bufnr)
