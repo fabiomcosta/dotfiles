@@ -26,4 +26,4 @@ brew "lazygit"
 brew "rustup"
 
 brew "watchexec"
-brew "goku"
+brew "yqrashawn/goku/goku"
