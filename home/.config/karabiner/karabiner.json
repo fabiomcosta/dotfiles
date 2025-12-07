@@ -4944,7 +4944,7 @@
             "key_code" : "a"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Spotify\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -4963,7 +4963,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Spotify\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Spotify\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -4989,7 +4989,7 @@
             "key_code" : "b"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Chrome\", \"Safari\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5008,7 +5008,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Google Chrome\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Chrome\", \"Safari\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5034,7 +5034,7 @@
             "key_code" : "c"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"WorkChat\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"WorkChat\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5053,7 +5053,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"WorkChat\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"WorkChat\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5079,7 +5079,7 @@
             "key_code" : "e"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"VS Code @ FB\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5098,7 +5098,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"VS Code @ FB\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"VS Code @ FB\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5124,7 +5124,7 @@
             "key_code" : "f"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Finder\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5143,7 +5143,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Finder\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Finder\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5169,7 +5169,7 @@
             "key_code" : "m"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Microsoft Outlook\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5188,7 +5188,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Microsoft Outlook\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Microsoft Outlook\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5214,7 +5214,7 @@
             "key_code" : "t"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Ghostty\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Ghostty\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5233,7 +5233,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Ghostty\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Ghostty\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5259,7 +5259,7 @@
             "key_code" : "n"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Notion\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5278,7 +5278,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"Notion\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Notion\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -5304,7 +5304,7 @@
             "key_code" : "v"
           },
           "to" : [ {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"zoom.us\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5323,7 +5323,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"zoom.us\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"zoom.us\")'"
           } ],
           "from" : {
             "simultaneous" : [ {

@@ -48,7 +48,8 @@
   }
 
   :templates {
-    :hsl "~/homebrew/bin/hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").openApplication(\"%s\")'"
+    :hsl "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"%s\")'"
+    :hsl2 "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"%s\", \"%s\")'"
     :external_display_brightness_decrement "~/bin/m1ddc chg luminance -20"
     :external_display_brightness_increment "~/bin/m1ddc chg luminance +20"
     :display_sleep "sleep 1 && pmset sleepnow"
@@ -406,7 +407,7 @@
     {:des "launch mode"
       :rules [:open_mode
         [:a [:hsl "Spotify"]]
-        [:b [:hsl "Google Chrome"]]
+        [:b [:hsl2 "Google Chrome" "Safari"]]
         [:c [:hsl "WorkChat"]]
         [:e [:hsl "VS Code @ FB"]]
         [:f [:hsl "Finder"]]
