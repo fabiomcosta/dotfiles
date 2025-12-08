@@ -240,9 +240,8 @@ vim.api.nvim_create_autocmd('TermClose', {
 -- Go to normal mode on terminal by pressing esc.
 set_keymap('t', '<ESC>', '<C-\\><C-n>')
 
-require('keyword_case').setup()
-
-set_keymap('n', '<LEADER>cc', '<CMD>CodeCycleCase<CR>')
+local keyword_case = require('keyword_case')
+vim.keymap.set('n', '<LEADER>cc', keyword_case.apply)
 
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:remove('buffers')

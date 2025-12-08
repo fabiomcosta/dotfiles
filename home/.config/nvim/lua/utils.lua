@@ -31,6 +31,36 @@ local utils = {
   memoize = memoize,
 }
 
+-- Use this on an expr = true
+-- local function create_make_repeatable()
+--   local n = 0
+--   _G.__rptcbs = { noop = function() end }
+--   return function(callback)
+--     local args
+--     n = n + 1
+--     local callback_name = 'cb' .. tostring(n)
+--     _G.__rptcbs[callback_name] = function()
+--       callback(args)
+--     end
+--     return function(...)
+--       args = ...
+--       -- vim.go.operatorfunc = 'v:lua.__rptcbs.noop'
+--       -- vim.cmd.normal({ 'g@l', bang = true })
+--       vim.go.operatorfunc = 'v:lua.__rptcbs.' .. callback_name
+--       return 'g@l'
+--     end
+--   end
+-- end
+--
+-- utils.make_repeatable = create_make_repeatable()
+
+-- function utils.keymap_set_repeatable(modes, map, callback, opts)
+--   opts = vim.tbl_deep_extend('force', opts or {}, {
+--     expr = true,
+--   })
+--   vim.keymap.set(modes, map, utils.make_repeatable(callback), opts)
+-- end
+
 function utils.module_exists(module_name)
   return pcall(require, module_name)
 end

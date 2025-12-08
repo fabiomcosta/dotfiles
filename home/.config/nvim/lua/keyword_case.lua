@@ -19,35 +19,35 @@ end
 local function is_snake_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[_%l%d' .. keywords .. ']+', '') == 0
+      and #word:gsub('[_%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_upper_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '_')
-    and #word:gsub('[_%u%d' .. keywords .. ']+', '') == 0
+      and #word:gsub('[_%u%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_kebab_case(word)
   local keywords = regex_escape(get_keywords())
   return string.find(word, '-')
-    and #word:gsub('[-%l%d' .. keywords .. ']+', '') == 0
+      and #word:gsub('[-%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_camel_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
-    and #word:gsub('%l+', '') > 0
-    and word_without_special_keywords:match('^%l')
+      and #word:gsub('%l+', '') > 0
+      and word_without_special_keywords:match('^%l')
 end
 
 local function is_pascal_case(word)
   local keywords = regex_escape(get_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
-    and #word:gsub('%l+', '') > 0
-    and word_without_special_keywords:match('^%u')
+      and #word:gsub('%l+', '') > 0
+      and word_without_special_keywords:match('^%u')
 end
 
 local function to_snake_case(word)
@@ -95,7 +95,7 @@ local function cycle_case(word)
 
   if is_camel_case(word) then
     local ft_supports_kebab_case =
-      utils.tbl_contains(vim.opt.iskeyword:get(), '-')
+        utils.tbl_contains(vim.opt.iskeyword:get(), '-')
     if ft_supports_kebab_case then
       return to_kebab_case(word)
     else
@@ -113,12 +113,9 @@ end
 
 local function apply()
   local cursorword = vim.fn.expand('<cword>')
-  vim.cmd('normal! diwi' .. cycle_case(cursorword))
+  vim.cmd.normal({ 'diwi' .. cycle_case(cursorword), bang = true })
 end
 
 return {
-  setup = function()
-    vim.api.nvim_create_user_command('CodeCycleCase', apply, {})
-  end,
   apply = apply,
 }
