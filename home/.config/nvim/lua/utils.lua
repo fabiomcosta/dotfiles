@@ -59,26 +59,6 @@ function utils.keymap_set_repeatable(modes, map, callback, opts)
   vim.keymap.set(modes, map, make_repeatable(callback), opts)
 end
 
-function utils.module_exists(module_name)
-  return pcall(require, module_name)
-end
-
-function utils.require_if_exists(module_name, callback)
-  local exists, module = pcall(require, module_name)
-  if exists then
-    callback(module)
-  end
-end
-
-function utils.tbl_contains(tbl, element)
-  for _, value in pairs(tbl) do
-    if value == element then
-      return true
-    end
-  end
-  return false
-end
-
 local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 function utils.auto_format_on_save(client, bufnr)
   -- if client.server_capabilities.document_formatting then
