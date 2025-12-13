@@ -31,7 +31,6 @@ local utils = {
   memoize = memoize,
 }
 
--- Use this on an expr = true
 local function create_make_repeatable()
   local n = 0
   _G.__rptcbs = {}
@@ -47,13 +46,17 @@ local function create_make_repeatable()
     end
   end
 end
-utils.make_repeatable = create_make_repeatable()
+local make_repeatable = create_make_repeatable()
 
+-- Creates mappings that are dot repeatable, meaning when pressing the "."
+-- key it execute again.
+-- Note that the callback can't run functions like vim.cmd.normal and can't
+-- return expressions.
 function utils.keymap_set_repeatable(modes, map, callback, opts)
   opts = vim.tbl_deep_extend('force', opts or {}, {
     expr = true,
   })
-  vim.keymap.set(modes, map, utils.make_repeatable(callback), opts)
+  vim.keymap.set(modes, map, make_repeatable(callback), opts)
 end
 
 function utils.module_exists(module_name)
