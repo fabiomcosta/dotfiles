@@ -4,7 +4,7 @@ local function get_keywords()
   local keywords = ''
   for _, value in pairs(vim.opt.iskeyword:get()) do
     if value == '@' then
-      keywords = keywords .. 'a-zA-Z'
+      keywords = keywords .. '%w'
     elseif value == '@-@' then
       -- Since @ matches a-zA-Z, to match the @ char @-@ can be used
       keywords = keywords .. '@'
@@ -52,7 +52,15 @@ end
 
 -- Escapes some characters to be used in lua regexes
 local function regex_escape(str)
-  return vim.fn.escape(str, '^$.*?[]~/\\')
+  return str
+      :gsub('%$', '%%$')
+      :gsub('%?', '%%?')
+      :gsub('%.', '%%.')
+      :gsub('%^', '%%^')
+      :gsub('%(', '%%(')
+      :gsub('%)', '%%)')
+      :gsub('%[', '%%[')
+      :gsub('%]', '%%]')
 end
 
 local function is_snake_case(word)
@@ -163,6 +171,8 @@ local function replace_word_under_cursor(transformer)
 
   local keywords = '[' .. regex_escape(get_keywords()) .. ']'
 
+  -- +1 to make it 1 indexed and +1 to also check the current char under
+  -- the cursor.
   local start_col = col + 2
   local end_col = col + 1
 
@@ -184,8 +194,6 @@ local function replace_word_under_cursor(transformer)
       '"' .. cursorword .. '" did not match "' .. detected_cursorword .. '"'
     )
   end
-
-  vim.notify(transformer(cursorword))
 
   vim.api.nvim_buf_set_text(
     bufnr,
