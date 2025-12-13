@@ -241,7 +241,7 @@ vim.api.nvim_create_autocmd('TermClose', {
 set_keymap('t', '<ESC>', '<C-\\><C-n>')
 
 local keyword_case = require('keyword_case')
-vim.keymap.set('n', '<LEADER>cc', keyword_case.apply)
+utils.keymap_set_repeatable('n', '<LEADER>cc', keyword_case.apply)
 
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:remove('buffers')

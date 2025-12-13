@@ -3,39 +3,78 @@ local utils = require('utils')
 local function get_keywords()
   local keywords = ''
   for _, value in pairs(vim.opt.iskeyword:get()) do
-    -- This might not be the best heuristic for this, but works for now.
-    if #value == 1 then
+    if value == '@' then
+      keywords = keywords .. 'a-zA-Z'
+    elseif value == '@-@' then
+      -- Since @ matches a-zA-Z, to match the @ char @-@ can be used
+      keywords = keywords .. '@'
+    elseif #value == 1 then
+      keywords = keywords .. value
+    elseif value ~= '^' and value:sub(1, 1) == '^' then
+      -- Ignoring negated ranges
+    else
+      local start, _end = string.match(value, '([^-]+)-([^-]+)')
+      if start ~= nil then
+        local nstart = tonumber(start)
+        if nstart ~= nil then
+          start = string.char(nstart)
+        end
+        local nend = tonumber(_end)
+        if nend ~= nil then
+          _end = string.char(nend)
+        end
+        keywords = keywords .. start .. '-' .. _end
+      else
+        error('Unexpected value part of keywords option: ' .. value)
+      end
+    end
+  end
+  return keywords
+end
+
+-- This is a very specific method to this function.
+-- Returns any individual character that are contained inside the iskeyword
+-- option.
+local function get_non_range_keywords()
+  local keywords = ''
+  for _, value in pairs(vim.opt.iskeyword:get()) do
+    if value == '@-@' then
+      -- @-@ represents the @ character
+      keywords = keywords .. '@'
+    elseif value ~= '@' and #value == 1 then
+      -- @ represents all alphanumerics and we don't want to add it as a
+      -- matching character, but anything else is good.
       keywords = keywords .. value
     end
   end
   return keywords
 end
 
--- Escapes characters to be used in lua regexes
+-- Escapes some characters to be used in lua regexes
 local function regex_escape(str)
-  return vim.fn.escape(str, '^$.*?[]~-/\\')
+  return vim.fn.escape(str, '^$.*?[]~/\\')
 end
 
 local function is_snake_case(word)
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   return string.find(word, '_')
       and #word:gsub('[_%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_upper_case(word)
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   return string.find(word, '_')
       and #word:gsub('[_%u%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_kebab_case(word)
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   return string.find(word, '-')
       and #word:gsub('[-%l%d' .. keywords .. ']+', '') == 0
 end
 
 local function is_camel_case(word)
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
       and #word:gsub('%l+', '') > 0
@@ -43,7 +82,7 @@ local function is_camel_case(word)
 end
 
 local function is_pascal_case(word)
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   local word_without_special_keywords = word:gsub('[' .. keywords .. ']+', '')
   return #word:gsub('[%l%u%d' .. keywords .. ']+', '') == 0
       and #word:gsub('%l+', '') > 0
@@ -59,11 +98,12 @@ local function to_snake_case(word)
   if string.find(word, '-') then
     return word:gsub('-', '_'):lower()
   end
-  local keywords = regex_escape(get_keywords())
+  local keywords = regex_escape(get_non_range_keywords())
   word = word:gsub('^[' .. keywords .. ']?%u', string.lower)
-  return word:gsub('(%u)', function(c)
+  word = word:gsub('(%u)', function(c)
     return '_' .. c:lower()
   end)
+  return word
 end
 
 local function to_upper_case(word)
@@ -71,18 +111,21 @@ local function to_upper_case(word)
 end
 
 local function to_camel_case(word)
-  return to_snake_case(word):gsub('_(%l)', function(c)
+  word = to_snake_case(word):gsub('_(%l)', function(c)
     return c:upper()
   end)
+  return word
 end
 
 local function to_kebab_case(word)
-  return to_snake_case(word):gsub('_', '-')
+  word = to_snake_case(word):gsub('_', '-')
+  return word
 end
 
 local function to_pascal_case(word)
-  local keywords = regex_escape(get_keywords())
-  return to_camel_case(word):gsub('^[' .. keywords .. ']?%l', string.upper)
+  local keywords = regex_escape(get_non_range_keywords())
+  word = to_camel_case(word):gsub('^[' .. keywords .. ']?%l', string.upper)
+  return word
 end
 
 local function cycle_case(word)
@@ -111,9 +154,51 @@ local function cycle_case(word)
   end
 end
 
-local function apply()
+local function replace_word_under_cursor(transformer)
+  local bufnr = 0
+  local winnr = 0
   local cursorword = vim.fn.expand('<cword>')
-  vim.cmd.normal({ 'diwi' .. cycle_case(cursorword), bang = true })
+  local row, col = unpack(vim.api.nvim_win_get_cursor(winnr))
+  local line = vim.api.nvim_get_current_line()
+
+  local keywords = '[' .. regex_escape(get_keywords()) .. ']'
+
+  local start_col = col + 2
+  local end_col = col + 1
+
+  while
+    start_col > 0 and line:sub(start_col - 1, start_col - 1):match(keywords)
+  do
+    start_col = start_col - 1
+  end
+
+  while
+    end_col < #line and line:sub(end_col + 1, end_col + 1):match(keywords)
+  do
+    end_col = end_col + 1
+  end
+
+  local detected_cursorword = line:sub(start_col, end_col)
+  if cursorword ~= detected_cursorword then
+    error(
+      '"' .. cursorword .. '" did not match "' .. detected_cursorword .. '"'
+    )
+  end
+
+  vim.notify(transformer(cursorword))
+
+  vim.api.nvim_buf_set_text(
+    bufnr,
+    row - 1,
+    start_col - 1,
+    row - 1,
+    end_col,
+    { transformer(cursorword) }
+  )
+end
+
+local function apply()
+  replace_word_under_cursor(cycle_case)
 end
 
 return {
