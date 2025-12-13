@@ -79,14 +79,6 @@ function utils.tbl_contains(tbl, element)
   return false
 end
 
-function utils.joinpath(...)
-  local args = { ... }
-  if vim.fs.joinpath ~= nil then
-    return vim.fs.joinpath(unpack(args))
-  end
-  return vim.fn.join(args, '/')
-end
-
 function utils.set_keymap(mode, lhs, rhs, opts)
   opts = vim.tbl_deep_extend('keep', opts or {}, {
     silent = true,

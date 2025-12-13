@@ -246,7 +246,7 @@ utils.keymap_set_repeatable('n', '<LEADER>cc', keyword_case.apply)
 vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:remove('buffers')
 require('micro_sessions').setup({
-  directory = utils.joinpath(vim.fn.stdpath('data'), 'sessions'),
+  directory = vim.fs.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
 
 vim.api.nvim_create_user_command('DevReload', function(context)
@@ -273,7 +273,7 @@ end)
 
 require('secrets.meta.dnd').setup()
 
-local lazypath = utils.joinpath(vim.fn.stdpath('data'), 'lazy', 'lazy.nvim')
+local lazypath = vim.fs.joinpath(vim.fn.stdpath('data'), 'lazy', 'lazy.nvim')
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
     'git',

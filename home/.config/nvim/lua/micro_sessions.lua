@@ -61,7 +61,7 @@ local get_session_name = function()
 end
 
 local get_session_path = function(session_name)
-  return utils.joinpath(M.config.directory, session_name)
+  return vim.fs.joinpath(M.config.directory, session_name)
 end
 
 local read = function()
