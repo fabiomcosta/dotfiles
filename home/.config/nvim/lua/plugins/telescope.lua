@@ -1,5 +1,4 @@
 local utils = require('secrets.meta.utils')
-local set_keymap = require('utils').set_keymap
 
 return {
   'nvim-telescope/telescope.nvim',
@@ -46,33 +45,37 @@ return {
 
     if utils.is_arc_root() then
       if utils.is_myles_repo() then
-        set_keymap('n', '<LEADER>ff', '<cmd>Telescope myles<CR>')
+        vim.keymap.set('n', '<LEADER>ff', '<cmd>Telescope myles<CR>')
       elseif utils.is_biggrep_repo() then
-        set_keymap(
+        vim.keymap.set(
           'n',
           '<LEADER>ff',
           '<cmd>Telescope biggrep f exclude=__(tests|generated|db_generated)__<CR>'
         )
       else
-        set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
-        set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
+        vim.keymap.set('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
+        vim.keymap.set('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
       end
       if utils.is_biggrep_repo() then
-        set_keymap(
+        vim.keymap.set(
           'n',
           '<LEADER>fg',
           '<cmd>Telescope biggrep s exclude=__(tests|generated|db_generated)__<CR>'
         )
       end
     else
-      set_keymap('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
-      set_keymap('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
+      vim.keymap.set('n', '<LEADER>ff', '<cmd>Telescope find_files<CR>')
+      vim.keymap.set('n', '<LEADER>fg', '<cmd>Telescope live_grep<CR>')
     end
 
-    set_keymap('n', '<LEADER>fh', '<cmd>Telescope help_tags<CR>')
-    set_keymap('n', '<LEADER>fj', '<cmd>Telescope find_files hidden=true<CR>')
-    set_keymap('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
-    set_keymap('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>')
-    set_keymap('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>')
+    vim.keymap.set('n', '<LEADER>fh', '<cmd>Telescope help_tags<CR>')
+    vim.keymap.set(
+      'n',
+      '<LEADER>fj',
+      '<cmd>Telescope find_files hidden=true<CR>'
+    )
+    vim.keymap.set('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
+    vim.keymap.set('n', '<LEADER>fd', '<cmd>Telescope diagnostics<CR>')
+    vim.keymap.set('n', '<LEADER>gs', '<cmd>Telescope git_status<CR>')
   end,
 }

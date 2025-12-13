@@ -69,8 +69,6 @@
 --   end
 -- }
 --
-local utils = require('utils')
-local set_keymap = utils.set_keymap
 
 return {
   'vim-test/vim-test',
@@ -80,7 +78,7 @@ return {
     vim.g['test#neovim#start_normal'] = 1
     vim.g['test#javascript#jest#options'] = '--verbose=false'
     vim.g['test#custom_runners'] =
-      { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
+    { PHP = { 'Arc' }, JavaScript = { 'Arc' }, Erlang = { 'Arc' } }
 
     -- Closes the last term window that is also full-width.
     local kill_bottom_sheet = function()
@@ -156,6 +154,6 @@ return {
       end),
       {}
     )
-    set_keymap('n', '<LEADER>tg', ':TestVisit<CR>', { noremap = false })
+    vim.keymap.set('n', '<LEADER>tg', ':TestVisit<CR>', { remap = true })
   end,
 }

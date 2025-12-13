@@ -1,5 +1,4 @@
 local utils = require('utils')
-local set_keymap = utils.set_keymap
 
 -- fonts and other gui stuff
 if vim.fn.has('gui_running') > 0 then
@@ -130,47 +129,47 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 
-set_keymap('n', 'j', 'gj')
-set_keymap('n', 'k', 'gk')
+vim.keymap.set('n', 'j', 'gj')
+vim.keymap.set('n', 'k', 'gk')
 
 -- moves cursor faster
-set_keymap('n', '<DOWN>', '12j')
-set_keymap('v', '<DOWN>', '12j')
-set_keymap('n', '<UP>', '12k')
-set_keymap('v', '<UP>', '12k')
+vim.keymap.set('n', '<DOWN>', '12j')
+vim.keymap.set('v', '<DOWN>', '12j')
+vim.keymap.set('n', '<UP>', '12k')
+vim.keymap.set('v', '<UP>', '12k')
 
-set_keymap('i', 'jj', '<ESC>')
-set_keymap('n', ';', ':', { silent = false })
-set_keymap('v', ';', ':', { silent = false })
+vim.keymap.set('i', 'jj', '<ESC>')
+vim.keymap.set('n', ';', ':', { silent = false })
+vim.keymap.set('v', ';', ':', { silent = false })
 
 -- makes ctrl-v work on command-line and search modes
-set_keymap('c', '<C-v>', '<C-r>"')
-set_keymap('s', '<C-v>', '<C-r>"')
+vim.keymap.set('c', '<C-v>', '<C-r>"')
+vim.keymap.set('s', '<C-v>', '<C-r>"')
 
 local init_lua_file_path = debug.getinfo(1).source:sub(2)
-set_keymap('n', '<LEADER>ev', ':e ' .. init_lua_file_path .. '<CR>')
-set_keymap('n', '<LEADER>\\', ':vsplit<CR><C-w>l')
-set_keymap('n', '<LEADER>-', ':split<CR><C-w>j')
+vim.keymap.set('n', '<LEADER>ev', ':e ' .. init_lua_file_path .. '<CR>')
+vim.keymap.set('n', '<LEADER>\\', ':vsplit<CR><C-w>l')
+vim.keymap.set('n', '<LEADER>-', ':split<CR><C-w>j')
 
 -- changes the size of the buffer windows
-set_keymap('n', '=', '<C-w>=')
-set_keymap('n', '<RIGHT>', ':vertical resize +5<CR>')
-set_keymap('n', '<LEFT>', ':vertical resize -5<CR>')
-set_keymap('n', '+', ':resize +5<CR>')
-set_keymap('n', '-', ':resize -5<CR>')
+vim.keymap.set('n', '=', '<C-w>=')
+vim.keymap.set('n', '<RIGHT>', ':vertical resize +5<CR>')
+vim.keymap.set('n', '<LEFT>', ':vertical resize -5<CR>')
+vim.keymap.set('n', '+', ':resize +5<CR>')
+vim.keymap.set('n', '-', ':resize -5<CR>')
 
 -- tab related mappings
-set_keymap('n', '<LEADER>tc', ':tabnew<CR>')
-set_keymap('n', '<LEADER>tp', ':tabprevious<CR>')
-set_keymap('n', '<LEADER>tn', ':tabnext<CR>')
+vim.keymap.set('n', '<LEADER>tc', ':tabnew<CR>')
+vim.keymap.set('n', '<LEADER>tp', ':tabprevious<CR>')
+vim.keymap.set('n', '<LEADER>tn', ':tabnext<CR>')
 
 -- avoid going on ex mode
-set_keymap('n', 'Q', '<NOP>')
+vim.keymap.set('n', 'Q', '<NOP>')
 
 -- Keeps selection when changing indentation
 -- https://github.com/mhinz/vim-galore#dont-lose-selection-when-shifting-sidewards
-set_keymap('x', '<', '<gv')
-set_keymap('x', '>', '>gv')
+vim.keymap.set('x', '<', '<gv')
+vim.keymap.set('x', '>', '>gv')
 
 -- Disable cursorline highlight on insert mode
 -- https://github.com/mhinz/vim-galore#smarter-cursorline
@@ -228,7 +227,7 @@ vim.filetype.add({
   },
 })
 
-set_keymap('n', '<LEADER>W', ':StripWhitespace<CR>')
+vim.keymap.set('n', '<LEADER>W', ':StripWhitespace<CR>')
 
 -- close terminal buffer without showing the exit status of the shell
 vim.api.nvim_create_autocmd('TermClose', {
@@ -238,7 +237,7 @@ vim.api.nvim_create_autocmd('TermClose', {
   end,
 })
 -- Go to normal mode on terminal by pressing esc.
-set_keymap('t', '<ESC>', '<C-\\><C-n>')
+vim.keymap.set('t', '<ESC>', '<C-\\><C-n>')
 
 local keyword_case = require('keyword_case')
 utils.keymap_set_repeatable('n', '<LEADER>cc', keyword_case.apply)

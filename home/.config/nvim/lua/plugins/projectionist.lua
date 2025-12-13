@@ -1,9 +1,7 @@
-local set_keymap = require('utils').set_keymap
-
 return {
   'tpope/vim-projectionist',
   config = function()
-    set_keymap('n', '<LEADER>a', ':A<CR>')
+    vim.keymap.set('n', '<LEADER>a', ':A<CR>')
     local jest_alternate = {
       ['**/__tests__/*.test.js'] = {
         alternate = '{}.js',

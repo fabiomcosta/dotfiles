@@ -79,14 +79,6 @@ function utils.tbl_contains(tbl, element)
   return false
 end
 
-function utils.set_keymap(mode, lhs, rhs, opts)
-  opts = vim.tbl_deep_extend('keep', opts or {}, {
-    silent = true,
-    noremap = true,
-  })
-  vim.api.nvim_set_keymap(mode, lhs, rhs, opts)
-end
-
 local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 function utils.auto_format_on_save(client, bufnr)
   -- if client.server_capabilities.document_formatting then
