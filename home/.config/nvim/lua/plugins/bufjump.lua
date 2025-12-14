@@ -1,9 +1,9 @@
 return {
   'kwkarlwang/bufjump.nvim',
   config = function()
-    -- require('bufjump').setup({
-    --   backward = '<C-b>',
-    --   forward = '<C-n>',
-    -- })
+    require('bufjump').setup({
+      backward_key = '<C-b>',
+      forward_key = '<C-n>',
+    })
   end,
 }
