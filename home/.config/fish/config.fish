@@ -35,7 +35,6 @@ end
 alias la='ls -a'
 alias ll='ls -l'
 alias simpleserver='python -m SimpleHTTPServer'
-alias oni2="$HOME/Applications/Onivim2.app/Contents/MacOS/Oni2"
 if command_exists bat
   alias cat='bat'
 end
