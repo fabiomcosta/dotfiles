@@ -90,7 +90,7 @@ return {
       })
 
       local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+        require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
         lsp_enable('prettier@meta')
@@ -114,7 +114,7 @@ return {
           'ktlint',
           -- Formatters
           'stylua',
-          'prettierd',
+          'prettier',
         },
         automatic_enable = {
           exclude = {
