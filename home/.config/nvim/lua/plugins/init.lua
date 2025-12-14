@@ -12,7 +12,6 @@ return {
   -- { 'jparise/vim-graphql' },
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
-  { 'williamboman/mason.nvim', config = true },
   {
     'OliverChao/bufmsg.nvim',
     opts = {

@@ -2,22 +2,27 @@ local utils = require('secrets.meta.utils')
 local auto_format_on_save = require('utils').auto_format_on_save
 
 return {
-  'neovim/nvim-lspconfig',
+  'mason-org/mason-lspconfig.nvim',
   dependencies = {
     'saghen/blink.cmp',
     'meta.nvim',
+    'neovim/nvim-lspconfig',
+    { 'mason-org/mason.nvim', opts = {} },
   },
   config = function()
-    vim.keymap.set('n', '[d', '<CMD>lua vim.diagnostic.goto_prev()<CR>')
-    vim.keymap.set('n', ']d', '<CMD>lua vim.diagnostic.goto_next()<CR>')
-    vim.keymap.set('n', 'gd', '<CMD>lua vim.lsp.buf.definition()<CR>')
-    vim.keymap.set('n', '<LEADER>rn', '<CMD>lua vim.lsp.buf.rename()<CR>')
-    vim.keymap.set('n', '<LEADER>ca', function()
-      require('tiny-code-action').code_action()
-    end, { noremap = true, silent = true })
+    vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+    vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+    vim.keymap.set('n', '<LEADER>rn', vim.lsp.buf.rename)
+    vim.keymap.set(
+      'n',
+      '<LEADER>ca',
+      require('tiny-code-action').code_action,
+      { noremap = true, silent = true }
+    )
     vim.keymap.set('n', 'K', function()
-      vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
-    end, { desc = "Hover documentation" })
+      vim.lsp.buf.hover({ border = 'rounded', max_height = 25, max_width = 120 })
+    end, { desc = 'Hover documentation' })
 
     local on_attach = function(client, bufnr)
       auto_format_on_save(client, bufnr)
@@ -60,12 +65,11 @@ return {
       vim.lsp.enable(lsp_name)
     end
 
-    lsp_enable('flow', {
-      cmd = { 'flow', 'lsp' },
-    })
-
     if utils.is_meta_server() then
       lsp_enable('hhvm')
+      lsp_enable('flow', {
+        cmd = { 'flow', 'lsp' },
+      })
 
       -- from https://github.com/neovim/nvim-lspconfig/blob/master/lua/lspconfig/configs/relay_lsp.lua
       lsp_enable('relay_lsp', {
@@ -86,7 +90,7 @@ return {
       })
 
       local installed_extensions =
-          require('meta.lsp.extensions').get_installed_extensions()
+        require('meta.lsp.extensions').get_installed_extensions()
 
       if installed_extensions['nuclide.meta-prettier-vscode'] then
         lsp_enable('prettier@meta')
@@ -98,8 +102,28 @@ return {
         lsp_enable('erlang@meta')
       end
     else
-      lsp_enable('pylsp')
-      lsp_enable('rust_analyzer')
+      require('mason-lspconfig').setup({
+        ensure_installed = {
+          -- LSPs
+          'lua_ls',
+          'pylsp',
+          'rust_analyzer',
+          'kotlin_language_server',
+          'eslint',
+          'ts_ls',
+          -- Formatters
+          'stylua',
+          'prettierd',
+        },
+        automatic_enable = {
+          exclude = {
+            'ts_ls',
+            'eslint',
+            'lua_ls',
+          },
+        },
+      })
+
       lsp_enable('ts_ls', {
         filetypes = { 'typescript', 'typescriptreact', 'typescript.tsx' },
       })
