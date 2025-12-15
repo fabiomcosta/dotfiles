@@ -16,7 +16,7 @@ return {
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     config = function()
       setup_proxy()
-      require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
+      require('nvim-treesitter.parsers').hgcommit = {
         install_info = {
           url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
           files = { 'src/parser.c' },
@@ -33,7 +33,7 @@ return {
       -- flow and jsx code.
       vim.treesitter.language.register('tsx', 'javascript')
 
-      require('nvim-treesitter.configs').setup({
+      require('nvim-treesitter').setup({
         sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
         ensure_installed = {
@@ -89,10 +89,10 @@ return {
       require('nvim-treesitter.install').update({ with_sync = true })()
     end,
   },
-  {
-    'nvim-treesitter/nvim-treesitter-refactor',
-    dependencies = { 'nvim-treesitter/nvim-treesitter' },
-  },
+  -- {
+  --   'nvim-treesitter/nvim-treesitter-refactor',
+  --   dependencies = { 'nvim-treesitter/nvim-treesitter' },
+  -- },
   {
     'windwp/nvim-ts-autotag',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
