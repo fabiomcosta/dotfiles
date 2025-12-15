@@ -11,12 +11,13 @@ end
 return {
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'master',
     -- It is dap_repl needs nvim-dap-repl-highlights to be setup before it can
     -- be installed.
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
     config = function()
       setup_proxy()
-      require('nvim-treesitter.parsers').hgcommit = {
+      require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
         install_info = {
           url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
           files = { 'src/parser.c' },
@@ -33,7 +34,7 @@ return {
       -- flow and jsx code.
       vim.treesitter.language.register('tsx', 'javascript')
 
-      require('nvim-treesitter').setup({
+      require('nvim-treesitter.configs').setup({
         sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
         ensure_installed = {
