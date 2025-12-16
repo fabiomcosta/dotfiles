@@ -1,22 +1,16 @@
 local utils = require('secrets.meta.utils')
 
-local function setup_proxy()
-  if utils.is_meta_server() and utils.proxy then
-    require('nvim-treesitter.install').command_extra_args = {
-      curl = { '--proxy', utils.proxy },
-    }
-  end
-end
-
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'master',
     -- It is dap_repl needs nvim-dap-repl-highlights to be setup before it can
     -- be installed.
     dependencies = { 'LiadOz/nvim-dap-repl-highlights' },
+
+    lazy = false,
+    branch = 'master',
     config = function()
-      setup_proxy()
+      utils.setup_proxy()
       require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
         install_info = {
           url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
@@ -35,7 +29,6 @@ return {
       vim.treesitter.language.register('tsx', 'javascript')
 
       require('nvim-treesitter.configs').setup({
-        sync_install = true,
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
         ensure_installed = {
           'javascript',
@@ -86,8 +79,8 @@ return {
       })
     end,
     build = function()
-      setup_proxy()
-      require('nvim-treesitter.install').update({ with_sync = true })()
+      utils.setup_proxy()
+      require('nvim-treesitter.install').update()()
     end,
   },
   -- {
