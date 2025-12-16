@@ -408,7 +408,7 @@
       :rules [:open_mode
         [:a [:hsl "Spotify"]]
         [:b [:hsl2 "Google Chrome" "Safari"]]
-        [:c [:hsl "WorkChat"]]
+        [:c [:hsl "Google Chat"]]
         [:e [:hsl "VS Code @ FB"]]
         [:f [:hsl "Finder"]]
         [:m [:hsl "Microsoft Outlook"]]

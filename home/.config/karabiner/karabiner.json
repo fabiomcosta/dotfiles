@@ -5034,7 +5034,7 @@
             "key_code" : "c"
           },
           "to" : [ {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"WorkChat\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Chat\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5053,7 +5053,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"WorkChat\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Chat\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
