@@ -151,19 +151,15 @@ vim.keymap.set('n', '<LEADER>ev', ':e ' .. init_lua_file_path .. '<CR>')
 vim.keymap.set('n', '<LEADER>\\', ':vsplit<CR><C-w>l')
 vim.keymap.set('n', '<LEADER>-', ':split<CR><C-w>j')
 
--- changes the size of the buffer windows
+-- equalizes the size of the windows
 vim.keymap.set('n', '=', '<C-w>=')
-vim.keymap.set('n', '<RIGHT>', ':vertical resize +5<CR>')
-vim.keymap.set('n', '<LEFT>', ':vertical resize -5<CR>')
-vim.keymap.set('n', '+', ':resize +5<CR>')
-vim.keymap.set('n', '-', ':resize -5<CR>')
 
 -- tab related mappings
 vim.keymap.set('n', '<LEADER>tc', ':tabnew<CR>')
 vim.keymap.set('n', '<LEADER>tp', ':tabprevious<CR>')
 vim.keymap.set('n', '<LEADER>tn', ':tabnext<CR>')
 
--- avoid going on ex mode
+-- avoid going on ex mode by accident
 vim.keymap.set('n', 'Q', '<NOP>')
 
 -- Keeps selection when changing indentation
@@ -195,7 +191,7 @@ end)
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename =
-      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+    vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -205,10 +201,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,

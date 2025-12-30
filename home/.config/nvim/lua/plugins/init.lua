@@ -13,7 +13,25 @@ return {
   -- { 'godlygeek/tabular' },
   -- { 'jeffkreeftmeijer/vim-numbertoggle' },
   {
-    'OliverChao/bufmsg.nvim',
+    'MisanthropicBit/winmove.nvim',
+    config = function()
+      local winmove = require('winmove')
+      winmove.configure({
+        modes = {
+          swap = { highlight = 'Visual' },
+          resize = { highlight = 'Visual' },
+        },
+      })
+      vim.keymap.set('n', '<C-m>', function()
+        winmove.start_mode(winmove.Mode.Swap)
+      end)
+      vim.keymap.set('n', '<C-r>', function()
+        winmove.start_mode(winmove.Mode.Resize)
+      end)
+    end,
+  },
+  {
+    'OliverCho/bufmsg.nvim',
     opts = {
       split_type = 'split',
       -- split_direction = 'botright',
