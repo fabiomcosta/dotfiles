@@ -133,18 +133,14 @@ vim.keymap.set('n', 'j', 'gj')
 vim.keymap.set('n', 'k', 'gk')
 
 -- moves cursor faster
-vim.keymap.set('n', '<DOWN>', '12j')
-vim.keymap.set('v', '<DOWN>', '12j')
-vim.keymap.set('n', '<UP>', '12k')
-vim.keymap.set('v', '<UP>', '12k')
+vim.keymap.set({ 'n', 'v' }, '<DOWN>', '12j')
+vim.keymap.set({ 'n', 'v' }, '<UP>', '12k')
 
 vim.keymap.set('i', 'jj', '<ESC>')
-vim.keymap.set('n', ';', ':', { silent = false })
-vim.keymap.set('v', ';', ':', { silent = false })
+vim.keymap.set({ 'n', 'v' }, ';', ':', { silent = false })
 
 -- makes ctrl-v work on command-line and search modes
-vim.keymap.set('c', '<C-v>', '<C-r>"')
-vim.keymap.set('s', '<C-v>', '<C-r>"')
+vim.keymap.set({ 'c', 's' }, '<C-v>', '<C-r>"')
 
 local init_lua_file_path = debug.getinfo(1).source:sub(2)
 vim.keymap.set('n', '<LEADER>ev', ':e ' .. init_lua_file_path .. '<CR>')
