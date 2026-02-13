@@ -7,6 +7,7 @@ return {
   event = 'VeryLazy',
   config = function()
     require('notify').setup({
+      background_colour = '#000000',
       stages = vim.env.SSH_CLIENT ~= nil and 'static' or 'fade_in_slide_out',
     })
     require('noice').setup({
