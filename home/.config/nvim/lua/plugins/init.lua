@@ -30,14 +30,14 @@ return {
       end)
     end,
   },
-  {
-    'OliverCho/bufmsg.nvim',
-    opts = {
-      split_type = 'split',
-      -- split_direction = 'botright',
-      -- keep_focus = true,
-    },
-  },
+  -- {
+  --   'OliverCho/bufmsg.nvim',
+  --   opts = {
+  --     split_type = 'split',
+  --     -- split_direction = 'botright',
+  --     -- keep_focus = true,
+  --   },
+  -- },
   {
     'folke/snacks.nvim',
     priority = 1000,
