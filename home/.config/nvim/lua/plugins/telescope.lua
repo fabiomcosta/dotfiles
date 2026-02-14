@@ -71,7 +71,7 @@ return {
     vim.keymap.set('n', '<LEADER>fh', '<cmd>Telescope help_tags<CR>')
     vim.keymap.set(
       'n',
-      '<LEADER>fj',
+      '<LEADER>f.',
       '<cmd>Telescope find_files hidden=true<CR>'
     )
     vim.keymap.set('n', '<LEADER>fb', '<cmd>Telescope buffers<CR>')
