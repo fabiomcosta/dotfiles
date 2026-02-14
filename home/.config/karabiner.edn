@@ -43,7 +43,6 @@
   :applications {
     :browser ["^com\\.google\\.Chrome$" "^com\\.google\\.Chrome\\.canary$" "^company\\.thebrowser\\.Browser$"]
     :outlook ["^com\\.microsoft\\.Outlook$"]
-    :workplace_chat ["WorkPlace" "^workplace-desktop$"]
     :terminal ["^org\\.alacritty$" "^com\\.raphaelamorim\\.rio$" "^com\\.mitchellh\\.ghostty$"]
   }
 
@@ -196,11 +195,6 @@
       :rules [:navigation_mode
         [:##i :!Topen_bracket :outlook]
         [:##o :!Tclose_bracket :outlook]
-    ]}
-    {:des "navigation mode (workplace chat)"
-      :rules [:navigation_mode
-        [:##i :!Copen_bracket :workplace_chat]
-        [:##o :!Cclose_bracket :workplace_chat]
     ]}
     {:des "navigation mode (terminal)"
       :rules [:navigation_mode
