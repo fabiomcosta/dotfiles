@@ -189,7 +189,7 @@ end)
 -- copies current buffer filename to register
 vim.keymap.set('n', 'cf', function()
   local filename =
-      vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
+    vim.fn.resolve(vim.fn.fnamemodify(vim.fn.expand('%:r'), ':t'))
   vim.fn.setreg('+', filename)
 end)
 
@@ -199,10 +199,10 @@ vim.filetype.add({
       local getline = vim.filetype.getline or vim.filetype._getline
       if vim.startswith(getline(bufnr, 1), '<?hh') then
         return 'hack',
-            function(_)
-              vim.opt_local.syntax = 'php'
-              vim.opt_local.iskeyword:append('$')
-            end
+          function(_)
+            vim.opt_local.syntax = 'php'
+            vim.opt_local.iskeyword:append('$')
+          end
       end
       return 'php'
     end,
@@ -240,6 +240,10 @@ vim.opt.sessionoptions:remove('blank')
 vim.opt.sessionoptions:remove('buffers')
 require('micro_sessions').setup({
   directory = vim.fs.joinpath(vim.fn.stdpath('data'), 'sessions'),
+})
+
+require('notes').setup({
+  directory = '~/notes',
 })
 
 vim.api.nvim_create_user_command('DevReload', function(context)
