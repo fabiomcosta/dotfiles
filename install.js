@@ -23,12 +23,12 @@ async function main() {
   const IS_REMOTE_SSH = Boolean(process.env.SSH_CLIENT || process.env.SSH_TTY);
 
   const hostname = (await $silent`hostname`).stdout.trim();
-  const IS_WORK_MACHINE =
+  const IS_META_MACHINE =
     hostname.endsWith('facebook.com') || hostname.endsWith('fbinfra.net');
 
   await $`git submodule update --init`;
 
-  if (IS_WORK_MACHINE) {
+  if (IS_META_MACHINE) {
     await applyTemplate(metahome('.gitconfig'), home('.gitconfig'));
   } else {
     await createHomeSymlink('.gitconfig');
@@ -38,24 +38,25 @@ async function main() {
     await import('./macos.js');
   }
 
-  if (IS_WORK_MACHINE) {
+  if (IS_META_MACHINE) {
     await import(metahome('install.js'));
   } else if (IS_LINUX) {
     await import('./linux.js');
   }
 
-  if (IS_WORK_MACHINE) {
+  if (IS_META_MACHINE) {
     // We actually want to do this before `npm i` on install.sh... tricky...
     await createMetaHomeSymlink('.npmrc');
     await createMetaHomeSymlink('.bashrc');
     await createMetaHomeSymlink('.fb-vimrc');
     await createMetaHomeSymlink('bin/open');
     await createMetaHomeSymlink('bin/xdg-open');
-    await createMetaHomeSymlink('bin/hg-rebase-my-commits');
     await createMetaHomeSymlink('bin/pbcopy');
+    await createMetaHomeSymlink('bin/hg-rebase-my-commits');
   } else {
-    await createMetaHomeSymlink('bin/local-file-proxy-for-od');
     await createMetaHomeSymlink('bin/dev-with-fileproxy');
+    await createMetaHomeSymlink('bin/local-file-proxy-for-od');
+    await createHomeSymlink('.config/opencode');
   }
 
   if (IS_MACOS && !IS_REMOTE_SSH) {
@@ -70,11 +71,11 @@ async function main() {
     }
 
     await setupCron();
+    await createHomeSymlink('.config/rio');
+    await createHomeSymlink('.config/ghostty');
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
     await createHomeSymlink('.config/alacritty/alacritty.toml');
-    await createHomeSymlink('.config/rio');
-    await createHomeSymlink('.config/ghostty');
     await createHomeSymlink('Applications/VimProtocolHandler.app');
   }
 
