@@ -110,6 +110,7 @@ return {
           'pylsp',
           'rust_analyzer',
           'ts_ls',
+          'marksman',
           -- Formatters
           'stylua',
           'prettier',
