@@ -18,4 +18,21 @@ return {
       },
     },
   },
+  keys = {
+    {
+      '<LEADER>nn',
+      '<CMD>Obsidian new<CR>',
+      desc = 'Create new note',
+    },
+    {
+      '<LEADER>nf',
+      '<CMD>Obsidian quick_switch<CR>',
+      desc = 'Find note by path',
+    },
+    {
+      '<LEADER>ng',
+      '<CMD>Obsidian search<CR>',
+      desc = 'Find note by content',
+    },
+  },
 }
