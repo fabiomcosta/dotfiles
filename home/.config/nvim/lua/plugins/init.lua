@@ -22,10 +22,10 @@ return {
           resize = { highlight = 'Visual' },
         },
       })
-      vim.keymap.set('n', '<C-m>', function()
+      vim.keymap.set('n', '<LEADER>wm', function()
         winmove.start_mode(winmove.Mode.Swap)
       end)
-      vim.keymap.set('n', '<C-r>', function()
+      vim.keymap.set('n', '<LEADER>wr', function()
         winmove.start_mode(winmove.Mode.Resize)
       end)
     end,

@@ -242,9 +242,9 @@ require('micro_sessions').setup({
   directory = vim.fs.joinpath(vim.fn.stdpath('data'), 'sessions'),
 })
 
-require('notes').setup({
-  directory = '~/notes',
-})
+-- require('notes').setup({
+--   directory = '~/notes',
+-- })
 
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
