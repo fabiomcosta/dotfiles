@@ -105,28 +105,44 @@ set -x PATH $HOME/bin $PATH
 set -x PATH $HOME/gdrive/code/gd/bin $PATH
 
 # Java
-# set -x JAVA_HOME "(/usr/libexec/java_home -v 11)"
+
+set android_studio_java_home "/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+if test -d $android_studio_java_home
+  set -x JAVA_HOME $android_studio_java_home
+else
+  set -x JAVA_HOME "(/usr/libexec/java_home -v 11)"
+end
+set -x PATH $JAVA_HOME/bin $PATH
 
 # Android DEV
-#
+
+# Default SDK path for Android Studio
+if test -d $HOME/Library/Android/sdk
+  set -x ANDROID_SDK "$HOME/Library/Android/sdk"
+  set -x ANDROID_SDK_ROOT $ANDROID_SDK
+  set -x ANDROID_HOME $ANDROID_SDK
+# I think this is for homebrew?
+else if test -d "/opt/android_sdk"
+  set -x ANDROID_SDK "/opt/android_sdk"
+  set -x ANDROID_SDK_ROOT $ANDROID_SDK
+  set -x ANDROID_HOME $ANDROID_SDK
+end
+
 # set -x ANDROID_NDK "/opt/android_ndk"
 # set -x ANDROID_NDK_REPOSITORY $ANDROID_NDK
 # set -x ANDROID_NDK_ROOT "$ANDROID_NDK/r17c"
-# set -x ANDROID_SDK "/opt/android_sdk"
-# set -x ANDROID_SDK_ROOT $ANDROID_SDK
-# set -x ANDROID_HOME $ANDROID_SDK
 
 # You'll need `fisher install edc/bass` before this.
 if command_exists bass
   bass 'source $HOME/.waandroid/env.sh'
-  set -x PATH $JAVA_HOME/bin $PATH
-  set -x PATH $ANDROID_HOME/emulator $PATH
-  set -x PATH $ANDROID_HOME/tools $PATH
-  set -x PATH $ANDROID_HOME/tools/bin $PATH
-
   set -x NDK_CCACHE "/usr/local/bin/ccache"
   set -x CCACHE_DIR "$HOME/.ccache"
   set -x USE_CCACHE 1
+end
+
+if set -q ANDROID_HOME
+  set -x PATH $ANDROID_HOME/emulator $PATH
+  set -x PATH $ANDROID_HOME/cmdline-tools/latest/bin $PATH
 end
 
 if command_exists starship
