@@ -56,6 +56,11 @@ set -x TERM xterm-256color
 set -x CLICOLOR 1
 set -x LSCOLORS ExFxCxDxBxegedabagacad
 
+# This will make the figma mcp work on any terminal, weirdly
+if command_exists open
+  set -x BROWSER (which open)
+end
+
 if command_exists brew
 
   ## brew
