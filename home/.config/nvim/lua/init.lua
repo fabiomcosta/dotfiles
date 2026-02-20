@@ -231,7 +231,7 @@ vim.api.nvim_create_autocmd('TermClose', {
   end,
 })
 -- Go to normal mode on terminal by pressing esc.
-vim.keymap.set('t', '<ESC>', '<C-\\><C-n>')
+-- vim.keymap.set('t', '<ESC>', '<C-\\><C-n>')
 
 local keyword_case = require('keyword_case')
 utils.keymap_set_repeatable('n', '<LEADER>cc', keyword_case.apply)
