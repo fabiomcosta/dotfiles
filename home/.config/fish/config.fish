@@ -148,6 +148,7 @@ end
 if set -q ANDROID_HOME
   set -x PATH $ANDROID_HOME/emulator $PATH
   set -x PATH $ANDROID_HOME/cmdline-tools/latest/bin $PATH
+  set -x PATH $ANDROID_HOME/platform-tools $PATH
 end
 
 if command_exists starship
