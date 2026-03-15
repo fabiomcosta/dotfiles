@@ -133,9 +133,12 @@ else if test -d "/opt/android_sdk"
   set -x ANDROID_HOME $ANDROID_SDK
 end
 
-# set -x ANDROID_NDK "/opt/android_ndk"
-# set -x ANDROID_NDK_REPOSITORY $ANDROID_NDK
-# set -x ANDROID_NDK_ROOT "$ANDROID_NDK/r17c"
+if test -d "$ANDROID_SDK/ndk"
+  set -x ANDROID_NDK "$ANDROID_SDK/ndk"
+  set -x ANDROID_NDK_REPOSITORY $ANDROID_NDK
+  # set -x ANDROID_NDK_ROOT "$ANDROID_NDK/r17c"
+end
+
 
 # You'll need `fisher install edc/bass` before this.
 if command_exists bass
