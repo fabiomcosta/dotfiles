@@ -5126,7 +5126,7 @@
             "key_code" : "m"
           },
           "to" : [ {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Microsoft Outlook\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Gmail\", \"Microsoft Outlook\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5145,7 +5145,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Microsoft Outlook\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Gmail\", \"Microsoft Outlook\")'"
           } ],
           "from" : {
             "simultaneous" : [ {

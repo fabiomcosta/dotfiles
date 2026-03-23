@@ -405,7 +405,7 @@
         [:c [:hsl "Google Chat"]]
         [:e [:hsl "VS Code @ FB"]]
         [:f [:hsl "Finder"]]
-        [:m [:hsl "Microsoft Outlook"]]
+        [:m [:hsl2 "Gmail" "Microsoft Outlook"]]
         [:t [:hsl "Ghostty"]]
         [:n [:hsl "Notes"]]
         [:v [:hsl "zoom.us"]]
