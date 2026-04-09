@@ -50,7 +50,7 @@ return {
       vim.keymap.set('n', '<LEADER>dmc', function()
         dap.toggle_breakpoint()
         vim.cmd('tabnew %')
-        vim.cmd('AccordionStop')
+        -- vim.cmd('AccordionStop')
         -- Moves cursor at the "current" place in the new tab.
         -- Without this the cursor moves to the top of the file.
         vim.cmd([[execute "normal! \<c-o>"]])
@@ -66,7 +66,7 @@ return {
         dap.clear_breakpoints()
         dapui.close()
         vim.cmd('tabclose')
-        vim.cmd('AccordionAutoResize')
+        -- vim.cmd('AccordionAutoResize')
       end)
       vim.keymap.set('n', '<LEADER>dc', dap.continue)
       vim.keymap.set('n', '<LEADER>dn', dap.step_over)
