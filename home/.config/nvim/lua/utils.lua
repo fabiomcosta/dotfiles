@@ -62,7 +62,7 @@ end
 local lsp_augroup = vim.api.nvim_create_augroup('LspFormatting', {})
 function utils.auto_format_on_save(client, bufnr)
   -- if client.server_capabilities.document_formatting then
-  if client.supports_method('textDocument/formatting') then
+  if client:supports_method('textDocument/formatting') then
     vim.api.nvim_clear_autocmds({ group = lsp_augroup, buffer = bufnr })
     vim.api.nvim_create_autocmd('BufWritePre', {
       group = lsp_augroup,

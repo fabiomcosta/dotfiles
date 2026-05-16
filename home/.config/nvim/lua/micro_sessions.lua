@@ -8,12 +8,10 @@ local M = {
 }
 
 local setup_config = function(config)
-  vim.validate({ config = { config, 'table', true } })
+  vim.validate('config', config, 'table', true)
   config =
-      vim.tbl_deep_extend('force', vim.deepcopy(M.default_config), config or {})
-  vim.validate({
-    directory = { config.directory, 'string' },
-  })
+    vim.tbl_deep_extend('force', vim.deepcopy(M.default_config), config or {})
+  vim.validate('directory', config.directory, 'string')
   M.config = config
 end
 

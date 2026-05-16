@@ -105,18 +105,17 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = {
           -- LSPs
-          'kotlin_language_server',
           'lua_ls',
           'pylsp',
           'rust_analyzer',
           'ts_ls',
           'marksman',
+          'clangd',
           -- Formatters
           'stylua',
-          'prettier',
           'eslint',
-          -- Linters
-          'ktlint',
+          -- maybe this is too new and mason hasn't properly added it.
+          -- 'clang_format',
         },
         automatic_enable = {
           exclude = {
