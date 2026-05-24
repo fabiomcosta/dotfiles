@@ -17,6 +17,7 @@ if (!(await commandExists('brew'))) {
 
 console.log('brew update... (can take a while)');
 await $`brew bundle --verbose`;
+await $`brew install ddcctl`;
 await $`brew cleanup`;
 
 // fish
