@@ -62,6 +62,30 @@ async function fish() {
   }
 }
 
+async function isBazzite() {
+  const id = (
+    await $`/bin/sh -c 'test -f /etc/os-release && . /etc/os-release && echo $ID'`
+  ).stdout
+    .trim()
+    .toLowerCase();
+  return id === 'bazzite';
+}
+
+async function bazzite() {
+  if (!(await isBazzite())) {
+    return;
+  }
+  // We have some cool customizations based on the amazing video and notes at:
+  // https://github.com/hardwarehaven/Video-Notes/tree/main/bazzite%20console%20notes
+
+  // Allow controllers to wakeup computer from sleep/hibernate
+  // This script need root/sudo access, so it can't be a user service.
+  await $`sudo cp ./profiles/bazzite/usb-wakeup-enable.js /usr/local/bin/`;
+  await $`sudo cp ./profiles/bazzite/usb-wakeup-enable.service /etc/systemd/system/`;
+  await $`sudo systemctl enable usb-wakeup-enable.service`;
+  await $`sudo systemctl start usb-wakeup-enable.service`;
+}
+
 async function main() {
   console.log('Executing the Linux specific setup...');
 
@@ -75,6 +99,7 @@ async function main() {
     }
   }
   await fish();
+  await bazzite();
 }
 
 await main();

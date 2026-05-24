@@ -1,0 +1,10 @@
+[Unit]
+Description=Enable Wake On USB for Controllers on USB Root 1
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo enabled > /sys/bus/usb/devices/usb1/power/wakeup'
+
+[Install]
+WantedBy=multi-user.target

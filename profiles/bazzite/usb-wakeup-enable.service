@@ -1,0 +1,10 @@
+[Unit]
+Description=Enable USB devices to wake the machine up.
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=-/usr/local/bin/usb-wakeup-enable.js
+
+[Install]
+WantedBy=multi-user.target
