@@ -71,12 +71,16 @@ async function main() {
     }
 
     await setupCron();
-    await createHomeSymlink('.config/rio');
-    await createHomeSymlink('.config/ghostty');
     await createHomeSymlink('.config/karabiner');
     await createHomeSymlink('.config/karabiner.edn');
-    await createHomeSymlink('.config/alacritty/alacritty.toml');
     await createHomeSymlink('Applications/VimProtocolHandler.app');
+  }
+
+  // Generally for GUI (apps) related config files
+  if (!IS_REMOTE_SSH) {
+    await createHomeSymlink('.config/rio');
+    await createHomeSymlink('.config/ghostty');
+    await createHomeSymlink('.config/alacritty/alacritty.toml');
   }
 
   await createHomeSymlink('.vim');
