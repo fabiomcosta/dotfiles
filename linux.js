@@ -3,24 +3,45 @@ import { commandExists, $swallow, $silent } from './src/shell.js';
 import { dir } from './src/path.js';
 import { OK } from './src/log.js';
 
-async function main() {
+async function brew() {
+  if (!(await commandExists('brew'))) {
+    return false;
+  }
+  console.log('brew update... (can take a while)');
+  await $`brew bundle --verbose`;
+  await $`brew cleanup`;
+  return true;
+}
+
+async function aptGet() {
   if (!(await commandExists('apt-get'))) {
-    console.log(
-      'apt-get not available, and other installers are not support. Silently ignoring Linux setup...'
-    );
-    return;
+    return false;
   }
-
-  console.log('Executing the Linux specific setup...');
-
-  if (!(await commandExists('starship'))) {
-    await $`curl -sS https://starship.rs/install.sh | sh`;
-  } else {
-    OK`starship already installed.`;
-  }
-
+  console.log('apt-get update... (can take a while)');
   await $`sudo apt-get update`;
   await $`sudo apt-get install -y neovim tmux git fish rsync ripgrep bat`;
+  return true;
+}
+
+async function starship() {}
+
+async function main() {
+  console.log('Executing the Linux specific setup...');
+
+  if (await aptGet()) {
+    // Installing staship "manually" as there is no option with apt-get
+    if (!(await commandExists('starship'))) {
+      await $`curl -sS https://starship.rs/install.sh | sh`;
+    } else {
+      OK`starship already installed.`;
+    }
+  } else {
+    console.log('apt-get not available, trying brew...');
+    if (!(await brew())) {
+      console.log('brew not available, silently ignoring Linux setup...');
+      return;
+    }
+  }
 
   // fish
   const fishPath = (await $silent`which fish`).stdout.trim();
