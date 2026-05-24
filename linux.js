@@ -80,8 +80,8 @@ async function bazzite() {
 
   // Allow controllers to wakeup computer from sleep/hibernate
   // This script need root/sudo access, so it can't be a user service.
-  await $`sudo cp ./profiles/bazzite/usb-wakeup-enable.js /usr/local/bin/`;
-  await $`sudo cp ./profiles/bazzite/usb-wakeup-enable.service /etc/systemd/system/`;
+  await $`sudo cp -f ./profiles/bazzite/usb-wakeup-enable.js /usr/local/bin/`;
+  await $`sudo cp -f ./profiles/bazzite/usb-wakeup-enable.service /etc/systemd/system/`;
   await $`sudo systemctl enable usb-wakeup-enable.service`;
   await $`sudo systemctl start usb-wakeup-enable.service`;
 }
