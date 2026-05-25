@@ -71,6 +71,13 @@ async function isBazzite() {
   return id === 'bazzite';
 }
 
+async function installService(name) {
+  await $`sudo cp -f ./profiles/bazzite/${name}.js /usr/local/bin/`;
+  await $`sudo cp -f ./profiles/bazzite/${name}.service /etc/systemd/system/`;
+  await $`sudo systemctl enable ${name}.service`;
+  await $`sudo systemctl start ${name}.service`;
+}
+
 async function bazzite() {
   if (!(await isBazzite())) {
     return;
@@ -80,16 +87,13 @@ async function bazzite() {
 
   // Allow controllers to wakeup computer from sleep/hibernate
   // This script need root/sudo access, so it can't be a user service.
-  await $`sudo cp -f ./profiles/bazzite/usb-wakeup-enable.js /usr/local/bin/`;
-  await $`sudo cp -f ./profiles/bazzite/usb-wakeup-enable.service /etc/systemd/system/`;
-  await $`sudo systemctl enable usb-wakeup-enable.service`;
-  await $`sudo systemctl start usb-wakeup-enable.service`;
+  await installService('usb-wakeup-enable');
 
   // Runs oneshot service that turns the tv on when the computer boots.
-  await $`sudo cp -f ./profiles/bazzite/onboot.js /usr/local/bin/`;
-  await $`sudo cp -f ./profiles/bazzite/onboot.service /etc/systemd/system/`;
-  await $`sudo systemctl enable onboot.service`;
-  await $`sudo systemctl start onboot.service`;
+  await installService('onboot');
+
+  // Runs oneshot service that turns the tv off when the computer turns off.
+  await installService('onpoweroff');
 }
 
 async function main() {
