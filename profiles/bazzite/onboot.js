@@ -22,7 +22,6 @@ async function httpRequestWithJsonResponse(url, options) {
     });
 
     if (!response.ok) {
-      throw response;
       throw new Error(`HTTP error status: ${response.status}`);
     }
 
