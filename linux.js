@@ -64,7 +64,7 @@ async function fish() {
 
 async function isBazzite() {
   const id = (
-    await $`/bin/sh -c 'test -f /etc/os-release && . /etc/os-release && echo $ID'`
+    await $silent`/bin/sh -c 'test -f /etc/os-release && . /etc/os-release && echo $ID'`
   ).stdout
     .trim()
     .toLowerCase();
