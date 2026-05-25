@@ -1,0 +1,11 @@
+[Unit]
+Description=Run actions on boot
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
+[Service]
+Type=oneshot
+Environment="PATH=/home/linuxbrew/.linuxbrew/bin/"
+ExecStart=-/usr/local/bin/onboot.js
+
+[Install]
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

@@ -84,6 +84,12 @@ async function bazzite() {
   await $`sudo cp -f ./profiles/bazzite/usb-wakeup-enable.service /etc/systemd/system/`;
   await $`sudo systemctl enable usb-wakeup-enable.service`;
   await $`sudo systemctl start usb-wakeup-enable.service`;
+
+  // Runs oneshot service that turns the tv on when the computer boots.
+  await $`sudo cp -f ./profiles/bazzite/onboot.js /usr/local/bin/`;
+  await $`sudo cp -f ./profiles/bazzite/onboot.service /etc/systemd/system/`;
+  await $`sudo systemctl enable onboot.service`;
+  await $`sudo systemctl start onboot.service`;
 }
 
 async function main() {
