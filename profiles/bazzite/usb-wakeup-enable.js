@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const fs = require('fs/promises');
-const path = require('path');
-const util = require('util');
-const { execFile } = require('child_process');
+import fs from 'fs/promises';
+import path from 'path';
+import util from 'util';
+import { execFile } from 'child_process';
 
 const execFileAsync = util.promisify(execFile);
 
