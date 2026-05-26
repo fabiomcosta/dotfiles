@@ -1,7 +1,9 @@
+import path from 'path';
 import { $ } from 'zx';
 import { commandExists, $swallow, $silent } from './src/shell.js';
-import { dir } from './src/path.js';
+import { profiles } from './src/path.js';
 import { OK } from './src/log.js';
+import { createSymlinkFor } from './src/fs.js';
 
 async function brew() {
   if (!(await commandExists('brew'))) {
@@ -72,9 +74,18 @@ async function isBazzite() {
 }
 
 async function installService(name) {
-  await $`sudo cp -f ./profiles/bazzite/${name}.js /usr/local/bin/`;
-  await $`sudo cp -f ./profiles/bazzite/${name}.service /etc/systemd/system/`;
-  await $`sudo systemctl enable ${name}.service`;
+  const profilesPath = profiles('bazzite');
+  const servicePath = path.join(profilesPath, `${name}.service`);
+  const scriptPath = path.join(profilesPath, `${name}.js`);
+
+  await $`sudo ln -s -f ${scriptPath} /usr/local/bin/${name}.js`;
+
+  // Provides permissions so that the service file can be a symlink
+  await $`sudo chcon -t systemd_unit_file_t ${servicePath}`;
+  // Provides permissions so that the executable path can point to a symlink
+  await $`sudo chcon -t bin_t ${scriptPath}`;
+
+  await $`sudo systemctl enable ${servicePath}`;
   await $`sudo systemctl start ${name}.service`;
 }
 

@@ -11,9 +11,11 @@ export const REPO_ROOT = path.resolve(
 export const DIR = path.join(REPO_ROOT, 'home');
 export const SECRETS = path.join(REPO_ROOT, 'secrets');
 export const META_HOME = path.join(SECRETS, 'meta-home');
+export const PROFILES = path.join(REPO_ROOT, 'profiles');
 export const HOME = os.homedir();
 
 export const dir = (...args) => path.join(DIR, ...args);
 export const secrets = (...args) => path.join(SECRETS, ...args);
 export const metahome = (...args) => path.join(META_HOME, ...args);
+export const profiles = (...args) => path.join(PROFILES, ...args);
 export const home = (...args) => path.join(HOME, ...args);
