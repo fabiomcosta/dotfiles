@@ -78,14 +78,15 @@ async function installService(name) {
   const servicePath = path.join(profilesPath, `${name}.service`);
   const scriptPath = path.join(profilesPath, `${name}.js`);
 
-  await $`sudo ln -s -f ${scriptPath} /usr/local/bin/${name}.js`;
-
-  // Provides permissions so that the service file can be a symlink
-  await $`sudo chcon -t systemd_unit_file_t ${servicePath}`;
   // Provides permissions so that the executable path can point to a symlink
   await $`sudo chcon -t bin_t ${scriptPath}`;
+  await $`sudo ln -s -f ${scriptPath} /usr/local/bin/${name}.js`;
 
-  await $`sudo systemctl enable ${servicePath}`;
+  // Unfortunately the service file has to live in this folder or we end up
+  // having issues when the OS is initialized and the service doesn't start.
+  await $`sudo cp -f --remove-destination ${servicePath} /etc/systemd/system/`;
+
+  await $`sudo systemctl enable ${name}.service`;
   await $`sudo systemctl start ${name}.service`;
 }
 
