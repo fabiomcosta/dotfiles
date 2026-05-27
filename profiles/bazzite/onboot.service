@@ -1,12 +1,27 @@
 [Unit]
 Description=Run actions on boot
-Requires=NetworkManager.service
-After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target NetworkManager.service
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+# We need dns and to be online in order to run this service
+Wants=network-online.target nss-lookup.target
+After=network-online.target nss-lookup.target
+# If it restarts 5 times within 120 seconds, give up and leave it dead.
+StartLimitBurst=5
+StartLimitIntervalSec=120
 
 [Service]
 Type=oneshot
 Environment="PATH=/home/linuxbrew/.linuxbrew/bin/"
 ExecStart=-/usr/local/bin/onboot.js
+# If for some reason we don't have network yet there are going to be errors and
+# we should retry.
+Restart=on-failure
+# Wait 1 second between each restart attempt
+RestartSec=1
+# If the script hangs for more than 30 seconds while starting, kill it and retry
+TimeoutStartSec=30
 
 [Install]
-WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+# Trigger on a normal cold boot
+WantedBy=multi-user.target
+# Trigger upon waking from all possible sleep/hibernation states
+WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target

@@ -101,11 +101,11 @@ async function bazzite() {
   // This script need root/sudo access, so it can't be a user service.
   await installService('usb-wakeup-enable');
 
-  // Runs oneshot service that turns the tv on when the computer boots.
-  await installService('onboot');
-
   // Runs oneshot service that turns the tv off when the computer turns off.
   await installService('onpoweroff');
+
+  // Runs oneshot service that turns the tv on when the computer boots.
+  await installService('onboot');
 }
 
 async function main() {
