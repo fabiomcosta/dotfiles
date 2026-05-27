@@ -6,6 +6,9 @@ const TV_ENTITY_ID = 'media_player.vizio_smartcast';
 export const HDMI_PORT_ID = 'HDMI-2';
 
 const API_URL = `https://${HA_ADDRESS}/api`;
+
+const HA_UPDATE_ENTITY = `${API_URL}/services/homeassistant/update_entity`;
+
 const TV_STATE_URL = `${API_URL}/states/${TV_ENTITY_ID}`;
 const TV_TOGGLE_URL = `${API_URL}/services/media_player/toggle`;
 const TV_SELECT_SOURCE_URL = `${API_URL}/services/media_player/select_source`;
@@ -83,7 +86,15 @@ export function log(message, level = 'info') {
   }
 }
 
+export async function haEntityUpdate() {
+  return await httpPost(HA_UPDATE_ENTITY);
+}
+
 export async function tvState() {
+  // Force the entity to be updated before we read its state.
+  // It can take ~5s for HA to update the state of an entity, this helps
+  // mitigate that.
+  await haEntityUpdate();
   return await httpGet(TV_STATE_URL);
 }
 
