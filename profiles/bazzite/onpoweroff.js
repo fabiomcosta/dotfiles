@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { HDMI_PORT_ID, tvOff, tvState, log as _log } from './common.js';
+import { HDMI_PORT_ID, tvToggle, tvState, log as _log } from './common.js';
 
 function log(message, type) {
   return _log(`onpoweroff - ${message}`, type);
@@ -20,7 +20,7 @@ async function main() {
   }
 
   log('turning tv off...');
-  await tvOff();
+  await tvToggle();
   log('tv should be off.', 'success');
 }
 

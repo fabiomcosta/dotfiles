@@ -1,6 +1,11 @@
 #!/usr/bin/env node
 
-import { tvOn, tvState, log as _log } from './common.js';
+import {
+  tvToggle,
+  tvState,
+  tvSetComputerSource,
+  log as _log,
+} from './common.js';
 
 function log(message, type) {
   return _log(`onboot - ${message}`, type);
@@ -14,8 +19,12 @@ async function main() {
   }
 
   log('turning tv on...');
-  await tvOn();
+  await tvToggle();
   log('tv should be on.', 'success');
+
+  // Unfortunately thi is not working with my TV.
+  // await tvSetComputerSource();
+  // log('tv should have computer source.', 'success');
 }
 
 main()

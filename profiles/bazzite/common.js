@@ -7,8 +7,8 @@ export const HDMI_PORT_ID = 'HDMI-2';
 
 const API_URL = `https://${HA_ADDRESS}/api`;
 const TV_STATE_URL = `${API_URL}/states/${TV_ENTITY_ID}`;
-const TV_ON_URL = `${API_URL}/services/media_player/turn_on`;
-const TV_OFF_URL = `${API_URL}/services/media_player/turn_off`;
+const TV_TOGGLE_URL = `${API_URL}/services/media_player/toggle`;
+const TV_SELECT_SOURCE_URL = `${API_URL}/services/media_player/select_source`;
 
 async function genHomeAssistantToken() {
   const haTokenPath = secrets('home_assistant.token');
@@ -59,11 +59,12 @@ async function httpRequestWithJsonResponse(url, options) {
   return await response.json();
 }
 
-async function httpPost(url) {
+async function httpPost(url, extraBody = {}) {
   return await httpRequestWithJsonResponse(url, {
     method: 'POST',
     body: JSON.stringify({
       entity_id: TV_ENTITY_ID,
+      ...extraBody,
     }),
   });
 }
@@ -86,10 +87,10 @@ export async function tvState() {
   return await httpGet(TV_STATE_URL);
 }
 
-export async function tvOn() {
-  return await httpPost(TV_ON_URL);
+export async function tvToggle() {
+  return await httpPost(TV_TOGGLE_URL);
 }
 
-export async function tvOff() {
-  return await httpPost(TV_OFF_URL);
+export async function tvSetComputerSource() {
+  return await httpPost(TV_SELECT_SOURCE_URL, { source: HDMI_PORT_ID });
 }
