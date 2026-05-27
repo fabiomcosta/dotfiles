@@ -1,11 +1,21 @@
 #!/usr/bin/env node
 
-import { tvOn, log } from './common.js';
+import { tvOn, tvState, log as _log } from './common.js';
+
+function log(message, type) {
+  return _log(`onboot - ${message}`, type);
+}
 
 async function main() {
-  log('onboot - turning tv on...');
+  const state = await tvState();
+  if (state.state === 'on') {
+    log('tv was already on.', 'success');
+    return;
+  }
+
+  log('turning tv on...');
   await tvOn();
-  log('onboot - tv should be on.');
+  log('tv should be on.', 'success');
 }
 
 main()
