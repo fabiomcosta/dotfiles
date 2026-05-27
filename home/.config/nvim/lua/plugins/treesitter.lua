@@ -55,6 +55,8 @@ return {
           'query',
           'vimdoc',
           'kotlin',
+          'toml',
+          'ini',
         },
         highlight = {
           enable = true,

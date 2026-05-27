@@ -218,6 +218,7 @@ vim.filetype.add({
   },
   pattern = {
     ['.*%.js.flow'] = 'javascript',
+    ['.*%.service'] = 'ini',
   },
 })
 
