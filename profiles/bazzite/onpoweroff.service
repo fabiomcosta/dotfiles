@@ -6,6 +6,7 @@ Before=systemd-suspend.service systemd-hibernate.service systemd-hybrid-sleep.se
 Type=oneshot
 Environment="PATH=/home/linuxbrew/.linuxbrew/bin/"
 ExecStart=-/usr/local/bin/onpoweroff.js
+TimeoutStartSec=30
 
 [Install]
 WantedBy=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target poweroff.target halt.target reboot.target

@@ -16,25 +16,20 @@ async function genHomeAssistantToken() {
 }
 
 async function httpRequestWithJsonResponse(url, options) {
-  try {
-    const token = await genHomeAssistantToken();
-    const response = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      ...options,
-    });
+  const token = await genHomeAssistantToken();
+  const response = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    ...options,
+  });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching data:');
-    console.error(error);
+  if (!response.ok) {
+    throw new Error(`HTTP error status: ${response.status}`);
   }
+
+  return await response.json();
 }
 
 async function httpPost(url) {
@@ -50,6 +45,14 @@ async function httpGet(url) {
   return await httpRequestWithJsonResponse(url, {
     method: 'GET',
   });
+}
+
+export function log(message, level = 'info') {
+  if (level === 'success') {
+    console.log(`[SUCCESS] ${message}`);
+  } else {
+    console.log(`[INFO]    ${message}`);
+  }
 }
 
 export async function tvOn() {

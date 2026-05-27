@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
-import { tvOn } from './common.js';
+import { tvOn, log } from './common.js';
 
 async function main() {
+  log('onboot - turning tv on...');
   await tvOn();
+  log('onboot - tv should be on.');
 }
 
 main()

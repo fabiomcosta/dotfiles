@@ -4,21 +4,13 @@ import fs from 'fs/promises';
 import path from 'path';
 import util from 'util';
 import { execFile } from 'child_process';
+import { log } from './common.js';
 
 const execFileAsync = util.promisify(execFile);
 
 const DEVICES_PATH = '/sys/bus/usb/devices/';
 
 // --- Logging & Notification Functions ---
-
-// 1. Terminal-only logging for Info/Success
-function logMessage(message, level = 'info') {
-  if (level === 'success') {
-    console.log(`[SUCCESS] ${message}`);
-  } else {
-    console.log(`[INFO]    ${message}`);
-  }
-}
 
 // 2. Terminal error logging AND desktop notifications
 async function logAndNotifyError(message, error) {
@@ -49,7 +41,7 @@ async function logAndNotifyError(message, error) {
 async function enableUsbWakeup() {
   try {
     const devices = await fs.readdir(DEVICES_PATH);
-    logMessage(`Scanning ${devices.length} potential USB devices...`, 'info');
+    log(`Scanning ${devices.length} potential USB devices...`, 'info');
 
     let enabledCount = 0;
 
@@ -63,7 +55,7 @@ async function enableUsbWakeup() {
           // Native write (Requires the script to be run with sudo)
           await fs.writeFile(wakeupPath, 'enabled', 'utf8');
 
-          logMessage(`Enabled wakeup for device: ${deviceId}`, 'success');
+          log(`Enabled wakeup for device: ${deviceId}`, 'success');
           enabledCount++;
         }
       } catch (error) {
@@ -77,12 +69,9 @@ async function enableUsbWakeup() {
     }
 
     if (enabledCount === 0) {
-      logMessage(
-        'Finished: All supported USB devices were already enabled.',
-        'info'
-      );
+      log('Finished: All supported USB devices were already enabled.', 'info');
     } else {
-      logMessage(
+      log(
         `Finished: Enabled wakeup for ${enabledCount} USB device(s).`,
         'success'
       );

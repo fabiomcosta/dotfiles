@@ -1,6 +1,7 @@
 [Unit]
 Description=Run actions on boot
-After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+Requires=NetworkManager.service
+After=suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target NetworkManager.service
 
 [Service]
 Type=oneshot
