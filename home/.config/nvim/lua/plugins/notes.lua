@@ -14,7 +14,7 @@ return {
     workspaces = {
       {
         name = 'personal',
-        path = '~/.config/notes/personal',
+        path = '~/.local/share/notes/personal',
       },
     },
   },
