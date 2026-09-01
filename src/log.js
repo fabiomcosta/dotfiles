@@ -27,4 +27,5 @@ function createTemplateTagWrapper(prefix) {
 export const OK = createTemplateTagLogger(`\x1b[32m✓\x1b[0m`);
 export const WARN = createTemplateTagLogger(`\x1b[33m⚠\x1b[0m`);
 export const ERROR = createTemplateTagLogger(`\x1b[31m✖\x1b[0m`);
+export const INFO = createTemplateTagLogger(`\x1b[34mⓘ\x1b[0m`);
 export const hl = createTemplateTagWrapper(`\x1b[37m`);

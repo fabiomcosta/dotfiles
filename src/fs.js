@@ -1,7 +1,7 @@
 import { question } from 'zx';
 import path from 'path';
 import * as fs from 'fs/promises';
-import { OK, WARN, ERROR, hl } from './log.js';
+import { OK, WARN, ERROR, INFO, hl } from './log.js';
 import { dir, home, metahome, DIR, HOME } from './path.js';
 
 async function prompt(_question) {
@@ -95,7 +95,7 @@ export async function createSymlinkFor(origPath, destPath) {
   }
   await fs.mkdir(path.dirname(origPath), { recursive: true });
   await fs.symlink(destPath, origPath);
-  OK`Symlink for ${hl(origPath)} created.`;
+  INFO`Symlink for ${hl(origPath)} created.`;
 }
 
 export async function createHomeSymlink(_path) {

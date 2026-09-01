@@ -88,6 +88,7 @@ async function main() {
   await createHomeSymlink('.bash_profile');
   await createHomeSymlink('.ripgreprc');
   await createHomeSymlink('.tmux.conf');
+  await createHomeSymlink('.prettierrc.json');
   await createHomeSymlink('.tmux/tmux.remote.conf');
   await createHomeSymlink('.tmux/tmux.remote.after.conf');
   await createHomeSymlink('.config/fish/config.fish');
