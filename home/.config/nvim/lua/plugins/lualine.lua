@@ -13,7 +13,7 @@ return {
         lualine_a = { 'branch' },
         lualine_b = {},
         lualine_c = { { 'filename', path = 1 } },
-        lualine_x = { 'diagnostics' },
+        lualine_x = { "require('git-auto-sync').status()", 'diagnostics' },
         lualine_y = { 'filetype' },
       },
       inactive_sections = {
