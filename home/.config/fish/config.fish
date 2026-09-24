@@ -1,5 +1,5 @@
 #!/usr/bin/env fish
-#
+
 function command_exists
   set cmd $argv[1]
   type -q $cmd
@@ -15,6 +15,7 @@ set SECRETS_PATH "$DOTFILES_PATH/secrets"
 source "$SECRETS_PATH/config.fish"
 
 set -x OPENROUTER_API_KEY (cat $SECRETS_PATH/openrouter.token)
+set -x NPM_TOKEN (cat $SECRETS_PATH/gh_cloudia_personal.token)
 
 # On Meta machines, a warning message is shown when running the brew command
 # and the PATH doesn't have one of the alternative paths inside it already.
@@ -96,6 +97,8 @@ set -x RIPGREP_CONFIG_PATH "$HOME/.ripgreprc"
 
 # prepends .cargo folder from rust
 set -x PATH $HOME/.cargo/bin $PATH
+# prepends docker folder to the path
+set -x PATH $HOME/.docker/bin $PATH
 
 # prepends my bin folder to the path
 set -x PATH $HOME/.local/bin $PATH
