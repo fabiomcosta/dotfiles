@@ -2,16 +2,19 @@ import * as fs from 'fs/promises';
 import { secrets } from '../../src/path.js';
 
 const HA_ADDRESS = 'ha.fabio.pw';
-const TV_ENTITY_ID = 'media_player.vizio_smartcast';
-export const HDMI_PORT_ID = 'HDMI-2';
+const TV_ID = 'vizio_smartcast';
+const FIRETV_ID = 'living_room_fire_tv_cube';
+
+const MP_TV_ID = `media_player.${TV_ID}`;
+const REMOTE_FIRETV_ID = `remote.${FIRETV_ID}`;
 
 const API_URL = `https://${HA_ADDRESS}/api`;
 
 const HA_UPDATE_ENTITY = `${API_URL}/services/homeassistant/update_entity`;
 
-const TV_STATE_URL = `${API_URL}/states/${TV_ENTITY_ID}`;
+const TV_STATE_URL = `${API_URL}/states/${MP_TV_ID}`;
 const TV_TOGGLE_URL = `${API_URL}/services/media_player/toggle`;
-const TV_SELECT_SOURCE_URL = `${API_URL}/services/media_player/select_source`;
+const REMOTE_SEND_COMMAND_URL = `${API_URL}/services/remote/send_command`;
 
 async function genHomeAssistantToken() {
   const haTokenPath = secrets('home_assistant.token');
@@ -62,20 +65,25 @@ async function httpRequestWithJsonResponse(url, options) {
   return await response.json();
 }
 
-async function httpPost(url, extraBody = {}) {
-  return await httpRequestWithJsonResponse(url, {
-    method: 'POST',
-    body: JSON.stringify({
-      entity_id: TV_ENTITY_ID,
-      ...extraBody,
-    }),
-  });
-}
-
 async function httpGet(url) {
   return await httpRequestWithJsonResponse(url, {
     method: 'GET',
   });
+}
+
+async function httpPost(url, extraBody = {}) {
+  return await httpRequestWithJsonResponse(url, {
+    method: 'POST',
+    body: JSON.stringify(extraBody),
+  });
+}
+
+async function httpPostForTv(url, extraBody = {}) {
+  return await httpPost(url, { entity_id: MP_TV_ID, ...extraBody });
+}
+
+async function httpPostForFireTvRemote(url, extraBody = {}) {
+  return await httpPost(url, { entity_id: REMOTE_FIRETV_ID, ...extraBody });
 }
 
 export function log(message, level = 'info') {
@@ -87,7 +95,7 @@ export function log(message, level = 'info') {
 }
 
 export async function haEntityUpdate() {
-  return await httpPost(HA_UPDATE_ENTITY);
+  return await httpPostForTv(HA_UPDATE_ENTITY);
 }
 
 export async function tvState() {
@@ -99,9 +107,15 @@ export async function tvState() {
 }
 
 export async function tvToggle() {
-  return await httpPost(TV_TOGGLE_URL);
+  return await httpPostForTv(TV_TOGGLE_URL);
 }
 
-export async function tvSetComputerSource() {
-  return await httpPost(TV_SELECT_SOURCE_URL, { source: HDMI_PORT_ID });
+export async function tvSetHDMIInput() {
+  return await httpPostForFireTvRemote(REMOTE_SEND_COMMAND_URL, {
+    // This sequence of commands will select the first HDMI input.
+    // There are 2 extra 'ENTER's on this list which seem to improve
+    // reliability of the input selection.
+    command: ['HOME', 'MENU', 'UP', 'ENTER', 'ENTER', 'ENTER', 'ENTER'],
+    delay_secs: 2,
+  });
 }
