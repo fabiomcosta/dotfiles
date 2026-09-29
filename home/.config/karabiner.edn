@@ -404,7 +404,7 @@
         [:b [:hsl2 "Google Chrome" "Safari"]]
         [:c [:hsl "Discord"]]
         [:f [:hsl "Finder"]]
-        [:m [:hsl2 "Gmail" "Microsoft Outlook"]]
+        [:m [:hsl "Gmail"]]
         [:t [:hsl "Ghostty"]]
         [:n [:hsl "Notion"]]
         [:v [:hsl "zoom.us"]]
