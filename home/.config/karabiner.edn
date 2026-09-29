@@ -407,7 +407,7 @@
         [:f [:hsl "Finder"]]
         [:m [:hsl2 "Gmail" "Microsoft Outlook"]]
         [:t [:hsl "Ghostty"]]
-        [:n [:hsl "Notes"]]
+        [:n [:hsl "Notion"]]
         [:v [:hsl "zoom.us"]]
         [:w [:hsl "WhatsApp"]]
     ]}
