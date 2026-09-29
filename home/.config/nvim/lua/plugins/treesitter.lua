@@ -11,13 +11,13 @@ return {
     branch = 'master',
     config = function()
       utils.setup_proxy()
-      require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
-        install_info = {
-          url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
-          files = { 'src/parser.c' },
-          branch = 'master',
-        },
-      }
+      -- require('nvim-treesitter.parsers').get_parser_configs().hgcommit = {
+      --   install_info = {
+      --     url = 'https://github.com/fabiomcosta/tree-sitter-hg-commit',
+      --     files = { 'src/parser.c' },
+      --     branch = 'master',
+      --   },
+      -- }
       -- This is needed to make the neotest-testrunner adapter work
       -- neotest uses Plenary's filetype function to define the filetype
       -- of a buffer based on their filename, which works in most cases
@@ -27,6 +27,10 @@ return {
       -- This drasticaly improves the javascript code highlight especially on
       -- flow and jsx code.
       vim.treesitter.language.register('tsx', 'javascript')
+
+      -- markdown injections are buggy ATM and I don't know how to properly
+      -- debug the issue.
+      vim.treesitter.query.set('markdown', 'injections', '')
 
       require('nvim-treesitter.configs').setup({
         parser_install_dir = vim.fs.joinpath(vim.fn.stdpath('data'), 'site'),
