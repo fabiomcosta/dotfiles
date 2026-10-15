@@ -1,3 +1,7 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/fabio/.docker/bin"
+# End of Docker Desktop section.
+
 #!/usr/bin/env fish
 
 function command_exists
@@ -16,6 +20,7 @@ source "$SECRETS_PATH/config.fish"
 
 set -x OPENROUTER_API_KEY (cat $SECRETS_PATH/openrouter.token)
 set -x NPM_TOKEN (cat $SECRETS_PATH/gh_cloudia_personal.token)
+set -x GH_TOKEN (cat $SECRETS_PATH/gh_cloudia_personal.token)
 
 # On Meta machines, a warning message is shown when running the brew command
 # and the PATH doesn't have one of the alternative paths inside it already.
