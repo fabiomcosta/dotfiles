@@ -247,6 +247,51 @@ require('micro_sessions').setup({
 --   directory = '~/notes',
 -- })
 
+vim.api.nvim_create_user_command('GitConflicts', function()
+  local cwd = vim.fn.getcwd()
+  local root_result = vim.system({ 'git', '-C', cwd, 'rev-parse', '--show-toplevel' }):wait()
+  if root_result.code ~= 0 then
+    vim.notify('GitConflicts: current directory is not in a Git repository', vim.log.levels.ERROR)
+    return
+  end
+  local root = vim.trim(root_result.stdout or '')
+
+  local result = vim.system({
+    'git',
+    '-C',
+    root,
+    'diff',
+    '--name-only',
+    '--diff-filter=U',
+    '-z',
+  }):wait()
+  if result.code ~= 0 then
+    vim.notify('GitConflicts: failed to read conflicted files', vim.log.levels.ERROR)
+    return
+  end
+
+  local files = vim.split(result.stdout or '', '\0', { plain = true, trimempty = true })
+  if #files == 0 then
+    vim.notify('GitConflicts: no conflicted files found')
+    return
+  end
+
+  -- :argadd inserts after the current argument. Add later conflicts in
+  -- reverse order so the argument list stays ordered.
+  local first_conflict_arg = vim.fn.argc() == 0 and 1 or vim.fn.argidx() + 2
+  local function load_conflict(file)
+    local path = vim.fs.joinpath(root, file)
+    vim.cmd('argadd ' .. vim.fn.fnameescape(path))
+    vim.fn.bufload(vim.fn.bufadd(path))
+  end
+  load_conflict(files[1])
+  for i = #files, 2, -1 do
+    load_conflict(files[i])
+  end
+  vim.cmd('argument ' .. first_conflict_arg)
+  vim.notify(('Loaded %d conflicted file(s) into buffers and the argument list'):format(#files))
+end, {})
+
 vim.api.nvim_create_user_command('DevReload', function(context)
   local module_names = vim.split(context.args, ' ')
   for _, module_name in ipairs(module_names) do

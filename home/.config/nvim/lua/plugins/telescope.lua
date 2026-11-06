@@ -7,23 +7,36 @@ return {
     'nvim-telescope/telescope-fzy-native.nvim',
   },
   config = function()
-    local telescope_setup = {}
-    if vim.fn.executable('fd') == 1 then
-      telescope_setup.pickers = {
+    local telescope_setup = {
+      pickers = {
         find_files = {
-          find_command = {
-            'fd',
-            '--type',
-            'f',
-            '--strip-cwd-prefix',
-            '--exclude',
-            'custom_modules',
-            '--exclude',
-            'submodules',
-            '--exclude',
-            'node_modules',
+          path_display = {
+            'shorten',
+            'truncate',
+            shorten = { len = 2, exclude = { -3, -2, -1 } },
           },
         },
+        live_grep = {
+          path_display = {
+            'shorten',
+            'truncate',
+            shorten = { len = 2, exclude = { -3, -2, -1 } },
+          },
+        },
+      },
+    }
+    if vim.fn.executable('fd') == 1 then
+      telescope_setup.pickers.find_files.find_command = {
+        'fd',
+        '--type',
+        'f',
+        '--strip-cwd-prefix',
+        '--exclude',
+        'custom_modules',
+        '--exclude',
+        'submodules',
+        '--exclude',
+        'node_modules',
       }
     end
     if vim.fn.executable('rg') == 1 then

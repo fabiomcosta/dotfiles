@@ -5216,7 +5216,7 @@
             "key_code" : "v"
           },
           "to" : [ {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"zoom.us\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Meet\", \"zoom.us\")'"
           } ],
           "conditions" : [ {
             "name" : "open_mode",
@@ -5235,7 +5235,7 @@
               "value" : 1
             }
           }, {
-            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"zoom.us\")'"
+            "shell_command" : "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"Google Meet\", \"zoom.us\")'"
           } ],
           "from" : {
             "simultaneous" : [ {
@@ -6355,7 +6355,7 @@
             }
           },
           "to" : [ {
-            "shell_command" : "sleep 1 && pmset sleepnow"
+            "shell_command" : "sleep 2 && pmset displaysleepnow"
           } ],
           "type" : "basic"
         } ]
@@ -6403,6 +6403,19 @@
         } ]
       } ]
     },
+    "devices" : [ {
+      "identifiers" : {
+        "is_keyboard" : true,
+        "product_id" : 258,
+        "vendor_id" : 10730
+      },
+      "ignore" : false
+    }, {
+      "identifiers" : {
+        "is_keyboard" : true
+      },
+      "ignore" : false
+    } ],
     "name" : "Goku",
     "selected" : true,
     "virtual_hid_keyboard" : {

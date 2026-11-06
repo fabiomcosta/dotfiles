@@ -7,6 +7,7 @@ return {
       padding = false,
       auto_preview = false,
       auto_close = true,
+      win = { wo = { wrap = true } },
     })
 
     vim.keymap.set('n', '<LEADER>xw', '<CMD>Trouble diagnostics toggle<CR>')

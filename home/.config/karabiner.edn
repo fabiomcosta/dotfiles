@@ -51,7 +51,7 @@
     :hsl2 "export PATH=$HOME/homebrew/bin:/opt/homebrew/bin; hs -A -n -q -t 0.5 -c 'require(\"keyboard.hyper\").open_application(\"%s\", \"%s\")'"
     :external_display_brightness_decrement "~/bin/m1ddc chg luminance -20"
     :external_display_brightness_increment "~/bin/m1ddc chg luminance +20"
-    :display_sleep "sleep 1 && pmset sleepnow"
+    :display_sleep "sleep 2 && pmset displaysleepnow"
   }
 
   :simlayer-threshold 210
@@ -407,7 +407,7 @@
         [:m [:hsl "Gmail"]]
         [:t [:hsl "Ghostty"]]
         [:n [:hsl "Notion"]]
-        [:v [:hsl "zoom.us"]]
+        [:v [:hsl2 "Google Meet" "zoom.us" ]]
         [:w [:hsl "WhatsApp"]]
     ]}
 
